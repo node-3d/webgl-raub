@@ -1,19 +1,19 @@
 nodejs=true;
 
-var glMatrix=require(__dirname+"/glMatrix-0.9.5.min");
+var glMatrix=require("./glMatrix-0.9.5.min");
 var mat4=glMatrix.mat4;
 
 Image  = require("node-image").Image;
 Platform = require('../lib/platform')(640,480);
 //Platform.setIcon("res/icon.png");
-Platform.setTitle("Traveling Wavefronts");
+Platform.setTitle("Lesson02");
 requestAnimFrame = Platform.requestAnimationFrame;
 
 //console.log("width="+Platform.width+' height='+Platform.height);
 
 var shaders= {
     "shader-fs" : 
-      [ "preciion mediump float;",
+      [ "precision mediump float;",
         "",
         "varying vec4 vColor;",
         "",

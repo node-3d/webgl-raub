@@ -1,3 +1,7 @@
+//
+// Ported from https://github.com/creationix/com.creationix.minimason
+//
+
 Platform = require('../lib/platform')(640,480);
 Platform.setTitle("Traveling Wavefronts");
 gl = Platform.gl;
