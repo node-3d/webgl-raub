@@ -21,6 +21,9 @@ def build(bld):
   if sys.platform.startswith('darwin'):
     obj.uselib = ["GL", "GLU", "GLUT"]
     obj.framework = ['OpenGL','GLUT','Cocoa']
+  elif sys.platform.startswith('linux'):
+    obj.uselib = ["GL", "GLU", "GLUT"]
+    obj.framework = ['GL','GLUT']
   else:
     obj.linkflags = ["-lGLESv2"]
 
