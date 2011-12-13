@@ -3,7 +3,6 @@ nodejs=true;
 var glMatrix=require("./glMatrix-0.9.5.min");
 var mat4=glMatrix.mat4;
 
-Image  = require("node-image").Image;
 Platform = require('../lib/platform')(640,480);
 //Platform.setIcon("res/icon.png");
 Platform.setTitle("Lesson02");
