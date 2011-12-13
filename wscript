@@ -27,5 +27,4 @@ def build(bld):
   else:
     obj.linkflags = ["-lGLESv2"]
 
-  obj.source = ["src/webgl.cc", "src/v8_typed_array.cc"]
-  # obj.uselib = "SDL"
+  obj.source = bld.path.ant_glob('src/*.cc')
