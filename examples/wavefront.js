@@ -4,6 +4,7 @@
 
 Platform = require('../lib/platform')(640,480);
 Platform.setTitle("Traveling Wavefronts");
+Platform.setIcon(__dirname+"/wavefront_icon.png");
 gl = Platform.gl;
 
 gl.viewportWidth = Platform.width;

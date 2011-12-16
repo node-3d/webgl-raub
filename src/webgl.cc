@@ -1,8 +1,10 @@
-#include <node.h>
-#include <v8.h>
+#include <iostream>
+using namespace std;
 
-#include "arch_wrapper.h"
+#include "webgl.h"
+#include "image.h"
 
+using namespace node;
 using namespace v8;
 
 static int SizeOfArrayElementForType(v8::ExternalArrayType type) {
@@ -22,8 +24,24 @@ static int SizeOfArrayElementForType(v8::ExternalArrayType type) {
   }
 }
 
-namespace webgl {
+void *getImageData(Local<Value> arg) {
+  void *pixels=NULL;
+  Local<Object> obj = Local<Object>::Cast(arg);
+  if(!obj->IsObject())
+    ThrowException(JS_STR("Bad texture argument"));
+  if(obj->GetIndexedPropertiesExternalArrayDataType()>0) {
+    cout<<"pixels as TypedArray, type="<<obj->GetIndexedPropertiesExternalArrayDataType()<<endl;
+    pixels = obj->GetIndexedPropertiesExternalArrayData();
+  }
+  else {
+    cout<<"Pixels as Image data"<<endl;
+    Image *image = ObjectWrap::Unwrap<Image>(arg->ToObject());
+    pixels=image->GetData();
+  }
 
+  return pixels;
+}
+namespace webgl {
 
 Handle<Value> Uniform1f(const Arguments& args) {
   HandleScope scope;
@@ -43,6 +61,18 @@ Handle<Value> Uniform2f(const Arguments& args) {
   double y = args[2]->NumberValue();
 
   glUniform2f(location, x, y);
+  return Undefined();
+}
+
+Handle<Value> Uniform3f(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  double x = args[1]->NumberValue();
+  double y = args[2]->NumberValue();
+  double z = args[3]->NumberValue();
+
+  glUniform3f(location, x, y, z);
   return Undefined();
 }
 
@@ -80,6 +110,18 @@ Handle<Value> Uniform2i(const Arguments& args) {
   return Undefined();
 }
 
+Handle<Value> Uniform3i(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  int x = args[1]->Int32Value();
+  int y = args[2]->Int32Value();
+  int z = args[3]->Int32Value();
+
+  glUniform3i(location, x, y, z);
+  return Undefined();
+}
+
 Handle<Value> Uniform4i(const Arguments& args) {
   HandleScope scope;
 
@@ -93,6 +135,93 @@ Handle<Value> Uniform4i(const Arguments& args) {
   return Undefined();
 }
 
+Handle<Value> Uniform1fv(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+  int num=arr->Length();
+
+  glUniform1fv(location, num, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+Handle<Value> Uniform2fv(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+  int num=arr->Length()/2;
+
+  glUniform2fv(location, num, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+Handle<Value> Uniform3fv(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+  int num=arr->Length()/3;
+
+  glUniform3fv(location, num, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+Handle<Value> Uniform4fv(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+  int num=arr->Length()/4;
+
+  glUniform4fv(location, num, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+Handle<Value> Uniform1iv(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+  int num=arr->Length();
+
+  glUniform1iv(location, num, (int*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+Handle<Value> Uniform2iv(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+  int num=arr->Length()/2;
+
+  glUniform2iv(location, num, (int*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+Handle<Value> Uniform3iv(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+  int num=arr->Length()/3;
+
+  glUniform3iv(location, num, (int*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+Handle<Value> Uniform4iv(const Arguments& args) {
+  HandleScope scope;
+
+  int location = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+  int num=arr->Length()/4;
+
+  glUniform4iv(location, num, (int*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
 
 Handle<Value> PixelStorei(const Arguments& args) {
   HandleScope scope;
@@ -137,6 +266,62 @@ Handle<Value> DrawArrays(const Arguments& args) {
   return Undefined();
 }
 
+Handle<Value> UniformMatrix2fv(const Arguments& args) {
+  HandleScope scope;
+
+  GLint location = args[0]->Int32Value();
+  GLboolean transpose = args[1]->BooleanValue();
+  Local<Object> value = Local<Object>::Cast(args[2]);
+
+
+  GLsizei count = value->GetIndexedPropertiesExternalArrayDataLength();
+
+  if (count < 4) {
+    return ThrowException(Exception::TypeError(String::New("Not enough data for UniformMatrix4fv")));
+  }
+
+  const GLfloat* data = (const GLfloat*)value->GetIndexedPropertiesExternalArrayData();
+
+  //    printf("count=%d\n", count);
+  //    printf("[%f, %f, %f, %f,\n", data[0], data[1], data[2], data[3]);
+  //    printf(" %f, %f, %f, %f,\n", data[4], data[5], data[6], data[7]);
+  //    printf(" %f, %f, %f, %f,\n", data[8], data[9], data[10], data[11]);
+  //    printf(" %f, %f, %f, %f]\n", data[12], data[13], data[14], data[15]);
+
+
+  glUniformMatrix4fv(location, count / 4, transpose, data);
+
+  return Undefined();
+}
+
+Handle<Value> UniformMatrix3fv(const Arguments& args) {
+  HandleScope scope;
+
+  GLint location = args[0]->Int32Value();
+  GLboolean transpose = args[1]->BooleanValue();
+  Local<Object> value = Local<Object>::Cast(args[2]);
+
+
+  GLsizei count = value->GetIndexedPropertiesExternalArrayDataLength();
+
+  if (count < 9) {
+    return ThrowException(Exception::TypeError(String::New("Not enough data for UniformMatrix4fv")));
+  }
+
+  const GLfloat* data = (const GLfloat*)value->GetIndexedPropertiesExternalArrayData();
+
+  //    printf("count=%d\n", count);
+  //    printf("[%f, %f, %f, %f,\n", data[0], data[1], data[2], data[3]);
+  //    printf(" %f, %f, %f, %f,\n", data[4], data[5], data[6], data[7]);
+  //    printf(" %f, %f, %f, %f,\n", data[8], data[9], data[10], data[11]);
+  //    printf(" %f, %f, %f, %f]\n", data[12], data[13], data[14], data[15]);
+
+
+  glUniformMatrix4fv(location, count / 9, transpose, data);
+
+  return Undefined();
+}
+
 Handle<Value> UniformMatrix4fv(const Arguments& args) {
   HandleScope scope;
 
@@ -165,7 +350,14 @@ Handle<Value> UniformMatrix4fv(const Arguments& args) {
   return Undefined();
 }
 
+Handle<Value> GenerateMipmap(const Arguments& args) {
+  HandleScope scope;
 
+  GLint target = args[0]->Int32Value();
+  glGenerateMipmap(target);
+
+  return Undefined();
+}
 
 Handle<Value> GetAttribLocation(const Arguments& args) {
   HandleScope scope;
@@ -400,11 +592,10 @@ Handle<Value> TexImage2D(const Arguments& args) {
   int border = args[5]->Int32Value();
   int format = args[6]->Int32Value();
   int type = args[7]->Int32Value();
-  Local<Object> obj = Local<Object>::Cast(args[8]);
+  void *pixels=getImageData(args[8]);
 
-  void* pixels = obj->GetIndexedPropertiesExternalArrayData();
-
-  glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+  if(pixels)
+    glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
   return Undefined();
 }
@@ -418,6 +609,18 @@ Handle<Value> TexParameteri(const Arguments& args) {
   int param = args[2]->Int32Value();
 
   glTexParameteri(target, pname, param);
+
+  return Undefined();
+}
+
+Handle<Value> TexParameterf(const Arguments& args) {
+  HandleScope scope;
+
+  int target = args[0]->Int32Value();
+  int pname = args[1]->Int32Value();
+  float param = args[2]->NumberValue();
+
+  glTexParameterf(target, pname, param);
 
   return Undefined();
 }
@@ -537,14 +740,23 @@ Handle<Value> BufferSubData(const Arguments& args) {
 Handle<Value> BlendEquation(const Arguments& args) {
   HandleScope scope;
 
-  return ThrowException(Exception::Error(String::New("BlendEquation not implemented in node-webgl")));
+  int mode=args[0]->Int32Value();;
+
+  glBlendEquation(mode);
+
+  return Undefined();
 }
 
 
 Handle<Value> BlendFunc(const Arguments& args) {
   HandleScope scope;
 
-  return ThrowException(Exception::Error(String::New("BlendFunc not implemented in node-webgl")));
+  int sfactor=args[0]->Int32Value();;
+  int dfactor=args[1]->Int32Value();;
+
+  glBlendFunc(sfactor,dfactor);
+
+  return Undefined();
 }
 
 
@@ -601,126 +813,4 @@ Handle<Value> Flush(const Arguments& args) {
   return Undefined();
 }
 
-
-}
-
-extern "C" {
-void init(Handle<Object> target)
-{
-
-  NODE_SET_METHOD(target, "uniform1f", webgl::Uniform1f);
-  NODE_SET_METHOD(target, "uniform2f", webgl::Uniform2f);
-  NODE_SET_METHOD(target, "uniform4f", webgl::Uniform4f);
-  NODE_SET_METHOD(target, "uniform1i", webgl::Uniform1i);
-  NODE_SET_METHOD(target, "uniform2i", webgl::Uniform2i);
-  NODE_SET_METHOD(target, "uniform4i", webgl::Uniform4i);
-  NODE_SET_METHOD(target, "pixelStorei", webgl::PixelStorei);
-  NODE_SET_METHOD(target, "bindAttribLocation", webgl::BindAttribLocation);
-  NODE_SET_METHOD(target, "getError", webgl::GetError);
-  NODE_SET_METHOD(target, "drawArrays", webgl::DrawArrays);
-  NODE_SET_METHOD(target, "uniformMatrix4fv", webgl::UniformMatrix4fv);
-
-  NODE_SET_METHOD(target, "getAttribLocation", webgl::GetAttribLocation);
-  NODE_SET_METHOD(target, "depthFunc", webgl::DepthFunc);
-  NODE_SET_METHOD(target, "viewport", webgl::Viewport);
-  NODE_SET_METHOD(target, "createShader", webgl::CreateShader);
-  NODE_SET_METHOD(target, "shaderSource", webgl::ShaderSource);
-  NODE_SET_METHOD(target, "compileShader", webgl::CompileShader);
-  NODE_SET_METHOD(target, "getShaderParameter", webgl::GetShaderParameter);
-  NODE_SET_METHOD(target, "getShaderInfoLog", webgl::GetShaderInfoLog);
-  NODE_SET_METHOD(target, "createProgram", webgl::CreateProgram);
-  NODE_SET_METHOD(target, "attachShader", webgl::AttachShader);
-  NODE_SET_METHOD(target, "linkProgram", webgl::LinkProgram);
-  NODE_SET_METHOD(target, "getProgramParameter", webgl::GetProgramParameter);
-  NODE_SET_METHOD(target, "getUniformLocation", webgl::GetUniformLocation);
-  NODE_SET_METHOD(target, "clearColor", webgl::ClearColor);
-  NODE_SET_METHOD(target, "clearDepth", webgl::ClearDepth);
-
-  NODE_SET_METHOD(target, "disable", webgl::Disable);
-  NODE_SET_METHOD(target, "createTexture", webgl::CreateTexture);
-  NODE_SET_METHOD(target, "bindTexture", webgl::BindTexture);
-  NODE_SET_METHOD(target, "texImage2D", webgl::TexImage2D);
-  NODE_SET_METHOD(target, "texParameteri", webgl::TexParameteri);
-  NODE_SET_METHOD(target, "clear", webgl::Clear);
-  NODE_SET_METHOD(target, "useProgram", webgl::UseProgram);
-  NODE_SET_METHOD(target, "createFramebuffer", webgl::CreateFramebuffer);
-  NODE_SET_METHOD(target, "bindFramebuffer", webgl::BindFramebuffer);
-  NODE_SET_METHOD(target, "framebufferTexture2D", webgl::FramebufferTexture2D);
-  NODE_SET_METHOD(target, "createBuffer", webgl::CreateBuffer);
-  NODE_SET_METHOD(target, "bindBuffer", webgl::BindBuffer);
-  NODE_SET_METHOD(target, "bufferData", webgl::BufferData);
-  NODE_SET_METHOD(target, "bufferSubData", webgl::BufferSubData);
-  NODE_SET_METHOD(target, "enable", webgl::Enable);
-  NODE_SET_METHOD(target, "blendEquation", webgl::BlendEquation);
-  NODE_SET_METHOD(target, "blendFunc", webgl::BlendFunc);
-  NODE_SET_METHOD(target, "enableVertexAttribArray", webgl::EnableVertexAttribArray);
-  NODE_SET_METHOD(target, "vertexAttribPointer", webgl::VertexAttribPointer);
-  NODE_SET_METHOD(target, "activeTexture", webgl::ActiveTexture);
-  NODE_SET_METHOD(target, "drawElements", webgl::DrawElements);
-  NODE_SET_METHOD(target, "flush", webgl::Flush);
-
-  target->Set(String::New("FRAGMENT_SHADER"), Number::New(GL_FRAGMENT_SHADER));
-  target->Set(String::New("VERTEX_SHADER"), Number::New(GL_VERTEX_SHADER));
-  target->Set(String::New("COMPILE_STATUS"), Number::New(GL_COMPILE_STATUS));
-  target->Set(String::New("DELETE_STATUS"), Number::New(GL_DELETE_STATUS));
-  target->Set(String::New("LINK_STATUS"), Number::New(GL_LINK_STATUS));
-  target->Set(String::New("VALIDATE_STATUS"), Number::New(GL_VALIDATE_STATUS));
-  target->Set(String::New("ATTACHED_SHADERS"), Number::New(GL_ATTACHED_SHADERS));
-  target->Set(String::New("ACTIVE_ATTRIBUTES"), Number::New(GL_ACTIVE_ATTRIBUTES));
-  target->Set(String::New("ACTIVE_UNIFORMS"), Number::New(GL_ACTIVE_UNIFORMS));
-  target->Set(String::New("ELEMENT_ARRAY_BUFFER"), Number::New(GL_ELEMENT_ARRAY_BUFFER));
-
-
-  target->Set(String::New("NEVER"), Number::New(GL_NEVER));
-  target->Set(String::New("LESS"), Number::New(GL_LESS));
-  target->Set(String::New("EQUAL"), Number::New(GL_EQUAL));
-  target->Set(String::New("LEQUAL"), Number::New(GL_LEQUAL));
-  target->Set(String::New("GREATER"), Number::New(GL_GREATER));
-  target->Set(String::New("NOTEQUAL"), Number::New(GL_NOTEQUAL));
-  target->Set(String::New("GEQUAL"), Number::New(GL_GEQUAL));
-  target->Set(String::New("ALWAYS"), Number::New(GL_ALWAYS));
-
-  target->Set(String::New("DEPTH_TEST"), Number::New(GL_DEPTH_TEST));
-  target->Set(String::New("ARRAY_BUFFER"), Number::New(GL_ARRAY_BUFFER));
-  target->Set(String::New("STATIC_DRAW"), Number::New(GL_STATIC_DRAW));
-  target->Set(String::New("STREAM_DRAW"), Number::New(GL_STREAM_DRAW));
-  target->Set(String::New("DYNAMIC_DRAW"), Number::New(GL_DYNAMIC_DRAW));
-
-  target->Set(String::New("FLOAT"), Number::New(GL_FLOAT));
-  target->Set(String::New("UNSIGNED_BYTE"), Number::New(GL_UNSIGNED_BYTE));
-  target->Set(String::New("UNSIGNED_SHORT"), Number::New(GL_UNSIGNED_SHORT));
-  target->Set(String::New("FALSE"), Boolean::New(GL_FALSE));
-  target->Set(String::New("TRIANGLES"), Number::New(GL_TRIANGLES));
-  target->Set(String::New("TRIANGLE_STRIP"), Number::New(GL_TRIANGLE_STRIP));
-  target->Set(String::New("COLOR_BUFFER_BIT"), Number::New(GL_COLOR_BUFFER_BIT));
-  target->Set(String::New("DEPTH_BUFFER_BIT"), Number::New(GL_DEPTH_BUFFER_BIT));
-
-  target->Set(String::New("TEXTURE_2D"), Number::New(GL_TEXTURE_2D));
-  target->Set(String::New("TEXTURE0"), Number::New(GL_TEXTURE0));
-  target->Set(String::New("TEXTURE1"), Number::New(GL_TEXTURE1));
-  target->Set(String::New("TEXTURE2"), Number::New(GL_TEXTURE2));
-  target->Set(String::New("TEXTURE3"), Number::New(GL_TEXTURE3));
-  target->Set(String::New("TEXTURE4"), Number::New(GL_TEXTURE4));
-  target->Set(String::New("TEXTURE_MIN_FILTER"), Number::New(GL_TEXTURE_MIN_FILTER));
-  target->Set(String::New("TEXTURE_MAG_FILTER"), Number::New(GL_TEXTURE_MAG_FILTER));
-  target->Set(String::New("LINEAR"), Number::New(GL_LINEAR));
-  target->Set(String::New("NEAREST"), Number::New(GL_NEAREST));
-
-  target->Set(String::New("FRAMEBUFFER"), Number::New(GL_FRAMEBUFFER));
-  target->Set(String::New("COLOR_ATTACHMENT0"), Number::New(GL_COLOR_ATTACHMENT0));
-
-  target->Set(String::New("INVALID_ENUM"), Number::New(GL_INVALID_ENUM));
-  target->Set(String::New("INVALID_VALUE"), Number::New(GL_INVALID_VALUE));
-  target->Set(String::New("INVALID_OPERATION"), Number::New(GL_INVALID_OPERATION));
-  //  target->Set(String::New("STACK_OVERFLOW"), Number::New(GL_STACK_OVERFLOW));
-  //  target->Set(String::New("STACK_UNDERFLOW"), Number::New(GL_STACK_UNDERFLOW));
-  target->Set(String::New("OUT_OF_MEMORY"), Number::New(GL_OUT_OF_MEMORY));
-  //  target->Set(String::New("TABLE_TOO_LARGE"), Number::New(GL_TABLE_TOO_LARGE));
-
-
-  target->Set(String::New("UNPACK_ALIGNMENT"), Number::New(GL_UNPACK_ALIGNMENT));
-  target->Set(String::New("RGBA"), Number::New(GL_RGBA));
-}
-
-}
-
+} // end namespace webgl

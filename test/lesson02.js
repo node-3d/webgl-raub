@@ -1,14 +1,12 @@
 nodejs=true;
 
-var glMatrix=require("./glMatrix-0.9.5.min");
-var mat4=glMatrix.mat4;
+//Read and eval library
+fs=require('fs');
+eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
 
 Platform = require('../lib/platform')(640,480);
-//Platform.setIcon("res/icon.png");
 Platform.setTitle("Lesson02");
 requestAnimFrame = Platform.requestAnimationFrame;
-
-//console.log("width="+Platform.width+' height='+Platform.height);
 
 var shaders= {
     "shader-fs" : 

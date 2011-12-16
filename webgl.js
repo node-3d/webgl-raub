@@ -653,9 +653,12 @@ gl.linkProgram = function linkProgram(program) {
 
 var _pixelStorei = gl.pixelStorei;
 gl.pixelStorei = function pixelStorei(pname, param) {
-  if (!(arguments.length === 2 && typeof pname === "number" && typeof param === "number")) {
+  if (!(arguments.length === 2 && typeof pname === "number" && (typeof param === "number") || typeof param === "boolean")) {
     throw new TypeError('Expected pixelStorei(number pname, number param)');
   }
+  
+  if(typeof param === "boolean")
+    param= param ? 1 : 0;
   return _pixelStorei(pname, param);
 }
 
@@ -805,9 +808,11 @@ gl.uniform1fv = function uniform1fv(location, v) {
 
 var _uniform1i = gl.uniform1i;
 gl.uniform1i = function uniform1i(location, x) {
-  if (!(arguments.length === 2 && (location === null || location instanceof WebGLUniformLocation) && typeof x === "number")) {
+  if (!(arguments.length === 2 && (location === null || location instanceof WebGLUniformLocation) && (typeof x === "number" || typeof x ==="boolean"))) {
     throw new TypeError('Expected uniform1i(WebGLUniformLocation location, number x)');
   }
+  if(typeof x === "boolean")
+    x= x ? 1 : 0;
   return _uniform1i(location ? location._ : 0, x);
 }
 
@@ -1021,7 +1026,7 @@ gl.vertexAttrib4fv = function vertexAttrib4fv(indx, values) {
 
 var _vertexAttribPointer = gl.vertexAttribPointer;
 gl.vertexAttribPointer = function vertexAttribPointer(indx, size, type, normalized, stride, offset) {
-  if (!(arguments.length === 6 && typeof indx === "number" && typeof size === "number" && typeof type === "number" && typeof normalized === "boolean" && typeof stride === "number" && typeof offset === "number")) {
+  if (!(arguments.length === 6 && typeof indx === "number" && typeof size === "number" && typeof type === "number" && (typeof normalized === "boolean" || typeof normalized === "number") && typeof stride === "number" && typeof offset === "number")) {
     throw new TypeError('Expected vertexAttribPointer(number indx, number size, number type, boolean normalized, number stride, number offset)');
   }
   return _vertexAttribPointer(indx, size, type, normalized, stride, offset);
