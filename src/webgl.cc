@@ -7,6 +7,10 @@ using namespace std;
 using namespace node;
 using namespace v8;
 
+v8::Handle<v8::Value> ThrowError(const char* msg) {
+  return v8::ThrowException(v8::Exception::Error(v8::String::New(msg)));
+}
+
 static int SizeOfArrayElementForType(v8::ExternalArrayType type) {
   switch (type) {
   case v8::kExternalByteArray:
@@ -30,11 +34,11 @@ void *getImageData(Local<Value> arg) {
   if(!obj->IsObject())
     ThrowException(JS_STR("Bad texture argument"));
   if(obj->GetIndexedPropertiesExternalArrayDataType()>0) {
-    cout<<"pixels as TypedArray, type="<<obj->GetIndexedPropertiesExternalArrayDataType()<<endl;
+    //cout<<"pixels as TypedArray, type="<<obj->GetIndexedPropertiesExternalArrayDataType()<<endl;
     pixels = obj->GetIndexedPropertiesExternalArrayData();
   }
   else {
-    cout<<"Pixels as Image data"<<endl;
+    //cout<<"Pixels as Image data"<<endl;
     Image *image = ObjectWrap::Unwrap<Image>(arg->ToObject());
     pixels=image->GetData();
   }
@@ -271,25 +275,25 @@ JS_METHOD(UniformMatrix2fv) {
 
   GLint location = args[0]->Int32Value();
   GLboolean transpose = args[1]->BooleanValue();
-  Local<Object> value = Local<Object>::Cast(args[2]);
 
+  GLsizei count=0;
+  GLfloat* data=NULL;
 
-  GLsizei count = value->GetIndexedPropertiesExternalArrayDataLength();
-
-  if (count < 4) {
-    return ThrowException(Exception::TypeError(String::New("Not enough data for UniformMatrix4fv")));
+  if(args[2]->IsArray()) {
+    Local<Array> value = Local<Array>::Cast(args[2]);
+    count = value->GetIndexedPropertiesExternalArrayDataLength();
+    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
+  } else {
+    Local<Object> value = Local<Object>::Cast(args[2]);
+    count = value->GetIndexedPropertiesExternalArrayDataLength();
+    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
   }
 
-  const GLfloat* data = (const GLfloat*)value->GetIndexedPropertiesExternalArrayData();
+  if (count < 4) {
+    return ThrowError("Not enough data for UniformMatrix2fv");
+  }
 
-  //    printf("count=%d\n", count);
-  //    printf("[%f, %f, %f, %f,\n", data[0], data[1], data[2], data[3]);
-  //    printf(" %f, %f, %f, %f,\n", data[4], data[5], data[6], data[7]);
-  //    printf(" %f, %f, %f, %f,\n", data[8], data[9], data[10], data[11]);
-  //    printf(" %f, %f, %f, %f]\n", data[12], data[13], data[14], data[15]);
-
-
-  glUniformMatrix4fv(location, count / 4, transpose, data);
+  glUniformMatrix2fv(location, count / 4, transpose, data);
 
   return Undefined();
 }
@@ -299,25 +303,24 @@ JS_METHOD(UniformMatrix3fv) {
 
   GLint location = args[0]->Int32Value();
   GLboolean transpose = args[1]->BooleanValue();
-  Local<Object> value = Local<Object>::Cast(args[2]);
+  GLsizei count=0;
+  GLfloat* data=NULL;
 
-
-  GLsizei count = value->GetIndexedPropertiesExternalArrayDataLength();
-
-  if (count < 9) {
-    return ThrowException(Exception::TypeError(String::New("Not enough data for UniformMatrix4fv")));
+  if(args[2]->IsArray()) {
+    Local<Array> value = Local<Array>::Cast(args[2]);
+    count = value->GetIndexedPropertiesExternalArrayDataLength();
+    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
+  } else {
+    Local<Object> value = Local<Object>::Cast(args[2]);
+    count = value->GetIndexedPropertiesExternalArrayDataLength();
+    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
   }
 
-  const GLfloat* data = (const GLfloat*)value->GetIndexedPropertiesExternalArrayData();
+  if (count < 9) {
+    return ThrowError("Not enough data for UniformMatrix3fv");
+  }
 
-  //    printf("count=%d\n", count);
-  //    printf("[%f, %f, %f, %f,\n", data[0], data[1], data[2], data[3]);
-  //    printf(" %f, %f, %f, %f,\n", data[4], data[5], data[6], data[7]);
-  //    printf(" %f, %f, %f, %f,\n", data[8], data[9], data[10], data[11]);
-  //    printf(" %f, %f, %f, %f]\n", data[12], data[13], data[14], data[15]);
-
-
-  glUniformMatrix4fv(location, count / 9, transpose, data);
+  glUniformMatrix3fv(location, count / 9, transpose, data);
 
   return Undefined();
 }
@@ -327,23 +330,22 @@ JS_METHOD(UniformMatrix4fv) {
 
   GLint location = args[0]->Int32Value();
   GLboolean transpose = args[1]->BooleanValue();
-  Local<Object> value = Local<Object>::Cast(args[2]);
+  GLsizei count=0;
+  GLfloat* data=NULL;
 
-
-  GLsizei count = value->GetIndexedPropertiesExternalArrayDataLength();
-
-  if (count < 16) {
-    return ThrowException(Exception::TypeError(String::New("Not enough data for UniformMatrix4fv")));
+  if(args[2]->IsArray()) {
+    Local<Array> value = Local<Array>::Cast(args[2]);
+    count = value->GetIndexedPropertiesExternalArrayDataLength();
+    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
+  } else {
+    Local<Object> value = Local<Object>::Cast(args[2]);
+    count = value->GetIndexedPropertiesExternalArrayDataLength();
+    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
   }
 
-  const GLfloat* data = (const GLfloat*)value->GetIndexedPropertiesExternalArrayData();
-
-  //    printf("count=%d\n", count);
-  //    printf("[%f, %f, %f, %f,\n", data[0], data[1], data[2], data[3]);
-  //    printf(" %f, %f, %f, %f,\n", data[4], data[5], data[6], data[7]);
-  //    printf(" %f, %f, %f, %f,\n", data[8], data[9], data[10], data[11]);
-  //    printf(" %f, %f, %f, %f]\n", data[12], data[13], data[14], data[15]);
-
+  if (count < 16) {
+    return ThrowError("Not enough data for UniformMatrix4fv");
+  }
 
   glUniformMatrix4fv(location, count / 16, transpose, data);
 
@@ -812,7 +814,13 @@ JS_METHOD(Flush) {
   return Undefined();
 }
 
-JS_METHOD(vertexAttrib1f) {
+JS_METHOD(Finish) {
+  HandleScope scope;
+  glFinish();
+  return Undefined();
+}
+
+JS_METHOD(VertexAttrib1f) {
   HandleScope scope;
 
   GLuint indx = args[0]->Int32Value();
@@ -822,7 +830,7 @@ JS_METHOD(vertexAttrib1f) {
   return Undefined();
 }
 
-JS_METHOD(vertexAttrib2f) {
+JS_METHOD(VertexAttrib2f) {
   HandleScope scope;
 
   GLuint indx = args[0]->Int32Value();
@@ -833,7 +841,7 @@ JS_METHOD(vertexAttrib2f) {
   return Undefined();
 }
 
-JS_METHOD(vertexAttrib3f) {
+JS_METHOD(VertexAttrib3f) {
   HandleScope scope;
 
   GLuint indx = args[0]->Int32Value();
@@ -845,7 +853,7 @@ JS_METHOD(vertexAttrib3f) {
   return Undefined();
 }
 
-JS_METHOD(vertexAttrib4f) {
+JS_METHOD(VertexAttrib4f) {
   HandleScope scope;
 
   GLuint indx = args[0]->Int32Value();
@@ -858,45 +866,509 @@ JS_METHOD(vertexAttrib4f) {
   return Undefined();
 }
 
-JS_METHOD(vertexAttrib1fv) {
+JS_METHOD(VertexAttrib1fv) {
   HandleScope scope;
 
   int indx = args[0]->Int32Value();
   Local<Array> arr = Array::Cast(*args[1]);
 
-  glVertexAttrib1fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  if(args[1]->IsArray()) {
+    Local<Array> arr = Array::Cast(*args[1]);
+    glVertexAttrib1fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  }
+  else if(args[1]->IsObject()) {
+    glVertexAttrib1fv(indx, (float*) args[1]->ToObject()->GetIndexedPropertiesExternalArrayData());
+  }
   return Undefined();
 }
 
-JS_METHOD(vertexAttrib2fv) {
+JS_METHOD(VertexAttrib2fv) {
   HandleScope scope;
 
   int indx = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-
-  glVertexAttrib2fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  if(args[1]->IsArray()) {
+    Local<Array> arr = Array::Cast(*args[1]);
+    glVertexAttrib2fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  }
+  else if(args[1]->IsObject()) {
+    glVertexAttrib2fv(indx, (float*) args[1]->ToObject()->GetIndexedPropertiesExternalArrayData());
+  }
   return Undefined();
 }
 
-JS_METHOD(vertexAttrib3fv) {
+JS_METHOD(VertexAttrib3fv) {
   HandleScope scope;
 
   int indx = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-
-  glVertexAttrib3fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  if(args[1]->IsArray()) {
+    Local<Array> arr = Array::Cast(*args[1]);
+    glVertexAttrib3fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  }
+  else if(args[1]->IsObject()) {
+    glVertexAttrib3fv(indx, (float*) args[1]->ToObject()->GetIndexedPropertiesExternalArrayData());
+  }
   return Undefined();
 }
 
-JS_METHOD(vertexAttrib4fv) {
+JS_METHOD(VertexAttrib4fv) {
   HandleScope scope;
 
   int indx = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-
-  glVertexAttrib4fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  if(args[1]->IsArray()) {
+    Local<Array> arr = Array::Cast(*args[1]);
+    glVertexAttrib4fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  }
+  else if(args[1]->IsObject()) {
+    glVertexAttrib4fv(indx, (float*) args[1]->ToObject()->GetIndexedPropertiesExternalArrayData());
+  }
   return Undefined();
 }
 
+JS_METHOD(BlendColor) {
+  HandleScope scope;
+
+  GLclampf r= args[0]->Int32Value();
+  GLclampf g= args[1]->Int32Value();
+  GLclampf b= args[2]->Int32Value();
+  GLclampf a= args[3]->Int32Value();
+
+  glBlendColor(r,g,b,a);
+  return Undefined();
+}
+
+JS_METHOD(BlendEquationSeparate) {
+  HandleScope scope;
+
+  GLenum modeRGB= args[0]->Int32Value();
+  GLenum modeAlpha= args[1]->Int32Value();
+
+  glBlendEquationSeparate(modeRGB,modeAlpha);
+  return Undefined();
+}
+
+JS_METHOD(BlendFuncSeparate) {
+  HandleScope scope;
+
+  GLenum srcRGB= args[0]->Int32Value();
+  GLenum dstRGB= args[1]->Int32Value();
+  GLenum srcAlpha= args[2]->Int32Value();
+  GLenum dstAlpha= args[3]->Int32Value();
+
+  glBlendFuncSeparate(srcRGB,dstRGB,srcAlpha,dstAlpha);
+  return Undefined();
+}
+
+JS_METHOD(ClearStencil) {
+  HandleScope scope;
+
+  GLint s = args[0]->Int32Value();
+
+  glClearStencil(s);
+  return Undefined();
+}
+
+JS_METHOD(ColorMask) {
+  HandleScope scope;
+
+  GLboolean r = args[0]->BooleanValue();
+  GLboolean g = args[1]->BooleanValue();
+  GLboolean b = args[2]->BooleanValue();
+  GLboolean a = args[3]->BooleanValue();
+
+  glColorMask(r,g,b,a);
+  return Undefined();
+}
+
+JS_METHOD(CopyTexImage2D) {
+  HandleScope scope;
+
+  GLenum target = args[0]->Int32Value();
+  GLint level = args[1]->Int32Value();
+  GLenum internalformat = args[2]->Int32Value();
+  GLint x = args[3]->Int32Value();
+  GLint y = args[4]->Int32Value();
+  GLsizei width = args[5]->Int32Value();
+  GLsizei height = args[6]->Int32Value();
+  GLint border = args[7]->Int32Value();
+
+  glCopyTexImage2D( target, level, internalformat, x, y, width, height, border);
+  return Undefined();
+}
+
+JS_METHOD(CopyTexSubImage2D) {
+  HandleScope scope;
+
+  GLenum target = args[0]->Int32Value();
+  GLint level = args[1]->Int32Value();
+  GLint xoffset = args[2]->Int32Value();
+  GLint yoffset = args[3]->Int32Value();
+  GLint x = args[4]->Int32Value();
+  GLint y = args[5]->Int32Value();
+  GLsizei width = args[6]->Int32Value();
+  GLsizei height = args[7]->Int32Value();
+
+  glCopyTexSubImage2D( target, level, xoffset, yoffset, x, y, width, height);
+  return Undefined();
+}
+
+JS_METHOD(CullFace) {
+  HandleScope scope;
+
+  GLenum mode = args[0]->Int32Value();
+
+  glCullFace(mode);
+  return Undefined();
+}
+
+JS_METHOD(DepthMask) {
+  HandleScope scope;
+
+  GLboolean flag = args[0]->BooleanValue();
+
+  glDepthMask(flag);
+  return Undefined();
+}
+
+JS_METHOD(DepthRange) {
+  HandleScope scope;
+
+  GLclampf zNear = args[0]->Int32Value();
+  GLclampf zFar = args[1]->Int32Value();
+
+  glDepthRangef(zNear, zFar);
+  return Undefined();
+}
+
+//void detachShader(WebGLProgram program, WebGLShader shader);
+
+JS_METHOD(DisableVertexAttribArray) {
+  HandleScope scope;
+
+  GLuint index = args[0]->Int32Value();
+
+  glDisableVertexAttribArray(index);
+  return Undefined();
+}
+
+JS_METHOD(Hint) {
+  HandleScope scope;
+
+  GLenum target = args[0]->Int32Value();
+  GLenum mode = args[1]->Int32Value();
+
+  glHint(target, mode);
+  return Undefined();
+}
+
+JS_METHOD(IsEnabled) {
+  HandleScope scope;
+
+  GLenum cap = args[0]->Int32Value();
+
+  bool ret=glIsEnabled(cap);
+  return scope.Close(Boolean::New(ret));
+}
+
+JS_METHOD(LineWidth) {
+  HandleScope scope;
+
+  GLfloat width = args[0]->NumberValue();
+
+  glLineWidth(width);
+  return Undefined();
+}
+
+JS_METHOD(PolygonOffset) {
+  HandleScope scope;
+
+  GLfloat factor = args[0]->NumberValue();
+  GLfloat units = args[1]->NumberValue();
+
+  glPolygonOffset(factor, units);
+  return Undefined();
+}
+
+JS_METHOD(SampleCoverage) {
+  HandleScope scope;
+
+  GLclampf value = args[0]->Int32Value();
+  GLboolean invert = args[1]->BooleanValue();
+
+  glSampleCoverage(value, invert);
+  return Undefined();
+}
+
+JS_METHOD(Scissor) {
+  HandleScope scope;
+
+  GLint x = args[0]->Int32Value();
+  GLint y = args[1]->Int32Value();
+  GLsizei width = args[2]->Int32Value();
+  GLsizei height = args[3]->Int32Value();
+
+  glScissor(x, y, width, height);
+  return Undefined();
+}
+
+//void stencilFunc(GLenum func, GLint ref, GLuint mask);
+JS_METHOD(StencilFunc) {
+  HandleScope scope;
+
+  GLenum func = args[0]->Int32Value();
+  GLint ref = args[1]->Int32Value();
+  GLuint mask = args[2]->Int32Value();
+
+  glStencilFunc(func, ref, mask);
+  return Undefined();
+}
+
+//void stencilFuncSeparate(GLenum face, GLenum func, GLint ref, GLuint mask);
+JS_METHOD(StencilFuncSeparate) {
+  HandleScope scope;
+
+  GLenum face = args[0]->Int32Value();
+  GLenum func = args[1]->Int32Value();
+  GLint ref = args[2]->Int32Value();
+  GLuint mask = args[3]->Int32Value();
+
+  glStencilFuncSeparate(face, func, ref, mask);
+  return Undefined();
+}
+
+//void stencilMask(GLuint mask);
+JS_METHOD(StencilMask) {
+  HandleScope scope;
+
+  GLuint mask = args[0]->Uint32Value();
+
+  glStencilMask(mask);
+  return Undefined();
+}
+
+//void stencilMaskSeparate(GLenum face, GLuint mask);
+JS_METHOD(StencilMaskSeparate) {
+  HandleScope scope;
+
+  GLenum face = args[0]->Int32Value();
+  GLuint mask = args[1]->Uint32Value();
+
+  glStencilMaskSeparate(face, mask);
+  return Undefined();
+}
+
+//void stencilOp(GLenum fail, GLenum zfail, GLenum zpass);
+JS_METHOD(StencilOp) {
+  HandleScope scope;
+
+  GLenum fail = args[0]->Int32Value();
+  GLenum zfail = args[1]->Int32Value();
+  GLenum zpass = args[2]->Int32Value();
+
+  glStencilOp(fail, zfail, zpass);
+  return Undefined();
+}
+
+//void stencilOpSeparate(GLenum face, GLenum fail, GLenum zfail, GLenum zpass);
+JS_METHOD(StencilOpSeparate) {
+  HandleScope scope;
+
+  GLenum face = args[0]->Int32Value();
+  GLenum fail = args[1]->Int32Value();
+  GLenum zfail = args[2]->Int32Value();
+  GLenum zpass = args[3]->Int32Value();
+
+  glStencilOpSeparate(face, fail, zfail, zpass);
+  return Undefined();
+}
+
+JS_METHOD(BindRenderbuffer) {
+  HandleScope scope;
+
+  int target = args[0]->Int32Value();
+  int buffer = args[1]->Int32Value();
+
+  glBindRenderbuffer(target, buffer);
+
+  return Undefined();
+}
+
+JS_METHOD(CreateRenderBuffer) {
+  HandleScope scope;
+
+  GLuint renderbuffers;
+  glGenRenderbuffers(1,&renderbuffers);
+  return Number::New(renderbuffers);
+}
+
+JS_METHOD(DeleteBuffer) {
+  HandleScope scope;
+
+  GLuint buffer = args[0]->Uint32Value();
+
+  glDeleteBuffers(1,&buffer);
+  return Undefined();
+}
+
+JS_METHOD(DeleteFramebuffer) {
+  HandleScope scope;
+
+  GLuint buffer = args[0]->Uint32Value();
+
+  glDeleteFramebuffers(1,&buffer);
+  return Undefined();
+}
+
+JS_METHOD(DeleteProgram) {
+  HandleScope scope;
+
+  GLuint program = args[0]->Uint32Value();
+
+  glDeleteProgram(program);
+  return Undefined();
+}
+
+JS_METHOD(DeleteRenderbuffer) {
+  HandleScope scope;
+
+  GLuint renderbuffer = args[0]->Uint32Value();
+
+  glDeleteRenderbuffers(1, &renderbuffer);
+  return Undefined();
+}
+
+JS_METHOD(DeleteShader) {
+  HandleScope scope;
+
+  GLuint shader = args[0]->Uint32Value();
+
+  glDeleteShader(shader);
+  return Undefined();
+}
+
+JS_METHOD(DeleteTexture) {
+  HandleScope scope;
+
+  GLuint texture = args[0]->Uint32Value();
+
+  glDeleteTextures(1,&texture);
+  return Undefined();
+}
+
+JS_METHOD(DetachShader) {
+  HandleScope scope;
+
+  GLuint program = args[0]->Uint32Value();
+  GLuint shader = args[1]->Uint32Value();
+
+  glDetachShader(program, shader);
+  return Undefined();
+}
+
+JS_METHOD(FramebufferRenderbuffer) {
+  HandleScope scope;
+
+  GLenum target = args[0]->Int32Value();
+  GLenum attachment = args[1]->Int32Value();
+  GLenum renderbuffertarget = args[2]->Int32Value();
+  GLuint renderbuffer = args[3]->Uint32Value();
+
+  glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+  return Undefined();
+}
+
+JS_METHOD(GetVertexAttribOffset) {
+  HandleScope scope;
+
+  GLuint index = args[0]->Uint32Value();
+  GLenum pname = args[1]->Int32Value();
+  void *ret=NULL;
+
+  glGetVertexAttribPointerv(index, pname, &ret);
+  return Integer::New((GLsizeiptr) ret); // TODO is this correct?
+}
+
+JS_METHOD(IsBuffer) {
+  HandleScope scope;
+
+  GLuint buffer = args[0]->Uint32Value();
+
+  return Boolean::New(glIsBuffer(buffer));
+}
+
+JS_METHOD(IsFramebuffer) {
+  HandleScope scope;
+
+  GLuint buffer = args[0]->Uint32Value();
+
+  return Boolean::New(glIsFramebuffer(buffer));
+}
+
+JS_METHOD(IsProgram) {
+  HandleScope scope;
+
+  GLuint buffer = args[0]->Uint32Value();
+
+  return Boolean::New(glIsProgram(buffer));
+}
+
+JS_METHOD(IsRenderbuffer) {
+  HandleScope scope;
+
+  GLuint buffer = args[0]->Uint32Value();
+
+  return Boolean::New(glIsRenderbuffer(buffer));
+}
+
+JS_METHOD(IsShader) {
+  HandleScope scope;
+
+  GLuint buffer = args[0]->Uint32Value();
+
+  return Boolean::New(glIsShader(buffer));
+}
+
+JS_METHOD(IsTexture) {
+  HandleScope scope;
+
+  GLuint buffer = args[0]->Uint32Value();
+
+  return Boolean::New(glIsTexture(buffer));
+}
+
+JS_METHOD(RenderbufferStorage) {
+  HandleScope scope;
+
+  GLenum target = args[0]->Int32Value();
+  GLenum internalformat = args[1]->Int32Value();
+  GLsizei width = args[2]->Uint32Value();
+  GLsizei height = args[3]->Uint32Value();
+
+  glRenderbufferStorage(target, internalformat, width, height);
+  return Undefined();
+}
+
+JS_METHOD(GetShaderSource) {
+  HandleScope scope;
+
+  int shader = args[0]->Int32Value();
+
+  GLint len;
+  glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &len);
+  GLchar *source=new GLchar[len];
+  glGetShaderSource(shader, len, NULL, source);
+
+  Local<String> str=String::New(source);
+  delete source;
+
+  return str;
+}
+
+JS_METHOD(ValidateProgram) {
+  HandleScope scope;
+
+  glValidateProgram(args[0]->Int32Value());
+
+  return Undefined();
+}
 
 } // end namespace webgl

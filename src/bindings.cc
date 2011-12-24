@@ -84,15 +84,63 @@ void init(Handle<Object> target)
   NODE_SET_METHOD(target, "activeTexture", webgl::ActiveTexture);
   NODE_SET_METHOD(target, "drawElements", webgl::DrawElements);
   NODE_SET_METHOD(target, "flush", webgl::Flush);
+  NODE_SET_METHOD(target, "finish", webgl::Finish);
 
-  NODE_SET_METHOD(target, "vertexAttrib1f", webgl::vertexAttrib1f);
-  NODE_SET_METHOD(target, "vertexAttrib2f", webgl::vertexAttrib2f);
-  NODE_SET_METHOD(target, "vertexAttrib3f", webgl::vertexAttrib3f);
-  NODE_SET_METHOD(target, "vertexAttrib4f", webgl::vertexAttrib4f);
-  NODE_SET_METHOD(target, "vertexAttrib1fv", webgl::vertexAttrib1fv);
-  NODE_SET_METHOD(target, "vertexAttrib2fv", webgl::vertexAttrib2fv);
-  NODE_SET_METHOD(target, "vertexAttrib3fv", webgl::vertexAttrib3fv);
-  NODE_SET_METHOD(target, "vertexAttrib4fv", webgl::vertexAttrib4fv);
+  NODE_SET_METHOD(target, "vertexAttrib1f", webgl::VertexAttrib1f);
+  NODE_SET_METHOD(target, "vertexAttrib2f", webgl::VertexAttrib2f);
+  NODE_SET_METHOD(target, "vertexAttrib3f", webgl::VertexAttrib3f);
+  NODE_SET_METHOD(target, "vertexAttrib4f", webgl::VertexAttrib4f);
+  NODE_SET_METHOD(target, "vertexAttrib1fv", webgl::VertexAttrib1fv);
+  NODE_SET_METHOD(target, "vertexAttrib2fv", webgl::VertexAttrib2fv);
+  NODE_SET_METHOD(target, "vertexAttrib3fv", webgl::VertexAttrib3fv);
+  NODE_SET_METHOD(target, "vertexAttrib4fv", webgl::VertexAttrib4fv);
+
+  NODE_SET_METHOD(target, "blendColor", webgl::BlendColor);
+  NODE_SET_METHOD(target, "blendEquationSeparate", webgl::BlendEquationSeparate);
+  NODE_SET_METHOD(target, "blendFuncSeparate", webgl::BlendFuncSeparate);
+  NODE_SET_METHOD(target, "clearStencil", webgl::ClearStencil);
+  NODE_SET_METHOD(target, "colorMask", webgl::ColorMask);
+  NODE_SET_METHOD(target, "copyTexImage2D", webgl::CopyTexImage2D);
+  NODE_SET_METHOD(target, "copyTexSubImage2D", webgl::CopyTexSubImage2D);
+  NODE_SET_METHOD(target, "cullFace", webgl::CullFace);
+  NODE_SET_METHOD(target, "DepthMask", webgl::DepthMask);
+  NODE_SET_METHOD(target, "DepthRange", webgl::DepthRange);
+  NODE_SET_METHOD(target, "DisableVertexAttribArray", webgl::DisableVertexAttribArray);
+  NODE_SET_METHOD(target, "Hint", webgl::Hint);
+  NODE_SET_METHOD(target, "IsEnabled", webgl::IsEnabled);
+  NODE_SET_METHOD(target, "LineWidth", webgl::LineWidth);
+  NODE_SET_METHOD(target, "PolygonOffset", webgl::PolygonOffset);
+
+  NODE_SET_METHOD(target, "Scissor", webgl::Scissor);
+  NODE_SET_METHOD(target, "StencilFunc", webgl::StencilFunc);
+  NODE_SET_METHOD(target, "StencilFuncSeparate", webgl::StencilFuncSeparate);
+  NODE_SET_METHOD(target, "StencilMask", webgl::StencilMask);
+  NODE_SET_METHOD(target, "StencilMaskSeparate", webgl::StencilMaskSeparate);
+  NODE_SET_METHOD(target, "StencilOp", webgl::StencilOp);
+  NODE_SET_METHOD(target, "StencilOpSeparate", webgl::StencilOpSeparate);
+  NODE_SET_METHOD(target, "BindRenderBuffer", webgl::BindRenderBuffer);
+  NODE_SET_METHOD(target, "CreateRenderBuffer", webgl::CreateRenderBuffer);
+
+  NODE_SET_METHOD(target, "DeleteBuffer", webgl::DeleteBuffer);
+  NODE_SET_METHOD(target, "DeleteFramebuffer", webgl::DeleteFramebuffer);
+  NODE_SET_METHOD(target, "DeleteProgram", webgl::DeleteProgram);
+  NODE_SET_METHOD(target, "DeleteRenderbuffer", webgl::DeleteRenderbuffer);
+  NODE_SET_METHOD(target, "DeleteShader", webgl::DeleteShader);
+  NODE_SET_METHOD(target, "DeleteTexture", webgl::DeleteTexture);
+  NODE_SET_METHOD(target, "DetachShader", webgl::DetachShader);
+  NODE_SET_METHOD(target, "FramebufferRenderbuffer", webgl::FramebufferRenderbuffer);
+  NODE_SET_METHOD(target, "GetVertexAttribOffset", webgl::GetVertexAttribOffset);
+
+  NODE_SET_METHOD(target, "IsBuffer", webgl::IsBuffer);
+  NODE_SET_METHOD(target, "IsFramebuffer", webgl::IsFramebuffer);
+  NODE_SET_METHOD(target, "IsProgram", webgl::IsProgram);
+  NODE_SET_METHOD(target, "IsRenderbuffer", webgl::IsRenderbuffer);
+  NODE_SET_METHOD(target, "IsShader", webgl::IsShader);
+  NODE_SET_METHOD(target, "IsTexture", webgl::IsTexture);
+
+  NODE_SET_METHOD(target, "RenderbufferStorage", webgl::RenderbufferStorage);
+  NODE_SET_METHOD(target, "GetShaderSource", webgl::GetShaderSource);
+  NODE_SET_METHOD(target, "ValidateProgram", webgl::ValidateProgram);
 
   // OpenGL ES 2.1 constants
 

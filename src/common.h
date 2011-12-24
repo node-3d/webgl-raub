@@ -18,6 +18,6 @@ namespace {
 #define JS_FLOAT(val) v8::Number::New(val)
 #define JS_BOOL(val) v8::Boolean::New(val)
 #define JS_METHOD(name) v8::Handle<v8::Value> name(const v8::Arguments& args)
-}
 
+}
 #endif /* COMMON_H_ */
