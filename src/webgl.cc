@@ -43,7 +43,7 @@ void *getImageData(Local<Value> arg) {
 }
 namespace webgl {
 
-Handle<Value> Uniform1f(const Arguments& args) {
+JS_METHOD(Uniform1f) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -53,7 +53,7 @@ Handle<Value> Uniform1f(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform2f(const Arguments& args) {
+JS_METHOD(Uniform2f) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -64,7 +64,7 @@ Handle<Value> Uniform2f(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform3f(const Arguments& args) {
+JS_METHOD(Uniform3f) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -76,7 +76,7 @@ Handle<Value> Uniform3f(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform4f(const Arguments& args) {
+JS_METHOD(Uniform4f) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -89,7 +89,7 @@ Handle<Value> Uniform4f(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform1i(const Arguments& args) {
+JS_METHOD(Uniform1i) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -99,7 +99,7 @@ Handle<Value> Uniform1i(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform2i(const Arguments& args) {
+JS_METHOD(Uniform2i) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -110,7 +110,7 @@ Handle<Value> Uniform2i(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform3i(const Arguments& args) {
+JS_METHOD(Uniform3i) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -122,7 +122,7 @@ Handle<Value> Uniform3i(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform4i(const Arguments& args) {
+JS_METHOD(Uniform4i) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -135,7 +135,7 @@ Handle<Value> Uniform4i(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform1fv(const Arguments& args) {
+JS_METHOD(Uniform1fv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -146,7 +146,7 @@ Handle<Value> Uniform1fv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform2fv(const Arguments& args) {
+JS_METHOD(Uniform2fv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -157,7 +157,7 @@ Handle<Value> Uniform2fv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform3fv(const Arguments& args) {
+JS_METHOD(Uniform3fv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -168,7 +168,7 @@ Handle<Value> Uniform3fv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform4fv(const Arguments& args) {
+JS_METHOD(Uniform4fv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -179,7 +179,7 @@ Handle<Value> Uniform4fv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform1iv(const Arguments& args) {
+JS_METHOD(Uniform1iv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -190,7 +190,7 @@ Handle<Value> Uniform1iv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform2iv(const Arguments& args) {
+JS_METHOD(Uniform2iv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -201,7 +201,7 @@ Handle<Value> Uniform2iv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform3iv(const Arguments& args) {
+JS_METHOD(Uniform3iv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -212,7 +212,7 @@ Handle<Value> Uniform3iv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Uniform4iv(const Arguments& args) {
+JS_METHOD(Uniform4iv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
@@ -223,7 +223,7 @@ Handle<Value> Uniform4iv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> PixelStorei(const Arguments& args) {
+JS_METHOD(PixelStorei) {
   HandleScope scope;
 
   int pname = args[0]->Int32Value();
@@ -234,7 +234,7 @@ Handle<Value> PixelStorei(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> BindAttribLocation(const Arguments& args) {
+JS_METHOD(BindAttribLocation) {
   HandleScope scope;
 
   int program = args[0]->Int32Value();
@@ -247,14 +247,14 @@ Handle<Value> BindAttribLocation(const Arguments& args) {
 }
 
 
-Handle<Value> GetError(const Arguments& args) {
+JS_METHOD(GetError) {
   HandleScope scope;
 
   return Number::New(glGetError());
 }
 
 
-Handle<Value> DrawArrays(const Arguments& args) {
+JS_METHOD(DrawArrays) {
   HandleScope scope;
 
   int mode = args[0]->Int32Value();
@@ -266,7 +266,7 @@ Handle<Value> DrawArrays(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> UniformMatrix2fv(const Arguments& args) {
+JS_METHOD(UniformMatrix2fv) {
   HandleScope scope;
 
   GLint location = args[0]->Int32Value();
@@ -294,7 +294,7 @@ Handle<Value> UniformMatrix2fv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> UniformMatrix3fv(const Arguments& args) {
+JS_METHOD(UniformMatrix3fv) {
   HandleScope scope;
 
   GLint location = args[0]->Int32Value();
@@ -322,7 +322,7 @@ Handle<Value> UniformMatrix3fv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> UniformMatrix4fv(const Arguments& args) {
+JS_METHOD(UniformMatrix4fv) {
   HandleScope scope;
 
   GLint location = args[0]->Int32Value();
@@ -350,7 +350,7 @@ Handle<Value> UniformMatrix4fv(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> GenerateMipmap(const Arguments& args) {
+JS_METHOD(GenerateMipmap) {
   HandleScope scope;
 
   GLint target = args[0]->Int32Value();
@@ -359,7 +359,7 @@ Handle<Value> GenerateMipmap(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> GetAttribLocation(const Arguments& args) {
+JS_METHOD(GetAttribLocation) {
   HandleScope scope;
 
   int program = args[0]->Int32Value();
@@ -369,7 +369,7 @@ Handle<Value> GetAttribLocation(const Arguments& args) {
 }
 
 
-Handle<Value> DepthFunc(const Arguments& args) {
+JS_METHOD(DepthFunc) {
   HandleScope scope;
 
   glDepthFunc(args[0]->Int32Value());
@@ -378,7 +378,7 @@ Handle<Value> DepthFunc(const Arguments& args) {
 }
 
 
-Handle<Value> Viewport(const Arguments& args) {
+JS_METHOD(Viewport) {
   HandleScope scope;
 
   int x = args[0]->Int32Value();
@@ -393,14 +393,14 @@ Handle<Value> Viewport(const Arguments& args) {
   return Number::New(glCreateShader(args[0]->Int32Value()));
 }
 
-Handle<Value> CreateShader(const Arguments& args) {
+JS_METHOD(CreateShader) {
   HandleScope scope;
 
   return Number::New(glCreateShader(args[0]->Int32Value()));
 }
 
 
-Handle<Value> ShaderSource(const Arguments& args) {
+JS_METHOD(ShaderSource) {
   HandleScope scope;
 
   int id = args[0]->Int32Value();
@@ -415,7 +415,7 @@ Handle<Value> ShaderSource(const Arguments& args) {
 }
 
 
-Handle<Value> CompileShader(const Arguments& args) {
+JS_METHOD(CompileShader) {
   HandleScope scope;
 
 
@@ -425,7 +425,7 @@ Handle<Value> CompileShader(const Arguments& args) {
 }
 
 
-Handle<Value> GetShaderParameter(const Arguments& args) {
+JS_METHOD(GetShaderParameter) {
   HandleScope scope;
 
   int shader = args[0]->Int32Value();
@@ -448,7 +448,7 @@ Handle<Value> GetShaderParameter(const Arguments& args) {
   }
 }
 
-Handle<Value> GetShaderInfoLog(const Arguments& args) {
+JS_METHOD(GetShaderInfoLog) {
   HandleScope scope;
 
   int id = args[0]->Int32Value();
@@ -460,14 +460,14 @@ Handle<Value> GetShaderInfoLog(const Arguments& args) {
 }
 
 
-Handle<Value> CreateProgram(const Arguments& args) {
+JS_METHOD(CreateProgram) {
   HandleScope scope;
 
   return Number::New(glCreateProgram());
 }
 
 
-Handle<Value> AttachShader(const Arguments& args) {
+JS_METHOD(AttachShader) {
   HandleScope scope;
 
   int program = args[0]->Int32Value();
@@ -479,7 +479,7 @@ Handle<Value> AttachShader(const Arguments& args) {
 }
 
 
-Handle<Value> LinkProgram(const Arguments& args) {
+JS_METHOD(LinkProgram) {
   HandleScope scope;
 
   glLinkProgram(args[0]->Int32Value());
@@ -488,7 +488,7 @@ Handle<Value> LinkProgram(const Arguments& args) {
 }
 
 
-Handle<Value> GetProgramParameter(const Arguments& args) {
+JS_METHOD(GetProgramParameter) {
   HandleScope scope;
 
   int program = args[0]->Int32Value();
@@ -512,7 +512,7 @@ Handle<Value> GetProgramParameter(const Arguments& args) {
 }
 
 
-Handle<Value> GetUniformLocation(const Arguments& args) {
+JS_METHOD(GetUniformLocation) {
   HandleScope scope;
 
   int program = args[0]->Int32Value();
@@ -522,7 +522,7 @@ Handle<Value> GetUniformLocation(const Arguments& args) {
 }
 
 
-Handle<Value> ClearColor(const Arguments& args) {
+JS_METHOD(ClearColor) {
   HandleScope scope;
 
   double red = args[0]->NumberValue();
@@ -536,7 +536,7 @@ Handle<Value> ClearColor(const Arguments& args) {
 }
 
 
-Handle<Value> ClearDepth(const Arguments& args) {
+JS_METHOD(ClearDepth) {
   HandleScope scope;
 
   double depth = args[0]->NumberValue();
@@ -546,14 +546,14 @@ Handle<Value> ClearDepth(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> Disable(const Arguments& args) {
+JS_METHOD(Disable) {
   HandleScope scope;
 
   glDisable(args[0]->Int32Value());
   return Undefined();
 }
 
-Handle<Value> Enable(const Arguments& args) {
+JS_METHOD(Enable) {
   HandleScope scope;
 
   glEnable(args[0]->Int32Value());
@@ -561,7 +561,7 @@ Handle<Value> Enable(const Arguments& args) {
 }
 
 
-Handle<Value> CreateTexture(const Arguments& args) {
+JS_METHOD(CreateTexture) {
   HandleScope scope;
 
   GLuint texture;
@@ -570,7 +570,7 @@ Handle<Value> CreateTexture(const Arguments& args) {
 }
 
 
-Handle<Value> BindTexture(const Arguments& args) {
+JS_METHOD(BindTexture) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
@@ -581,7 +581,7 @@ Handle<Value> BindTexture(const Arguments& args) {
 }
 
 
-Handle<Value> TexImage2D(const Arguments& args) {
+JS_METHOD(TexImage2D) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
@@ -601,7 +601,7 @@ Handle<Value> TexImage2D(const Arguments& args) {
 }
 
 
-Handle<Value> TexParameteri(const Arguments& args) {
+JS_METHOD(TexParameteri) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
@@ -613,7 +613,7 @@ Handle<Value> TexParameteri(const Arguments& args) {
   return Undefined();
 }
 
-Handle<Value> TexParameterf(const Arguments& args) {
+JS_METHOD(TexParameterf) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
@@ -626,7 +626,7 @@ Handle<Value> TexParameterf(const Arguments& args) {
 }
 
 
-Handle<Value> Clear(const Arguments& args) {
+JS_METHOD(Clear) {
   HandleScope scope;
 
   glClear(args[0]->Int32Value());
@@ -635,7 +635,7 @@ Handle<Value> Clear(const Arguments& args) {
 }
 
 
-Handle<Value> UseProgram(const Arguments& args) {
+JS_METHOD(UseProgram) {
   HandleScope scope;
 
   glUseProgram(args[0]->Int32Value());
@@ -644,7 +644,7 @@ Handle<Value> UseProgram(const Arguments& args) {
 }
 
 
-Handle<Value> CreateBuffer(const Arguments& args) {
+JS_METHOD(CreateBuffer) {
   HandleScope scope;
 
   GLuint buffer;
@@ -653,7 +653,7 @@ Handle<Value> CreateBuffer(const Arguments& args) {
 }
 
 
-Handle<Value> BindBuffer(const Arguments& args) {
+JS_METHOD(BindBuffer) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
@@ -665,7 +665,7 @@ Handle<Value> BindBuffer(const Arguments& args) {
 }
 
 
-Handle<Value> CreateFramebuffer(const Arguments& args) {
+JS_METHOD(CreateFramebuffer) {
   HandleScope scope;
 
   GLuint buffer;
@@ -674,7 +674,7 @@ Handle<Value> CreateFramebuffer(const Arguments& args) {
 }
 
 
-Handle<Value> BindFramebuffer(const Arguments& args) {
+JS_METHOD(BindFramebuffer) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
@@ -686,7 +686,7 @@ Handle<Value> BindFramebuffer(const Arguments& args) {
 }
 
 
-Handle<Value> FramebufferTexture2D(const Arguments& args) {
+JS_METHOD(FramebufferTexture2D) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
@@ -701,7 +701,7 @@ Handle<Value> FramebufferTexture2D(const Arguments& args) {
 }
 
 
-Handle<Value> BufferData(const Arguments& args) {
+JS_METHOD(BufferData) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
@@ -720,7 +720,7 @@ Handle<Value> BufferData(const Arguments& args) {
 }
 
 
-Handle<Value> BufferSubData(const Arguments& args) {
+JS_METHOD(BufferSubData) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
@@ -737,7 +737,7 @@ Handle<Value> BufferSubData(const Arguments& args) {
 }
 
 
-Handle<Value> BlendEquation(const Arguments& args) {
+JS_METHOD(BlendEquation) {
   HandleScope scope;
 
   int mode=args[0]->Int32Value();;
@@ -748,7 +748,7 @@ Handle<Value> BlendEquation(const Arguments& args) {
 }
 
 
-Handle<Value> BlendFunc(const Arguments& args) {
+JS_METHOD(BlendFunc) {
   HandleScope scope;
 
   int sfactor=args[0]->Int32Value();;
@@ -760,7 +760,7 @@ Handle<Value> BlendFunc(const Arguments& args) {
 }
 
 
-Handle<Value> EnableVertexAttribArray(const Arguments& args) {
+JS_METHOD(EnableVertexAttribArray) {
   HandleScope scope;
 
   glEnableVertexAttribArray(args[0]->Int32Value());
@@ -769,7 +769,7 @@ Handle<Value> EnableVertexAttribArray(const Arguments& args) {
 }
 
 
-Handle<Value> VertexAttribPointer(const Arguments& args) {
+JS_METHOD(VertexAttribPointer) {
   HandleScope scope;
 
   int indx = args[0]->Int32Value();
@@ -786,7 +786,7 @@ Handle<Value> VertexAttribPointer(const Arguments& args) {
 }
 
 
-Handle<Value> ActiveTexture(const Arguments& args) {
+JS_METHOD(ActiveTexture) {
   HandleScope scope;
 
   glActiveTexture(args[0]->Int32Value());
@@ -794,7 +794,7 @@ Handle<Value> ActiveTexture(const Arguments& args) {
 }
 
 
-Handle<Value> DrawElements(const Arguments& args) {
+JS_METHOD(DrawElements) {
   HandleScope scope;
 
   int mode = args[0]->Int32Value();
@@ -806,11 +806,97 @@ Handle<Value> DrawElements(const Arguments& args) {
 }
 
 
-Handle<Value> Flush(const Arguments& args) {
+JS_METHOD(Flush) {
   HandleScope scope;
-
   glFlush();
   return Undefined();
 }
+
+JS_METHOD(vertexAttrib1f) {
+  HandleScope scope;
+
+  GLuint indx = args[0]->Int32Value();
+  GLfloat x = args[1]->NumberValue();
+
+  glVertexAttrib1f(indx, x);
+  return Undefined();
+}
+
+JS_METHOD(vertexAttrib2f) {
+  HandleScope scope;
+
+  GLuint indx = args[0]->Int32Value();
+  GLfloat x = args[1]->NumberValue();
+  GLfloat y = args[2]->NumberValue();
+
+  glVertexAttrib2f(indx, x, y);
+  return Undefined();
+}
+
+JS_METHOD(vertexAttrib3f) {
+  HandleScope scope;
+
+  GLuint indx = args[0]->Int32Value();
+  GLfloat x = args[1]->NumberValue();
+  GLfloat y = args[2]->NumberValue();
+  GLfloat z = args[3]->NumberValue();
+
+  glVertexAttrib3f(indx, x, y, z);
+  return Undefined();
+}
+
+JS_METHOD(vertexAttrib4f) {
+  HandleScope scope;
+
+  GLuint indx = args[0]->Int32Value();
+  GLfloat x = args[1]->NumberValue();
+  GLfloat y = args[2]->NumberValue();
+  GLfloat z = args[3]->NumberValue();
+  GLfloat w = args[4]->NumberValue();
+
+  glVertexAttrib4f(indx, x, y, z, w);
+  return Undefined();
+}
+
+JS_METHOD(vertexAttrib1fv) {
+  HandleScope scope;
+
+  int indx = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+
+  glVertexAttrib1fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+JS_METHOD(vertexAttrib2fv) {
+  HandleScope scope;
+
+  int indx = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+
+  glVertexAttrib2fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+JS_METHOD(vertexAttrib3fv) {
+  HandleScope scope;
+
+  int indx = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+
+  glVertexAttrib3fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
+JS_METHOD(vertexAttrib4fv) {
+  HandleScope scope;
+
+  int indx = args[0]->Int32Value();
+  Local<Array> arr = Array::Cast(*args[1]);
+
+  glVertexAttrib4fv(indx, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  return Undefined();
+}
+
 
 } // end namespace webgl

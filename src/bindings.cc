@@ -85,6 +85,15 @@ void init(Handle<Object> target)
   NODE_SET_METHOD(target, "drawElements", webgl::DrawElements);
   NODE_SET_METHOD(target, "flush", webgl::Flush);
 
+  NODE_SET_METHOD(target, "vertexAttrib1f", webgl::vertexAttrib1f);
+  NODE_SET_METHOD(target, "vertexAttrib2f", webgl::vertexAttrib2f);
+  NODE_SET_METHOD(target, "vertexAttrib3f", webgl::vertexAttrib3f);
+  NODE_SET_METHOD(target, "vertexAttrib4f", webgl::vertexAttrib4f);
+  NODE_SET_METHOD(target, "vertexAttrib1fv", webgl::vertexAttrib1fv);
+  NODE_SET_METHOD(target, "vertexAttrib2fv", webgl::vertexAttrib2fv);
+  NODE_SET_METHOD(target, "vertexAttrib3fv", webgl::vertexAttrib3fv);
+  NODE_SET_METHOD(target, "vertexAttrib4fv", webgl::vertexAttrib4fv);
+
   // OpenGL ES 2.1 constants
 
   /* ClearBufferMask */
