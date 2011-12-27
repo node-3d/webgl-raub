@@ -110,8 +110,8 @@ JS_METHOD(StencilMask);
 JS_METHOD(StencilMaskSeparate);
 JS_METHOD(StencilOp);
 JS_METHOD(StencilOpSeparate);
-JS_METHOD(BindRenderBuffer);
-JS_METHOD(CreateRenderBuffer);
+JS_METHOD(BindRenderbuffer);
+JS_METHOD(CreateRenderbuffer);
 
 JS_METHOD(DeleteBuffer);
 JS_METHOD(DeleteFramebuffer);
@@ -133,6 +133,7 @@ JS_METHOD(IsTexture);
 JS_METHOD(RenderbufferStorage);
 JS_METHOD(GetShaderSource);
 JS_METHOD(ValidateProgram);
+
 }
 
 #endif /* WEBGL_H_ */

@@ -15,7 +15,7 @@ def configure(conf):
 
 def build(bld):
   obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
-  obj.target = "node-webgl"
+  obj.target = "webgl"
   obj.cxxflags = ["-pthread", "-Wall"]
 
   if sys.platform.startswith('darwin'):
@@ -23,7 +23,7 @@ def build(bld):
     obj.framework = ['OpenGL','GLUT','Cocoa']
   elif sys.platform.startswith('linux'):
     obj.uselib = ["GL", "GLU", "GLUT", "FREEIMAGE"]
-    obj.linkflags = ["-lfreeimage"]
+    obj.linkflags = ["-lGL", "-lfreeimage"]
   else:
     obj.linkflags = ["-lGLESv2"]
 

@@ -7,6 +7,8 @@ using namespace std;
 using namespace node;
 using namespace v8;
 
+namespace webgl {
+
 v8::Handle<v8::Value> ThrowError(const char* msg) {
   return v8::ThrowException(v8::Exception::Error(v8::String::New(msg)));
 }
@@ -45,7 +47,6 @@ void *getImageData(Local<Value> arg) {
 
   return pixels;
 }
-namespace webgl {
 
 JS_METHOD(Uniform1f) {
   HandleScope scope;
@@ -254,7 +255,7 @@ JS_METHOD(BindAttribLocation) {
 JS_METHOD(GetError) {
   HandleScope scope;
 
-  return Number::New(glGetError());
+  return scope.Close(Number::New(glGetError()));
 }
 
 
@@ -367,7 +368,7 @@ JS_METHOD(GetAttribLocation) {
   int program = args[0]->Int32Value();
   String::Utf8Value name(args[1]);
 
-  return Number::New(glGetAttribLocation(program, *name));
+  return scope.Close(Number::New(glGetAttribLocation(program, *name)));
 }
 
 
@@ -392,13 +393,13 @@ JS_METHOD(Viewport) {
 
   return Undefined();
 
-  return Number::New(glCreateShader(args[0]->Int32Value()));
+  return scope.Close(Number::New(glCreateShader(args[0]->Int32Value())));
 }
 
 JS_METHOD(CreateShader) {
   HandleScope scope;
 
-  return Number::New(glCreateShader(args[0]->Int32Value()));
+  return scope.Close(Number::New(glCreateShader(args[0]->Int32Value())));
 }
 
 
@@ -437,14 +438,14 @@ JS_METHOD(GetShaderParameter) {
   case GL_DELETE_STATUS:
   case GL_COMPILE_STATUS:
     glGetShaderiv(shader, pname, &value);
-    return Boolean::New(static_cast<bool>(value));
+    return scope.Close(Boolean::New(static_cast<bool>(value)));
   case GL_SHADER_TYPE:
     glGetShaderiv(shader, pname, &value);
-    return Number::New(static_cast<unsigned long>(value));
+    return scope.Close(Number::New(static_cast<unsigned long>(value)));
   case GL_INFO_LOG_LENGTH:
   case GL_SHADER_SOURCE_LENGTH:
     glGetShaderiv(shader, pname, &value);
-    return Number::New(static_cast<long>(value));
+    return scope.Close(Number::New(static_cast<long>(value)));
   default:
     return ThrowException(Exception::TypeError(String::New("GetShaderParameter: Invalid Enum")));
   }
@@ -458,14 +459,14 @@ JS_METHOD(GetShaderInfoLog) {
   char Error[1024];
   glGetShaderInfoLog(id, 1024, &Len, Error);
 
-  return String::New(Error);
+  return scope.Close(String::New(Error));
 }
 
 
 JS_METHOD(CreateProgram) {
   HandleScope scope;
 
-  return Number::New(glCreateProgram());
+  return scope.Close(Number::New(glCreateProgram()));
 }
 
 
@@ -502,12 +503,12 @@ JS_METHOD(GetProgramParameter) {
   case GL_LINK_STATUS:
   case GL_VALIDATE_STATUS:
     glGetProgramiv(program, pname, &value);
-    return Boolean::New(static_cast<bool>(value));
+    return scope.Close(Boolean::New(static_cast<bool>(value)));
   case GL_ATTACHED_SHADERS:
   case GL_ACTIVE_ATTRIBUTES:
   case GL_ACTIVE_UNIFORMS:
     glGetProgramiv(program, pname, &value);
-    return Number::New(static_cast<long>(value));
+    return scope.Close(Number::New(static_cast<long>(value)));
   default:
     return ThrowException(Exception::TypeError(String::New("GetProgramParameter: Invalid Enum")));
   }
@@ -520,7 +521,7 @@ JS_METHOD(GetUniformLocation) {
   int program = args[0]->Int32Value();
   String::Utf8Value name(args[1]);
 
-  return Number::New(glGetUniformLocation(program, *name));
+  return scope.Close(Number::New(glGetUniformLocation(program, *name)));
 }
 
 
@@ -568,7 +569,7 @@ JS_METHOD(CreateTexture) {
 
   GLuint texture;
   glGenTextures(1, &texture);
-  return Number::New(texture);
+  return scope.Close(Number::New(texture));
 }
 
 
@@ -651,7 +652,7 @@ JS_METHOD(CreateBuffer) {
 
   GLuint buffer;
   glGenBuffers(1, &buffer);
-  return Number::New(buffer);
+  return scope.Close(Number::New(buffer));
 }
 
 
@@ -672,7 +673,7 @@ JS_METHOD(CreateFramebuffer) {
 
   GLuint buffer;
   glGenFramebuffers(1, &buffer);
-  return Number::New(buffer);
+  return scope.Close(Number::New(buffer));
 }
 
 
@@ -1039,8 +1040,6 @@ JS_METHOD(DepthRange) {
   return Undefined();
 }
 
-//void detachShader(WebGLProgram program, WebGLShader shader);
-
 JS_METHOD(DisableVertexAttribArray) {
   HandleScope scope;
 
@@ -1110,7 +1109,6 @@ JS_METHOD(Scissor) {
   return Undefined();
 }
 
-//void stencilFunc(GLenum func, GLint ref, GLuint mask);
 JS_METHOD(StencilFunc) {
   HandleScope scope;
 
@@ -1122,7 +1120,6 @@ JS_METHOD(StencilFunc) {
   return Undefined();
 }
 
-//void stencilFuncSeparate(GLenum face, GLenum func, GLint ref, GLuint mask);
 JS_METHOD(StencilFuncSeparate) {
   HandleScope scope;
 
@@ -1135,7 +1132,6 @@ JS_METHOD(StencilFuncSeparate) {
   return Undefined();
 }
 
-//void stencilMask(GLuint mask);
 JS_METHOD(StencilMask) {
   HandleScope scope;
 
@@ -1145,7 +1141,6 @@ JS_METHOD(StencilMask) {
   return Undefined();
 }
 
-//void stencilMaskSeparate(GLenum face, GLuint mask);
 JS_METHOD(StencilMaskSeparate) {
   HandleScope scope;
 
@@ -1156,7 +1151,6 @@ JS_METHOD(StencilMaskSeparate) {
   return Undefined();
 }
 
-//void stencilOp(GLenum fail, GLenum zfail, GLenum zpass);
 JS_METHOD(StencilOp) {
   HandleScope scope;
 
@@ -1168,7 +1162,6 @@ JS_METHOD(StencilOp) {
   return Undefined();
 }
 
-//void stencilOpSeparate(GLenum face, GLenum fail, GLenum zfail, GLenum zpass);
 JS_METHOD(StencilOpSeparate) {
   HandleScope scope;
 
@@ -1184,20 +1177,20 @@ JS_METHOD(StencilOpSeparate) {
 JS_METHOD(BindRenderbuffer) {
   HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int buffer = args[1]->Int32Value();
+  GLenum target = args[0]->Int32Value();
+  GLuint buffer = args[1]->Int32Value();
 
   glBindRenderbuffer(target, buffer);
 
   return Undefined();
 }
 
-JS_METHOD(CreateRenderBuffer) {
+JS_METHOD(CreateRenderbuffer) {
   HandleScope scope;
 
   GLuint renderbuffers;
   glGenRenderbuffers(1,&renderbuffers);
-  return Number::New(renderbuffers);
+  return scope.Close(Number::New(renderbuffers));
 }
 
 JS_METHOD(DeleteBuffer) {
@@ -1284,55 +1277,43 @@ JS_METHOD(GetVertexAttribOffset) {
   void *ret=NULL;
 
   glGetVertexAttribPointerv(index, pname, &ret);
-  return Integer::New((GLsizeiptr) ret); // TODO is this correct?
+  return scope.Close(Integer::New((GLsizeiptr) ret)); // TODO is this correct?
 }
 
 JS_METHOD(IsBuffer) {
   HandleScope scope;
 
-  GLuint buffer = args[0]->Uint32Value();
-
-  return Boolean::New(glIsBuffer(buffer));
+  return scope.Close(Boolean::New(glIsBuffer(args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsFramebuffer) {
   HandleScope scope;
 
-  GLuint buffer = args[0]->Uint32Value();
-
-  return Boolean::New(glIsFramebuffer(buffer));
+  return scope.Close(Boolean::New(glIsFramebuffer(args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsProgram) {
   HandleScope scope;
 
-  GLuint buffer = args[0]->Uint32Value();
-
-  return Boolean::New(glIsProgram(buffer));
+  return scope.Close(Boolean::New(glIsProgram(args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsRenderbuffer) {
   HandleScope scope;
 
-  GLuint buffer = args[0]->Uint32Value();
-
-  return Boolean::New(glIsRenderbuffer(buffer));
+  return scope.Close(Boolean::New(glIsRenderbuffer( args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsShader) {
   HandleScope scope;
 
-  GLuint buffer = args[0]->Uint32Value();
-
-  return Boolean::New(glIsShader(buffer));
+  return scope.Close(Boolean::New(glIsShader(args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsTexture) {
   HandleScope scope;
 
-  GLuint buffer = args[0]->Uint32Value();
-
-  return Boolean::New(glIsTexture(buffer));
+  return scope.Close(Boolean::New(glIsTexture(args[0]->Uint32Value())));
 }
 
 JS_METHOD(RenderbufferStorage) {
