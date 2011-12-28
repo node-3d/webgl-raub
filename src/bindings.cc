@@ -142,6 +142,21 @@ void init(Handle<Object> target)
   NODE_SET_METHOD(target, "getShaderSource", webgl::GetShaderSource);
   NODE_SET_METHOD(target, "validateProgram", webgl::ValidateProgram);
 
+  NODE_SET_METHOD(target, "texSubImage2D", webgl::TexSubImage2D);
+  NODE_SET_METHOD(target, "readPixels", webgl::ReadPixels);
+  NODE_SET_METHOD(target, "getTexParameter", webgl::GetTexParameter);
+  NODE_SET_METHOD(target, "getActiveAttrib", webgl::GetActiveAttrib);
+  NODE_SET_METHOD(target, "getActiveUniform", webgl::GetActiveUniform);
+  NODE_SET_METHOD(target, "getAttachedShaders", webgl::GetAttachedShaders);
+  NODE_SET_METHOD(target, "getBufferParameter", webgl::GetBufferParameter);
+  NODE_SET_METHOD(target, "getFramebufferAttachmentParameter", webgl::GetFramebufferAttachmentParameter);
+  NODE_SET_METHOD(target, "getProgramInfoLog", webgl::GetProgramInfoLog);
+  NODE_SET_METHOD(target, "getRenderbufferParameter", webgl::GetRenderbufferParameter);
+  NODE_SET_METHOD(target, "getVertexAttrib", webgl::GetVertexAttrib);
+  NODE_SET_METHOD(target, "getSupportedExtensions", webgl::GetSupportedExtensions);
+  NODE_SET_METHOD(target, "getExtension", webgl::GetExtension);
+  NODE_SET_METHOD(target, "checkFramebufferStatus", webgl::CheckFramebufferStatus);
+
   // OpenGL ES 2.1 constants
 
   /* ClearBufferMask */

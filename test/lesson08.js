@@ -4,10 +4,11 @@ nodejs=true;
 fs=require('fs');
 eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
 
-Image = require('../lib/image').Image;
-Platform = require('../lib/platform')(640,480);
-Platform.setTitle("Lesson05");
-requestAnimFrame = Platform.requestAnimationFrame;
+var Image = require('../lib/image').Image,
+    document = require('../lib/platform')();
+document.createWindow(640,480);
+document.setTitle("Lesson05");
+requestAnimFrame = document.requestAnimationFrame;
 
 
 var shaders= {
@@ -56,16 +57,9 @@ var gl;
 
 function initGL(canvas) {
   try {
-    if(nodejs) {
-      gl = Platform.gl;
-      gl.viewportWidth = Platform.width;
-      gl.viewportHeight = Platform.height;
-    }
-    else {
-      gl = canvas.getContext("experimental-webgl");
-      gl.viewportWidth = canvas.width;
-      gl.viewportHeight = canvas.height;
-    }
+    gl = canvas.getContext("experimental-webgl");
+    gl.viewportWidth = canvas.width;
+    gl.viewportHeight = canvas.height;
   } catch (e) {
   }
   if (!gl) {
@@ -235,13 +229,13 @@ var z = -5.0;
 
 var currentlyPressedKeys = {};
 
-Platform.on("KEYDOWN", function(evt){
+document.on("KEYDOWN", function(evt){
   //console.log("[KEYDOWN] mod: "+evt.mod+" sym: "+evt.sym+" scancode: "+evt.scancode);
   currentlyPressedKeys[evt.scancode] = true;
   handleKeys();
 });
 
-Platform.on("KEYUP", function(evt){
+document.on("KEYUP", function(evt){
   currentlyPressedKeys[evt.scancode] = false;
 });
 
@@ -534,19 +528,14 @@ function tick() {
   drawScene();
   animate();
 
-  if(nodejs) {
-    Platform.flip();
-    setTimeout(function () {
-      requestAnimFrame(tick);
-    }, 3);
-  }
-  else 
-    requestAnimFrame(tick);
+  if(nodejs) document.flip();
+  
+  requestAnimFrame(tick);
 }
 
 
 function webGLStart() {
-  var canvas = ""; //document.getElementById("lesson05-canvas");
+  var canvas = document.getElementById("lesson05-canvas");
   initGL(canvas);
   initShaders();
   initBuffers();

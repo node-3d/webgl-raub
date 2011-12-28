@@ -3,6 +3,19 @@
 var gl = module.exports = require('./build/Release/webgl.node');
 
 
+var _getSupportedExtensions = gl.getSupportedExtensions;
+gl.getSupportedExtensions = function getSupportedExtensions() {
+  return _getSupportedExtensions().split(" ");
+}
+
+var _getExtension = gl.getExtension;
+gl.getExtension = function getExtension(name) {
+  if (!(arguments.length === 1 && typeof name === "string")) {
+    throw new TypeError('Expected getExtension(string name)');
+  }
+  return _getExtension(name);
+}
+
 var _activeTexture = gl.activeTexture;
 gl.activeTexture = function activeTexture(texture) {
   if (!(arguments.length === 1 && typeof texture === "number")) {
@@ -567,6 +580,11 @@ var _getVertexAttribOffset = gl.getVertexAttribOffset;
 gl.getVertexAttribOffset = function getVertexAttribOffset(index, pname) {
   if (!(arguments.length === 2 && typeof index === "number" && typeof pname === "number")) {
     throw new TypeError('Expected getVertexAttribOffset(number index, number pname)');
+  }
+  
+  if(pname === gl.CURRENT_VERTEX_ATTRIB) {
+    var buf=_getVertexAttribOffset(index, pname);
+    return new Float32Array(buf);
   }
   return _getVertexAttribOffset(index, pname);
 }

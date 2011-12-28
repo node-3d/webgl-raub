@@ -134,6 +134,20 @@ JS_METHOD(RenderbufferStorage);
 JS_METHOD(GetShaderSource);
 JS_METHOD(ValidateProgram);
 
+JS_METHOD(TexSubImage2D);
+JS_METHOD(ReadPixels);
+JS_METHOD(GetTexParameter);
+JS_METHOD(GetActiveAttrib);
+JS_METHOD(GetActiveUniform);
+JS_METHOD(GetAttachedShaders);
+JS_METHOD(GetBufferParameter);
+JS_METHOD(GetFramebufferAttachmentParameter);
+JS_METHOD(GetProgramInfoLog);
+JS_METHOD(GetRenderbufferParameter);
+JS_METHOD(GetVertexAttrib);
+JS_METHOD(GetSupportedExtensions);
+JS_METHOD(GetExtension);
+JS_METHOD(CheckFramebufferStatus);
 }
 
 #endif /* WEBGL_H_ */

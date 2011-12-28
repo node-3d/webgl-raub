@@ -2,13 +2,12 @@
 // Ported from https://github.com/creationix/com.creationix.minimason
 //
 
-Platform = require('../lib/platform')(640,480);
-Platform.setTitle("Traveling Wavefronts");
-Platform.setIcon(__dirname+"/wavefront_icon.png");
-gl = Platform.gl;
+var document = require('../lib/platform')(),
+    requestAnimFrame = document.requestAnimationFrame;
 
-gl.viewportWidth = Platform.width;
-gl.viewportHeight = Platform.height;
+document.createWindow(640,480);
+document.setTitle("Traveling Wavefronts");
+document.setIcon(__dirname+"/wavefront_icon.png");
 
 var shaders = {
     "shader-vs": [
@@ -167,8 +166,6 @@ var shaders = {
 
 
 
-  requestAnimFrame = Platform.requestAnimationFrame;
-
   var gl;
   var prog_advance;
   var prog_composite;
@@ -189,7 +186,7 @@ var shaders = {
   var texture_noise_l; // noise interpolated pixel access
 
   var halted = false;
-  var delay = 3;
+  var delay = 20; // framerate speed
   var it = 1;
   var frames = 0;
   var fps = 60; // no hurdle for DX10 graphics cards
@@ -202,19 +199,25 @@ var shaders = {
   var sizeX = 256;
   var sizeY = 256; // 2048x1024 flat or 128x128x128 cube
   // viewport size
-  var viewX = Platform.width;
-  var viewY = Platform.height;
+  var viewX;
+  var viewY;
 
   load();
+  
   function load() {
     clearInterval(timer);
-    gl = Platform.gl
+    var canvas = document.getElementById("wavefront");
+    gl = canvas.getContext("experimental-webgl");
+
     if (!gl) {
       alert("Your browser does not support WebGL");
       return;
     }
-    
-  Platform.on("mousemove", function (evt) {
+
+    gl.viewportWidth = viewX = canvas.width;
+    gl.viewportHeight = viewY = canvas.height;
+
+  document.on("mousemove", function (evt) {
       mouseX = evt.x / viewX;
       mouseY = 1 - evt.y / viewY;
   });
@@ -493,13 +496,13 @@ var shaders = {
 //    gl.clearColor(1,0,0,1);
 //    gl.clear(gl.COLOR_BUFFER_BIT);
     //gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    Platform.flip();
+    
+    if(nodejs)
+      document.flip();
     
     switch (animation) {
     case "animate":
-      setTimeout(function () {
-                    requestAnimFrame(anim);
-                  }, delay);  
+      setTimeout(anim, delay);  
       break;
     case "reset":
       load();

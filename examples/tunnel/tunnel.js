@@ -1,15 +1,15 @@
-nodejs=true;
+
+var Image = require('../../lib/image').Image,
+    document = require('../../lib/platform')(),
+    nodejs = true;
+document.createWindow(800,600);
+document.setTitle("Tunnel");
+requestAnimFrame = document.requestAnimationFrame;
 
 //Read and eval library
 fs=require('fs');
 eval(fs.readFileSync(__dirname+ '/sylvester.js','utf8'));
 eval(fs.readFileSync(__dirname+ '/glUtils.js','utf8'));
-
-Image = require('../../lib/image').Image;
-Platform = require('../../lib/platform')(800,600);
-Platform.setTitle("Tunnel");
-requestAnimFrame = Platform.requestAnimationFrame;
-
 
 var shaders= {
     "shader-fs" : 
@@ -125,16 +125,9 @@ var gl;
 
 function initGL(canvas) {
   try {
-    if(nodejs) {
-      gl = Platform.gl;
-      gl.viewportWidth = Platform.width;
-      gl.viewportHeight = Platform.height;
-    }
-    else {
-      gl = canvas.getContext("experimental-webgl");
-      gl.viewportWidth = canvas.width;
-      gl.viewportHeight = canvas.height;
-    }
+    gl = canvas.getContext("experimental-webgl");
+    gl.viewportWidth = canvas.width;
+    gl.viewportHeight = canvas.height;
   } catch (e) {
   }
   if (!gl) {
@@ -341,12 +334,9 @@ function drawScene() {
 
   mvPopMatrix();
 
-  if(nodejs) {
-    Platform.flip();
-    setTimeout(function () {
-      requestAnimFrame(drawScene);
-    }, 10);
-  }
+  if(nodejs) 
+    document.flip();
+  setInterval(drawScene, 15);
 }
 
 var tunnelTexture;
@@ -371,7 +361,7 @@ function handleLoadedTexture(texture) {
 }
 
 function webGLStart() {
-  var canvas = ""; //document.getElementById("lesson04-canvas");
+  var canvas = document.getElementById("lesson04-canvas");
   initGL(canvas);
   toggleTriangles();
   initShaders();
@@ -385,10 +375,7 @@ function webGLStart() {
   gl.enable(gl.DEPTH_TEST);
   gl.depthFunc(gl.LEQUAL);
 
-  if(nodejs)
-    drawScene();
-  else
-    setInterval(drawScene, 15);
+  drawScene();
 }
 
 function toggleTriangles() {

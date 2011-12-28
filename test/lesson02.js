@@ -1,12 +1,12 @@
-nodejs=true;
+var nodejs=true,
+  document = require('../lib/platform')();
+document.createWindow(640,480);
+document.setTitle("Lesson02");
+requestAnimFrame = document.requestAnimationFrame;
 
 //Read and eval library
 fs=require('fs');
 eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
-
-Platform = require('../lib/platform')(640,480);
-Platform.setTitle("Lesson02");
-requestAnimFrame = Platform.requestAnimationFrame;
 
 var shaders= {
     "shader-fs" : 
@@ -37,16 +37,9 @@ var gl;
 
 function initGL(canvas) {
   try {
-    if(nodejs) {
-      gl = Platform.gl;
-      gl.viewportWidth = Platform.width;
-      gl.viewportHeight = Platform.height;
-    }
-    else {
-      gl = canvas.getContext("experimental-webgl");
-      gl.viewportWidth = canvas.width;
-      gl.viewportHeight = canvas.height;
-    }
+    gl = canvas.getContext("experimental-webgl");
+    gl.viewportWidth = canvas.width;
+    gl.viewportHeight = canvas.height;
   } catch (e) {
   }
   if (!gl) {
@@ -221,18 +214,15 @@ function drawScene() {
   setMatrixUniforms();
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
 
-  if(nodejs) {
-    Platform.flip();
-    setTimeout(function () {
-      requestAnimFrame(drawScene);
-    }, 3);
-  }
+  if(nodejs) document.flip();
+  
+  requestAnimFrame(drawScene);
 }
 
 
 
 function webGLStart() {
-  var canvas = "";// [mbs] TDB document.getElementById("lesson02-canvas");
+  var canvas = document.getElementById("lesson02-canvas");
   initGL(canvas);
   initShaders()
   initBuffers();
