@@ -34,19 +34,20 @@ static int SizeOfArrayElementForType(v8::ExternalArrayType type) {
 
 inline void *getImageData(Local<Value> arg) {
   void *pixels=NULL;
-  Local<Object> obj = Local<Object>::Cast(arg);
-  if(!obj->IsObject())
-    ThrowException(JS_STR("Bad texture argument"));
-  if(obj->GetIndexedPropertiesExternalArrayDataType()>0) {
-    //cout<<"pixels as TypedArray, type="<<obj->GetIndexedPropertiesExternalArrayDataType()<<endl;
-    pixels = obj->GetIndexedPropertiesExternalArrayData();
+    if(!arg->IsNull()) {
+    Local<Object> obj = Local<Object>::Cast(arg);
+    if(!obj->IsObject())
+      ThrowException(JS_STR("Bad texture argument"));
+    if(obj->GetIndexedPropertiesExternalArrayDataType()>0) {
+      //cout<<"pixels as TypedArray, type="<<obj->GetIndexedPropertiesExternalArrayDataType()<<endl;
+      pixels = obj->GetIndexedPropertiesExternalArrayData();
+    }
+    else {
+      //cout<<"Pixels as Image data"<<endl;
+      Image *image = ObjectWrap::Unwrap<Image>(arg->ToObject());
+      pixels=image->GetData();
+    }
   }
-  else {
-    //cout<<"Pixels as Image data"<<endl;
-    Image *image = ObjectWrap::Unwrap<Image>(arg->ToObject());
-    pixels=image->GetData();
-  }
-
   return pixels;
 }
 
@@ -876,15 +877,17 @@ JS_METHOD(VertexAttrib4f) {
 
 inline void *getArrayData(Local<Value> arg) {
   void *data=NULL;
-  if(arg->IsArray()) {
-    Local<Array> arr = Array::Cast(*arg);
-    data = arr->GetIndexedPropertiesExternalArrayData();
+  if(!arg->IsNull()) {
+    if(arg->IsArray()) {
+      Local<Array> arr = Array::Cast(*arg);
+      data = arr->GetIndexedPropertiesExternalArrayData();
+    }
+    else if(arg->IsObject()) {
+      data = arg->ToObject()->GetIndexedPropertiesExternalArrayData();
+    }
+    else
+      ThrowException(JS_STR("Bad array argument"));
   }
-  else if(arg->IsObject()) {
-    data = arg->ToObject()->GetIndexedPropertiesExternalArrayData();
-  }
-  else
-    ThrowException(JS_STR("Bad array argument"));
 
   return data;
 }
