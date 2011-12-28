@@ -2,7 +2,9 @@
 // Ported from https://github.com/creationix/com.creationix.minimason
 //
 
-var document = require('../lib/platform')(),
+var WebGL=require('../index'),
+    document = WebGL.document(),
+    nodejs=true,
     requestAnimFrame = document.requestAnimationFrame;
 
 document.createWindow(640,480);

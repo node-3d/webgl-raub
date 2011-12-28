@@ -1,5 +1,7 @@
 var nodejs=true,
-  document = require('../lib/platform')();
+    WebGL = require('../index'),
+    document = WebGL.document();
+
 document.createWindow(640,480);
 document.setTitle("Lesson02");
 requestAnimFrame = document.requestAnimationFrame;

@@ -4,8 +4,9 @@ nodejs=true;
 fs=require('fs');
 eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
 
-var Image = require('../lib/image').Image,
-    document = require('../lib/platform')();
+var WebGL=require('../index'),
+    Image = WebGL.Image,
+    document = WebGL.document();
 
 document.createWindow(640,480);
 document.setTitle("Lesson05");

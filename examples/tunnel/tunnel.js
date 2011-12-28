@@ -1,6 +1,6 @@
-
-var Image = require('../../lib/image').Image,
-    document = require('../../lib/platform')(),
+var WebGL=require('../../index'),
+    Image = WebGL.Image,
+    document = WebGL.document(),
     nodejs = true;
 document.createWindow(800,600);
 document.setTitle("Tunnel");
@@ -336,7 +336,8 @@ function drawScene() {
 
   if(nodejs) 
     document.flip();
-  setInterval(drawScene, 15);
+  //setInterval(drawScene, 15);
+  requestAnimFrame(drawScene);
 }
 
 var tunnelTexture;
