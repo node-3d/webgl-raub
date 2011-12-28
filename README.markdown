@@ -9,11 +9,6 @@ This requires SDL to be installed in your system:
 sudo apt-get install libsdl-dev libghc-sdl-ttf-dev libsdl-image1.2-dev
 npm install -g sdl
 
-- node-image
-Install freeimage first
-sudo apt-get install freeimage-dev
-npm install -g node-image
-
 Installation
 ============
 npm install -g node-webgl
@@ -35,6 +30,8 @@ Please read http://www.khronos.org/webgl/wiki_1_15/index.php/WebGL_and_OpenGL_Di
 to learn about the differences.
 
 Remember to add this on top of your fragment shaders:
+<code>
 #ifdef GL_ES
 precision highp float;
 #endif
+</code>
