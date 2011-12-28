@@ -30,7 +30,7 @@ Please read http://www.khronos.org/webgl/wiki_1_15/index.php/WebGL_and_OpenGL_Di
 to learn about the differences.
 
 Remember to add this on top of your fragment shaders:
-```C
+```c
 #ifdef GL_ES
 precision highp float;
 #endif
