@@ -31,7 +31,7 @@ to learn about the differences.
 
 Remember to add this on top of your fragment shaders:
 <code>
-\#ifdef GL_ES
+#ifdef GL_ES
 precision highp float;
-\#endif
+#endif
 </code>
