@@ -4,7 +4,7 @@ var WebGL=require('../../index'),
     nodejs = true;
 document.createWindow(800,600);
 document.setTitle("Tunnel");
-requestAnimFrame = document.requestAnimationFrame;
+requestAnimationFrame = document.requestAnimationFrame;
 
 //Read and eval library
 fs=require('fs');
@@ -300,7 +300,7 @@ function initBuffers() {
 
 var rPyramid = 0;
 var rCube = 0;
-function drawScene() {
+function drawScene(timestamp) {
   gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -334,10 +334,8 @@ function drawScene() {
 
   mvPopMatrix();
 
-  if(nodejs) 
-    document.flip();
-  //setInterval(drawScene, 15);
-  requestAnimFrame(drawScene);
+  requestAnimationFrame(drawScene,16); // ~60 fps
+  
 }
 
 var tunnelTexture;
@@ -362,7 +360,7 @@ function handleLoadedTexture(texture) {
 }
 
 function webGLStart() {
-  var canvas = document.getElementById("lesson04-canvas");
+  var canvas = document.getElementById("mytunnel");
   initGL(canvas);
   toggleTriangles();
   initShaders();

@@ -8,6 +8,7 @@
 
 #include "webgl.h"
 #include "image.h"
+#include <cstdlib>
 
 using namespace node;
 
@@ -16,6 +17,7 @@ using namespace node;
 extern "C" {
 void init(Handle<Object> target)
 {
+  atexit(webgl::AtExit);
 
   Image::Initialize(target);
 

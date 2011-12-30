@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <vector>
 using namespace std;
 
 #include "webgl.h"
@@ -10,6 +11,10 @@ using namespace node;
 using namespace v8;
 
 namespace webgl {
+
+// forward declarations
+void registerGLObj(GLuint obj);
+void unregisterGLObj(GLuint obj);
 
 v8::Handle<v8::Value> ThrowError(const char* msg) {
   return v8::ThrowException(v8::Exception::Error(v8::String::New(msg)));
@@ -402,7 +407,9 @@ JS_METHOD(Viewport) {
 JS_METHOD(CreateShader) {
   HandleScope scope;
 
-  return scope.Close(Number::New(glCreateShader(args[0]->Int32Value())));
+  GLuint shader=glCreateShader(args[0]->Int32Value());
+  registerGLObj(shader);
+  return scope.Close(Number::New(shader));
 }
 
 
@@ -469,7 +476,9 @@ JS_METHOD(GetShaderInfoLog) {
 JS_METHOD(CreateProgram) {
   HandleScope scope;
 
-  return scope.Close(Number::New(glCreateProgram()));
+  GLuint program=glCreateProgram();
+  registerGLObj(program);
+  return scope.Close(Number::New(program));
 }
 
 
@@ -572,6 +581,7 @@ JS_METHOD(CreateTexture) {
 
   GLuint texture;
   glGenTextures(1, &texture);
+  registerGLObj(texture);
   return scope.Close(Number::New(texture));
 }
 
@@ -655,6 +665,7 @@ JS_METHOD(CreateBuffer) {
 
   GLuint buffer;
   glGenBuffers(1, &buffer);
+  registerGLObj(buffer);
   return scope.Close(Number::New(buffer));
 }
 
@@ -676,6 +687,7 @@ JS_METHOD(CreateFramebuffer) {
 
   GLuint buffer;
   glGenFramebuffers(1, &buffer);
+  registerGLObj(buffer);
   return scope.Close(Number::New(buffer));
 }
 
@@ -1200,6 +1212,7 @@ JS_METHOD(CreateRenderbuffer) {
 
   GLuint renderbuffers;
   glGenRenderbuffers(1,&renderbuffers);
+  registerGLObj(renderbuffers);
   return scope.Close(Number::New(renderbuffers));
 }
 
@@ -1709,6 +1722,64 @@ JS_METHOD(CheckFramebufferStatus) {
   GLenum target=args[0]->Int32Value();
 
   return scope.Close(JS_INT(glCheckFramebufferStatus(target)));
+}
+
+vector<GLuint> globjs;
+static bool isDirty=false;
+
+void registerGLObj(GLuint obj) {
+  globjs.push_back(obj);
+  isDirty=true;
+}
+
+
+void unregisterCLObj(GLuint obj) {
+  vector<GLuint>::iterator it = globjs.begin();
+  while(it != globjs.end()) {
+    if(*it==obj) {
+      globjs.erase(it);
+      break;
+    }
+    it++;
+  }
+  if(globjs.size()==0) isDirty=false;
+}
+
+void AtExit() {
+  cout<<"WebGL AtExit() called"<<endl;
+  cout<<"  # objects allocated: "<<globjs.size()<<endl;
+  if(!isDirty) return;
+  isDirty=false;
+  vector<GLuint>::iterator it = globjs.begin();
+  while(it != globjs.end()) {
+    GLuint obj=*it++;
+    if(glIsProgram(obj)) {
+      cout<<"  Destroying GL program"<<endl;
+      glDeleteProgram(obj);
+    }
+    else if(glIsBuffer(obj)) {
+      cout<<"  Destroying GL buffer"<<endl;
+      glDeleteBuffers(1,&obj);
+    }
+    else if(glIsFramebuffer(obj)) {
+      cout<<"  Destroying GL frame buffer"<<endl;
+      glDeleteFramebuffers(1,&obj);
+    }
+    else if(glIsRenderbuffer(obj)) {
+      cout<<"  Destroying GL render buffer"<<endl;
+      glDeleteRenderbuffers(1,&obj);
+    }
+    else if(glIsShader(obj)) {
+      cout<<"  Destroying GL shader"<<endl;
+      glDeleteShader(obj);
+    }
+    else if(glIsTexture(obj)) {
+      cout<<"  Destroying GL texture"<<endl;
+      glDeleteTextures(1,&obj);
+    }
+  }
+
+  globjs.clear();
 }
 
 } // end namespace webgl

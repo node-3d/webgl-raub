@@ -4,10 +4,9 @@
 
 var WebGL=require('../index'),
     document = WebGL.document(),
-    nodejs=true,
-    requestAnimFrame = document.requestAnimationFrame;
+    requestAnimationFrame = document.requestAnimationFrame;
 
-document.createWindow(640,480);
+document.createWindow(800,600);
 document.setTitle("Traveling Wavefronts");
 document.setIcon(__dirname+"/wavefront_icon.png");
 
@@ -167,7 +166,7 @@ var shaders = {
   }
 
 
-
+  // GL variables
   var gl;
   var prog_advance;
   var prog_composite;
@@ -187,22 +186,21 @@ var shaders = {
   var texture_noise_n; // noise pixel accurate
   var texture_noise_l; // noise interpolated pixel access
 
+  // animation controls
   var halted = false;
-  var delay = 20; // framerate speed
   var it = 1;
   var frames = 0;
-  var fps = 60; // no hurdle for DX10 graphics cards
+  var fps = 30; 
+  var delay = 1000/fps; // framerate speed
   var time;
   var mouseX = 0.5;
   var mouseY = 0.5;
   var animation;
   var timer;
+  
   // texture size (must be powers of two, remember 2048x1024 flat could also be a 128x128x128 voxel)
-  var sizeX = 256;
-  var sizeY = 256; // 2048x1024 flat or 128x128x128 cube
-  // viewport size
-  var viewX;
-  var viewY;
+  var sizeX = 256, sizeY = 256; // 2048x1024 flat or 128x128x128 cube
+  var viewX, viewY; // viewport size
 
   load();
   
@@ -499,12 +497,9 @@ var shaders = {
 //    gl.clear(gl.COLOR_BUFFER_BIT);
     //gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     
-    if(nodejs)
-      document.flip();
-    
     switch (animation) {
     case "animate":
-      setTimeout(anim, delay);  
+      requestAnimationFrame(anim, delay);  
       break;
     case "reset":
       load();

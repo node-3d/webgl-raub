@@ -10,7 +10,7 @@ var WebGL=require('../index'),
 
 document.createWindow(640,480);
 document.setTitle("Lesson05");
-requestAnimFrame = document.requestAnimationFrame;
+requestAnimationFrame = document.requestAnimationFrame;
 
 var shaders= {
     "shader-fs" : 
@@ -342,8 +342,7 @@ function tick() {
   drawScene();
   animate();
 
-  if(nodejs) document.flip();
-  requestAnimFrame(tick);
+  requestAnimationFrame(tick);
 }
 
 

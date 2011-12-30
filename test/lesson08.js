@@ -9,7 +9,7 @@ var WebGL=require('../index'),
     document = WebGL.document();
 document.createWindow(640,480);
 document.setTitle("Lesson05");
-requestAnimFrame = document.requestAnimationFrame;
+requestAnimationFrame = document.requestAnimationFrame;
 
 
 var shaders= {
@@ -529,14 +529,12 @@ function tick() {
   drawScene();
   animate();
 
-  if(nodejs) document.flip();
-  
-  requestAnimFrame(tick);
+  requestAnimationFrame(tick);
 }
 
 
 function webGLStart() {
-  var canvas = document.getElementById("lesson05-canvas");
+  var canvas = document.getElementById("lesson08-canvas");
   initGL(canvas);
   initShaders();
   initBuffers();

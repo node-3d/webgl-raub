@@ -13,6 +13,7 @@
 using namespace v8;
 
 namespace webgl {
+void AtExit();
 
 JS_METHOD(Uniform1f);
 JS_METHOD(Uniform2f);

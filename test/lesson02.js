@@ -4,7 +4,7 @@ var nodejs=true,
 
 document.createWindow(640,480);
 document.setTitle("Lesson02");
-requestAnimFrame = document.requestAnimationFrame;
+requestAnimationFrame = document.requestAnimationFrame;
 
 //Read and eval library
 fs=require('fs');
@@ -216,9 +216,7 @@ function drawScene() {
   setMatrixUniforms();
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
 
-  if(nodejs) document.flip();
-  
-  requestAnimFrame(drawScene);
+  requestAnimationFrame(drawScene);
 }
 
 
