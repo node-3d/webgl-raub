@@ -19,6 +19,9 @@ def build(bld):
   obj.cxxflags = ["-pthread", "-Wall"]
 
   if sys.platform.startswith('darwin'):
+    obj.includes = ["/opt/local/include"]
+    obj.libpath = ["/opt/local/lib"]
+    obj.linkflags = ["-lfreeimage"]
     obj.uselib = ["GL", "GLU", "GLUT"]
     obj.framework = ['OpenGL','GLUT','Cocoa']
   elif sys.platform.startswith('linux'):

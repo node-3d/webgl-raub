@@ -5,6 +5,8 @@ var nodejs=true,
 document.createWindow(640,480);
 document.setTitle("Lesson02");
 requestAnimationFrame = document.requestAnimationFrame;
+alert=console.error;
+
 
 //Read and eval library
 fs=require('fs');
@@ -12,8 +14,9 @@ eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
 
 var shaders= {
     "shader-fs" : 
-      [ "precision mediump float;",
-        "",
+      [ "#ifdef GL_ES",
+        "  precision mediump float;",
+        "#endif",
         "varying vec4 vColor;",
         "",
         "void main(void) {",

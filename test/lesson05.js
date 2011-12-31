@@ -6,7 +6,9 @@ eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
 
 var WebGL=require('../index'),
     Image = WebGL.Image,
-    document = WebGL.document();
+    document = WebGL.document(),
+	alert=console.error;
+;
 
 document.createWindow(640,480);
 document.setTitle("Lesson05");
@@ -15,7 +17,9 @@ requestAnimationFrame = document.requestAnimationFrame;
 var shaders= {
     "shader-fs" : 
       [     
-       "precision mediump float;",
+       "#ifdef GL_ES",
+       "  precision mediump float;",
+       "#endif",
        "varying vec2 vTextureCoord;",
        "uniform sampler2D uSampler;",
        "void main(void) {",

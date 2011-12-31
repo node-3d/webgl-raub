@@ -2,15 +2,29 @@ This is a port of WebGL for desktops: windows, linux, mac
 
 This is an extension of creationix/node-webgl and their great example com.creationix.minimason that you can find in examples/wavefront.js.
 
-Dependencies
+Linux
 ============
 - node-sdl
 This requires SDL to be installed in your system: 
 sudo apt-get install libsdl-dev libghc-sdl-ttf-dev libsdl-image1.2-dev
-npm install -g sdl
+download and install my SDL module (mikeseven/sdl)
 
 - freeimage
 sudo apt-get install libfreeimage-dev
+
+Notes: tested on Ubuntu 11.10 x64.
+
+MAC OSX
+=======
+- download and install: SDL-1.2.14 (not 1.3.x), SDL_image, SDL_ttf. They should reside in /usr/local/ by default.
+- make sure sdl-config is in your PATH and verify 'sdl-config --version' returns 1.2.14.
+- download and install freeimage.
+- add to your environment: export SDL_VIDEODRIVER=x11
+- build and install my SDL module (mikeseven/sdl)
+- verify it works e.g. node examples/img.js
+- now you can install this module
+
+Notes: tested on MAC OSX 10.6 x64. Some constants are not supported, see src/bindings.cc, lookfor __APPLE__.
 
 Installation
 ============
@@ -19,7 +33,7 @@ node-waf configure build
 Usage
 =====
 examples/   contains examples from other the web
-test/       contains lessons from learningwebgl.com and other tests
+test/       contains lessons from www.learningwebgl.com and other tests
 
 simply type: node test/lesson02.js
 

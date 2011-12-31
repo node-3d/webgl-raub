@@ -8,7 +8,9 @@
     #ifdef __APPLE__
       #include <OpenGL/OpenGL.h>
       #include <OpenGL/gl.h>
+      #include <OpenGL/glext.h>
       #define glClearDepthf glClearDepth
+      #define glDepthRangef glDepthRange
     #else
       #ifdef _WIN32
         #include <windows.h>
