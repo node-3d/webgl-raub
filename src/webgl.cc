@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
-using namespace std;
 
 #include "webgl.h"
 #include "image.h"
@@ -9,6 +8,7 @@ using namespace std;
 
 using namespace node;
 using namespace v8;
+using namespace std;
 
 namespace webgl {
 
@@ -38,20 +38,13 @@ static int SizeOfArrayElementForType(v8::ExternalArrayType type) {
 }
 
 inline void *getImageData(Local<Value> arg) {
-  void *pixels=NULL;
-    if(!arg->IsNull()) {
+  void *pixels = NULL;
+  if (!arg->IsNull()) {
     Local<Object> obj = Local<Object>::Cast(arg);
-    if(!obj->IsObject())
+    if (!obj->IsObject())
       ThrowException(JS_STR("Bad texture argument"));
-    if(obj->GetIndexedPropertiesExternalArrayDataType()>0) {
-      //cout<<"pixels as TypedArray, type="<<obj->GetIndexedPropertiesExternalArrayDataType()<<endl;
-      pixels = obj->GetIndexedPropertiesExternalArrayData();
-    }
-    else {
-      //cout<<"Pixels as Image data"<<endl;
-      Image *image = ObjectWrap::Unwrap<Image>(arg->ToObject());
-      pixels=image->GetData();
-    }
+
+    pixels = obj->GetIndexedPropertiesExternalArrayData();
   }
   return pixels;
 }
@@ -669,6 +662,7 @@ JS_METHOD(CreateBuffer) {
   return scope.Close(Number::New(buffer));
 }
 
+extern "C" void glBindBufferARB (GLenum target, GLuint buffer);
 
 JS_METHOD(BindBuffer) {
   HandleScope scope;
@@ -676,7 +670,10 @@ JS_METHOD(BindBuffer) {
   int target = args[0]->Int32Value();
   int buffer = args[1]->Int32Value();
 
-  glBindBuffer(target, buffer);
+  if(target==0x88EB || target==0x88EC)
+    glBindBufferARB(target,buffer);
+  else
+    glBindBuffer(target, buffer);
 
   return Undefined();
 }

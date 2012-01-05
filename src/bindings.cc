@@ -564,7 +564,7 @@ void init(Handle<Object> target)
   JS_GL_CONSTANT(RGBA4);
   JS_GL_CONSTANT(RGB5_A1);
 #ifndef __APPLE__
-  JS_GL_CONSTANT(RGB565);
+  //JS_GL_CONSTANT(RGB565);
 #endif
   JS_GL_CONSTANT(DEPTH_COMPONENT16);
   JS_GL_CONSTANT(STENCIL_INDEX);
@@ -595,7 +595,7 @@ void init(Handle<Object> target)
   JS_GL_CONSTANT(FRAMEBUFFER_INCOMPLETE_ATTACHMENT);
   JS_GL_CONSTANT(FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT);
 #ifndef __APPLE__
-  JS_GL_CONSTANT(FRAMEBUFFER_INCOMPLETE_DIMENSIONS);
+  //JS_GL_CONSTANT(FRAMEBUFFER_INCOMPLETE_DIMENSIONS);
 #endif
   JS_GL_CONSTANT(FRAMEBUFFER_UNSUPPORTED);
 
@@ -611,6 +611,16 @@ void init(Handle<Object> target)
   //const GLenum CONTEXT_LOST_WEBGL             = 0x9242;
   //const GLenum UNPACK_COLORSPACE_CONVERSION_WEBGL = 0x9243;
   //const GLenum BROWSER_DEFAULT_WEBGL          = 0x9244;
+
+  //////////////////////////////
+  // NOT in WebGL spec
+  //////////////////////////////
+
+  // PBO
+  target->Set(JS_STR( "PIXEL_PACK_BUFFER" ), JS_INT(0x88EB));
+  target->Set(JS_STR( "PIXEL_UNPACK_BUFFER" ), JS_INT(0x88EC));
+  target->Set(JS_STR( "PIXEL_PACK_BUFFER_BINDING" ), JS_INT(0x88ED));
+  target->Set(JS_STR( "PIXEL_UNPACK_BUFFER_BINDING" ), JS_INT(0x88EF));
 }
 
 NODE_MODULE(webgl, init)

@@ -1,22 +1,27 @@
 #include "image.h"
+#include <cstdlib>
 
 using namespace v8;
 using namespace node;
+
+Persistent<FunctionTemplate> Image::constructor_template;
 
 void Image::Initialize (Handle<Object> target) {
   HandleScope scope;
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
+  constructor_template = Persistent<FunctionTemplate>::New(t);
 
-  //t->Inherit(EventEmitter::constructor_template);
-  t->InstanceTemplate()->SetInternalFieldCount(1);
+  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
+  constructor_template->SetClassName(JS_STR("Image"));
 
-  t->PrototypeTemplate()->SetAccessor(String::New("width"), WidthGetter);
-  t->PrototypeTemplate()->SetAccessor(String::New("height"), HeightGetter);
-  t->PrototypeTemplate()->SetAccessor(String::New("src"), SrcGetter, SrcSetter);
-  //t->PrototypeTemplate()->SetAccessor(String::New("onload"), NULL, OnloadSetter);
+  constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("width"), WidthGetter);
+  constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("height"), HeightGetter);
+  constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("pitch"), PitchGetter);
+  constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("src"), SrcGetter, SrcSetter);
+  //constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("onload"), NULL, OnloadSetter);
 
-  target->Set(String::NewSymbol("Image"), t->GetFunction());
+  target->Set(String::NewSymbol("Image"), constructor_template->GetFunction());
 
   FreeImage_Initialise(true);
 }
@@ -27,6 +32,10 @@ int Image::GetWidth () {
 
 int Image::GetHeight () {
   return FreeImage_GetHeight(image_bmp);
+}
+
+int Image::GetPitch () {
+  return FreeImage_GetPitch(image_bmp);
 }
 
 void *Image::GetData () {
@@ -71,7 +80,6 @@ Handle<Value> Image::WidthGetter (Local<String> property, const AccessorInfo& in
   return scope.Close(JS_INT(image->GetWidth()));
 }
 
-
 Handle<Value> Image::HeightGetter (Local<String> property, const AccessorInfo& info) {
   HandleScope scope;
 
@@ -80,6 +88,13 @@ Handle<Value> Image::HeightGetter (Local<String> property, const AccessorInfo& i
   return scope.Close(JS_INT(image->GetHeight()));
 }
 
+Handle<Value> Image::PitchGetter (Local<String> property, const AccessorInfo& info) {
+  HandleScope scope;
+
+  Image *image = ObjectWrap::Unwrap<Image>(info.This());
+
+  return scope.Close(JS_INT(image->GetPitch()));
+}
 
 Handle<Value> Image::SrcGetter (Local<String> property, const AccessorInfo& info) {
   HandleScope scope;
@@ -95,6 +110,24 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
   Image *image = ObjectWrap::Unwrap<Image>(info.This());
   String::Utf8Value filename_s(value->ToString());
   image->Load(*filename_s);
+
+  // adjust internal fields
+  size_t num_bytes = FreeImage_GetWidth(image->image_bmp) * FreeImage_GetHeight(image->image_bmp);
+  BYTE *pixels = FreeImage_GetBits(image->image_bmp);
+
+  // FreeImage stores data in BGR
+  // Convert from BGR to RGB
+  for(int i = 0; i < num_bytes; i++)
+  {
+    int i4=i<<2;
+    BYTE temp = pixels[i4 + 0];
+    pixels[i4 + 0] = pixels[i4 + 2];
+    pixels[i4 + 2] = temp;
+  }
+
+  info.This()->ToObject()->SetIndexedPropertiesToExternalArrayData(pixels,
+                                                       kExternalUnsignedByteArray,
+                                                       num_bytes);
 
   // emit event
   Local<Value> emit_v = info.This()->Get(String::NewSymbol("emit"));

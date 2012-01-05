@@ -25,7 +25,7 @@ def build(bld):
     obj.uselib = ["GL", "GLU", "GLUT"]
     obj.framework = ['OpenGL','GLUT','Cocoa']
   elif sys.platform.startswith('linux'):
-    obj.uselib = ["GL", "GLU", "GLUT", "FREEIMAGE"]
+    obj.uselib = ["GL", "FREEIMAGE"]
     obj.linkflags = ["-lGL", "-lfreeimage"]
   else:
     obj.linkflags = ["-lGLESv2"]
