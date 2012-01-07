@@ -25,6 +25,7 @@ protected:
   static void SrcSetter (Local<String> property, Local<Value> value, const AccessorInfo& info);
   static void OnloadSetter (Local<String> property, Local<Value> value, const AccessorInfo& info);
   static Handle<Value> PitchGetter (Local<String> property, const AccessorInfo& info);
+  static JS_METHOD(save);
 
   ~Image ();
 

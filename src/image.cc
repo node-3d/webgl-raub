@@ -15,6 +15,7 @@ void Image::Initialize (Handle<Object> target) {
   constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
   constructor_template->SetClassName(JS_STR("Image"));
 
+  NODE_SET_PROTOTYPE_METHOD(constructor_template, "save", save);
   constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("width"), WidthGetter);
   constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("height"), HeightGetter);
   constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("pitch"), PitchGetter);
@@ -164,6 +165,40 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
   if (tc.HasCaught())
     FatalException(tc);
 }*/
+
+JS_METHOD(Image::save) {
+  HandleScope scope;
+  String::Utf8Value filename(args[0]->ToString());
+
+  FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(*filename);
+
+  Local<Object> obj=args[1]->ToObject();
+  void *buffer = obj->GetIndexedPropertiesExternalArrayData();
+
+  uint32_t width=args[2]->ToUint32()->Value();
+  uint32_t height=args[3]->ToUint32()->Value();
+
+  uint32_t pitch=width*4, bpp=32;
+  uint32_t redMask=0xFF000000, greenMask=0x00FF0000, blueMask=0x0000FF00;
+
+  if(args.Length()>4) pitch=args[4]->ToUint32()->Value();
+  if(args.Length()>5) bpp=args[5]->ToUint32()->Value();
+  if(args.Length()>6) redMask=args[6]->ToUint32()->Value();
+  if(args.Length()>7) greenMask=args[7]->ToUint32()->Value();
+  if(args.Length()>8) blueMask=args[8]->ToUint32()->Value();
+
+  FIBITMAP *image = FreeImage_ConvertFromRawBits(
+      (BYTE*)buffer,
+      width, height, pitch, bpp,
+      redMask, greenMask, blueMask);
+
+  if(format==FIF_JPEG && bpp!=24) {
+    FIBITMAP *old=image;
+    image=FreeImage_ConvertTo24Bits(image);
+    FreeImage_Unload(old);
+  }
+  return scope.Close(Boolean::New((FreeImage_Save(format, image, *filename) == TRUE) ? true : false));
+}
 
 Image::~Image () {
   if (image_bmp) FreeImage_Unload(image_bmp);

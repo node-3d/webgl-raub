@@ -7,11 +7,18 @@ eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
 var WebGL=require('../index'),
     Image = WebGL.Image,
     document = WebGL.document(),
-	alert=console.error;
+    alert=console.error;
 ;
 
 document.createWindow(640,480);
 document.setTitle("Lesson05");
+document.on("VIDEORESIZE",function(evt){
+  console.log('resize to: ('+evt.width+", "+evt.height+")");
+  document.createWindow(evt.width,evt.height);
+  gl.viewportWidth=evt.width;
+  gl.viewportHeight=evt.height;
+});
+
 requestAnimationFrame = document.requestAnimationFrame;
 
 var shaders= {

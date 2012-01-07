@@ -20,6 +20,23 @@ v8::Handle<v8::Value> ThrowError(const char* msg) {
   return v8::ThrowException(v8::Exception::Error(v8::String::New(msg)));
 }
 
+// GL_ARB_vertex_buffer_object extension
+extern "C" {
+  typedef ptrdiff_t GLintptrARB;
+  typedef ptrdiff_t GLsizeiptrARB;
+  void glBindBufferARB (GLenum, GLuint);
+  void glDeleteBuffersARB (GLsizei, const GLuint *);
+  void glGenBuffersARB (GLsizei, GLuint *);
+  GLboolean glIsBufferARB (GLuint);
+  void glBufferDataARB (GLenum, GLsizeiptrARB, const GLvoid *, GLenum);
+  void glBufferSubDataARB (GLenum, GLintptrARB, GLsizeiptrARB, const GLvoid *);
+  //void glGetBufferSubDataARB (GLenum, GLintptrARB, GLsizeiptrARB, GLvoid *);
+  //GLvoid* glMapBufferARB (GLenum, GLenum);
+  //GLboolean glUnmapBufferARB (GLenum);
+  void glGetBufferParameterivARB (GLenum, GLenum, GLint *);
+  //void glGetBufferPointervARB (GLenum, GLenum, GLvoid* *);
+}
+
 static int SizeOfArrayElementForType(v8::ExternalArrayType type) {
   switch (type) {
   case v8::kExternalByteArray:
@@ -603,8 +620,7 @@ JS_METHOD(TexImage2D) {
   int type = args[7]->Int32Value();
   void *pixels=getImageData(args[8]);
 
-  if(pixels)
-    glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+  glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
   return Undefined();
 }
@@ -652,17 +668,14 @@ JS_METHOD(UseProgram) {
   return Undefined();
 }
 
-
 JS_METHOD(CreateBuffer) {
   HandleScope scope;
 
   GLuint buffer;
-  glGenBuffers(1, &buffer);
+  glGenBuffersARB(1, &buffer);
   registerGLObj(buffer);
   return scope.Close(Number::New(buffer));
 }
-
-extern "C" void glBindBufferARB (GLenum target, GLuint buffer);
 
 JS_METHOD(BindBuffer) {
   HandleScope scope;
@@ -670,10 +683,7 @@ JS_METHOD(BindBuffer) {
   int target = args[0]->Int32Value();
   int buffer = args[1]->Int32Value();
 
-  if(target==0x88EB || target==0x88EC)
-    glBindBufferARB(target,buffer);
-  else
-    glBindBuffer(target, buffer);
+  glBindBufferARB(target,buffer);
 
   return Undefined();
 }
@@ -722,19 +732,19 @@ JS_METHOD(BufferData) {
   int target = args[0]->Int32Value();
   if(args[1]->IsObject()) {
     Local<Object> obj = Local<Object>::Cast(args[1]);
-    int usage = args[2]->Int32Value();
+    GLenum usage = args[2]->Int32Value();
 
     int element_size = SizeOfArrayElementForType(obj->GetIndexedPropertiesExternalArrayDataType());
-    int size = obj->GetIndexedPropertiesExternalArrayDataLength() * element_size;
+    GLsizeiptr size = obj->GetIndexedPropertiesExternalArrayDataLength() * element_size;
     void* data = obj->GetIndexedPropertiesExternalArrayData();
 
     //    printf("BufferData %d %d %d\n", target, size, usage);
-    glBufferData(target, size, data, usage);
+    glBufferDataARB(target, size, data, usage);
   }
   else if(args[1]->IsNumber()) {
-    int size = args[1]->Int32Value();
-    int usage = args[2]->Int32Value();
-    glBufferData(target, size, NULL, usage);
+    GLsizeiptr size = args[1]->NumberValue();
+    GLenum usage = args[2]->Int32Value();
+    glBufferDataARB(target, size, NULL, usage);
   }
   return Undefined();
 }
@@ -751,7 +761,7 @@ JS_METHOD(BufferSubData) {
   int size = obj->GetIndexedPropertiesExternalArrayDataLength() * element_size;
   void* data = obj->GetIndexedPropertiesExternalArrayData();
 
-  glBufferSubData(target, offset, size, data);
+  glBufferSubDataARB(target, offset, size, data);
 
   return Undefined();
 }
@@ -1218,7 +1228,7 @@ JS_METHOD(DeleteBuffer) {
 
   GLuint buffer = args[0]->Uint32Value();
 
-  glDeleteBuffers(1,&buffer);
+  glDeleteBuffersARB(1,&buffer);
   return Undefined();
 }
 
@@ -1303,7 +1313,7 @@ JS_METHOD(GetVertexAttribOffset) {
 JS_METHOD(IsBuffer) {
   HandleScope scope;
 
-  return scope.Close(Boolean::New(glIsBuffer(args[0]->Uint32Value())));
+  return scope.Close(Boolean::New(glIsBufferARB(args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsFramebuffer) {
@@ -1385,8 +1395,7 @@ JS_METHOD(TexSubImage2D) {
   GLenum type = args[7]->Int32Value();
   void *pixels=getImageData(args[8]);
 
-  if(pixels)
-    glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
+  glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
   return Undefined();
 }
@@ -1402,8 +1411,7 @@ JS_METHOD(ReadPixels) {
   GLenum type = args[5]->Int32Value();
   void *pixels=getImageData(args[6]);
 
-  if(pixels)
-    glReadPixels(x, y, width, height, format, type, pixels);
+  glReadPixels(x, y, width, height, format, type, pixels);
 
   return Undefined();
 }
@@ -1609,7 +1617,7 @@ JS_METHOD(GetBufferParameter) {
   GLenum pname = args[1]->Int32Value();
 
   GLint params;
-  glGetBufferParameteriv(target,pname,&params);
+  glGetBufferParameterivARB(target,pname,&params);
   return scope.Close(JS_INT(params));
 }
 
