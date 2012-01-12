@@ -155,11 +155,11 @@ var neheTexture;
 function initTexture() {
   neheTexture = gl.createTexture();
   neheTexture.image = new Image();
-  neheTexture.image.onload(function (s) { // [MBS] was onload() event
-    console.log("Loaded image: "+s);
+  neheTexture.image.onload = function () { // [MBS] was onload() event
+    console.log("Loaded image: "+neheTexture.image.src);
     console.log("size: "+neheTexture.image.width+"x"+neheTexture.image.height);
     handleLoadedTexture(neheTexture)
-  });
+  };
 
   neheTexture.image.src = nodejs ? __dirname+"/nehe.gif" : "nehe.gif";
 }

@@ -144,11 +144,11 @@ var lena;
 function initTexture() {
   lena = gl.createTexture();
   lena.image = new Image();
-  lena.image.onload(function (s) { // [MBS] was onload() event
-    console.log("Loaded image: "+s);
+  lena.image.onload=function () { // [MBS] was onload() event
+    console.log("Loaded image: "+lena.image.src);
     console.log("size: "+lena.image.width+"x"+lena.image.height);
     handleLoadedTexture(lena)
-  });
+  };
 
   lena.image.src = nodejs ? __dirname+"/lena.jpg" : "lena.jpg";
 }

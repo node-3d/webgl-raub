@@ -14,16 +14,12 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-var Image = require('../lib/image').Image;
+var Image = require('../lib/image');
 
 var img = new Image();
 
 img.onload=function() {
   console.log("web onload called");
 }
-
-img.on('load',function(s) {
-  console.log("Image "+s+" loaded");
-});
 
 img.src=__dirname+"/node_logo.png";

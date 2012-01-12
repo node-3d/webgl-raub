@@ -342,9 +342,9 @@ var tunnelTexture;
 function initTexture() {
   tunnelTexture = gl.createTexture();
   tunnelTexture.image = new Image();
-  tunnelTexture.image.onload(function() {
+  tunnelTexture.image.onload=function() {
     handleLoadedTexture(tunnelTexture)
-  });
+  };
 
   tunnelTexture.image.src = nodejs ? __dirname+"/texture.jpg" : "texture.jpg";
 }

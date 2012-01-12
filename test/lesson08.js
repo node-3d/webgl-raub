@@ -176,9 +176,9 @@ var glassTexture;
 function initTexture() {
   glassTexture = gl.createTexture();
   glassTexture.image = new Image();
-  glassTexture.image.onload(function () {
+  glassTexture.image.onload=function () {
     handleLoadedTexture(glassTexture)
-  });
+  };
 
   if(nodejs)
     glassTexture.image.src = __dirname+"/glass.gif";
