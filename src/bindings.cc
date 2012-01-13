@@ -18,6 +18,7 @@ extern "C" {
 void init(Handle<Object> target)
 {
   atexit(webgl::AtExit);
+  atexit(Image::AtExit);
 
   Image::Initialize(target);
 

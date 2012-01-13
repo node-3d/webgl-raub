@@ -1,8 +1,30 @@
 #include "image.h"
 #include <cstdlib>
+#include <vector>
+#include <iostream>
 
 using namespace v8;
 using namespace node;
+using namespace std;
+
+static vector<Image*> images;
+
+static void registerImage(Image *obj) {
+  images.push_back(obj);
+}
+
+
+static void unregisterImage(Image* obj) {
+  vector<Image*>::iterator it = images.begin();
+  while(it != images.end()) {
+    if(*it==obj) {
+      images.erase(it);
+      break;
+    }
+    it++;
+  }
+}
+
 
 Persistent<FunctionTemplate> Image::constructor_template;
 
@@ -60,8 +82,9 @@ void Image::Load (const char *filename) {
   this->filename = (char *)filename;
 
   FREE_IMAGE_FORMAT format = FreeImage_GetFileType(filename, 0);
-  image_bmp = FreeImage_Load(format, filename, 0);
-  image_bmp = FreeImage_ConvertTo32Bits(image_bmp);
+  FIBITMAP *tmp = FreeImage_Load(format, filename, 0);
+  image_bmp = FreeImage_ConvertTo32Bits(tmp);
+  FreeImage_Unload(tmp);
 }
 
 Handle<Value> Image::New (const Arguments& args) {
@@ -69,6 +92,7 @@ Handle<Value> Image::New (const Arguments& args) {
 
   Image *image = new Image();
   image->Wrap(args.This());
+  registerImage(image);
 
   return args.This();
 }
@@ -148,24 +172,6 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
     FatalException(tc);
 }
 
-/*void Image::OnloadSetter (Local<String> property, Local<Value> value, const AccessorInfo& info) {
-  HandleScope scope;
-
-  Image *image = ObjectWrap::Unwrap<Image>(info.This());
-
-  // emit event
-  Local<Value> cb = value;
-  assert(cb->IsFunction());
-  Local<Function>cb_f = cb.As<Function>();
-
-  TryCatch tc;
-
-  cb_f->Call(info.This(), 0, NULL);
-
-  if (tc.HasCaught())
-    FatalException(tc);
-}*/
-
 JS_METHOD(Image::save) {
   HandleScope scope;
   String::Utf8Value filename(args[0]->ToString());
@@ -197,11 +203,29 @@ JS_METHOD(Image::save) {
     image=FreeImage_ConvertTo24Bits(image);
     FreeImage_Unload(old);
   }
-  return scope.Close(Boolean::New((FreeImage_Save(format, image, *filename) == TRUE) ? true : false));
+  bool ret=FreeImage_Save(format, image, *filename);
+  FreeImage_Unload(image);
+  return scope.Close(Boolean::New(ret));
 }
 
 Image::~Image () {
+  cout<<"  Deleting image"<<endl;
   if (image_bmp) FreeImage_Unload(image_bmp);
-  FreeImage_DeInitialise();
+  unregisterImage(this);
 }
 
+void Image::AtExit() {
+  cout<<"Image AtExit"<<endl;
+  vector<Image*>::iterator it = images.begin();
+  while(it != images.end()) {
+    Image *img=*it;
+    v8::Persistent<v8::Value> value = img->handle_;
+    //v8::Object* obj = v8::Object::Cast(*value);
+    //BYTE* ptr = (BYTE*) obj->GetIndexedPropertiesExternalArrayData();
+    value.ClearWeak();
+    value.Dispose();
+    //delete ptr;
+    it++;
+  }
+  FreeImage_DeInitialise();
+}

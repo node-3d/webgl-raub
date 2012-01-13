@@ -11,6 +11,7 @@ using namespace node;
 class Image : public ObjectWrap {
 public:
   static void Initialize (Handle<Object> target);
+  static void AtExit();
   int GetWidth ();
   int GetHeight ();
   int GetPitch ();
@@ -27,7 +28,7 @@ protected:
   static Handle<Value> PitchGetter (Local<String> property, const AccessorInfo& info);
   static JS_METHOD(save);
 
-  ~Image ();
+  virtual ~Image ();
 
 private:
   static Persistent<FunctionTemplate> constructor_template;
