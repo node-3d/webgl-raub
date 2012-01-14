@@ -209,13 +209,15 @@ JS_METHOD(Image::save) {
 }
 
 Image::~Image () {
-  cout<<"  Deleting image"<<endl;
-  if (image_bmp) FreeImage_Unload(image_bmp);
+  if (image_bmp) {
+    cout<<"  Deleting image"<<endl;
+    FreeImage_Unload(image_bmp);
+  }
   unregisterImage(this);
 }
 
 void Image::AtExit() {
-  cout<<"Image AtExit"<<endl;
+  cout<<"Image AtExit()"<<endl;
   vector<Image*>::iterator it = images.begin();
   while(it != images.end()) {
     Image *img=*it;
@@ -224,7 +226,12 @@ void Image::AtExit() {
     //BYTE* ptr = (BYTE*) obj->GetIndexedPropertiesExternalArrayData();
     value.ClearWeak();
     value.Dispose();
-    //delete ptr;
+    if (img->image_bmp) {
+      cout<<"  Deleting image"<<endl;
+      FreeImage_Unload(img->image_bmp);
+      img->image_bmp=NULL;
+    }
+
     it++;
   }
   FreeImage_DeInitialise();
