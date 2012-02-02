@@ -1653,17 +1653,22 @@ JS_METHOD(GetRenderbufferParameter) {
   return scope.Close(JS_INT(value));
 }
 
-// TODO GetUniform() not sure how to retrieve type of uniform at location in program
 JS_METHOD(GetUniform) {
   HandleScope scope;
 
-  /*GLuint program = args[0]->Int32Value();
-  GLuint location = args[1]->Int32Value();
-  float *data=new float[16]; // worst case scenario is 16 floats
+  GLuint program = args[0]->Int32Value();
+  GLint location = args[1]->Int32Value();
+  if(location < 0 ) return Undefined();
 
-  glGetUniformfv(program, location, data);*/
+  float data[16]; // worst case scenario is 16 floats
 
-  return Undefined();
+  glGetUniformfv(program, location, data);
+
+  Local<Array> arr=Array::New(16);
+  for(int i=0;i<16;i++)
+    arr->Set(i,JS_FLOAT(data[i]));
+
+  return scope.Close(arr);
 }
 
 JS_METHOD(GetVertexAttrib) {

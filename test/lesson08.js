@@ -8,9 +8,14 @@ var WebGL=require('../index'),
     Image = WebGL.Image,
     document = WebGL.document(),
 	alert=console.error;
-document.createWindow(640,480);
 document.setTitle("Lesson08");
 requestAnimationFrame = document.requestAnimationFrame;
+
+document.on("resize",function(evt){
+  document.createWindow(evt.width,evt.height);
+  gl.viewportWidth=evt.width;
+  gl.viewportHeight=evt.height;
+});
 
 
 var shaders= {
@@ -161,8 +166,7 @@ function handleLoadedTexture(texture) {
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
   gl.bindTexture(gl.TEXTURE_2D, texture);
-  //gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, texture.image.width,texture.image.height,0,gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
   gl.generateMipmap(gl.TEXTURE_2D);
@@ -537,7 +541,7 @@ function tick() {
 
 
 function webGLStart() {
-  var canvas = document.getElementById("lesson08-canvas");
+  var canvas = document.createElement("lesson08-canvas");
   initGL(canvas);
   initShaders();
   initBuffers();
