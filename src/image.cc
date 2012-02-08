@@ -142,7 +142,7 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
 
   // FreeImage stores data in BGR
   // Convert from BGR to RGB
-  for(int i = 0; i < num_bytes; i++)
+  for(size_t i = 0; i < num_bytes; i++)
   {
     int i4=i<<2;
     BYTE temp = pixels[i4 + 0];
