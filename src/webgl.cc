@@ -4,6 +4,7 @@
 
 #include "webgl.h"
 #include "image.h"
+#include <node.h>
 #include <node_buffer.h>
 
 namespace webgl {
@@ -27,6 +28,11 @@ void unregisterGLObj(GLuint obj);
 
 v8::Handle<v8::Value> ThrowError(const char* msg) {
   return v8::ThrowException(v8::Exception::Error(v8::String::New(msg)));
+}
+
+// A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.
+static GLuint ToGLuint(const void* ptr) {
+  return static_cast<GLuint>(reinterpret_cast<size_t>(ptr));
 }
 
 // GL_ARB_vertex_buffer_object extension
@@ -75,6 +81,28 @@ inline void *getImageData(Local<Value> arg) {
     pixels = obj->GetIndexedPropertiesExternalArrayData();
   }
   return pixels;
+}
+
+template<typename Type>
+inline Type* getArrayData(Local<Value> arg, int* num = NULL) {
+  Type *data=NULL;
+  if(num) *num=0;
+
+  if(!arg->IsNull()) {
+    if(arg->IsArray()) {
+      Local<Array> arr = Array::Cast(*arg);
+      if(num) *num=arr->Length();
+      data = reinterpret_cast<Type*>(arr->GetIndexedPropertiesExternalArrayData());
+    }
+    else if(arg->IsObject()) {
+      if(num) *num = arg->ToObject()->GetIndexedPropertiesExternalArrayDataLength();
+      data = reinterpret_cast<Type*>(arg->ToObject()->GetIndexedPropertiesExternalArrayData());
+    }
+    else
+      ThrowException(JS_STR("Bad array argument"));
+  }
+
+  return data;
 }
 
 JS_METHOD(Uniform1f) {
@@ -173,10 +201,9 @@ JS_METHOD(Uniform1fv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-  int num=arr->Length();
-
-  glUniform1fv(location, num, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  int num=0;
+  GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
+  glUniform1fv(location, num, ptr);
   return Undefined();
 }
 
@@ -184,10 +211,11 @@ JS_METHOD(Uniform2fv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-  int num=arr->Length()/2;
+  int num=0;
+  GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
+  num /= 2;
 
-  glUniform2fv(location, num, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  glUniform2fv(location, num, ptr);
   return Undefined();
 }
 
@@ -195,10 +223,11 @@ JS_METHOD(Uniform3fv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-  int num=arr->Length()/3;
+  int num=0;
+  GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
+  num /= 3;
 
-  glUniform3fv(location, num, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  glUniform3fv(location, num, ptr);
   return Undefined();
 }
 
@@ -206,10 +235,11 @@ JS_METHOD(Uniform4fv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-  int num=arr->Length()/4;
+  int num=0;
+  GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
+  num /= 4;
 
-  glUniform4fv(location, num, (float*) arr->GetIndexedPropertiesExternalArrayData());
+  glUniform4fv(location, num, ptr);
   return Undefined();
 }
 
@@ -217,10 +247,10 @@ JS_METHOD(Uniform1iv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-  int num=arr->Length();
+  int num=0;
+  GLint *ptr=getArrayData<GLint>(args[1],&num);
 
-  glUniform1iv(location, num, (int*) arr->GetIndexedPropertiesExternalArrayData());
+  glUniform1iv(location, num, ptr);
   return Undefined();
 }
 
@@ -228,10 +258,11 @@ JS_METHOD(Uniform2iv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-  int num=arr->Length()/2;
+  int num=0;
+  GLint *ptr=getArrayData<GLint>(args[1],&num);
+  num /= 2;
 
-  glUniform2iv(location, num, (int*) arr->GetIndexedPropertiesExternalArrayData());
+  glUniform2iv(location, num, ptr);
   return Undefined();
 }
 
@@ -239,10 +270,10 @@ JS_METHOD(Uniform3iv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-  int num=arr->Length()/3;
-
-  glUniform3iv(location, num, (int*) arr->GetIndexedPropertiesExternalArrayData());
+  int num=0;
+  GLint *ptr=getArrayData<GLint>(args[1],&num);
+  num /= 3;
+  glUniform3iv(location, num, ptr);
   return Undefined();
 }
 
@@ -250,10 +281,10 @@ JS_METHOD(Uniform4iv) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-  int num=arr->Length()/4;
-
-  glUniform4iv(location, num, (int*) arr->GetIndexedPropertiesExternalArrayData());
+  int num=0;
+  GLint *ptr=getArrayData<GLint>(args[1],&num);
+  num /= 4;
+  glUniform4iv(location, num, ptr);
   return Undefined();
 }
 
@@ -307,17 +338,7 @@ JS_METHOD(UniformMatrix2fv) {
   GLboolean transpose = args[1]->BooleanValue();
 
   GLsizei count=0;
-  GLfloat* data=NULL;
-
-  if(args[2]->IsArray()) {
-    Local<Array> value = Local<Array>::Cast(args[2]);
-    count = value->GetIndexedPropertiesExternalArrayDataLength();
-    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
-  } else {
-    Local<Object> value = Local<Object>::Cast(args[2]);
-    count = value->GetIndexedPropertiesExternalArrayDataLength();
-    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
-  }
+  GLfloat* data=getArrayData<GLfloat>(args[2],&count);
 
   if (count < 4) {
     return ThrowError("Not enough data for UniformMatrix2fv");
@@ -334,17 +355,7 @@ JS_METHOD(UniformMatrix3fv) {
   GLint location = args[0]->Int32Value();
   GLboolean transpose = args[1]->BooleanValue();
   GLsizei count=0;
-  GLfloat* data=NULL;
-
-  if(args[2]->IsArray()) {
-    Local<Array> value = Local<Array>::Cast(args[2]);
-    count = value->GetIndexedPropertiesExternalArrayDataLength();
-    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
-  } else {
-    Local<Object> value = Local<Object>::Cast(args[2]);
-    count = value->GetIndexedPropertiesExternalArrayDataLength();
-    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
-  }
+  GLfloat* data=getArrayData<GLfloat>(args[2],&count);
 
   if (count < 9) {
     return ThrowError("Not enough data for UniformMatrix3fv");
@@ -361,17 +372,7 @@ JS_METHOD(UniformMatrix4fv) {
   GLint location = args[0]->Int32Value();
   GLboolean transpose = args[1]->BooleanValue();
   GLsizei count=0;
-  GLfloat* data=NULL;
-
-  if(args[2]->IsArray()) {
-    Local<Array> value = Local<Array>::Cast(args[2]);
-    count = value->GetIndexedPropertiesExternalArrayDataLength();
-    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
-  } else {
-    Local<Object> value = Local<Object>::Cast(args[2]);
-    count = value->GetIndexedPropertiesExternalArrayDataLength();
-    data = (GLfloat*)value->GetIndexedPropertiesExternalArrayData();
-  }
+  GLfloat* data=getArrayData<GLfloat>(args[2],&count);
 
   if (count < 16) {
     return ThrowError("Not enough data for UniformMatrix4fv");
@@ -421,8 +422,6 @@ JS_METHOD(Viewport) {
   glViewport(x, y, width, height);
 
   return Undefined();
-
-  return scope.Close(Number::New(glCreateShader(args[0]->Int32Value())));
 }
 
 JS_METHOD(CreateShader) {
@@ -443,8 +442,9 @@ JS_METHOD(ShaderSource) {
 
   const char* codes[1];
   codes[0] = *code;
+  GLint length=code.length();
 
-  glShaderSource  (id, 1, codes, NULL);
+  glShaderSource  (id, 1, codes, &length);
 
   return Undefined();
 }
@@ -470,14 +470,14 @@ JS_METHOD(GetShaderParameter) {
   case GL_DELETE_STATUS:
   case GL_COMPILE_STATUS:
     glGetShaderiv(shader, pname, &value);
-    return scope.Close(Boolean::New(static_cast<bool>(value)));
+    return scope.Close(JS_BOOL(static_cast<bool>(value)));
   case GL_SHADER_TYPE:
     glGetShaderiv(shader, pname, &value);
-    return scope.Close(Number::New(static_cast<unsigned long>(value)));
+    return scope.Close(JS_INT(static_cast<unsigned long>(value)));
   case GL_INFO_LOG_LENGTH:
   case GL_SHADER_SOURCE_LENGTH:
     glGetShaderiv(shader, pname, &value);
-    return scope.Close(Number::New(static_cast<long>(value)));
+    return scope.Close(JS_INT(static_cast<long>(value)));
   default:
     return ThrowException(Exception::TypeError(String::New("GetShaderParameter: Invalid Enum")));
   }
@@ -538,12 +538,12 @@ JS_METHOD(GetProgramParameter) {
   case GL_LINK_STATUS:
   case GL_VALIDATE_STATUS:
     glGetProgramiv(program, pname, &value);
-    return scope.Close(Boolean::New(static_cast<bool>(value)));
+    return scope.Close(JS_BOOL(static_cast<bool>(value)));
   case GL_ATTACHED_SHADERS:
   case GL_ACTIVE_ATTRIBUTES:
   case GL_ACTIVE_UNIFORMS:
     glGetProgramiv(program, pname, &value);
-    return scope.Close(Number::New(static_cast<long>(value)));
+    return scope.Close(JS_INT(static_cast<long>(value)));
   default:
     return ThrowException(Exception::TypeError(String::New("GetProgramParameter: Invalid Enum")));
   }
@@ -556,7 +556,7 @@ JS_METHOD(GetUniformLocation) {
   int program = args[0]->Int32Value();
   String::AsciiValue name(args[1]);
 
-  return scope.Close(Number::New(glGetUniformLocation(program, *name)));
+  return scope.Close(JS_INT(glGetUniformLocation(program, *name)));
 }
 
 
@@ -614,7 +614,7 @@ JS_METHOD(BindTexture) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
-  int texture = args[1]->Int32Value();
+  int texture = args[1]->IsNull() ? 0 : args[1]->Int32Value();
 
   glBindTexture(target, texture);
   return Undefined();
@@ -719,7 +719,7 @@ JS_METHOD(BindFramebuffer) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
-  int buffer = args[1]->Int32Value();
+  int buffer = args[1]->IsNull() ? 0 : args[1]->Int32Value();
 
   glBindFramebuffer(target, buffer);
 
@@ -746,6 +746,7 @@ JS_METHOD(BufferData) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
+  //cout<<"BufferData args[1]: isArray: "<<args[1]->IsArray()<<" isObject: "<<args[1]->IsObject()<<" isNumber: "<<args[1]->IsNumber()<<endl;
   if(args[1]->IsObject()) {
     Local<Object> obj = Local<Object>::Cast(args[1]);
     GLenum usage = args[2]->Int32Value();
@@ -846,8 +847,8 @@ JS_METHOD(DrawElements) {
   int mode = args[0]->Int32Value();
   int count = args[1]->Int32Value();
   int type = args[2]->Int32Value();
-  int offset = args[3]->Int32Value();
-  glDrawElements(mode, count, type, (const GLvoid*)offset);
+  GLvoid *offset = reinterpret_cast<GLvoid*>(args[3]->Uint32Value());
+  glDrawElements(mode, count, type, offset);
   return Undefined();
 }
 
@@ -910,32 +911,12 @@ JS_METHOD(VertexAttrib4f) {
   return Undefined();
 }
 
-inline void *getArrayData(Local<Value> arg) {
-  void *data=NULL;
-  if(!arg->IsNull()) {
-    if(arg->IsArray()) {
-      Local<Array> arr = Array::Cast(*arg);
-      data = arr->GetIndexedPropertiesExternalArrayData();
-    }
-    else if(arg->IsObject()) {
-      data = arg->ToObject()->GetIndexedPropertiesExternalArrayData();
-    }
-    else
-      ThrowException(JS_STR("Bad array argument"));
-  }
-
-  return data;
-}
-
-
 JS_METHOD(VertexAttrib1fv) {
   HandleScope scope;
 
   int indx = args[0]->Int32Value();
-  Local<Array> arr = Array::Cast(*args[1]);
-
-  void *data = getArrayData(args[1]);
-  if(data) glVertexAttrib1fv(indx, (float*) data);
+  GLfloat *data = getArrayData<GLfloat>(args[1]);
+  glVertexAttrib1fv(indx, data);
 
   return Undefined();
 }
@@ -944,8 +925,8 @@ JS_METHOD(VertexAttrib2fv) {
   HandleScope scope;
 
   int indx = args[0]->Int32Value();
-  void *data = getArrayData(args[1]);
-  if(data) glVertexAttrib2fv(indx, (float*) data);
+  GLfloat *data = getArrayData<GLfloat>(args[1]);
+  glVertexAttrib2fv(indx, data);
 
   return Undefined();
 }
@@ -954,8 +935,8 @@ JS_METHOD(VertexAttrib3fv) {
   HandleScope scope;
 
   int indx = args[0]->Int32Value();
-  void *data = getArrayData(args[1]);
-  if(data) glVertexAttrib3fv(indx, (float*) data);
+  GLfloat *data = getArrayData<GLfloat>(args[1]);
+  glVertexAttrib3fv(indx, data);
 
   return Undefined();
 }
@@ -964,8 +945,8 @@ JS_METHOD(VertexAttrib4fv) {
   HandleScope scope;
 
   int indx = args[0]->Int32Value();
-  void *data = getArrayData(args[1]);
-  if(data) glVertexAttrib4fv(indx, (float*) data);
+  GLfloat *data = getArrayData<GLfloat>(args[1]);
+  glVertexAttrib4fv(indx, data);
 
   return Undefined();
 }
@@ -1223,7 +1204,7 @@ JS_METHOD(BindRenderbuffer) {
   HandleScope scope;
 
   GLenum target = args[0]->Int32Value();
-  GLuint buffer = args[1]->Int32Value();
+  GLuint buffer = args[1]->IsNull() ? 0 : args[1]->Int32Value();
 
   glBindRenderbuffer(target, buffer);
 
@@ -1324,7 +1305,7 @@ JS_METHOD(GetVertexAttribOffset) {
   void *ret=NULL;
 
   glGetVertexAttribPointerv(index, pname, &ret);
-  return scope.Close(Integer::New((int)(GLsizeiptr) ret)); // TODO is this correct?
+  return scope.Close(JS_INT(ToGLuint(ret)));
 }
 
 JS_METHOD(IsBuffer) {
@@ -1336,31 +1317,31 @@ JS_METHOD(IsBuffer) {
 JS_METHOD(IsFramebuffer) {
   HandleScope scope;
 
-  return scope.Close(Boolean::New(glIsFramebuffer(args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsFramebuffer(args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsProgram) {
   HandleScope scope;
 
-  return scope.Close(Boolean::New(glIsProgram(args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsProgram(args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsRenderbuffer) {
   HandleScope scope;
 
-  return scope.Close(Boolean::New(glIsRenderbuffer( args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsRenderbuffer( args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsShader) {
   HandleScope scope;
 
-  return scope.Close(Boolean::New(glIsShader(args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsShader(args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsTexture) {
   HandleScope scope;
 
-  return scope.Close(Boolean::New(glIsTexture(args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsTexture(args[0]->Uint32Value())));
 }
 
 JS_METHOD(RenderbufferStorage) {
@@ -1549,10 +1530,11 @@ JS_METHOD(GetParameter) {
     // return a int32[2]
     GLint params[2];
     ::glGetIntegerv(name, params);
-    node::Buffer *buf=node::Buffer::New(2*sizeof(int));
-    ((int*)Buffer::Data(buf))[0]=params[0];
-    ((int*)Buffer::Data(buf))[1]=params[1];
-    return scope.Close(buf->handle_);
+
+    Local<Array> arr=Array::New(2);
+    arr->Set(0,JS_INT(params[0]));
+    arr->Set(1,JS_INT(params[1]));
+    return scope.Close(arr);
   }
   case GL_SCISSOR_BOX:
   case GL_VIEWPORT:
@@ -1560,12 +1542,13 @@ JS_METHOD(GetParameter) {
     // return a int32[4]
     GLint params[4];
     ::glGetIntegerv(name, params);
-    node::Buffer *buf=node::Buffer::New(4*sizeof(int));
-    ((int*)Buffer::Data(buf))[0]=params[0];
-    ((int*)Buffer::Data(buf))[1]=params[1];
-    ((int*)Buffer::Data(buf))[2]=params[2];
-    ((int*)Buffer::Data(buf))[3]=params[3];
-    return scope.Close(buf->handle_);
+
+    Local<Array> arr=Array::New(4);
+    arr->Set(0,JS_INT(params[0]));
+    arr->Set(1,JS_INT(params[1]));
+    arr->Set(2,JS_INT(params[2]));
+    arr->Set(3,JS_INT(params[3]));
+    return scope.Close(arr);
   }
   case GL_ALIASED_LINE_WIDTH_RANGE:
   case GL_ALIASED_POINT_SIZE_RANGE:
@@ -1574,10 +1557,10 @@ JS_METHOD(GetParameter) {
     // return a float[2]
     GLfloat params[2];
     ::glGetFloatv(name, params);
-    node::Buffer *buf=node::Buffer::New(2*sizeof(float));
-    ((float*)Buffer::Data(buf))[0]=params[0];
-    ((float*)Buffer::Data(buf))[1]=params[1];
-    return scope.Close(buf->handle_);
+    Local<Array> arr=Array::New(2);
+    arr->Set(0,JS_FLOAT(params[0]));
+    arr->Set(1,JS_FLOAT(params[1]));
+    return scope.Close(arr);
   }
   case GL_BLEND_COLOR:
   case GL_COLOR_CLEAR_VALUE:
@@ -1585,12 +1568,12 @@ JS_METHOD(GetParameter) {
     // return a float[4]
     GLfloat params[4];
     ::glGetFloatv(name, params);
-    node::Buffer *buf=node::Buffer::New(4*sizeof(float));
-    ((float*)Buffer::Data(buf))[0]=params[0];
-    ((float*)Buffer::Data(buf))[1]=params[1];
-    ((float*)Buffer::Data(buf))[2]=params[2];
-    ((float*)Buffer::Data(buf))[3]=params[3];
-    return scope.Close(buf->handle_);
+    Local<Array> arr=Array::New(4);
+    arr->Set(0,JS_FLOAT(params[0]));
+    arr->Set(1,JS_FLOAT(params[1]));
+    arr->Set(2,JS_FLOAT(params[2]));
+    arr->Set(3,JS_FLOAT(params[3]));
+    return scope.Close(arr);
   }
   case GL_COLOR_WRITEMASK:
   {
@@ -1672,17 +1655,22 @@ JS_METHOD(GetRenderbufferParameter) {
   return scope.Close(JS_INT(value));
 }
 
-// TODO GetUniform() not sure how to retrieve type of uniform at location in program
 JS_METHOD(GetUniform) {
   HandleScope scope;
 
-  /*GLuint program = args[0]->Int32Value();
-  GLuint location = args[1]->Int32Value();
-  float *data=new float[16]; // worst case scenario is 16 floats
+  GLuint program = args[0]->Int32Value();
+  GLint location = args[1]->Int32Value();
+  if(location < 0 ) return Undefined();
 
-  glGetUniformfv(program, location, data);*/
+  float data[16]; // worst case scenario is 16 floats
 
-  return Undefined();
+  glGetUniformfv(program, location, data);
+
+  Local<Array> arr=Array::New(16);
+  for(int i=0;i<16;i++)
+    arr->Set(i,JS_FLOAT(data[i]));
+
+  return scope.Close(arr);
 }
 
 JS_METHOD(GetVertexAttrib) {
@@ -1706,14 +1694,21 @@ JS_METHOD(GetVertexAttrib) {
   case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
     glGetVertexAttribiv(index,pname,&value);
     return scope.Close(JS_INT(value));
-  case GL_CURRENT_VERTEX_ATTRIB:
+  case GL_CURRENT_VERTEX_ATTRIB: {
     float vextex_attribs[4];
     glGetVertexAttribfv(index,pname,vextex_attribs);
-    return scope.Close(node::Buffer::New((char*)vextex_attribs, 4*4)->handle_);
+    Local<Array> arr=Array::New(4);
+    arr->Set(0,JS_FLOAT(vextex_attribs[0]));
+    arr->Set(1,JS_FLOAT(vextex_attribs[1]));
+    arr->Set(2,JS_FLOAT(vextex_attribs[2]));
+    arr->Set(3,JS_FLOAT(vextex_attribs[3]));
+    return scope.Close(arr);
+  }
   default:
     return ThrowError("GetVertexAttrib: Invalid Enum");
   }
 
+  return Undefined();
 }
 
 JS_METHOD(GetSupportedExtensions) {

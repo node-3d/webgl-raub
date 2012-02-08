@@ -151,6 +151,7 @@ void init(Handle<Object> target)
   NODE_SET_METHOD(target, "getActiveAttrib", webgl::GetActiveAttrib);
   NODE_SET_METHOD(target, "getActiveUniform", webgl::GetActiveUniform);
   NODE_SET_METHOD(target, "getAttachedShaders", webgl::GetAttachedShaders);
+  NODE_SET_METHOD(target, "getParameter", webgl::GetParameter);
   NODE_SET_METHOD(target, "getBufferParameter", webgl::GetBufferParameter);
   NODE_SET_METHOD(target, "getFramebufferAttachmentParameter", webgl::GetFramebufferAttachmentParameter);
   NODE_SET_METHOD(target, "getProgramInfoLog", webgl::GetProgramInfoLog);
@@ -607,11 +608,11 @@ void init(Handle<Object> target)
   JS_GL_CONSTANT(INVALID_FRAMEBUFFER_OPERATION);
 
   /* WebGL-specific enums */
-  //const GLenum UNPACK_FLIP_Y_WEBGL            = 0x9240;
-  //const GLenum UNPACK_PREMULTIPLY_ALPHA_WEBGL = 0x9241;
-  //const GLenum CONTEXT_LOST_WEBGL             = 0x9242;
-  //const GLenum UNPACK_COLORSPACE_CONVERSION_WEBGL = 0x9243;
-  //const GLenum BROWSER_DEFAULT_WEBGL          = 0x9244;
+  target->Set(JS_STR( "UNPACK_FLIP_Y_WEBGL" ), JS_INT(0x9240));
+  target->Set(JS_STR( "UNPACK_PREMULTIPLY_ALPHA_WEBGL" ), JS_INT(0x9241));
+  target->Set(JS_STR( "CONTEXT_LOST_WEBGL" ), JS_INT(0x9242));
+  target->Set(JS_STR( "UNPACK_COLORSPACE_CONVERSION_WEBGL" ), JS_INT(0x9243));
+  target->Set(JS_STR( "BROWSER_DEFAULT_WEBGL" ), JS_INT(0x9244));
 
   //////////////////////////////
   // NOT in WebGL spec

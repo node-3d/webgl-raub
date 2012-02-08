@@ -2,9 +2,9 @@ var WebGL=require('../../index'),
     Image = WebGL.Image,
     document = WebGL.document(),
     nodejs = true;
-document.createWindow(800,600);
 document.setTitle("Tunnel");
 requestAnimationFrame = document.requestAnimationFrame;
+alert=console.log;
 
 //Read and eval library
 fs=require('fs');
@@ -360,7 +360,7 @@ function handleLoadedTexture(texture) {
 }
 
 function webGLStart() {
-  var canvas = document.getElementById("mytunnel");
+  var canvas = document.createElement("canvas",800,600);
   initGL(canvas);
   toggleTriangles();
   initShaders();

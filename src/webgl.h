@@ -141,6 +141,7 @@ JS_METHOD(GetTexParameter);
 JS_METHOD(GetActiveAttrib);
 JS_METHOD(GetActiveUniform);
 JS_METHOD(GetAttachedShaders);
+JS_METHOD(GetParameter);
 JS_METHOD(GetBufferParameter);
 JS_METHOD(GetFramebufferAttachmentParameter);
 JS_METHOD(GetProgramInfoLog);

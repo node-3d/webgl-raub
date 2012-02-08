@@ -1,0 +1,39 @@
+<html>
+<body>
+
+<script type="text/javascript">
+// Float32Array
+ 
+var ary32 = new Float32Array(10000);
+ 
+document.write("Float32Array type: "+Object.prototype.toString.call(ary32)+"<br>");
+
+var start = +new Date();
+    for(var i=0, l=ary32.length; i < l; i++){
+        ary32[i] = 0.1234567890123456;
+    }
+document.write( "Write: " + ( + new Date() - start ) +"<br>");
+ 
+var val = 0;
+var start = +new Date();
+    for(var i=0, l=ary32.length; i < l; i++){
+        val = ary32[i];
+    }
+document.write( "Read: " + ( +new Date() - start ) +"<br>");
+ 
+var start = +new Date();
+var ary32Copy = new Float32Array(ary32.length);
+    for(var i=0, l=ary32.length; i < l; i++){
+        ary32Copy[i] = ary32[i];
+    }
+document.write( "Loop Copy: " + ( + new Date() - start ) +"\n");
+ 
+var start = +new Date();
+var ary32SliceCopy = new Float32Array(ary32.slice(0, ary32.length));
+document.write( "Slice Copy: " + ( + new Date() - start ) +"<br>");
+
+</script>
+
+</body>
+</html>
+

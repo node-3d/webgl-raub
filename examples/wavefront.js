@@ -6,7 +6,6 @@ var WebGL=require('../index'),
     document = WebGL.document(),
     requestAnimationFrame = document.requestAnimationFrame;
 
-document.createWindow(800,600);
 document.setTitle("Traveling Wavefronts");
 document.setIcon(__dirname+"/wavefront_icon.png");
 
@@ -206,7 +205,7 @@ var shaders = {
   
   function load() {
     clearInterval(timer);
-    var canvas = document.getElementById("wavefront");
+    var canvas = document.createElement("canvas");
     gl = canvas.getContext("experimental-webgl");
 
     if (!gl) {

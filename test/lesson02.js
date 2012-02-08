@@ -2,7 +2,6 @@ var nodejs=true,
     WebGL = require('../index'),
     document = WebGL.document();
 
-document.createWindow(640,480);
 document.setTitle("Lesson02");
 requestAnimationFrame = document.requestAnimationFrame;
 alert=console.error;
@@ -225,7 +224,7 @@ function drawScene() {
 
 
 function webGLStart() {
-  var canvas = document.getElementById("lesson02-canvas");
+  var canvas = document.createElement("lesson02-canvas");
   initGL(canvas);
   initShaders()
   initBuffers();
