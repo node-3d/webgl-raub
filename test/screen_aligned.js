@@ -1,4 +1,5 @@
 nodejs=true;
+alert=console.log;
 
 //Read and eval library
 fs=require('fs');

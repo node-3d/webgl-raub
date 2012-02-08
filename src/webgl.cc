@@ -30,6 +30,7 @@ v8::Handle<v8::Value> ThrowError(const char* msg) {
 }
 
 // GL_ARB_vertex_buffer_object extension
+/*
 extern "C" {
   typedef ptrdiff_t GLintptrARB;
   typedef ptrdiff_t GLsizeiptrARB;
@@ -45,6 +46,7 @@ extern "C" {
   void glGetBufferParameterivARB (GLenum, GLenum, GLint *);
   //void glGetBufferPointervARB (GLenum, GLenum, GLvoid* *);
 }
+*/
 
 static int SizeOfArrayElementForType(v8::ExternalArrayType type) {
   switch (type) {
@@ -684,7 +686,7 @@ JS_METHOD(CreateBuffer) {
   HandleScope scope;
 
   GLuint buffer;
-  glGenBuffersARB(1, &buffer);
+  glGenBuffers(1, &buffer);
   cout<<"createBuffer "<<buffer<<endl;
   registerGLObj(GLOBJECT_TYPE_BUFFER, buffer);
   return scope.Close(Number::New(buffer));
@@ -696,7 +698,7 @@ JS_METHOD(BindBuffer) {
   int target = args[0]->Int32Value();
   int buffer = args[1]->Int32Value();
 
-  glBindBufferARB(target,buffer);
+  glBindBuffer(target,buffer);
 
   return Undefined();
 }
@@ -753,12 +755,12 @@ JS_METHOD(BufferData) {
     void* data = obj->GetIndexedPropertiesExternalArrayData();
 
     //    printf("BufferData %d %d %d\n", target, size, usage);
-    glBufferDataARB(target, size, data, usage);
+    glBufferData(target, size, data, usage);
   }
   else if(args[1]->IsNumber()) {
     GLsizeiptr size = args[1]->NumberValue();
     GLenum usage = args[2]->Int32Value();
-    glBufferDataARB(target, size, NULL, usage);
+    glBufferData(target, size, NULL, usage);
   }
   return Undefined();
 }
@@ -775,7 +777,7 @@ JS_METHOD(BufferSubData) {
   int size = obj->GetIndexedPropertiesExternalArrayDataLength() * element_size;
   void* data = obj->GetIndexedPropertiesExternalArrayData();
 
-  glBufferSubDataARB(target, offset, size, data);
+  glBufferSubData(target, offset, size, data);
 
   return Undefined();
 }
@@ -1243,7 +1245,7 @@ JS_METHOD(DeleteBuffer) {
 
   GLuint buffer = args[0]->Uint32Value();
 
-  glDeleteBuffersARB(1,&buffer);
+  glDeleteBuffers(1,&buffer);
   return Undefined();
 }
 
@@ -1328,7 +1330,7 @@ JS_METHOD(GetVertexAttribOffset) {
 JS_METHOD(IsBuffer) {
   HandleScope scope;
 
-  return scope.Close(Boolean::New(glIsBufferARB(args[0]->Uint32Value())));
+  return scope.Close(Boolean::New(glIsBuffer(args[0]->Uint32Value())));
 }
 
 JS_METHOD(IsFramebuffer) {
@@ -1632,7 +1634,7 @@ JS_METHOD(GetBufferParameter) {
   GLenum pname = args[1]->Int32Value();
 
   GLint params;
-  glGetBufferParameterivARB(target,pname,&params);
+  glGetBufferParameteriv(target,pname,&params);
   return scope.Close(JS_INT(params));
 }
 
