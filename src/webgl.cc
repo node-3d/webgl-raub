@@ -1520,10 +1520,11 @@ JS_METHOD(GetParameter) {
   case GL_SHADING_LANGUAGE_VERSION:
   case GL_VENDOR:
   case GL_VERSION:
+  case GL_EXTENSIONS:
   {
     // return a string
     char *params=(char*) ::glGetString(name);
-    return scope.Close(JS_STR(params));
+    return scope.Close(params ? JS_STR(params) : Undefined());
   }
   case GL_MAX_VIEWPORT_DIMS:
   {

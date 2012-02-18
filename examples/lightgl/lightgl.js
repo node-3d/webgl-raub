@@ -491,7 +491,6 @@ function Shader(vertexSource, fragmentSource) {
     }\
   ';
   var fragmentHeader = '\
-    /*precision highp float;*/\
   ' + header;
 
   // Check for the use of built-in matrices that require expensive matrix
@@ -533,7 +532,7 @@ function Shader(vertexSource, fragmentSource) {
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-      throw 'compile error: ' + gl.getShaderInfoLog(shader);
+      throw 'compile error: ' + gl.getShaderInfoLog(shader)+'\n\n'+source;
     }
     return shader;
   }

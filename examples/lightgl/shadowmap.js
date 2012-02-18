@@ -259,9 +259,9 @@ gl.ondraw = function() {
 };
 
 document.onkeydown = function(e) {
-  if (e.which == 's'.charCodeAt(0)) {
+  if (e.which == 'S'.charCodeAt(0)) {
     useBoundingSphere = true;
-  } else if (e.which == 'b'.charCodeAt(0)) {
+  } else if (e.which == 'B'.charCodeAt(0)) {
     useBoundingSphere = false;
   }
 };
