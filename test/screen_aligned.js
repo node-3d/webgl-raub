@@ -15,7 +15,9 @@ requestAnimFrame = document.requestAnimationFrame;
 var shaders= {
     "shader-fs" : 
       [     
-       "precision mediump float;",
+       "#ifdef GL_ES",
+       "  precision mediump float;",
+       "#endif",
        "varying vec2 vTextureCoord;",
        "uniform sampler2D uSampler;",
        "void main(void) {",

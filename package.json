@@ -1,14 +1,23 @@
 {
-  "author": [ 
-    "Tim Caswell <tim@creationix.com> (http://creationix.com/)",
-    "Mikael Bourges-Sevenier <mikeseven@gmail.com>" ],
-  "name": "webgl",
-  "description": "webGL bindings for node",
+  "author": [ "Mikael Bourges-Sevenier <mikeseven@gmail.com>" ],
+  "name": "node_webgl",
+  "description": "WebGL bindings for node",
   "version": "0.1.0",
   "main": "index.js",
+  "keywords": [ "webgl", "opengl" ],
   "engines": {
-    "node": ">=0.6.6"
+    "node": ">=0.6.5"
   },
-  "dependencies": {},
+   "directories": {
+       "src": "src",
+       "lib": "lib",
+       "doc": "doc",
+       "examples": "examples",
+       "test": "test"
+   },
+   "scripts": {
+       "install": "rm -rf build; node-waf configure build"
+   },
+  "dependencies": { },
   "devDependencies": {}
 }

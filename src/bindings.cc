@@ -625,5 +625,5 @@ void init(Handle<Object> target)
   target->Set(JS_STR( "PIXEL_UNPACK_BUFFER_BINDING" ), JS_INT(0x88EF));
 }
 
-NODE_MODULE(webgl, init)
+NODE_MODULE(node_webgl, init)
 } // extern "C"
