@@ -112,7 +112,7 @@ JS_METHOD(Uniform1f) {
   double x = args[1]->NumberValue();
 
   glUniform1f(location, x);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform2f) {
@@ -123,7 +123,7 @@ JS_METHOD(Uniform2f) {
   double y = args[2]->NumberValue();
 
   glUniform2f(location, x, y);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform3f) {
@@ -135,7 +135,7 @@ JS_METHOD(Uniform3f) {
   double z = args[3]->NumberValue();
 
   glUniform3f(location, x, y, z);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform4f) {
@@ -148,7 +148,7 @@ JS_METHOD(Uniform4f) {
   double w = args[4]->NumberValue();
 
   glUniform4f(location, x, y, z, w);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform1i) {
@@ -158,7 +158,7 @@ JS_METHOD(Uniform1i) {
   int x = args[1]->Int32Value();
 
   glUniform1i(location, x);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform2i) {
@@ -169,7 +169,7 @@ JS_METHOD(Uniform2i) {
   int y = args[2]->Int32Value();
 
   glUniform2i(location, x, y);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform3i) {
@@ -181,7 +181,7 @@ JS_METHOD(Uniform3i) {
   int z = args[3]->Int32Value();
 
   glUniform3i(location, x, y, z);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform4i) {
@@ -194,7 +194,7 @@ JS_METHOD(Uniform4i) {
   int w = args[4]->Int32Value();
 
   glUniform4i(location, x, y, z, w);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform1fv) {
@@ -204,7 +204,7 @@ JS_METHOD(Uniform1fv) {
   int num=0;
   GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
   glUniform1fv(location, num, ptr);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform2fv) {
@@ -216,7 +216,7 @@ JS_METHOD(Uniform2fv) {
   num /= 2;
 
   glUniform2fv(location, num, ptr);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform3fv) {
@@ -228,7 +228,7 @@ JS_METHOD(Uniform3fv) {
   num /= 3;
 
   glUniform3fv(location, num, ptr);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform4fv) {
@@ -240,7 +240,7 @@ JS_METHOD(Uniform4fv) {
   num /= 4;
 
   glUniform4fv(location, num, ptr);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform1iv) {
@@ -251,7 +251,7 @@ JS_METHOD(Uniform1iv) {
   GLint *ptr=getArrayData<GLint>(args[1],&num);
 
   glUniform1iv(location, num, ptr);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform2iv) {
@@ -263,7 +263,7 @@ JS_METHOD(Uniform2iv) {
   num /= 2;
 
   glUniform2iv(location, num, ptr);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform3iv) {
@@ -274,7 +274,7 @@ JS_METHOD(Uniform3iv) {
   GLint *ptr=getArrayData<GLint>(args[1],&num);
   num /= 3;
   glUniform3iv(location, num, ptr);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Uniform4iv) {
@@ -285,7 +285,7 @@ JS_METHOD(Uniform4iv) {
   GLint *ptr=getArrayData<GLint>(args[1],&num);
   num /= 4;
   glUniform4iv(location, num, ptr);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(PixelStorei) {
@@ -296,7 +296,7 @@ JS_METHOD(PixelStorei) {
 
   glPixelStorei(pname,param);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(BindAttribLocation) {
@@ -308,7 +308,7 @@ JS_METHOD(BindAttribLocation) {
 
   glBindAttribLocation(program, index, *name);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -328,7 +328,7 @@ JS_METHOD(DrawArrays) {
 
   glDrawArrays(mode, first, count);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(UniformMatrix2fv) {
@@ -346,7 +346,7 @@ JS_METHOD(UniformMatrix2fv) {
 
   glUniformMatrix2fv(location, count / 4, transpose, data);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(UniformMatrix3fv) {
@@ -363,7 +363,7 @@ JS_METHOD(UniformMatrix3fv) {
 
   glUniformMatrix3fv(location, count / 9, transpose, data);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(UniformMatrix4fv) {
@@ -380,7 +380,7 @@ JS_METHOD(UniformMatrix4fv) {
 
   glUniformMatrix4fv(location, count / 16, transpose, data);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(GenerateMipmap) {
@@ -389,7 +389,7 @@ JS_METHOD(GenerateMipmap) {
   GLint target = args[0]->Int32Value();
   glGenerateMipmap(target);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(GetAttribLocation) {
@@ -407,7 +407,7 @@ JS_METHOD(DepthFunc) {
 
   glDepthFunc(args[0]->Int32Value());
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -421,7 +421,7 @@ JS_METHOD(Viewport) {
 
   glViewport(x, y, width, height);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(CreateShader) {
@@ -446,7 +446,7 @@ JS_METHOD(ShaderSource) {
 
   glShaderSource  (id, 1, codes, &length);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -456,7 +456,7 @@ JS_METHOD(CompileShader) {
 
   glCompileShader(args[0]->Int32Value());
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -513,7 +513,7 @@ JS_METHOD(AttachShader) {
 
   glAttachShader(program, shader);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -522,7 +522,7 @@ JS_METHOD(LinkProgram) {
 
   glLinkProgram(args[0]->Int32Value());
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -570,7 +570,7 @@ JS_METHOD(ClearColor) {
 
   glClearColor(red, green, blue, alpha);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -581,21 +581,21 @@ JS_METHOD(ClearDepth) {
 
   glClearDepthf(depth);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Disable) {
   HandleScope scope;
 
   glDisable(args[0]->Int32Value());
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Enable) {
   HandleScope scope;
 
   glEnable(args[0]->Int32Value());
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -617,7 +617,7 @@ JS_METHOD(BindTexture) {
   int texture = args[1]->IsNull() ? 0 : args[1]->Int32Value();
 
   glBindTexture(target, texture);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -636,7 +636,7 @@ JS_METHOD(TexImage2D) {
 
   glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -649,7 +649,7 @@ JS_METHOD(TexParameteri) {
 
   glTexParameteri(target, pname, param);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(TexParameterf) {
@@ -661,7 +661,7 @@ JS_METHOD(TexParameterf) {
 
   glTexParameterf(target, pname, param);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -670,7 +670,7 @@ JS_METHOD(Clear) {
 
   glClear(args[0]->Int32Value());
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -679,7 +679,7 @@ JS_METHOD(UseProgram) {
 
   glUseProgram(args[0]->Int32Value());
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(CreateBuffer) {
@@ -696,11 +696,10 @@ JS_METHOD(BindBuffer) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
-  int buffer = args[1]->Int32Value();
-
+  int buffer = args[1]->Uint32Value();
   glBindBuffer(target,buffer);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -723,7 +722,7 @@ JS_METHOD(BindFramebuffer) {
 
   glBindFramebuffer(target, buffer);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -738,7 +737,7 @@ JS_METHOD(FramebufferTexture2D) {
 
   glFramebufferTexture2D(target, attachment, textarget, texture, level);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -759,11 +758,12 @@ JS_METHOD(BufferData) {
     glBufferData(target, size, data, usage);
   }
   else if(args[1]->IsNumber()) {
-    GLsizeiptr size = args[1]->NumberValue();
+    GLsizeiptr size = args[1]->Uint32Value();
     GLenum usage = args[2]->Int32Value();
+    cout<<"BufferData size="<<size<<" usage="<<usage<<endl;
     glBufferData(target, size, NULL, usage);
   }
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -780,7 +780,7 @@ JS_METHOD(BufferSubData) {
 
   glBufferSubData(target, offset, size, data);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -791,7 +791,7 @@ JS_METHOD(BlendEquation) {
 
   glBlendEquation(mode);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -803,7 +803,7 @@ JS_METHOD(BlendFunc) {
 
   glBlendFunc(sfactor,dfactor);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -812,7 +812,7 @@ JS_METHOD(EnableVertexAttribArray) {
 
   glEnableVertexAttribArray(args[0]->Int32Value());
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -829,7 +829,7 @@ JS_METHOD(VertexAttribPointer) {
   //    printf("VertexAttribPointer %d %d %d %d %d %d\n", indx, size, type, normalized, stride, offset);
   glVertexAttribPointer(indx, size, type, normalized, stride, (const GLvoid *)offset);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -837,7 +837,7 @@ JS_METHOD(ActiveTexture) {
   HandleScope scope;
 
   glActiveTexture(args[0]->Int32Value());
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
@@ -849,20 +849,20 @@ JS_METHOD(DrawElements) {
   int type = args[2]->Int32Value();
   GLvoid *offset = reinterpret_cast<GLvoid*>(args[3]->Uint32Value());
   glDrawElements(mode, count, type, offset);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 
 JS_METHOD(Flush) {
   HandleScope scope;
   glFlush();
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Finish) {
   HandleScope scope;
   glFinish();
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(VertexAttrib1f) {
@@ -872,7 +872,7 @@ JS_METHOD(VertexAttrib1f) {
   GLfloat x = args[1]->NumberValue();
 
   glVertexAttrib1f(indx, x);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(VertexAttrib2f) {
@@ -883,7 +883,7 @@ JS_METHOD(VertexAttrib2f) {
   GLfloat y = args[2]->NumberValue();
 
   glVertexAttrib2f(indx, x, y);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(VertexAttrib3f) {
@@ -895,7 +895,7 @@ JS_METHOD(VertexAttrib3f) {
   GLfloat z = args[3]->NumberValue();
 
   glVertexAttrib3f(indx, x, y, z);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(VertexAttrib4f) {
@@ -908,7 +908,7 @@ JS_METHOD(VertexAttrib4f) {
   GLfloat w = args[4]->NumberValue();
 
   glVertexAttrib4f(indx, x, y, z, w);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(VertexAttrib1fv) {
@@ -918,7 +918,7 @@ JS_METHOD(VertexAttrib1fv) {
   GLfloat *data = getArrayData<GLfloat>(args[1]);
   glVertexAttrib1fv(indx, data);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(VertexAttrib2fv) {
@@ -928,7 +928,7 @@ JS_METHOD(VertexAttrib2fv) {
   GLfloat *data = getArrayData<GLfloat>(args[1]);
   glVertexAttrib2fv(indx, data);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(VertexAttrib3fv) {
@@ -938,7 +938,7 @@ JS_METHOD(VertexAttrib3fv) {
   GLfloat *data = getArrayData<GLfloat>(args[1]);
   glVertexAttrib3fv(indx, data);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(VertexAttrib4fv) {
@@ -948,7 +948,7 @@ JS_METHOD(VertexAttrib4fv) {
   GLfloat *data = getArrayData<GLfloat>(args[1]);
   glVertexAttrib4fv(indx, data);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(BlendColor) {
@@ -960,7 +960,7 @@ JS_METHOD(BlendColor) {
   GLclampf a= args[3]->Int32Value();
 
   glBlendColor(r,g,b,a);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(BlendEquationSeparate) {
@@ -970,7 +970,7 @@ JS_METHOD(BlendEquationSeparate) {
   GLenum modeAlpha= args[1]->Int32Value();
 
   glBlendEquationSeparate(modeRGB,modeAlpha);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(BlendFuncSeparate) {
@@ -982,7 +982,7 @@ JS_METHOD(BlendFuncSeparate) {
   GLenum dstAlpha= args[3]->Int32Value();
 
   glBlendFuncSeparate(srcRGB,dstRGB,srcAlpha,dstAlpha);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(ClearStencil) {
@@ -991,7 +991,7 @@ JS_METHOD(ClearStencil) {
   GLint s = args[0]->Int32Value();
 
   glClearStencil(s);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(ColorMask) {
@@ -1003,7 +1003,7 @@ JS_METHOD(ColorMask) {
   GLboolean a = args[3]->BooleanValue();
 
   glColorMask(r,g,b,a);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(CopyTexImage2D) {
@@ -1019,7 +1019,7 @@ JS_METHOD(CopyTexImage2D) {
   GLint border = args[7]->Int32Value();
 
   glCopyTexImage2D( target, level, internalformat, x, y, width, height, border);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(CopyTexSubImage2D) {
@@ -1035,7 +1035,7 @@ JS_METHOD(CopyTexSubImage2D) {
   GLsizei height = args[7]->Int32Value();
 
   glCopyTexSubImage2D( target, level, xoffset, yoffset, x, y, width, height);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(CullFace) {
@@ -1044,7 +1044,7 @@ JS_METHOD(CullFace) {
   GLenum mode = args[0]->Int32Value();
 
   glCullFace(mode);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(DepthMask) {
@@ -1053,7 +1053,7 @@ JS_METHOD(DepthMask) {
   GLboolean flag = args[0]->BooleanValue();
 
   glDepthMask(flag);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(DepthRange) {
@@ -1063,7 +1063,7 @@ JS_METHOD(DepthRange) {
   GLclampf zFar = args[1]->Int32Value();
 
   glDepthRangef(zNear, zFar);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(DisableVertexAttribArray) {
@@ -1072,7 +1072,7 @@ JS_METHOD(DisableVertexAttribArray) {
   GLuint index = args[0]->Int32Value();
 
   glDisableVertexAttribArray(index);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Hint) {
@@ -1082,7 +1082,7 @@ JS_METHOD(Hint) {
   GLenum mode = args[1]->Int32Value();
 
   glHint(target, mode);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(IsEnabled) {
@@ -1100,7 +1100,7 @@ JS_METHOD(LineWidth) {
   GLfloat width = args[0]->NumberValue();
 
   glLineWidth(width);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(PolygonOffset) {
@@ -1110,7 +1110,7 @@ JS_METHOD(PolygonOffset) {
   GLfloat units = args[1]->NumberValue();
 
   glPolygonOffset(factor, units);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(SampleCoverage) {
@@ -1120,7 +1120,7 @@ JS_METHOD(SampleCoverage) {
   GLboolean invert = args[1]->BooleanValue();
 
   glSampleCoverage(value, invert);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(Scissor) {
@@ -1132,7 +1132,7 @@ JS_METHOD(Scissor) {
   GLsizei height = args[3]->Int32Value();
 
   glScissor(x, y, width, height);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(StencilFunc) {
@@ -1143,7 +1143,7 @@ JS_METHOD(StencilFunc) {
   GLuint mask = args[2]->Int32Value();
 
   glStencilFunc(func, ref, mask);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(StencilFuncSeparate) {
@@ -1155,7 +1155,7 @@ JS_METHOD(StencilFuncSeparate) {
   GLuint mask = args[3]->Int32Value();
 
   glStencilFuncSeparate(face, func, ref, mask);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(StencilMask) {
@@ -1164,7 +1164,7 @@ JS_METHOD(StencilMask) {
   GLuint mask = args[0]->Uint32Value();
 
   glStencilMask(mask);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(StencilMaskSeparate) {
@@ -1174,7 +1174,7 @@ JS_METHOD(StencilMaskSeparate) {
   GLuint mask = args[1]->Uint32Value();
 
   glStencilMaskSeparate(face, mask);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(StencilOp) {
@@ -1185,7 +1185,7 @@ JS_METHOD(StencilOp) {
   GLenum zpass = args[2]->Int32Value();
 
   glStencilOp(fail, zfail, zpass);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(StencilOpSeparate) {
@@ -1197,7 +1197,7 @@ JS_METHOD(StencilOpSeparate) {
   GLenum zpass = args[3]->Int32Value();
 
   glStencilOpSeparate(face, fail, zfail, zpass);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(BindRenderbuffer) {
@@ -1208,7 +1208,7 @@ JS_METHOD(BindRenderbuffer) {
 
   glBindRenderbuffer(target, buffer);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(CreateRenderbuffer) {
@@ -1227,7 +1227,7 @@ JS_METHOD(DeleteBuffer) {
   GLuint buffer = args[0]->Uint32Value();
 
   glDeleteBuffers(1,&buffer);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(DeleteFramebuffer) {
@@ -1236,7 +1236,7 @@ JS_METHOD(DeleteFramebuffer) {
   GLuint buffer = args[0]->Uint32Value();
 
   glDeleteFramebuffers(1,&buffer);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(DeleteProgram) {
@@ -1245,7 +1245,7 @@ JS_METHOD(DeleteProgram) {
   GLuint program = args[0]->Uint32Value();
 
   glDeleteProgram(program);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(DeleteRenderbuffer) {
@@ -1254,7 +1254,7 @@ JS_METHOD(DeleteRenderbuffer) {
   GLuint renderbuffer = args[0]->Uint32Value();
 
   glDeleteRenderbuffers(1, &renderbuffer);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(DeleteShader) {
@@ -1263,7 +1263,7 @@ JS_METHOD(DeleteShader) {
   GLuint shader = args[0]->Uint32Value();
 
   glDeleteShader(shader);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(DeleteTexture) {
@@ -1272,7 +1272,7 @@ JS_METHOD(DeleteTexture) {
   GLuint texture = args[0]->Uint32Value();
 
   glDeleteTextures(1,&texture);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(DetachShader) {
@@ -1282,7 +1282,7 @@ JS_METHOD(DetachShader) {
   GLuint shader = args[1]->Uint32Value();
 
   glDetachShader(program, shader);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(FramebufferRenderbuffer) {
@@ -1294,7 +1294,7 @@ JS_METHOD(FramebufferRenderbuffer) {
   GLuint renderbuffer = args[3]->Uint32Value();
 
   glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(GetVertexAttribOffset) {
@@ -1353,7 +1353,7 @@ JS_METHOD(RenderbufferStorage) {
   GLsizei height = args[3]->Uint32Value();
 
   glRenderbufferStorage(target, internalformat, width, height);
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(GetShaderSource) {
@@ -1377,7 +1377,7 @@ JS_METHOD(ValidateProgram) {
 
   glValidateProgram(args[0]->Int32Value());
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(TexSubImage2D) {
@@ -1395,7 +1395,7 @@ JS_METHOD(TexSubImage2D) {
 
   glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(ReadPixels) {
@@ -1411,7 +1411,7 @@ JS_METHOD(ReadPixels) {
 
   glReadPixels(x, y, width, height, format, type, pixels);
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(GetTexParameter) {
@@ -1608,7 +1608,7 @@ JS_METHOD(GetParameter) {
   }
   }
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(GetBufferParameter) {
@@ -1661,7 +1661,7 @@ JS_METHOD(GetUniform) {
 
   GLuint program = args[0]->Int32Value();
   GLint location = args[1]->Int32Value();
-  if(location < 0 ) return Undefined();
+  if(location < 0 ) return scope.Close(Undefined());
 
   float data[16]; // worst case scenario is 16 floats
 
@@ -1709,7 +1709,7 @@ JS_METHOD(GetVertexAttrib) {
     return ThrowError("GetVertexAttrib: Invalid Enum");
   }
 
-  return Undefined();
+  return scope.Close(Undefined());
 }
 
 JS_METHOD(GetSupportedExtensions) {
@@ -1730,7 +1730,7 @@ JS_METHOD(GetExtension) {
 
   char *ext=strcasestr(extensions, sname);
 
-  if(!ext) return Undefined();
+  if(!ext) return scope.Close(Undefined());
   return scope.Close(JS_STR(ext, ::strlen(sname)));
 }
 
