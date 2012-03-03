@@ -6,10 +6,10 @@
     #include <OpenGLES/ES2/glext.h>
     typedef double GLclampd;
 #else
-    #ifdef __APPLE__
+    #if defined (__APPLE__) || defined(MACOSX)
       //#include <OpenGL/OpenGL.h>
-      //#include <OpenGL/gl3.h>
-      //#include <OpenGL/gl3ext.h>
+      #include <OpenGL/gl3.h>
+      #include <OpenGL/gl3ext.h>
       #define GL_ALIASED_POINT_SIZE_RANGE       0x846D
       #define GL_RED_BITS                       0x0D52
       #define GL_GREEN_BITS                     0x0D53
@@ -22,8 +22,8 @@
       #define GL_GENERATE_MIPMAP_HINT            0x8192
       //#include "GLES2/gl2.h"
       //#include "GLES2/gl2ext.h"
-      //#define glClearDepthf glClearDepth
-      //#define glDepthRangef glDepthRange
+      #define glClearDepthf glClearDepth
+      #define glDepthRangef glDepthRange
     #else
       #ifdef _WIN32
         #include <windows.h>

@@ -11,21 +11,18 @@ def set_options(opt):
 def configure(conf):
   conf.check_tool('compiler_cxx')
   conf.check_tool('node_addon')
-  #conf.check(lib=['GLEW'], libpath=['/opt/local/lib'], uselib_store='GLEW')
-
 
 def build(bld):
   obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
   obj.target = "node_webgl"
-  obj.cxxflags = ["-pthread", "-Wall"]
+  obj.cxxflags = ["-g", "-pthread", "-D_FILE_OFFSET_BITS=64", "-D_LARGEFILE_SOURCE","-fPIC"]
 
   if sys.platform.startswith('darwin'):
     obj.includes = ["/opt/local/include"]
     obj.libpath = ["/opt/local/lib"]
     obj.linkflags = ["-lfreeimage"]
-    obj.uselib=['GLFW']
-    #obj.uselib=['GLFW','GLEW']
-    obj.framework = ['OpenGL']
+    obj.uselib = ["GL", "GLU"]
+    obj.framework = ['OpenGL','Cocoa']
   elif sys.platform.startswith('linux'):
     obj.uselib = ["GL", "FREEIMAGE"]
     obj.linkflags = ["-lGL", "-lfreeimage","-lXrandr","-lX11"]
