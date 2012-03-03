@@ -7,7 +7,6 @@
     typedef double GLclampd;
 #else
     #if defined (__APPLE__) || defined(MACOSX)
-      //#include <OpenGL/OpenGL.h>
       #include <OpenGL/gl3.h>
       #include <OpenGL/gl3ext.h>
       #define GL_ALIASED_POINT_SIZE_RANGE       0x846D
