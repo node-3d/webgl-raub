@@ -11,7 +11,7 @@ def set_options(opt):
 def configure(conf):
   conf.check_tool('compiler_cxx')
   conf.check_tool('node_addon')
-  conf.check(lib=['GLEW'], libpath=['/opt/local/lib'], uselib_store='GLEW')
+  #conf.check(lib=['GLEW'], libpath=['/opt/local/lib'], uselib_store='GLEW')
 
 
 def build(bld):
@@ -23,11 +23,12 @@ def build(bld):
     obj.includes = ["/opt/local/include"]
     obj.libpath = ["/opt/local/lib"]
     obj.linkflags = ["-lfreeimage"]
-    obj.uselib=['GLFW','GLEW']
+    obj.uselib=['GLFW']
+    #obj.uselib=['GLFW','GLEW']
     obj.framework = ['OpenGL']
   elif sys.platform.startswith('linux'):
     obj.uselib = ["GL", "FREEIMAGE"]
-    obj.linkflags = ["-lGL", "-lfreeimage"]
+    obj.linkflags = ["-lGL", "-lfreeimage","-lXrandr","-lX11"]
   else:
     obj.linkflags = ["-lGLESv2"]
 

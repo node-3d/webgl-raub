@@ -1,19 +1,11 @@
 #ifndef _INCLUDE_ARCH_WRAPPER_
 #define _INCLUDE_ARCH_WRAPPER_
-  #define GLEW_NO_GLU
-  #include <GL/glew.h>
-  #ifdef UNIX
-      #include <GL/glxew.h>
-  #endif
-  #if defined (_WIN32)
-      #include <GL/wglew.h>
-  #endif
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
     #include <OpenGLES/ES2/gl.h>
     #include <OpenGLES/ES2/glext.h>
     typedef double GLclampd;
-  #else
+#else
     #ifdef __APPLE__
       //#include <OpenGL/OpenGL.h>
       //#include <OpenGL/gl3.h>
@@ -40,5 +32,6 @@
         #include "GLES2/gl2ext.h"
       #endif
     #endif
-  #endif
+#endif
+
 #endif
