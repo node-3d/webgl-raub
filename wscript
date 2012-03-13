@@ -18,11 +18,8 @@ def build(bld):
   obj.cxxflags = ["-g", "-pthread", "-D_FILE_OFFSET_BITS=64", "-D_LARGEFILE_SOURCE","-fPIC"]
 
   if sys.platform.startswith('darwin'):
-    obj.includes = ["/opt/local/include"]
-    obj.libpath = ["/opt/local/lib"]
     obj.linkflags = ["-lfreeimage"]
-    obj.uselib = ["GL", "GLU"]
-    obj.framework = ['OpenGL','Cocoa']
+    obj.framework = ['OpenGL']
   elif sys.platform.startswith('linux'):
     obj.uselib = ["GL", "FREEIMAGE"]
     obj.linkflags = ["-lGL", "-lfreeimage","-lXrandr","-lX11"]
