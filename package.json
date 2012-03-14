@@ -18,6 +18,10 @@
    "scripts": {
        "install": "rm -rf build; node-waf configure build"
    },
-  "dependencies": { },
-  "devDependencies": {}
+   "licenses": [{
+        "type": "BSD",
+        "url": "http://github.com/mikeseven/node-webgl/raw/master/LICENSE.BSD.txt"
+    }],
+   "dependencies": { },
+   "devDependencies": {}
 }
