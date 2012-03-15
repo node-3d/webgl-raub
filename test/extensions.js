@@ -1,31 +1,25 @@
 nodejs=true;
 
-Platform = require('../lib/platform')(640,480);
+var WebGL=require('../index'),
+    Image = WebGL.Image,
+    document = WebGL.document();
 
-var gl, log=console.log;
+var gl, log=console.log, alert=log;
 
 function initGL(canvas) {
   try {
-    if(nodejs) {
-      gl = Platform.gl;
-      gl.viewportWidth = Platform.width;
-      gl.viewportHeight = Platform.height;
-    }
-    else {
-      gl = canvas.getContext("experimental-webgl");
-      gl.viewportWidth = canvas.width;
-      gl.viewportHeight = canvas.height;
-    }
+    gl = canvas.getContext("experimental-webgl");
+    gl.viewportWidth = canvas.width;
+    gl.viewportHeight = canvas.height;
   } catch (e) {
-  }
-  if (!gl) {
     alert("Could not initialise WebGL, sorry :-(");
+    process.exit(-1);
   }
 }
 
 
-function webGLStart() {
-  var canvas = "";// [mbs] TDB document.getElementById("lesson02-canvas");
+(function webGLStart() {
+  var canvas = document.createElement("test-canvas");
   initGL(canvas);
   
   var extensions=gl.getSupportedExtensions();
@@ -40,11 +34,7 @@ function webGLStart() {
                     "WEBGL_debug_renderer_info", "WEBGL_debug_shaders",
                     "WEBGL_lose_context", "OES_vertex_array_object" ];
   
-  for(i in extensions) {
-    var ext=extensions[i];
-    log("looking for "+extensions[i]+": "+gl.getExtension(extensions[i]));
-  }
-}
-
-webGLStart();
-
+  extensions.forEach(function(extension) {
+    log("looking for "+extension+": "+gl.getExtension(extension));
+  });
+}());

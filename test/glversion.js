@@ -11,7 +11,7 @@ log("  shading language version : "+gl.getParameter(gl.SHADING_LANGUAGE_VERSION)
 log("  renderer                 : "+gl.getParameter(gl.RENDERER));
 var extensions=gl.getParameter(gl.EXTENSIONS);
 if(extensions) {
-  extensions.split(' ');
+  extensions=extensions.split(' ');
   log("  extensions               : "+extensions.length);
   
   var str="";
@@ -24,4 +24,4 @@ if(extensions) {
   }
 }
 else
-  log("  extensions               : "+0);
+  log("  extensions               : 0");
