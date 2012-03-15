@@ -1,14 +1,17 @@
-var WebGL=require('../../index'),
-    Image = WebGL.Image,
-    document = WebGL.document(),
-    nodejs = true;
-document.setTitle("Camera");
-window = document;
-requestAnimationFrame = document.requestAnimationFrame;
+var nodejs = (typeof window === 'undefined');
+if(nodejs) {
+  WebGL = require('../../index');
+  document = WebGL.document();
+  alert=console.log;
+  window = document;
 
-//Read and eval library
-fs=require('fs');
-eval(fs.readFileSync(__dirname+ '/lightgl.js','utf8'));
+  //Read and eval library
+  var fs=require('fs');
+  eval(fs.readFileSync(__dirname+ '/lightgl.js','utf8'));
+}
+
+document.setTitle("Camera");
+requestAnimationFrame = document.requestAnimationFrame;
 
 var angleX = -35;
 var angleY = 45;

@@ -13,18 +13,20 @@ sample rays in a pass are parallel because the intersections can then be
 computed using rasterization. That is what this example does.
 
 */
-var WebGL=require('../../index'),
-    Image = WebGL.Image,
-    document = WebGL.document(),
-    nodejs = true;
-//document.createWindow(800,600);
-document.setTitle("GPU light map");
-window = document;
-requestAnimationFrame = document.requestAnimationFrame;
+var nodejs = (typeof window === 'undefined');
+if(nodejs) {
+  WebGL = require('../../index');
+  document = WebGL.document();
+  alert=console.log;
+  window = document;
 
-//Read and eval library
-fs=require('fs');
-eval(fs.readFileSync(__dirname+ '/lightgl.js','utf8'));
+  //Read and eval library
+  var fs=require('fs');
+  eval(fs.readFileSync(__dirname+ '/lightgl.js','utf8'));
+}
+
+document.setTitle("GPU light map");
+requestAnimationFrame = document.requestAnimationFrame;
 
 var angleX = 30;
 var angleY = 30;

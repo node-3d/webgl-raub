@@ -1,17 +1,21 @@
-var WebGL=require('../../index'),
-    Image = WebGL.Image,
-    document = WebGL.document(),
-    nodejs = true;
-//document.createWindow(800,600);
-document.setTitle("Shadow map");
-window = document;
-requestAnimationFrame = document.requestAnimationFrame;
+var nodejs = (typeof window === 'undefined');
+if(nodejs) {
+  WebGL = require('../../index');
+  Image = WebGL.Image;
+  document = WebGL.document();
+  alert=console.log;
+  window = document;
 
-//Read and eval library
-fs=require('fs');
-var mesh_name = 'cessna';
-eval(fs.readFileSync(__dirname+ '/lightgl.js','utf8'));
-eval(fs.readFileSync(__dirname+ '/'+mesh_name+'.js','utf8'));
+  //Read and eval library
+  var fs=require('fs');
+  var mesh_name = 'cessna';
+  eval(fs.readFileSync(__dirname+ '/lightgl.js','utf8'));
+  eval(fs.readFileSync(__dirname+ '/'+mesh_name+'.js','utf8'));
+
+}
+
+document.setTitle("Shadow mapping");
+requestAnimationFrame = document.requestAnimationFrame;
 
 var time = 0;
 var angleX = 20;

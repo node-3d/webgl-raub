@@ -1,15 +1,19 @@
-var WebGL=require('../../index'),
-    Image = WebGL.Image,
-    document = WebGL.document(),
-    nodejs = true;
-document.setTitle("Camera");
-window = document;
-requestAnimationFrame = document.requestAnimationFrame;
+var nodejs = (typeof window === 'undefined');
+if(nodejs) {
+  WebGL = require('../../index');
+  Image = WebGL.Image;
+  document = WebGL.document();
+  alert=console.log;
+  window = document;
 
-//Read and eval library
-fs=require('fs');
-eval(fs.readFileSync(__dirname+ '/lightgl.js','utf8'));
-eval(fs.readFileSync(__dirname+ '/gazebo.js','utf8'));
+  //Read and eval library
+  var fs=require('fs');
+  eval(fs.readFileSync(__dirname+ '/lightgl.js','utf8'));
+  eval(fs.readFileSync(__dirname+ '/gazebo.js','utf8'));
+}
+
+document.setTitle("Render to texture");
+requestAnimationFrame = document.requestAnimationFrame;
 
 var angle = 0;
 var gl = GL.create();

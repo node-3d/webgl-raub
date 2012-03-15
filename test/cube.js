@@ -7,9 +7,19 @@ eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
 var WebGL=require('../index'),
     Image = WebGL.Image,
     document = WebGL.document(),
-    ATB=document.AntTweakBar,
-    alert=console.error,
-    log=console.log;
+    ATB=document.AntTweakBar;
+
+// configure winston
+var winston = require('winston');
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({ level: 'warning', colorize: true /*, timestamp: true*/ }),
+    //new (winston.transports.File)({ level: 'info', filename: __dirname+'/cube.log' })
+  ]
+});
+var alert=logger.error;
+var log=logger.info;
+var debug=logger.debug;
 
 document.setTitle("cube with AntTweakBar");
 requestAnimationFrame = document.requestAnimationFrame;
@@ -57,6 +67,8 @@ var shaders= {
 var gl;
 
 function initGL(canvas) {
+  log('init WebGL');
+  
   try {
     gl = canvas.getContext("experimental-webgl");
     gl.viewportWidth = canvas.width;
@@ -119,6 +131,7 @@ function getShader(gl, id) {
 var shaderProgram;
 
 function initShaders() {
+  log('init GL shaders')
   var fragmentShader = getShader(gl, "shader-fs");
   var vertexShader = getShader(gl, "shader-vs");
 
@@ -227,6 +240,7 @@ var cubeVertexNormalBuffer;
 var cubeVerticesColorBuffer;
 var cubeVertexIndexBuffer;
 function initBuffers() {
+  log('init GL buffers')
   vertices = [
               // Front face
               -1.0, -1.0,  1.0,
@@ -436,8 +450,9 @@ function drawScene() {
 var lastTime = 0;
 var fps=0;
 
-function animate() {
-  var timeNow = new Date().getTime();
+function animate(timeNow) {
+  if(!timeNow) return; // first time, timeNow may be undefined
+  
   if (lastTime != 0) {
     var elapsed = timeNow - lastTime;
     fps = Math.round(1000/elapsed);
@@ -448,20 +463,19 @@ function animate() {
   lastTime = timeNow;
 }
 
-function tick() {
-  drawScene();
-  animate();
+function tick(timeNow) {
+  debug('time: '+timeNow);
+  drawScene(timeNow);
+  animate(timeNow);
 
   ATB.Draw();
   
   requestAnimationFrame(tick);
 }
 
-function speedup(data) {
-  log('received data: '+data);
-  
-}
 function initAntTweakBar(canvas) {
+  log('init AntTweakBar');
+  
   ATB.Init();
   ATB.Define(" GLOBAL help='This example shows how to integrate AntTweakBar with GLFW and OpenGL.' "); // Message added to the help bar.
   ATB.WindowSize(canvas.width, canvas.height);

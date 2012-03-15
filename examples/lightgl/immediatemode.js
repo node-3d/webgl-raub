@@ -1,10 +1,16 @@
-var WebGL=require('../../index'),
-    Image = WebGL.Image,
-    document = WebGL.document(),
-    nodejs = true;
-//document.createWindow(800,600);
-document.setTitle("Camera");
-window = document;
+var nodejs = (typeof window === 'undefined');
+if(nodejs) {
+  WebGL = require('../../index');
+  document = WebGL.document();
+  alert=console.log;
+  window = document;
+
+  //Read and eval library
+  var fs=require('fs');
+  eval(fs.readFileSync(__dirname+ '/lightgl.js','utf8'));
+}
+
+document.setTitle("Immediate mode");
 requestAnimationFrame = document.requestAnimationFrame;
 
 //Read and eval library

@@ -22,6 +22,6 @@
         "type": "BSD",
         "url": "http://github.com/mikeseven/node-webgl/raw/master/LICENSE.BSD.txt"
     }],
-   "dependencies": { },
+   "dependencies": { 'node-glfw','node-image' },
    "devDependencies": {}
 }
