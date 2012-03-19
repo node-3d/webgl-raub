@@ -7,19 +7,9 @@ eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
 var WebGL=require('../index'),
     Image = WebGL.Image,
     document = WebGL.document(),
-    ATB=document.AntTweakBar;
-
-// configure winston
-var winston = require('winston');
-var logger = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)({ level: 'warning', colorize: true /*, timestamp: true*/ }),
-    //new (winston.transports.File)({ level: 'info', filename: __dirname+'/cube.log' })
-  ]
-});
-var alert=logger.error;
-var log=logger.info;
-var debug=logger.debug;
+    ATB=document.AntTweakBar,
+    log=console.log,
+    alert=console.warn;
 
 document.setTitle("cube with AntTweakBar");
 requestAnimationFrame = document.requestAnimationFrame;
@@ -35,6 +25,9 @@ document.on("resize",function(evt){
   document.createWindow(evt.width,evt.height);
   gl.viewportWidth=evt.width;
   gl.viewportHeight=evt.height;
+  
+  // make sure AntTweakBar is repositioned correctly and events correct
+  ATB.WindowSize(evt.width,evt.height);
 });
 
 
@@ -140,7 +133,7 @@ function initShaders() {
   gl.linkProgram(shaderProgram);
 
   if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    alert("Could not initialise shaders");
+    alert("Could not initialise shaders. Error: "+gl.getProgramInfoLog(shaderProgram));
   }
 
   gl.useProgram(shaderProgram);
@@ -440,9 +433,6 @@ function drawScene() {
 
   gl.cullFace(gl.BACK);
   gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-
-  gl.disable(gl.CULL_FACE);
-  gl.disable(gl.BLEND);
 }
 
 
@@ -462,13 +452,35 @@ function animate(timeNow) {
   lastTime = timeNow;
 }
 
+/* Before calling AntTweakBar or any other library that could use programs,
+ * one must make sure to disable the VertexAttribArray used by the current
+ * program otherwise this may have some unpredictable consequences aka
+ * wrong vertex attrib arrays being used by another program!
+ */
+function enableProgram() {
+  gl.useProgram(shaderProgram);
+  gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+  gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+}
+
+function disableProgram() {
+  gl.disableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+  gl.disableVertexAttribArray(shaderProgram.vertexColorAttribute);
+  gl.useProgram(null);
+}
+
+function drawATB() {
+  disableProgram();
+  ATB.Draw();
+  enableProgram();
+}
+
 function tick(timeNow) {
-  debug('time: '+timeNow);
   drawScene(timeNow);
   animate(timeNow);
 
-  ATB.Draw();
-  
+  drawATB();
+    
   requestAnimationFrame(tick);
 }
 
