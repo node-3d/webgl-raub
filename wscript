@@ -11,8 +11,6 @@ def set_options(opt):
 def configure(conf):
   conf.check_tool('compiler_cxx')
   conf.check_tool('node_addon')
-  if sys.platform.startswith('linux'):
-    conf.check(lib='GLEW', uselib_store='GLEW')
 
 def build(bld):
   obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
