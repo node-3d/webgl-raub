@@ -1,6 +1,6 @@
 {
   "author": [ "Mikael Bourges-Sevenier <mikeseven@gmail.com>" ],
-  "name": "node_webgl",
+  "name": "node-webgl",
   "description": "WebGL bindings for node",
   "version": "0.1.0",
   "main": "index.js",

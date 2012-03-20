@@ -16,7 +16,7 @@ def configure(conf):
 
 def build(bld):
   obj = bld.new_task_gen('cxx', 'shlib', 'node_addon')
-  obj.target = "node_webgl"
+  obj.target = "webgl"
   obj.cxxflags = ["-g", "-pthread", "-D_FILE_OFFSET_BITS=64", "-D_LARGEFILE_SOURCE","-fPIC"]
 
   if sys.platform.startswith('darwin'):
