@@ -1,12 +1,12 @@
 {
-  "author": [ "Mikael Bourges-Sevenier <mikeseven@gmail.com>" ],
+  "author": "Mikael Bourges-Sevenier <mikeseven@gmail.com>",
   "name": "node-webgl",
   "description": "WebGL bindings for node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "index.js",
   "keywords": [ "webgl", "opengl" ],
   "engines": {
-    "node": ">=0.6.5"
+    "node": ">=0.7.0"
   },
    "directories": {
        "src": "src",
@@ -20,7 +20,7 @@
    },
    "licenses": [{
         "type": "BSD",
-        "url": "http://github.com/mikeseven/node-webgl/raw/master/LICENSE.BSD.txt"
+        "url": "http://github.com/mikeseven/node-webgl/raw/master/LICENSES"
     }],
    "dependencies": {},
    "devDependencies": {}
