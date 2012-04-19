@@ -15,6 +15,12 @@
        "examples": "examples",
        "test": "test"
    },
+   "repositories": [
+       {
+           "type": "git",
+           "url": "https://mikeseven@github.com/mikeseven/node-webgl.git" 
+       } 
+   ],
    "scripts": {
        "install": "rm -rf build; node-waf configure build"
    },
