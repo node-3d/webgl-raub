@@ -1,5 +1,5 @@
 //
-// Ported from https://github.com/creationix/com.creationix.minimason
+// Ported from https://github.com/webos-commons/com.creationix.minimason
 //
 
 var WebGL=require('../index'),

@@ -1,3 +1,7 @@
+//
+// Ported from http://www.rozengain.com/blog/2010/08/10/using-webgl-glsl-shaders-to-create-a-tunnel-effect/
+//
+
 var nodejs = (typeof window === 'undefined');
 if(nodejs) {
   WebGL = require('../../index');
