@@ -210,14 +210,18 @@ JS_METHOD(Image::save) {
 
 Image::~Image () {
   if (image_bmp) {
+    #ifdef LOGGING
     cout<<"  Deleting image"<<endl;
+    #endif
     FreeImage_Unload(image_bmp);
   }
   unregisterImage(this);
 }
 
 void Image::AtExit() {
+  #ifdef LOGGING
   cout<<"Image AtExit()"<<endl;
+  #endif
   vector<Image*>::iterator it = images.begin();
   while(it != images.end()) {
     Image *img=*it;
@@ -227,7 +231,9 @@ void Image::AtExit() {
     value.ClearWeak();
     value.Dispose();
     if (img->image_bmp) {
+      #ifdef LOGGING
       cout<<"  Deleting image"<<endl;
+      #endif
       FreeImage_Unload(img->image_bmp);
       img->image_bmp=NULL;
     }

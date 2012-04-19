@@ -428,7 +428,9 @@ JS_METHOD(CreateShader) {
   HandleScope scope;
 
   GLuint shader=glCreateShader(args[0]->Int32Value());
-  std::cout<<"createShader "<<shader<<endl;
+  #ifdef LOGGING
+  cout<<"createShader "<<shader<<endl;
+  #endif
   registerGLObj(GLOBJECT_TYPE_SHADER, shader);
   return scope.Close(Number::New(shader));
 }
@@ -499,7 +501,9 @@ JS_METHOD(CreateProgram) {
   HandleScope scope;
 
   GLuint program=glCreateProgram();
+  #ifdef LOGGING
   cout<<"createProgram "<<program<<endl;
+  #endif
   registerGLObj(GLOBJECT_TYPE_PROGRAM, program);
   return scope.Close(Number::New(program));
 }
@@ -604,7 +608,9 @@ JS_METHOD(CreateTexture) {
 
   GLuint texture;
   glGenTextures(1, &texture);
+  #ifdef LOGGING
   cout<<"createTexture "<<texture<<endl;
+  #endif
   registerGLObj(GLOBJECT_TYPE_TEXTURE, texture);
   return scope.Close(Number::New(texture));
 }
@@ -687,7 +693,9 @@ JS_METHOD(CreateBuffer) {
 
   GLuint buffer;
   glGenBuffers(1, &buffer);
+  #ifdef LOGGING
   cout<<"createBuffer "<<buffer<<endl;
+  #endif
   registerGLObj(GLOBJECT_TYPE_BUFFER, buffer);
   return scope.Close(Number::New(buffer));
 }
@@ -708,7 +716,9 @@ JS_METHOD(CreateFramebuffer) {
 
   GLuint buffer;
   glGenFramebuffers(1, &buffer);
+  #ifdef LOGGING
   cout<<"createFrameBuffer "<<buffer<<endl;
+  #endif
   registerGLObj(GLOBJECT_TYPE_FRAMEBUFFER, buffer);
   return scope.Close(Number::New(buffer));
 }
@@ -745,7 +755,6 @@ JS_METHOD(BufferData) {
   HandleScope scope;
 
   int target = args[0]->Int32Value();
-  //cout<<"BufferData args[1]: isArray: "<<args[1]->IsArray()<<" isObject: "<<args[1]->IsObject()<<" isNumber: "<<args[1]->IsNumber()<<endl;
   if(args[1]->IsObject()) {
     Local<Object> obj = Local<Object>::Cast(args[1]);
     GLenum usage = args[2]->Int32Value();
@@ -753,14 +762,11 @@ JS_METHOD(BufferData) {
     int element_size = SizeOfArrayElementForType(obj->GetIndexedPropertiesExternalArrayDataType());
     GLsizeiptr size = obj->GetIndexedPropertiesExternalArrayDataLength() * element_size;
     void* data = obj->GetIndexedPropertiesExternalArrayData();
-
-    //    printf("BufferData %d %d %d\n", target, size, usage);
     glBufferData(target, size, data, usage);
   }
   else if(args[1]->IsNumber()) {
     GLsizeiptr size = args[1]->Uint32Value();
     GLenum usage = args[2]->Int32Value();
-    cout<<"BufferData size="<<size<<" usage="<<usage<<endl;
     glBufferData(target, size, NULL, usage);
   }
   return scope.Close(Undefined());
@@ -1216,7 +1222,9 @@ JS_METHOD(CreateRenderbuffer) {
 
   GLuint renderbuffers;
   glGenRenderbuffers(1,&renderbuffers);
+  #ifdef LOGGING
   cout<<"createRenderBuffer "<<renderbuffers<<endl;
+  #endif
   registerGLObj(GLOBJECT_TYPE_RENDERBUFFER, renderbuffers);
   return scope.Close(Number::New(renderbuffers));
 }
@@ -1778,9 +1786,12 @@ void AtExit() {
   atExit=true;
   //glFinish();
 
+  vector<GLObj*>::iterator it;
+
+  #ifdef LOGGING
   cout<<"WebGL AtExit() called"<<endl;
   cout<<"  # objects allocated: "<<globjs.size()<<endl;
-  vector<GLObj*>::iterator it = globjs.begin();
+  it = globjs.begin();
   while(globjs.size() && it != globjs.end()) {
     GLObj *obj=*it;
     cout<<"[";
@@ -1796,6 +1807,7 @@ void AtExit() {
     ++it;
   }
   cout<<endl;
+  #endif
 
   it = globjs.begin();
   while(globjs.size() && it != globjs.end()) {
@@ -1804,31 +1816,45 @@ void AtExit() {
 
     switch(globj->type) {
     case GLOBJECT_TYPE_PROGRAM:
+      #ifdef LOGGING
       cout<<"  Destroying GL program "<<obj<<endl;
+      #endif
       glDeleteProgram(obj);
       break;
     case GLOBJECT_TYPE_BUFFER:
+      #ifdef LOGGING
       cout<<"  Destroying GL buffer "<<obj<<endl;
+      #endif
       glDeleteBuffers(1,&obj);
       break;
     case GLOBJECT_TYPE_FRAMEBUFFER:
+      #ifdef LOGGING
       cout<<"  Destroying GL frame buffer "<<obj<<endl;
+      #endif
       glDeleteFramebuffers(1,&obj);
       break;
     case GLOBJECT_TYPE_RENDERBUFFER:
+      #ifdef LOGGING
       cout<<"  Destroying GL render buffer "<<obj<<endl;
+      #endif
       glDeleteRenderbuffers(1,&obj);
       break;
     case GLOBJECT_TYPE_SHADER:
+      #ifdef LOGGING
       cout<<"  Destroying GL shader "<<obj<<endl;
+      #endif
       glDeleteShader(obj);
       break;
     case GLOBJECT_TYPE_TEXTURE:
+      #ifdef LOGGING
       cout<<"  Destroying GL texture "<<obj<<endl;
+      #endif
       glDeleteTextures(1,&obj);
       break;
     default:
+      #ifdef LOGGING
       cout<<"  Unknown object "<<obj<<endl;
+      #endif
       break;
     }
     delete globj;
