@@ -10,8 +10,6 @@
 #include "image.h"
 #include <cstdlib>
 
-using namespace node;
-
 #define JS_GL_CONSTANT(name) target->Set(JS_STR( #name ), JS_INT(GL_ ## name))
 
 extern "C" {

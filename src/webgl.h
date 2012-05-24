@@ -10,6 +10,12 @@
 
 #include "common.h"
 
+#ifdef _WIN32
+  // OpenGL Graphics Includes
+  #define GLEW_STATIC
+  #include <GL/glew.h>using namespace node;
+#endif
+
 using namespace v8;
 
 namespace webgl {
