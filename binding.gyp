@@ -13,6 +13,7 @@
       'conditions': [
         ['OS=="mac"', {'libraries': ['-lfreeimage','-framework OpenGL']}],
         ['OS=="win"', {'libraries': ['freeimage.lib','glew32s.lib','opengl32.lib']}],
+        ['OS=="linux"', {'libraries': ['-lfreeimage','-lGLEW','-lGL']}],
       ],
     }
   ]
