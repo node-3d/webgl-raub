@@ -22,7 +22,7 @@
        } 
    ],
    "scripts": {
-       "install": "rm -rf build; node-waf configure build"
+       "install": "node-gyp rebuild"
    },
    "licenses": [{
         "type": "BSD",

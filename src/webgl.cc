@@ -7,6 +7,10 @@
 #include <node.h>
 #include <node_buffer.h>
 
+#ifdef _WIN32
+  #define  strcasestr(s, t) strstr(strupr(s), t)
+#endif
+
 namespace webgl {
 
 using namespace node;

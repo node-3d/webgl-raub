@@ -11,10 +11,8 @@
           'src/webgl.cc',
       ],
       'conditions': [
-        ['OS=="mac"', {'libraries': ['-framework OpenGL']}],
-      ],
-      'libraries': [
-        '-lfreeimage',
+        ['OS=="mac"', {'libraries': ['-lfreeimage','-framework OpenGL']}],
+        ['OS=="win"', {'libraries': ['freeimage.lib','glew32s.lib','opengl32.lib']}],
       ],
     }
   ]
