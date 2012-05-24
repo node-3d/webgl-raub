@@ -1,3 +1,5 @@
 build
 .lock-wscript
 npm-debug.log
+
+.idea
