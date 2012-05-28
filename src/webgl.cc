@@ -6,6 +6,7 @@
 #include "image.h"
 #include <node.h>
 #include <node_buffer.h>
+#include <GL/glew.h>
 
 #ifdef _WIN32
   #define  strcasestr(s, t) strstr(strupr(s), t)

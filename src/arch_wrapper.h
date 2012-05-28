@@ -6,8 +6,8 @@
     #include <OpenGLES/ES2/glext.h>
     typedef double GLclampd;
 #else
-    #if defined (__APPLE__) || defined(MACOSX)
-      #include <OpenGL/gl3.h>
+    /*#if defined (__APPLE__) || defined(MACOSX)
+	  #include <OpenGL/gl3.h>
       #include <OpenGL/gl3ext.h>
       #define GL_ALIASED_POINT_SIZE_RANGE       0x846D
       #define GL_RED_BITS                       0x0D52
@@ -18,21 +18,21 @@
       #define GL_STENCIL_BITS                   0x0D57
       #define GL_LUMINANCE                      0x1909
       #define GL_LUMINANCE_ALPHA                0x190A
-      #define GL_GENERATE_MIPMAP_HINT            0x8192
+      #define GL_GENERATE_MIPMAP_HINT           0x8192
       //#include "GLES2/gl2.h"
       //#include "GLES2/gl2ext.h"
       #define glClearDepthf glClearDepth
       #define glDepthRangef glDepthRange
     #else
-      #ifdef _WIN32
-		    // OpenGL Graphics Includes
-		    #define GLEW_STATIC
+      #ifdef _WIN32*/
+		// OpenGL Graphics Includes
+		#define GLEW_STATIC
         #include <GL/glew.h>
-      #else
+	/*#else
         #include "GLES2/gl2.h"
         #include "GLES2/gl2ext.h"
       #endif
-    #endif
+    #endif*/
 #endif
 
 #endif
