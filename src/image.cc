@@ -144,7 +144,7 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
   // Convert from BGR to RGB
   for(size_t i = 0; i < num_bytes; i++)
   {
-    int i4=i<<2;
+    size_t i4=i<<2;
     BYTE temp = pixels[i4 + 0];
     pixels[i4 + 0] = pixels[i4 + 2];
     pixels[i4 + 2] = temp;
@@ -152,7 +152,7 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
 
   info.This()->ToObject()->SetIndexedPropertiesToExternalArrayData(pixels,
                                                        kExternalUnsignedByteArray,
-                                                       num_bytes);
+                                                       (int) num_bytes);
 
   // emit event
   Local<Value> emit_v = info.This()->Get(String::NewSymbol("emit"));
@@ -203,7 +203,7 @@ JS_METHOD(Image::save) {
     image=FreeImage_ConvertTo24Bits(image);
     FreeImage_Unload(old);
   }
-  bool ret=FreeImage_Save(format, image, *filename);
+  bool ret=FreeImage_Save(format, image, *filename)==1;
   FreeImage_Unload(image);
   return scope.Close(Boolean::New(ret));
 }

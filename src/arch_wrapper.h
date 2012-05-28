@@ -25,7 +25,9 @@
       #define glDepthRangef glDepthRange
     #else
       #ifdef _WIN32
-        #include <windows.h>
+		    // OpenGL Graphics Includes
+		    #define GLEW_STATIC
+        #include <GL/glew.h>
       #else
         #include "GLES2/gl2.h"
         #include "GLES2/gl2ext.h"

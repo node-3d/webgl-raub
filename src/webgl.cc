@@ -109,11 +109,24 @@ inline Type* getArrayData(Local<Value> arg, int* num = NULL) {
   return data;
 }
 
+JS_METHOD(Init) {
+  HandleScope scope;
+  GLenum err = glewInit();
+  if (GLEW_OK != err)
+  {
+    /* Problem: glewInit failed, something is seriously wrong. */
+    fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+    return scope.Close(JS_INT(-1));
+  }
+  //fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+  return scope.Close(JS_INT(0));
+}
+
 JS_METHOD(Uniform1f) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  double x = args[1]->NumberValue();
+  float x = (float) args[1]->NumberValue();
 
   glUniform1f(location, x);
   return scope.Close(Undefined());
@@ -123,8 +136,8 @@ JS_METHOD(Uniform2f) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  double x = args[1]->NumberValue();
-  double y = args[2]->NumberValue();
+  float x = (float) args[1]->NumberValue();
+  float y = (float) args[2]->NumberValue();
 
   glUniform2f(location, x, y);
   return scope.Close(Undefined());
@@ -134,9 +147,9 @@ JS_METHOD(Uniform3f) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  double x = args[1]->NumberValue();
-  double y = args[2]->NumberValue();
-  double z = args[3]->NumberValue();
+  float x = (float) args[1]->NumberValue();
+  float y = (float) args[2]->NumberValue();
+  float z = (float) args[3]->NumberValue();
 
   glUniform3f(location, x, y, z);
   return scope.Close(Undefined());
@@ -146,10 +159,10 @@ JS_METHOD(Uniform4f) {
   HandleScope scope;
 
   int location = args[0]->Int32Value();
-  double x = args[1]->NumberValue();
-  double y = args[2]->NumberValue();
-  double z = args[3]->NumberValue();
-  double w = args[4]->NumberValue();
+  float x = (float) args[1]->NumberValue();
+  float y = (float) args[2]->NumberValue();
+  float z = (float) args[3]->NumberValue();
+  float w = (float) args[4]->NumberValue();
 
   glUniform4f(location, x, y, z, w);
   return scope.Close(Undefined());
@@ -476,7 +489,7 @@ JS_METHOD(GetShaderParameter) {
   case GL_DELETE_STATUS:
   case GL_COMPILE_STATUS:
     glGetShaderiv(shader, pname, &value);
-    return scope.Close(JS_BOOL(static_cast<bool>(value)));
+    return scope.Close(JS_BOOL(static_cast<bool>(value!=0)));
   case GL_SHADER_TYPE:
     glGetShaderiv(shader, pname, &value);
     return scope.Close(JS_INT(static_cast<unsigned long>(value)));
@@ -546,7 +559,7 @@ JS_METHOD(GetProgramParameter) {
   case GL_LINK_STATUS:
   case GL_VALIDATE_STATUS:
     glGetProgramiv(program, pname, &value);
-    return scope.Close(JS_BOOL(static_cast<bool>(value)));
+    return scope.Close(JS_BOOL(static_cast<bool>(value!=0)));
   case GL_ATTACHED_SHADERS:
   case GL_ACTIVE_ATTRIBUTES:
   case GL_ACTIVE_UNIFORMS:
@@ -571,10 +584,10 @@ JS_METHOD(GetUniformLocation) {
 JS_METHOD(ClearColor) {
   HandleScope scope;
 
-  double red = args[0]->NumberValue();
-  double green = args[1]->NumberValue();
-  double blue = args[2]->NumberValue();
-  double alpha = args[3]->NumberValue();
+  float red = (float) args[0]->NumberValue();
+  float green = (float) args[1]->NumberValue();
+  float blue = (float) args[2]->NumberValue();
+  float alpha = (float) args[3]->NumberValue();
 
   glClearColor(red, green, blue, alpha);
 
@@ -585,7 +598,7 @@ JS_METHOD(ClearColor) {
 JS_METHOD(ClearDepth) {
   HandleScope scope;
 
-  double depth = args[0]->NumberValue();
+  float depth = (float) args[0]->NumberValue();
 
   glClearDepthf(depth);
 
@@ -667,7 +680,7 @@ JS_METHOD(TexParameterf) {
 
   int target = args[0]->Int32Value();
   int pname = args[1]->Int32Value();
-  float param = args[2]->NumberValue();
+  float param = (float) args[2]->NumberValue();
 
   glTexParameterf(target, pname, param);
 
@@ -879,7 +892,7 @@ JS_METHOD(VertexAttrib1f) {
   HandleScope scope;
 
   GLuint indx = args[0]->Int32Value();
-  GLfloat x = args[1]->NumberValue();
+  float x = (float) args[1]->NumberValue();
 
   glVertexAttrib1f(indx, x);
   return scope.Close(Undefined());
@@ -889,8 +902,8 @@ JS_METHOD(VertexAttrib2f) {
   HandleScope scope;
 
   GLuint indx = args[0]->Int32Value();
-  GLfloat x = args[1]->NumberValue();
-  GLfloat y = args[2]->NumberValue();
+  float x = (float) args[1]->NumberValue();
+  float y = (float) args[2]->NumberValue();
 
   glVertexAttrib2f(indx, x, y);
   return scope.Close(Undefined());
@@ -900,9 +913,9 @@ JS_METHOD(VertexAttrib3f) {
   HandleScope scope;
 
   GLuint indx = args[0]->Int32Value();
-  GLfloat x = args[1]->NumberValue();
-  GLfloat y = args[2]->NumberValue();
-  GLfloat z = args[3]->NumberValue();
+  float x = (float) args[1]->NumberValue();
+  float y = (float) args[2]->NumberValue();
+  float z = (float) args[3]->NumberValue();
 
   glVertexAttrib3f(indx, x, y, z);
   return scope.Close(Undefined());
@@ -912,10 +925,10 @@ JS_METHOD(VertexAttrib4f) {
   HandleScope scope;
 
   GLuint indx = args[0]->Int32Value();
-  GLfloat x = args[1]->NumberValue();
-  GLfloat y = args[2]->NumberValue();
-  GLfloat z = args[3]->NumberValue();
-  GLfloat w = args[4]->NumberValue();
+  float x = (float) args[1]->NumberValue();
+  float y = (float) args[2]->NumberValue();
+  float z = (float) args[3]->NumberValue();
+  float w = (float) args[4]->NumberValue();
 
   glVertexAttrib4f(indx, x, y, z, w);
   return scope.Close(Undefined());
@@ -964,10 +977,10 @@ JS_METHOD(VertexAttrib4fv) {
 JS_METHOD(BlendColor) {
   HandleScope scope;
 
-  GLclampf r= args[0]->Int32Value();
-  GLclampf g= args[1]->Int32Value();
-  GLclampf b= args[2]->Int32Value();
-  GLclampf a= args[3]->Int32Value();
+  GLclampf r= (float) args[0]->NumberValue();
+  GLclampf g= (float) args[1]->NumberValue();
+  GLclampf b= (float) args[2]->NumberValue();
+  GLclampf a= (float) args[3]->NumberValue();
 
   glBlendColor(r,g,b,a);
   return scope.Close(Undefined());
@@ -1069,8 +1082,8 @@ JS_METHOD(DepthMask) {
 JS_METHOD(DepthRange) {
   HandleScope scope;
 
-  GLclampf zNear = args[0]->Int32Value();
-  GLclampf zFar = args[1]->Int32Value();
+  GLclampf zNear = (float) args[0]->NumberValue();
+  GLclampf zFar = (float) args[1]->NumberValue();
 
   glDepthRangef(zNear, zFar);
   return scope.Close(Undefined());
@@ -1100,14 +1113,14 @@ JS_METHOD(IsEnabled) {
 
   GLenum cap = args[0]->Int32Value();
 
-  bool ret=glIsEnabled(cap);
+  bool ret=glIsEnabled(cap)!=0;
   return scope.Close(Boolean::New(ret));
 }
 
 JS_METHOD(LineWidth) {
   HandleScope scope;
 
-  GLfloat width = args[0]->NumberValue();
+  GLfloat width = (float) args[0]->NumberValue();
 
   glLineWidth(width);
   return scope.Close(Undefined());
@@ -1116,8 +1129,8 @@ JS_METHOD(LineWidth) {
 JS_METHOD(PolygonOffset) {
   HandleScope scope;
 
-  GLfloat factor = args[0]->NumberValue();
-  GLfloat units = args[1]->NumberValue();
+  GLfloat factor = (float) args[0]->NumberValue();
+  GLfloat units = (float) args[1]->NumberValue();
 
   glPolygonOffset(factor, units);
   return scope.Close(Undefined());
@@ -1126,7 +1139,7 @@ JS_METHOD(PolygonOffset) {
 JS_METHOD(SampleCoverage) {
   HandleScope scope;
 
-  GLclampf value = args[0]->Int32Value();
+  GLclampf value = (float) args[0]->NumberValue();
   GLboolean invert = args[1]->BooleanValue();
 
   glSampleCoverage(value, invert);
@@ -1323,37 +1336,37 @@ JS_METHOD(GetVertexAttribOffset) {
 JS_METHOD(IsBuffer) {
   HandleScope scope;
 
-  return scope.Close(Boolean::New(glIsBuffer(args[0]->Uint32Value())));
+  return scope.Close(Boolean::New(glIsBuffer(args[0]->Uint32Value())!=0));
 }
 
 JS_METHOD(IsFramebuffer) {
   HandleScope scope;
 
-  return scope.Close(JS_BOOL(glIsFramebuffer(args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsFramebuffer(args[0]->Uint32Value())!=0));
 }
 
 JS_METHOD(IsProgram) {
   HandleScope scope;
 
-  return scope.Close(JS_BOOL(glIsProgram(args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsProgram(args[0]->Uint32Value())!=0));
 }
 
 JS_METHOD(IsRenderbuffer) {
   HandleScope scope;
 
-  return scope.Close(JS_BOOL(glIsRenderbuffer( args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsRenderbuffer( args[0]->Uint32Value())!=0));
 }
 
 JS_METHOD(IsShader) {
   HandleScope scope;
 
-  return scope.Close(JS_BOOL(glIsShader(args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsShader(args[0]->Uint32Value())!=0));
 }
 
 JS_METHOD(IsTexture) {
   HandleScope scope;
 
-  return scope.Close(JS_BOOL(glIsTexture(args[0]->Uint32Value())));
+  return scope.Close(JS_BOOL(glIsTexture(args[0]->Uint32Value())!=0));
 }
 
 JS_METHOD(RenderbufferStorage) {
@@ -1515,7 +1528,7 @@ JS_METHOD(GetParameter) {
     // return a boolean
     GLboolean params;
     ::glGetBooleanv(name, &params);
-    return scope.Close(JS_BOOL(params));
+    return scope.Close(JS_BOOL(params!=0));
   }
   case GL_DEPTH_CLEAR_VALUE:
   case GL_LINE_WIDTH:
@@ -1594,10 +1607,10 @@ JS_METHOD(GetParameter) {
     GLboolean params[4];
     ::glGetBooleanv(name, params);
     Local<Array> arr=Array::New(4);
-    arr->Set(0,JS_BOOL(params[0]));
-    arr->Set(1,JS_BOOL(params[1]));
-    arr->Set(2,JS_BOOL(params[2]));
-    arr->Set(3,JS_BOOL(params[3]));
+    arr->Set(0,JS_BOOL(params[0]==1));
+    arr->Set(1,JS_BOOL(params[1]==1));
+    arr->Set(2,JS_BOOL(params[2]==1));
+    arr->Set(3,JS_BOOL(params[3]==1));
     return scope.Close(arr);
   }
   case GL_ARRAY_BUFFER_BINDING:
@@ -1698,7 +1711,7 @@ JS_METHOD(GetVertexAttrib) {
   case GL_VERTEX_ATTRIB_ARRAY_ENABLED:
   case GL_VERTEX_ATTRIB_ARRAY_NORMALIZED:
     glGetVertexAttribiv(index,pname,&value);
-    return scope.Close(JS_BOOL(value));
+    return scope.Close(JS_BOOL(value!=0));
   case GL_VERTEX_ATTRIB_ARRAY_SIZE:
   case GL_VERTEX_ATTRIB_ARRAY_STRIDE:
   case GL_VERTEX_ATTRIB_ARRAY_TYPE:
@@ -1743,7 +1756,7 @@ JS_METHOD(GetExtension) {
   char *ext=strcasestr(extensions, sname);
 
   if(!ext) return scope.Close(Undefined());
-  return scope.Close(JS_STR(ext, ::strlen(sname)));
+  return scope.Close(JS_STR(ext, (int)::strlen(sname)));
 }
 
 JS_METHOD(CheckFramebufferStatus) {

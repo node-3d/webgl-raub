@@ -10,16 +10,13 @@
 
 #include "common.h"
 
-#ifdef _WIN32
-  // OpenGL Graphics Includes
-  #define GLEW_STATIC
-  #include <GL/glew.h>using namespace node;
-#endif
-
+using namespace node;
 using namespace v8;
 
 namespace webgl {
 void AtExit();
+
+JS_METHOD(Init);
 
 JS_METHOD(Uniform1f);
 JS_METHOD(Uniform2f);

@@ -20,6 +20,8 @@ void init(Handle<Object> target)
 
   Image::Initialize(target);
 
+  NODE_SET_METHOD(target, "Init", webgl::Init);
+ 
   NODE_SET_METHOD(target, "uniform1f", webgl::Uniform1f);
   NODE_SET_METHOD(target, "uniform2f", webgl::Uniform2f);
   NODE_SET_METHOD(target, "uniform3f", webgl::Uniform3f);
