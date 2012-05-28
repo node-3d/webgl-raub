@@ -20,6 +20,12 @@
           'defines' : [
             'WIN32_LEAN_AND_MEAN',
             'VC_EXTRALEAN'
+          ],
+          'cflags' : [
+          '/Ox','/Ob2','/Oi','/Ot','/Oy','/GL','/GF','/Gm-','/EHsc','/MT','/GS','/Gy','/GR-','/Gd','/wd"4530"','/wd"4251"' 
+          ],
+          'ldflags' : [
+            '/OPT:REF','/OPT:ICF','/LTCG'
           ]
           }
         ],
