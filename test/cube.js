@@ -485,7 +485,8 @@ function tick(timeNow) {
 
   drawATB();
     
-  requestAnimationFrame(tick);
+  gl.finish(); // for timing
+  requestAnimationFrame(tick,0);
 }
 
 function initAntTweakBar(canvas) {
