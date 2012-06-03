@@ -1,4 +1,12 @@
 {
+  'variables': {
+    'platform': '<(OS)',
+  },
+  'conditions': [
+    # Replace gyp platform with node platform, blech
+    ['platform == "mac"', {'variables': {'platform': 'darwin'}}],
+    ['platform == "win"', {'variables': {'platform': 'win32'}}],
+  ],
   'targets': [
     {
       'target_name': 'webgl',
@@ -9,6 +17,12 @@
           'src/bindings.cc',
           'src/image.cc',
           'src/webgl.cc',
+      ],
+      'include_dirs': [
+        './deps/include',
+      ],
+      'library_dirs': [
+        './deps/<(platform)',
       ],
       'conditions': [
         ['OS=="mac"', {'libraries': ['-lGLEW','-lfreeimage','-framework OpenGL']}],
