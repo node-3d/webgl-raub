@@ -1,18 +1,27 @@
-This is a port of WebGL for desktops: windows, linux, mac
+This is a Node.JS port of WebGL for desktops: windows, linux, mac
 
-It started as an extension of creationix/node-webgl and their great example com.creationix.minimason that you can find in examples/wavefront.js. However, it is now quite different and support different platform bindings, mainly GLFW instead of SDL.
+It started as an extension of creationix/node-webgl and their great example com.creationix.minimason that 
+you can find in examples/wavefront.js. However, it is now quite different and support different platform 
+bindings, mainly GLFW instead of SDL.
 
 Dependencies
 ============
-- node-glfw
-which depends on GLEW, GLFW as well as AntTweakBar. See node-glfw for installation instructions.
-
-- freeimage
-freeimage is used to load/save a variety of image formats.
+- node-glfw, which depends on GLEW, GLFW as well as AntTweakBar. See node-glfw for installation instructions.
+- freeimage is used to load/save a variety of image formats.
+- node-gyp if not already available in your distribution
 
 Installation
 ============
-node-waf configure build
+node-gyp rebuild
+
+Installation for Windows 7
+==========================
+Beware of the Node.JS distribution you use. The default Node.JS is 32-bit and this means that modules 
+will be compiled by node-gyp with 32-bit settings, which often leads to compilation errors especially
+on 64-bit systems.
+
+So for Windows 7 64-bit, instead of downloading the default Node.JS windows installer, select 'Other release files'.
+This will show you an ftp site for the latest release. Go into x64 folder and download that distribution.
 
 Usage
 =====
@@ -50,3 +59,6 @@ requestAnimationFrame(callback [, delay]) works as in the browser.
 If delay is specified, it is the requested delay in milliseconds between animation frames 
 e.g. 16 will provide 1000 / 16 = 62 fps at best, which is the default value if delay is undefined. 
 If delay = 0, then the fastest possible framerate on your machine is used.
+
+The timestamp now uses the high-resolution timer in your machine (not new Date()). This provides a much more precise
+framerate as well as much better timing for animations.
