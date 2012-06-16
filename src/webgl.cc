@@ -40,25 +40,6 @@ static GLuint ToGLuint(const void* ptr) {
   return static_cast<GLuint>(reinterpret_cast<size_t>(ptr));
 }
 
-// GL_ARB_vertex_buffer_object extension
-/*
-extern "C" {
-  typedef ptrdiff_t GLintptrARB;
-  typedef ptrdiff_t GLsizeiptrARB;
-  void glBindBufferARB (GLenum, GLuint);
-  void glDeleteBuffersARB (GLsizei, const GLuint *);
-  void glGenBuffersARB (GLsizei, GLuint *);
-  GLboolean glIsBufferARB (GLuint);
-  void glBufferDataARB (GLenum, GLsizeiptrARB, const GLvoid *, GLenum);
-  void glBufferSubDataARB (GLenum, GLintptrARB, GLsizeiptrARB, const GLvoid *);
-  //void glGetBufferSubDataARB (GLenum, GLintptrARB, GLsizeiptrARB, GLvoid *);
-  //GLvoid* glMapBufferARB (GLenum, GLenum);
-  //GLboolean glUnmapBufferARB (GLenum);
-  void glGetBufferParameterivARB (GLenum, GLenum, GLint *);
-  //void glGetBufferPointervARB (GLenum, GLenum, GLvoid* *);
-}
-*/
-
 static int SizeOfArrayElementForType(v8::ExternalArrayType type) {
   switch (type) {
   case v8::kExternalByteArray:
@@ -473,8 +454,15 @@ JS_METHOD(ShaderSource) {
 JS_METHOD(CompileShader) {
   HandleScope scope;
 
-
   glCompileShader(args[0]->Int32Value());
+
+  return scope.Close(Undefined());
+}
+
+JS_METHOD(FrontFace) {
+  HandleScope scope;
+
+  glFrontFace(args[0]->Int32Value());
 
   return scope.Close(Undefined());
 }

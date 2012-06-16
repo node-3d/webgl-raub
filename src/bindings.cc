@@ -161,6 +161,8 @@ void init(Handle<Object> target)
   NODE_SET_METHOD(target, "getExtension", webgl::GetExtension);
   NODE_SET_METHOD(target, "checkFramebufferStatus", webgl::CheckFramebufferStatus);
 
+  NODE_SET_METHOD(target, "frontFace", webgl::FrontFace);
+
   // OpenGL ES 2.1 constants
 
   /* ClearBufferMask */

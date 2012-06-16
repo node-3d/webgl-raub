@@ -153,6 +153,8 @@ JS_METHOD(GetVertexAttrib);
 JS_METHOD(GetSupportedExtensions);
 JS_METHOD(GetExtension);
 JS_METHOD(CheckFramebufferStatus);
+
+JS_METHOD(FrontFace);
 }
 
 #endif /* WEBGL_H_ */
