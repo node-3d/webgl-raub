@@ -29,6 +29,7 @@
         "url": "http://github.com/mikeseven/node-webgl/raw/master/LICENSES"
     }],
    "dependencies": {
+    "node-glfw" : ""
    },
    "devDependencies": {}
 }
