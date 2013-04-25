@@ -37,10 +37,10 @@ var gl = GL.create({
   // avoided by using centroid sampling except it isn't supported by WebGL.
   antialias: false
 });
-/*if (!gl.getExtension('OES_texture_float')) {
-  document.write('This demo requires the OES_texture_float extension to run');
+if (!(gl.getExtension('GL_ARB_texture_float') || gl.getExtension('OES_texture_float'))) {
+  alert('This demo requires the OES_texture_float or GL_ARB_texture_float extension to run');
   throw 'not supported';
-}*/
+}
 
 var depthMap = new GL.Texture(1024, 1024, { format: gl.RED });
 var depthShader = new GL.Shader('\
