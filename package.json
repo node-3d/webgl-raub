@@ -2,11 +2,11 @@
   "author": "Mikael Bourges-Sevenier <mikeseven@gmail.com>",
   "name": "node-webgl",
   "description": "WebGL bindings for node",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "index.js",
   "keywords": [ "webgl", "opengl" ],
   "engines": {
-    "node": ">=0.7.0"
+    "node": "0.7.0-0.11.3"
   },
    "directories": {
        "src": "src",
@@ -15,12 +15,10 @@
        "examples": "examples",
        "test": "test"
    },
-   "repositories": [
-       {
-           "type": "git",
-           "url": "https://mikeseven@github.com/mikeseven/node-webgl.git" 
-       } 
-   ],
+   "repository": {
+       "type": "git",
+       "url": "https://mikeseven@github.com/mikeseven/node-webgl.git" 
+   },
    "scripts": {
        "install": "node-gyp rebuild"
    },
