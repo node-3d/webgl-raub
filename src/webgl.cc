@@ -589,7 +589,7 @@ JS_METHOD(ClearDepth) {
 
   float depth = (float) args[0]->NumberValue();
 
-  glClearDepthf(depth);
+  glClearDepth(depth);
 
   return scope.Close(Undefined());
 }
