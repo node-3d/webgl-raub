@@ -226,6 +226,11 @@ function drawScene() {
 function webGLStart() {
   var canvas = document.createElement("lesson02-canvas");
   initGL(canvas);
+  document.on("resize", function (evt) {
+    // console.log("resize "+canvas.width+" x "+canvas.height);
+    gl.viewportWidth=canvas.width;
+    gl.viewportHeight=canvas.height;
+  });
   initShaders()
   initBuffers();
 

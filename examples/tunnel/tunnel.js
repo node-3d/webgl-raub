@@ -368,7 +368,15 @@ function handleLoadedTexture(texture) {
 
 function webGLStart() {
   var canvas = document.createElement("canvas",800,600);
+
   initGL(canvas);
+
+  document.on("resize", function (evt) {
+    // console.log("resize "+canvas.width+" x "+canvas.height);
+    gl.viewportWidth=canvas.width;
+    gl.viewportHeight=canvas.height;
+  });
+
   toggleTriangles();
   initShaders();
   initTexture();

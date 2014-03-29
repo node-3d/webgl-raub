@@ -32,7 +32,7 @@ vec3 doit( in vec2 pix )
         // texture mapping
         vec2 uv;
         uv.x = atan(nor.x,nor.z)/6.2831 - 0.05*time - mouse.x/resolution.x;
-        uv.y = acos(nor.y)/3.1416;
+        uv.y = -acos(nor.y)/3.1416;
         uv.y = 0.5 + spow( uv.y-0.5, 1.2 );
         col = texture2D(tex0,uv).xyz;
 

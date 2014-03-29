@@ -13,7 +13,6 @@ var WebGL=require('../index'),
 document.setTitle("Lesson05");
 document.on("resize",function(evt){
   //console.log('resize to: ('+evt.width+", "+evt.height+")");
-  document.createWindow(evt.width,evt.height);
   gl.viewportWidth=evt.width;
   gl.viewportHeight=evt.height;
 });

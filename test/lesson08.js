@@ -12,7 +12,6 @@ document.setTitle("Lesson08");
 requestAnimationFrame = document.requestAnimationFrame;
 
 document.on("resize",function(evt){
-  document.createWindow(evt.width,evt.height);
   gl.viewportWidth=evt.width;
   gl.viewportHeight=evt.height;
 });

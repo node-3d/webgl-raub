@@ -198,7 +198,7 @@ var startTime=-1;
 var mMouseOriX=-1, mMouseOriY=-1, mMousePosX=-1, mMousePosY=-1;
 
 function initGL() {
-  mCanvas = document.createElement("canvas",256,256);
+  mCanvas = document.createElement("canvas",512,512);
   try {
     mGLContext = mCanvas.getContext("experimental-webgl");
   } catch (e) {
@@ -224,7 +224,6 @@ function render(t) {
 if(initGL()) {
   document.on("resize",function(evt){
     //console.log('resize to: ('+evt.width+", "+evt.height+")");
-    document.createWindow(evt.width,evt.height);
     mGLContext.viewportWidth=evt.width;
     mGLContext.viewportHeight=evt.height;
     mEffect.SetSize(evt.width,evt.height);

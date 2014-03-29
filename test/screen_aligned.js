@@ -260,6 +260,11 @@ function tick() {
 function webGLStart() {
   var canvas = document.createElement("screen_aligned-canvas");
   initGL(canvas);
+  document.on("resize", function (evt) {
+    // console.log("resize "+canvas.width+" x "+canvas.height);
+    gl.viewportWidth=canvas.width;
+    gl.viewportHeight=canvas.height;
+  });
   initShaders();
   initBuffers();
   initTexture();

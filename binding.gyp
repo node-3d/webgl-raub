@@ -19,10 +19,10 @@
           'src/webgl.cc',
       ],
       'include_dirs': [
-        './deps/include',
+        '<(module_root_dir)/deps/include',
       ],
       'library_dirs': [
-        './deps/<(platform)',
+        '<(module_root_dir)/deps/<(platform)',
       ],
       'conditions': [
         ['OS=="mac"', {'libraries': ['-lGLEW','-lfreeimage','-framework OpenGL']}],

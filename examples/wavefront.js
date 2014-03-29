@@ -200,6 +200,7 @@ var shaders = {
   // texture size (must be powers of two, remember 2048x1024 flat could also be a 128x128x128 voxel)
   var sizeX = 256, sizeY = 256; // 2048x1024 flat or 128x128x128 cube
   var viewX, viewY; // viewport size
+  var resized=true;
 
   load();
   
@@ -216,14 +217,16 @@ var shaders = {
     gl.viewportWidth = viewX = canvas.width;
     gl.viewportHeight = viewY = canvas.height;
 
-  document.on("mousemove", function (evt) {
-      mouseX = evt.x / viewX;
-      mouseY = 1 - evt.y / viewY;
-  });
-//    document.onmousemove = function(evt) {
-//      mouseX = evt.pageX / viewX;
-//      mouseY = 1 - evt.pageY / viewY;
-//    };
+    document.on("mousemove", function (evt) {
+        mouseX = evt.x / viewX;
+        mouseY = 1 - evt.y / viewY;
+    });
+    document.on("resize", function (evt) {
+      // console.log("resize "+canvas.width+" x "+canvas.height);
+      viewX=canvas.width;
+      viewY=canvas.height;
+      resized=true;
+    });
 //    document.onclick = function(evt) {
 //      halted = !halted;
 //    };
