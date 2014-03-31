@@ -2,7 +2,7 @@
   "author": "Mikael Bourges-Sevenier <mikeseven@gmail.com>",
   "name": "node-webgl",
   "description": "WebGL bindings for node",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "index.js",
   "keywords": [ "webgl", "opengl" ],
   "engines": {
@@ -27,6 +27,7 @@
         "url": "http://github.com/mikeseven/node-webgl/raw/master/LICENSES"
     }],
    "dependencies": {
+    "node-glfw" : ">=0.2.0"
    },
    "devDependencies": {
     "node-glfw" : ">=0.2.0"
