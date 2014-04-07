@@ -29,7 +29,7 @@ static void unregisterImage(Image* obj) {
 Persistent<FunctionTemplate> Image::constructor_template;
 
 void Image::Initialize (Handle<Object> target) {
-  HandleScope scope;
+  NanScope();
 
   Local<FunctionTemplate> t = FunctionTemplate::New(New);
   constructor_template = Persistent<FunctionTemplate>::New(t);
@@ -44,7 +44,7 @@ void Image::Initialize (Handle<Object> target) {
   constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("src"), SrcGetter, SrcSetter);
   //constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("onload"), NULL, OnloadSetter);
 
-  target->Set(String::NewSymbol("Image"), constructor_template->GetFunction());
+  target->Set(NanSymbol("Image"), constructor_template->GetFunction());
 
   FreeImage_Initialise(true);
 }
@@ -88,7 +88,7 @@ void Image::Load (const char *filename) {
 }
 
 Handle<Value> Image::New (const Arguments& args) {
-  HandleScope scope;
+  NanScope();
 
   Image *image = new Image();
   image->Wrap(args.This());
@@ -98,39 +98,39 @@ Handle<Value> Image::New (const Arguments& args) {
 }
 
 Handle<Value> Image::WidthGetter (Local<String> property, const AccessorInfo& info) {
-  HandleScope scope;
+  NanScope();
 
   Image *image = ObjectWrap::Unwrap<Image>(info.This());
 
-  return scope.Close(JS_INT(image->GetWidth()));
+  NanReturnValue(JS_INT(image->GetWidth()));
 }
 
 Handle<Value> Image::HeightGetter (Local<String> property, const AccessorInfo& info) {
-  HandleScope scope;
+  NanScope();
 
   Image *image = ObjectWrap::Unwrap<Image>(info.This());
 
-  return scope.Close(JS_INT(image->GetHeight()));
+  NanReturnValue(JS_INT(image->GetHeight()));
 }
 
 Handle<Value> Image::PitchGetter (Local<String> property, const AccessorInfo& info) {
-  HandleScope scope;
+  NanScope();
 
   Image *image = ObjectWrap::Unwrap<Image>(info.This());
 
-  return scope.Close(JS_INT(image->GetPitch()));
+  NanReturnValue(JS_INT(image->GetPitch()));
 }
 
 Handle<Value> Image::SrcGetter (Local<String> property, const AccessorInfo& info) {
-  HandleScope scope;
+  NanScope();
 
   Image *image = ObjectWrap::Unwrap<Image>(info.This());
 
-  return scope.Close(JS_STR(image->filename));
+  NanReturnValue(JS_STR(image->filename));
 }
 
 void Image::SrcSetter (Local<String> property, Local<Value> value, const AccessorInfo& info) {
-  HandleScope scope;
+  NanScope();
 
   Image *image = ObjectWrap::Unwrap<Image>(info.This());
   String::Utf8Value filename_s(value->ToString());
@@ -155,7 +155,7 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
                                                        (int) num_bytes);
 
   // emit event
-  Local<Value> emit_v = info.This()->Get(String::NewSymbol("emit"));
+  Local<Value> emit_v = info.This()->Get(NanSymbol("emit"));
   assert(emit_v->IsFunction());
   Local<Function> emit_f = emit_v.As<Function>();
 
@@ -172,8 +172,8 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
     FatalException(tc);
 }
 
-JS_METHOD(Image::save) {
-  HandleScope scope;
+NAN_METHOD(Image::save) {
+  NanScope();
   String::Utf8Value filename(args[0]->ToString());
 
   FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(*filename);
@@ -205,7 +205,7 @@ JS_METHOD(Image::save) {
   }
   bool ret=FreeImage_Save(format, image, *filename)==1;
   FreeImage_Unload(image);
-  return scope.Close(Boolean::New(ret));
+  NanReturnValue(Boolean::New(ret));
 }
 
 Image::~Image () {
