@@ -31,20 +31,22 @@ Persistent<FunctionTemplate> Image::constructor_template;
 void Image::Initialize (Handle<Object> target) {
   NanScope();
 
-  Local<FunctionTemplate> t = FunctionTemplate::New(New);
-  constructor_template = Persistent<FunctionTemplate>::New(t);
+  // constructor
+  Local<FunctionTemplate> ctor = FunctionTemplate::New(New);
+  NanAssignPersistent(FunctionTemplate, constructor_template, ctor);
+  ctor->InstanceTemplate()->SetInternalFieldCount(1);
+  ctor->SetClassName(JS_STR("Image"));
 
-  constructor_template->InstanceTemplate()->SetInternalFieldCount(1);
-  constructor_template->SetClassName(JS_STR("Image"));
+  // prototype
+  NODE_SET_PROTOTYPE_METHOD(ctor, "save", save);
+  Local<ObjectTemplate> proto = ctor->PrototypeTemplate();
+  proto->SetAccessor(JS_STR("width"), WidthGetter);
+  proto->SetAccessor(JS_STR("height"), HeightGetter);
+  proto->SetAccessor(JS_STR("pitch"), PitchGetter);
+  proto->SetAccessor(JS_STR("src"), SrcGetter, SrcSetter);
+  //proto->SetAccessor(JS_STR("onload"), NULL, OnloadSetter);
 
-  NODE_SET_PROTOTYPE_METHOD(constructor_template, "save", save);
-  constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("width"), WidthGetter);
-  constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("height"), HeightGetter);
-  constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("pitch"), PitchGetter);
-  constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("src"), SrcGetter, SrcSetter);
-  //constructor_template->PrototypeTemplate()->SetAccessor(JS_STR("onload"), NULL, OnloadSetter);
-
-  target->Set(NanSymbol("Image"), constructor_template->GetFunction());
+  target->Set(NanSymbol("Image"), ctor->GetFunction());
 
   FreeImage_Initialise(true);
 }
@@ -87,52 +89,52 @@ void Image::Load (const char *filename) {
   FreeImage_Unload(tmp);
 }
 
-Handle<Value> Image::New (const Arguments& args) {
+NAN_METHOD(Image::New) {
   NanScope();
 
   Image *image = new Image();
   image->Wrap(args.This());
   registerImage(image);
 
-  return args.This();
+  NanReturnValue(args.This());
 }
 
-Handle<Value> Image::WidthGetter (Local<String> property, const AccessorInfo& info) {
+NAN_GETTER(Image::WidthGetter) {
   NanScope();
 
-  Image *image = ObjectWrap::Unwrap<Image>(info.This());
+  Image *image = ObjectWrap::Unwrap<Image>(args.This());
 
   NanReturnValue(JS_INT(image->GetWidth()));
 }
 
-Handle<Value> Image::HeightGetter (Local<String> property, const AccessorInfo& info) {
+NAN_GETTER(Image::HeightGetter) {
   NanScope();
 
-  Image *image = ObjectWrap::Unwrap<Image>(info.This());
+  Image *image = ObjectWrap::Unwrap<Image>(args.This());
 
   NanReturnValue(JS_INT(image->GetHeight()));
 }
 
-Handle<Value> Image::PitchGetter (Local<String> property, const AccessorInfo& info) {
+NAN_GETTER(Image::PitchGetter) {
   NanScope();
 
-  Image *image = ObjectWrap::Unwrap<Image>(info.This());
+  Image *image = ObjectWrap::Unwrap<Image>(args.This());
 
   NanReturnValue(JS_INT(image->GetPitch()));
 }
 
-Handle<Value> Image::SrcGetter (Local<String> property, const AccessorInfo& info) {
+NAN_GETTER(Image::SrcGetter) {
   NanScope();
 
-  Image *image = ObjectWrap::Unwrap<Image>(info.This());
+  Image *image = ObjectWrap::Unwrap<Image>(args.This());
 
   NanReturnValue(JS_STR(image->filename));
 }
 
-void Image::SrcSetter (Local<String> property, Local<Value> value, const AccessorInfo& info) {
+NAN_SETTER(Image::SrcSetter) {
   NanScope();
 
-  Image *image = ObjectWrap::Unwrap<Image>(info.This());
+  Image *image = ObjectWrap::Unwrap<Image>(args.This());
   String::Utf8Value filename_s(value->ToString());
   image->Load(*filename_s);
 
@@ -150,12 +152,12 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
     pixels[i4 + 2] = temp;
   }
 
-  info.This()->ToObject()->SetIndexedPropertiesToExternalArrayData(pixels,
+  args.This()->ToObject()->SetIndexedPropertiesToExternalArrayData(pixels,
                                                        kExternalUnsignedByteArray,
                                                        (int) num_bytes);
 
   // emit event
-  Local<Value> emit_v = info.This()->Get(NanSymbol("emit"));
+  Local<Value> emit_v = args.This()->Get(NanSymbol("emit"));
   assert(emit_v->IsFunction());
   Local<Function> emit_f = emit_v.As<Function>();
 
@@ -166,7 +168,7 @@ void Image::SrcSetter (Local<String> property, Local<Value> value, const Accesso
 
   TryCatch tc;
 
-  emit_f->Call(info.This(), 2, argv);
+  emit_f->Call(args.This(), 2, argv);
 
   if (tc.HasCaught())
     FatalException(tc);

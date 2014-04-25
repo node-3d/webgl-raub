@@ -76,7 +76,7 @@ inline Type* getArrayData(Local<Value> arg, int* num = NULL) {
 
   if(!arg->IsNull()) {
     if(arg->IsArray()) {
-      Local<Array> arr = Array::Cast(*arg);
+      Local<Array> arr = Local<Array>::Cast(arg);
       if(num) *num=arr->Length();
       data = reinterpret_cast<Type*>(arr->GetIndexedPropertiesExternalArrayData());
     }
@@ -340,7 +340,7 @@ NAN_METHOD(UniformMatrix2fv) {
   GLfloat* data=getArrayData<GLfloat>(args[2],&count);
 
   if (count < 4) {
-    return ThrowError("Not enough data for UniformMatrix2fv");
+    NanThrowError("Not enough data for UniformMatrix2fv");
   }
 
   glUniformMatrix2fv(location, count / 4, transpose, data);
@@ -357,7 +357,7 @@ NAN_METHOD(UniformMatrix3fv) {
   GLfloat* data=getArrayData<GLfloat>(args[2],&count);
 
   if (count < 9) {
-    return ThrowError("Not enough data for UniformMatrix3fv");
+    NanThrowError("Not enough data for UniformMatrix3fv");
   }
 
   glUniformMatrix3fv(location, count / 9, transpose, data);
@@ -374,7 +374,7 @@ NAN_METHOD(UniformMatrix4fv) {
   GLfloat* data=getArrayData<GLfloat>(args[2],&count);
 
   if (count < 16) {
-    return ThrowError("Not enough data for UniformMatrix4fv");
+    NanThrowError("Not enough data for UniformMatrix4fv");
   }
 
   glUniformMatrix4fv(location, count / 16, transpose, data);
@@ -487,7 +487,7 @@ NAN_METHOD(GetShaderParameter) {
     glGetShaderiv(shader, pname, &value);
     NanReturnValue(JS_INT(static_cast<long>(value)));
   default:
-    return ThrowException(Exception::TypeError(String::New("GetShaderParameter: Invalid Enum")));
+    NanThrowTypeError("GetShaderParameter: Invalid Enum");
   }
 }
 
@@ -555,7 +555,7 @@ NAN_METHOD(GetProgramParameter) {
     glGetProgramiv(program, pname, &value);
     NanReturnValue(JS_INT(static_cast<long>(value)));
   default:
-    return ThrowException(Exception::TypeError(String::New("GetProgramParameter: Invalid Enum")));
+    NanThrowTypeError("GetProgramParameter: Invalid Enum");
   }
 }
 
@@ -1383,7 +1383,7 @@ NAN_METHOD(GetShaderSource) {
   Local<String> str=String::New(source);
   delete source;
 
-  return str;
+  NanReturnValue(str);
 }
 
 NAN_METHOD(ValidateProgram) {
@@ -1538,7 +1538,9 @@ NAN_METHOD(GetParameter) {
   {
     // return a string
     char *params=(char*) ::glGetString(name);
-    NanReturnValue(params ? JS_STR(params) : Undefined());
+    if(params)
+      NanReturnValue(JS_STR(params));
+    NanReturnUndefined();
   }
   case GL_MAX_VIEWPORT_DIMS:
   {
@@ -1720,7 +1722,7 @@ NAN_METHOD(GetVertexAttrib) {
     NanReturnValue(arr);
   }
   default:
-    return ThrowError("GetVertexAttrib: Invalid Enum");
+    NanThrowError("GetVertexAttrib: Invalid Enum");
   }
 
   NanReturnValue(Undefined());
