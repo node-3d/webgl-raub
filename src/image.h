@@ -19,14 +19,14 @@ public:
   void Load (const char *filename);
 
 protected:
-  static Handle<Value> New (const Arguments& args);
-  static Handle<Value> WidthGetter (Local<String> property, const AccessorInfo& info);
-  static Handle<Value> HeightGetter (Local<String> property, const AccessorInfo& info);
-  static Handle<Value> SrcGetter (Local<String> property, const AccessorInfo& info);
-  static void SrcSetter (Local<String> property, Local<Value> value, const AccessorInfo& info);
-  static void OnloadSetter (Local<String> property, Local<Value> value, const AccessorInfo& info);
-  static Handle<Value> PitchGetter (Local<String> property, const AccessorInfo& info);
-  static JS_METHOD(save);
+  static NAN_METHOD(New);
+  static NAN_GETTER(WidthGetter);
+  static NAN_GETTER(HeightGetter);
+  static NAN_GETTER(SrcGetter);
+  static NAN_SETTER(SrcSetter);
+  static NAN_SETTER(OnloadSetter);
+  static NAN_GETTER(PitchGetter);
+  static NAN_METHOD(save);
 
   virtual ~Image ();
 
