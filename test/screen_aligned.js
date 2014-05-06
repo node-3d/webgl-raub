@@ -252,7 +252,6 @@ function drawScene() {
 function tick() {
   drawScene();
 
-  if(nodejs) document.flip();
   requestAnimFrame(tick);
 }
 

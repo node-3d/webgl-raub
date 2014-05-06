@@ -11,7 +11,7 @@
     {
       'target_name': 'webgl',
       'defines': [
-        'VERSION=0.1.4'
+        'VERSION=0.4.0'
       ],
       'sources': [ 
           'src/bindings.cc',
@@ -19,6 +19,7 @@
           'src/webgl.cc',
       ],
       'include_dirs': [
+        "<!(node -e \"require('nan')\")",
         '<(module_root_dir)/deps/include',
       ],
       'library_dirs': [

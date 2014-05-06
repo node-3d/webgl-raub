@@ -2,34 +2,37 @@
   "author": "Mikael Bourges-Sevenier <mikeseven@gmail.com>",
   "name": "node-webgl",
   "description": "WebGL bindings for node",
-  "version": "0.2.1",
+  "version": "0.4.0",
   "main": "index.js",
-  "keywords": [ "webgl", "opengl" ],
+  "keywords": [
+    "webgl",
+    "opengl"
+  ],
   "engines": {
-    "node": "0.7.0-0.11.3"
+    "node": ">=0.7.0"
   },
-   "directories": {
-       "src": "src",
-       "lib": "lib",
-       "doc": "doc",
-       "examples": "examples",
-       "test": "test"
-   },
-   "repository": {
-       "type": "git",
-       "url": "https://mikeseven@github.com/mikeseven/node-webgl.git" 
-   },
-   "scripts": {
-       "install": "node-gyp rebuild"
-   },
-   "licenses": [{
-        "type": "BSD",
-        "url": "http://github.com/mikeseven/node-webgl/raw/master/LICENSES"
-    }],
-   "dependencies": {
-    "node-glfw" : ">=0.2.0"
-   },
-   "devDependencies": {
-    "node-glfw" : ">=0.2.0"
-   }
+  "directories": {
+    "src": "src",
+    "lib": "lib",
+    "doc": "doc",
+    "examples": "examples",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://mikeseven@github.com/mikeseven/node-webgl.git"
+  },
+  "scripts": {
+    "install": "node-gyp rebuild"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "http://github.com/mikeseven/node-webgl/raw/master/LICENSES"
+    }
+  ],
+  "dependencies": {
+    "node-glfw": ">=0.2.0",
+    "nan": "^0.8.0"
+  }
 }
