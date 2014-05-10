@@ -239,48 +239,40 @@ var z = -5.0;
 
 var currentlyPressedKeys = {};
 
-document.on("KEYDOWN", function(evt){
-  //console.log("[KEYDOWN] mod: "+evt.mod+" sym: "+evt.sym+" scancode: "+evt.scancode);
-  currentlyPressedKeys[evt.scancode] = true;
+document.on("keydown", function(evt){
+  // console.log("[KEYDOWN] keyCode: "+evt.keyCode+" which: "+evt.which);
+  currentlyPressedKeys[evt.keyCode] = true;
   handleKeys();
 });
 
-document.on("KEYUP", function(evt){
-  currentlyPressedKeys[evt.scancode] = false;
+document.on("keyup", function(evt){
+  // console.log("[KEYUP] keyCode: "+evt.keyCode);
+  currentlyPressedKeys[evt.keyCode] = false;
 });
 
 
-function handleKeyDown(event) {
-  currentlyPressedKeys[event.keyCode] = true;
-}
-
-
-function handleKeyUp(event) {
-  currentlyPressedKeys[event.keyCode] = false;
-}
-
 function handleKeys() {
-  if (currentlyPressedKeys[35]) {
+  if (currentlyPressedKeys[221]) {
     // ]
-    z -= 0.05;
+    z -= 0.5;
   }
-  if (currentlyPressedKeys[51]) {
+  if (currentlyPressedKeys[220]) {
     // \
-    z += 0.05;
+    z += 0.5;
   }
-  if (currentlyPressedKeys[113]) {
+  if (currentlyPressedKeys[37]) {
     // Left cursor key
     ySpeed -= 1;
   }
-  if (currentlyPressedKeys[114]) {
+  if (currentlyPressedKeys[39]) {
     // Right cursor key
     ySpeed += 1;
   }
-  if (currentlyPressedKeys[111]) {
+  if (currentlyPressedKeys[38]) {
     // Up cursor key
     xSpeed -= 1;
   }
-  if (currentlyPressedKeys[116]) {
+  if (currentlyPressedKeys[40]) {
     // Down cursor key
     xSpeed += 1;
   }
