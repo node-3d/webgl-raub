@@ -516,10 +516,10 @@ function initAntTweakBar(canvas) {
   },
   " label=Orientation opened=true group=Rotation help='Orientation (degree)' ");
 
-  /*twBar.AddVar("yRot", ATB.TYPE_FLOAT, {
-    getter: function(data){ return yRot; },
-  },
-  " label='yRot' precision=1 group=Rotation help='y rot (degree)' ");*/
+  // twBar.AddVar("yRot", ATB.TYPE_FLOAT, {
+  //   getter: function(data){ return yRot; },
+  // },
+  // " label='yRot' precision=1 group=Rotation help='y rot (degree)' ");
 
   twBar.AddVar("xSpeed", ATB.TYPE_FLOAT, {
     getter: function(data){ return xSpeed; },
@@ -540,7 +540,6 @@ function initAntTweakBar(canvas) {
   " label='fps' help='frames per second' ");
 
   //twBar.AddButton("toto",speedup,"dummy value"," label='misc' ");
-
 }
 
 function webGLStart() {

@@ -11,7 +11,7 @@
     {
       'target_name': 'webgl',
       'defines': [
-        'VERSION=0.4.0'
+        'VERSION=0.4.1'
       ],
       'sources': [ 
           'src/bindings.cc',
@@ -26,7 +26,8 @@
         '<(module_root_dir)/deps/<(platform)',
       ],
       'conditions': [
-        ['OS=="mac"', {'libraries': ['-lGLEW','-lfreeimage','-framework OpenGL']}],
+        ['OS=="mac"', {
+          'libraries': ['-lGLEW','-lfreeimage','-framework OpenGL']}],
         ['OS=="linux"', {'libraries': ['-lfreeimage','-lGLEW','-lGL']}],
         ['OS=="win"', {
           'libraries': [
