@@ -250,7 +250,7 @@ if(initGL()) {
   //mEffect.NewShader(require('fs').readFileSync(presets+ 'water.fs','utf8'));
   //mEffect.NewTexture(0, presets+ 'tex0.jpg')
 
-  mEffect.NewShader(require('fs').readFileSync(presets+ 'mandelbulb.fs','utf8'));
+  //mEffect.NewShader(require('fs').readFileSync(presets+ 'mandelbulb.fs','utf8'));
 
   //mEffect.NewShader(require('fs').readFileSync(presets+ 'landscape.fs','utf8'));
 
@@ -263,7 +263,7 @@ if(initGL()) {
   //mEffect.NewShader(require('fs').readFileSync(presets+ 'square_tunnel.fs','utf8'));
   //mEffect.NewTexture(0, presets+ 'tex0.jpg')
 
-  //mEffect.NewShader(require('fs').readFileSync(presets+ '704.fs','utf8'));
+  mEffect.NewShader(require('fs').readFileSync(presets+ '704.fs','utf8'));
   
   //mEffect.NewShader(require('fs').readFileSync(presets+ 'earth.fs','utf8'));
   //mEffect.NewTexture(0, presets+ 'earth_day.jpg')

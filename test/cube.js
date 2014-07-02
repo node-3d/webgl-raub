@@ -22,7 +22,6 @@ var ySpeed = -5;
 var z = -5.0;
 
 document.on("resize",function(evt){
-  document.createWindow(evt.width,evt.height);
   gl.viewportWidth=evt.width;
   gl.viewportHeight=evt.height;
   

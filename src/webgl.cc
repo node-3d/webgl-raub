@@ -489,6 +489,7 @@ NAN_METHOD(GetShaderParameter) {
   default:
     NanThrowTypeError("GetShaderParameter: Invalid Enum");
   }
+  NanReturnUndefined();
 }
 
 NAN_METHOD(GetShaderInfoLog) {
@@ -557,6 +558,7 @@ NAN_METHOD(GetProgramParameter) {
   default:
     NanThrowTypeError("GetProgramParameter: Invalid Enum");
   }
+  NanReturnUndefined();
 }
 
 
@@ -836,7 +838,7 @@ NAN_METHOD(VertexAttribPointer) {
   int type = args[2]->Int32Value();
   int normalized = args[3]->BooleanValue();
   int stride = args[4]->Int32Value();
-  int offset = args[5]->Int32Value();
+  long offset = args[5]->Int32Value();
 
   //    printf("VertexAttribPointer %d %d %d %d %d %d\n", indx, size, type, normalized, stride, offset);
   glVertexAttribPointer(indx, size, type, normalized, stride, (const GLvoid *)offset);
