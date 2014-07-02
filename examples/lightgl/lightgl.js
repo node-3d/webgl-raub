@@ -1660,7 +1660,11 @@ function addOtherMethods() {
       }
       if (gl.ondraw) gl.ondraw();
     }
-    on(window, 'resize', resize);
+    on(window, 'resize', function(evt) {
+      gl.canvas.width=evt.width;
+      gl.canvas.height=evt.height;
+      resize();
+    });
     resize();
   };
 }

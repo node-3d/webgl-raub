@@ -11,7 +11,7 @@
     {
       'target_name': 'webgl',
       'defines': [
-        'VERSION=0.4.1'
+        'VERSION=0.4.2'
       ],
       'sources': [ 
           'src/bindings.cc',
