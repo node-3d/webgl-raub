@@ -7,7 +7,7 @@
     typedef double GLclampd;
 #else
     /*#if defined (__APPLE__) || defined(MACOSX)
-	  #include <OpenGL/gl3.h>
+      #include <OpenGL/gl3.h>
       #include <OpenGL/gl3ext.h>
       #define GL_ALIASED_POINT_SIZE_RANGE       0x846D
       #define GL_RED_BITS                       0x0D52
@@ -25,10 +25,8 @@
       #define glDepthRangef glDepthRange
     #else
       #ifdef _WIN32*/
-		// OpenGL Graphics Includes
-		#define GLEW_STATIC
         #include <GL/glew.h>
-	/*#else
+    /*#else
         #include "GLES2/gl2.h"
         #include "GLES2/gl2ext.h"
       #endif
