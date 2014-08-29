@@ -26,8 +26,13 @@
         '<(module_root_dir)/deps/<(platform)',
       ],
       'conditions': [
-        ['OS=="mac"', {
-          'libraries': ['-lGLEW','-lfreeimage','-framework OpenGL']}],
+        ['OS=="mac"',
+          {
+            'libraries': ['-lGLEW','-lfreeimage','-framework OpenGL'],
+            'include_dirs': ['/usr/local/include'],
+            'library_dirs': ['/usr/local/lib'],
+          }
+        ],
         ['OS=="linux"', {'libraries': ['-lfreeimage','-lGLEW','-lGL']}],
         ['OS=="win"',
           {
