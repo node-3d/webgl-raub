@@ -131,6 +131,20 @@ NAN_GETTER(Image::SrcGetter) {
   NanReturnValue(JS_STR(image->filename));
 }
 
+v8::ExternalArrayType getTypedArrayType(int bpp)
+{
+  switch(bpp) {
+    case 8:
+      return kExternalUnsignedByteArray;
+    case 16:
+      return kExternalUnsignedShortArray;
+    case 24:
+    case 32:
+      return kExternalUnsignedIntArray;
+  }
+  return kExternalUnsignedByteArray;
+}
+
 NAN_SETTER(Image::SrcSetter) {
   NanScope();
 
@@ -152,8 +166,9 @@ NAN_SETTER(Image::SrcSetter) {
     pixels[i4 + 2] = temp;
   }
 
+  v8::ExternalArrayType kType=getTypedArrayType(FreeImage_GetBPP(image->image_bmp));
   args.This()->ToObject()->SetIndexedPropertiesToExternalArrayData(pixels,
-                                                       kExternalUnsignedByteArray,
+                                                       kType,
                                                        (int) num_bytes);
 
   // emit event
