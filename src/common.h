@@ -14,10 +14,10 @@
 #include "arch_wrapper.h"
 
 namespace {
-#define JS_STR(...) v8::String::New(__VA_ARGS__)
-#define JS_INT(val) v8::Integer::New(val)
-#define JS_FLOAT(val) v8::Number::New(val)
-#define JS_BOOL(val) v8::Boolean::New(val)
+#define JS_STR(...) NanNew<v8::String>(__VA_ARGS__)
+#define JS_INT(val) NanNew<v8::Integer>(val)
+#define JS_FLOAT(val) NanNew<v8::Number>(val)
+#define JS_BOOL(val) NanNew<v8::Boolean>(val)
 
 }
 #endif /* COMMON_H_ */

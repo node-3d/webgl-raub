@@ -26,14 +26,13 @@ static void unregisterImage(Image* obj) {
 }
 
 
-Persistent<FunctionTemplate> Image::constructor_template;
+Persistent<Function> Image::constructor_template;
 
 void Image::Initialize (Handle<Object> target) {
   NanScope();
 
   // constructor
   Local<FunctionTemplate> ctor = FunctionTemplate::New(New);
-  NanAssignPersistent(FunctionTemplate, constructor_template, ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(JS_STR("Image"));
 
@@ -46,7 +45,8 @@ void Image::Initialize (Handle<Object> target) {
   proto->SetAccessor(JS_STR("src"), SrcGetter, SrcSetter);
   //proto->SetAccessor(JS_STR("onload"), NULL, OnloadSetter);
 
-  target->Set(NanSymbol("Image"), ctor->GetFunction());
+  NanAssignPersistent<Function>(constructor_template, ctor->GetFunction());
+  target->Set(JS_STR("Image"), ctor->GetFunction());
 
   FreeImage_Initialise(true);
 }
@@ -172,7 +172,7 @@ NAN_SETTER(Image::SrcSetter) {
                                                        (int) num_bytes);
 
   // emit event
-  Local<Value> emit_v = args.This()->Get(NanSymbol("emit"));
+  Local<Value> emit_v = args.This()->Get(JS_STR("emit"));
   assert(emit_v->IsFunction());
   Local<Function> emit_f = emit_v.As<Function>();
 
