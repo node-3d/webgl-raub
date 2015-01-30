@@ -9,7 +9,7 @@
 #include <GL/glew.h>
 
 #ifdef _WIN32
-  #define  strcasestr(s, t) strstr(strupr(s), t)
+  #define  strcasestr(s, t) strstr(strupr(s), strupr(t))
 #endif
 
 namespace webgl {
