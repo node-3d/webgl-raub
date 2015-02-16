@@ -481,11 +481,11 @@ NAN_METHOD(GetShaderParameter) {
     NanReturnValue(JS_BOOL(static_cast<bool>(value!=0)));
   case GL_SHADER_TYPE:
     glGetShaderiv(shader, pname, &value);
-    NanReturnValue(JS_INT(static_cast<unsigned long>(value)));
+    NanReturnValue(JS_FLOAT(static_cast<unsigned long>(value)));
   case GL_INFO_LOG_LENGTH:
   case GL_SHADER_SOURCE_LENGTH:
     glGetShaderiv(shader, pname, &value);
-    NanReturnValue(JS_INT(static_cast<long>(value)));
+    NanReturnValue(JS_FLOAT(static_cast<long>(value)));
   default:
     NanThrowTypeError("GetShaderParameter: Invalid Enum");
   }
@@ -554,7 +554,7 @@ NAN_METHOD(GetProgramParameter) {
   case GL_ACTIVE_ATTRIBUTES:
   case GL_ACTIVE_UNIFORMS:
     glGetProgramiv(program, pname, &value);
-    NanReturnValue(JS_INT(static_cast<long>(value)));
+    NanReturnValue(JS_FLOAT(static_cast<long>(value)));
   default:
     NanThrowTypeError("GetProgramParameter: Invalid Enum");
   }
