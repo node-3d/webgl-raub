@@ -566,7 +566,7 @@ NAN_METHOD(GetUniformLocation) {
   NanScope();
 
   int program = args[0]->Int32Value();
-  String::AsciiValue name(args[1]);
+  NanAsciiString name(args[1]);
 
   NanReturnValue(JS_INT(glGetUniformLocation(program, *name)));
 }
@@ -1742,7 +1742,7 @@ NAN_METHOD(GetSupportedExtensions) {
 NAN_METHOD(GetExtension) {
   NanScope();
 
-  String::AsciiValue name(args[0]);
+  NanAsciiString name(args[0]);
   char *sname=*name;
   char *extensions=(char*) glGetString(GL_EXTENSIONS);
 
