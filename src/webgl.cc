@@ -32,7 +32,7 @@ void registerGLObj(GLObjectType type, GLuint obj);
 void unregisterGLObj(GLuint obj);
 
 v8::Handle<v8::Value> ThrowError(const char* msg) {
-  return v8::ThrowException(v8::Exception::Error(v8::String::New(msg)));
+    NanThrowError(NanNew<String>(msg));
 }
 
 // A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.
@@ -62,7 +62,7 @@ inline void *getImageData(Local<Value> arg) {
   if (!arg->IsNull()) {
     Local<Object> obj = Local<Object>::Cast(arg);
     if (!obj->IsObject())
-      ThrowException(JS_STR("Bad texture argument"));
+      NanThrowError("Bad texture argument");
 
     pixels = obj->GetIndexedPropertiesExternalArrayData();
   }
@@ -85,7 +85,7 @@ inline Type* getArrayData(Local<Value> arg, int* num = NULL) {
       data = reinterpret_cast<Type*>(arg->ToObject()->GetIndexedPropertiesExternalArrayData());
     }
     else
-      ThrowException(JS_STR("Bad array argument"));
+      NanThrowError("Bad array argument");
   }
 
   return data;
