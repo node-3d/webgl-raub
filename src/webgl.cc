@@ -500,7 +500,7 @@ NAN_METHOD(GetShaderInfoLog) {
   char Error[1024];
   glGetShaderInfoLog(id, 1024, &Len, Error);
 
-  NanReturnValue(String::New(Error));
+  NanReturnValue(NanNew<String>(Error));
 }
 
 
@@ -1382,7 +1382,7 @@ NAN_METHOD(GetShaderSource) {
   GLchar *source=new GLchar[len];
   glGetShaderSource(shader, len, NULL, source);
 
-  Local<String> str=String::New(source);
+  Local<String> str = NanNew<String>(source);
   delete source;
 
   NanReturnValue(str);
@@ -1660,7 +1660,7 @@ NAN_METHOD(GetProgramInfoLog) {
   char Error[1024];
   glGetProgramInfoLog(program, 1024, &Len, Error);
 
-  NanReturnValue(String::New(Error));
+  NanReturnValue(NanNew<String>(Error));
 }
 
 NAN_METHOD(GetRenderbufferParameter) {

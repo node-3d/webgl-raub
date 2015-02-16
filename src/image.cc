@@ -46,7 +46,7 @@ void Image::Initialize (Handle<Object> target) {
   proto->SetAccessor(JS_STR("src"), SrcGetter, SrcSetter);
   //proto->SetAccessor(JS_STR("onload"), NULL, OnloadSetter);
 
-  target->Set(NanSymbol("Image"), ctor->GetFunction());
+  target->Set(NanNew<String>("Image"), ctor->GetFunction());
 
   FreeImage_Initialise(true);
 }
@@ -158,7 +158,7 @@ NAN_SETTER(Image::SrcSetter) {
                                                        (int) num_bytes);
 
   // emit event
-  Local<Value> emit_v = args.This()->Get(NanSymbol("emit"));
+  Local<Value> emit_v = args.This()->Get(NanNew<String>("emit"));
   assert(emit_v->IsFunction());
   Local<Function> emit_f = emit_v.As<Function>();
 
