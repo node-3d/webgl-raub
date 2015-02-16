@@ -1748,7 +1748,7 @@ NAN_METHOD(GetExtension) {
 
   char *ext=strcasestr(extensions, sname);
 
-  if(!ext) NanReturnValue(Undefined());
+  if(!ext) NanReturnValue(NanUndefined());
   NanReturnValue(JS_STR(ext, (int)::strlen(sname)));
 }
 
