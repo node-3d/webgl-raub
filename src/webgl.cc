@@ -314,7 +314,7 @@ NAN_METHOD(BindAttribLocation) {
 NAN_METHOD(GetError) {
   NanScope();
 
-  NanReturnValue(Number::New(glGetError()));
+  NanReturnValue(NanNew<Number>(glGetError()));
 }
 
 
@@ -397,7 +397,7 @@ NAN_METHOD(GetAttribLocation) {
   int program = args[0]->Int32Value();
   String::Utf8Value name(args[1]);
 
-  NanReturnValue(Number::New(glGetAttribLocation(program, *name)));
+  NanReturnValue(NanNew<Number>(glGetAttribLocation(program, *name)));
 }
 
 
@@ -431,7 +431,7 @@ NAN_METHOD(CreateShader) {
   cout<<"createShader "<<shader<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_SHADER, shader);
-  NanReturnValue(Number::New(shader));
+  NanReturnValue(NanNew<Number>(shader));
 }
 
 
@@ -512,7 +512,7 @@ NAN_METHOD(CreateProgram) {
   cout<<"createProgram "<<program<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_PROGRAM, program);
-  NanReturnValue(Number::New(program));
+  NanReturnValue(NanNew<Number>(program));
 }
 
 
@@ -620,7 +620,7 @@ NAN_METHOD(CreateTexture) {
   cout<<"createTexture "<<texture<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_TEXTURE, texture);
-  NanReturnValue(Number::New(texture));
+  NanReturnValue(NanNew<Number>(texture));
 }
 
 
@@ -705,7 +705,7 @@ NAN_METHOD(CreateBuffer) {
   cout<<"createBuffer "<<buffer<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_BUFFER, buffer);
-  NanReturnValue(Number::New(buffer));
+  NanReturnValue(NanNew<Number>(buffer));
 }
 
 NAN_METHOD(BindBuffer) {
@@ -728,7 +728,7 @@ NAN_METHOD(CreateFramebuffer) {
   cout<<"createFrameBuffer "<<buffer<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_FRAMEBUFFER, buffer);
-  NanReturnValue(Number::New(buffer));
+  NanReturnValue(NanNew<Number>(buffer));
 }
 
 
@@ -1234,7 +1234,7 @@ NAN_METHOD(CreateRenderbuffer) {
   cout<<"createRenderBuffer "<<renderbuffers<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_RENDERBUFFER, renderbuffers);
-  NanReturnValue(Number::New(renderbuffers));
+  NanReturnValue(NanNew<Number>(renderbuffers));
 }
 
 NAN_METHOD(DeleteBuffer) {
@@ -1439,7 +1439,7 @@ NAN_METHOD(GetTexParameter) {
   GLint param_value=0;
   glGetTexParameteriv(target, pname, &param_value);
 
-  NanReturnValue(Number::New(param_value));
+  NanReturnValue(NanNew<Number>(param_value));
 }
 
 NAN_METHOD(GetActiveAttrib) {
