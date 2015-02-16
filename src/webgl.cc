@@ -111,7 +111,7 @@ NAN_METHOD(Uniform1f) {
   float x = (float) args[1]->NumberValue();
 
   glUniform1f(location, x);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform2f) {
@@ -122,7 +122,7 @@ NAN_METHOD(Uniform2f) {
   float y = (float) args[2]->NumberValue();
 
   glUniform2f(location, x, y);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform3f) {
@@ -134,7 +134,7 @@ NAN_METHOD(Uniform3f) {
   float z = (float) args[3]->NumberValue();
 
   glUniform3f(location, x, y, z);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform4f) {
@@ -147,7 +147,7 @@ NAN_METHOD(Uniform4f) {
   float w = (float) args[4]->NumberValue();
 
   glUniform4f(location, x, y, z, w);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform1i) {
@@ -157,7 +157,7 @@ NAN_METHOD(Uniform1i) {
   int x = args[1]->Int32Value();
 
   glUniform1i(location, x);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform2i) {
@@ -168,7 +168,7 @@ NAN_METHOD(Uniform2i) {
   int y = args[2]->Int32Value();
 
   glUniform2i(location, x, y);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform3i) {
@@ -180,7 +180,7 @@ NAN_METHOD(Uniform3i) {
   int z = args[3]->Int32Value();
 
   glUniform3i(location, x, y, z);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform4i) {
@@ -193,7 +193,7 @@ NAN_METHOD(Uniform4i) {
   int w = args[4]->Int32Value();
 
   glUniform4i(location, x, y, z, w);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform1fv) {
@@ -203,7 +203,7 @@ NAN_METHOD(Uniform1fv) {
   int num=0;
   GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
   glUniform1fv(location, num, ptr);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform2fv) {
@@ -215,7 +215,7 @@ NAN_METHOD(Uniform2fv) {
   num /= 2;
 
   glUniform2fv(location, num, ptr);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform3fv) {
@@ -227,7 +227,7 @@ NAN_METHOD(Uniform3fv) {
   num /= 3;
 
   glUniform3fv(location, num, ptr);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform4fv) {
@@ -239,7 +239,7 @@ NAN_METHOD(Uniform4fv) {
   num /= 4;
 
   glUniform4fv(location, num, ptr);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform1iv) {
@@ -250,7 +250,7 @@ NAN_METHOD(Uniform1iv) {
   GLint *ptr=getArrayData<GLint>(args[1],&num);
 
   glUniform1iv(location, num, ptr);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform2iv) {
@@ -262,7 +262,7 @@ NAN_METHOD(Uniform2iv) {
   num /= 2;
 
   glUniform2iv(location, num, ptr);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform3iv) {
@@ -273,7 +273,7 @@ NAN_METHOD(Uniform3iv) {
   GLint *ptr=getArrayData<GLint>(args[1],&num);
   num /= 3;
   glUniform3iv(location, num, ptr);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Uniform4iv) {
@@ -284,7 +284,7 @@ NAN_METHOD(Uniform4iv) {
   GLint *ptr=getArrayData<GLint>(args[1],&num);
   num /= 4;
   glUniform4iv(location, num, ptr);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(PixelStorei) {
@@ -295,7 +295,7 @@ NAN_METHOD(PixelStorei) {
 
   glPixelStorei(pname,param);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(BindAttribLocation) {
@@ -307,7 +307,7 @@ NAN_METHOD(BindAttribLocation) {
 
   glBindAttribLocation(program, index, *name);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -327,7 +327,7 @@ NAN_METHOD(DrawArrays) {
 
   glDrawArrays(mode, first, count);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(UniformMatrix2fv) {
@@ -345,7 +345,7 @@ NAN_METHOD(UniformMatrix2fv) {
 
   glUniformMatrix2fv(location, count / 4, transpose, data);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(UniformMatrix3fv) {
@@ -362,7 +362,7 @@ NAN_METHOD(UniformMatrix3fv) {
 
   glUniformMatrix3fv(location, count / 9, transpose, data);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(UniformMatrix4fv) {
@@ -379,7 +379,7 @@ NAN_METHOD(UniformMatrix4fv) {
 
   glUniformMatrix4fv(location, count / 16, transpose, data);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(GenerateMipmap) {
@@ -388,7 +388,7 @@ NAN_METHOD(GenerateMipmap) {
   GLint target = args[0]->Int32Value();
   glGenerateMipmap(target);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(GetAttribLocation) {
@@ -406,7 +406,7 @@ NAN_METHOD(DepthFunc) {
 
   glDepthFunc(args[0]->Int32Value());
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -420,7 +420,7 @@ NAN_METHOD(Viewport) {
 
   glViewport(x, y, width, height);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(CreateShader) {
@@ -447,7 +447,7 @@ NAN_METHOD(ShaderSource) {
 
   glShaderSource  (id, 1, codes, &length);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -456,7 +456,7 @@ NAN_METHOD(CompileShader) {
 
   glCompileShader(args[0]->Int32Value());
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(FrontFace) {
@@ -464,7 +464,7 @@ NAN_METHOD(FrontFace) {
 
   glFrontFace(args[0]->Int32Value());
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -524,7 +524,7 @@ NAN_METHOD(AttachShader) {
 
   glAttachShader(program, shader);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -533,7 +533,7 @@ NAN_METHOD(LinkProgram) {
 
   glLinkProgram(args[0]->Int32Value());
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -582,7 +582,7 @@ NAN_METHOD(ClearColor) {
 
   glClearColor(red, green, blue, alpha);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -593,21 +593,21 @@ NAN_METHOD(ClearDepth) {
 
   glClearDepth(depth);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Disable) {
   NanScope();
 
   glDisable(args[0]->Int32Value());
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Enable) {
   NanScope();
 
   glEnable(args[0]->Int32Value());
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -631,7 +631,7 @@ NAN_METHOD(BindTexture) {
   int texture = args[1]->IsNull() ? 0 : args[1]->Int32Value();
 
   glBindTexture(target, texture);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -650,7 +650,7 @@ NAN_METHOD(TexImage2D) {
 
   glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -663,7 +663,7 @@ NAN_METHOD(TexParameteri) {
 
   glTexParameteri(target, pname, param);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(TexParameterf) {
@@ -675,7 +675,7 @@ NAN_METHOD(TexParameterf) {
 
   glTexParameterf(target, pname, param);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -684,7 +684,7 @@ NAN_METHOD(Clear) {
 
   glClear(args[0]->Int32Value());
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -693,7 +693,7 @@ NAN_METHOD(UseProgram) {
 
   glUseProgram(args[0]->Int32Value());
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(CreateBuffer) {
@@ -715,7 +715,7 @@ NAN_METHOD(BindBuffer) {
   int buffer = args[1]->Uint32Value();
   glBindBuffer(target,buffer);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -740,7 +740,7 @@ NAN_METHOD(BindFramebuffer) {
 
   glBindFramebuffer(target, buffer);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -755,7 +755,7 @@ NAN_METHOD(FramebufferTexture2D) {
 
   glFramebufferTexture2D(target, attachment, textarget, texture, level);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -777,7 +777,7 @@ NAN_METHOD(BufferData) {
     GLenum usage = args[2]->Int32Value();
     glBufferData(target, size, NULL, usage);
   }
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -794,7 +794,7 @@ NAN_METHOD(BufferSubData) {
 
   glBufferSubData(target, offset, size, data);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -805,7 +805,7 @@ NAN_METHOD(BlendEquation) {
 
   glBlendEquation(mode);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -817,7 +817,7 @@ NAN_METHOD(BlendFunc) {
 
   glBlendFunc(sfactor,dfactor);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -826,7 +826,7 @@ NAN_METHOD(EnableVertexAttribArray) {
 
   glEnableVertexAttribArray(args[0]->Int32Value());
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -843,7 +843,7 @@ NAN_METHOD(VertexAttribPointer) {
   //    printf("VertexAttribPointer %d %d %d %d %d %d\n", indx, size, type, normalized, stride, offset);
   glVertexAttribPointer(indx, size, type, normalized, stride, (const GLvoid *)offset);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -851,7 +851,7 @@ NAN_METHOD(ActiveTexture) {
   NanScope();
 
   glActiveTexture(args[0]->Int32Value());
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
@@ -863,20 +863,20 @@ NAN_METHOD(DrawElements) {
   int type = args[2]->Int32Value();
   GLvoid *offset = reinterpret_cast<GLvoid*>(args[3]->Uint32Value());
   glDrawElements(mode, count, type, offset);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 
 NAN_METHOD(Flush) {
   NanScope();
   glFlush();
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Finish) {
   NanScope();
   glFinish();
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(VertexAttrib1f) {
@@ -886,7 +886,7 @@ NAN_METHOD(VertexAttrib1f) {
   float x = (float) args[1]->NumberValue();
 
   glVertexAttrib1f(indx, x);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(VertexAttrib2f) {
@@ -897,7 +897,7 @@ NAN_METHOD(VertexAttrib2f) {
   float y = (float) args[2]->NumberValue();
 
   glVertexAttrib2f(indx, x, y);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(VertexAttrib3f) {
@@ -909,7 +909,7 @@ NAN_METHOD(VertexAttrib3f) {
   float z = (float) args[3]->NumberValue();
 
   glVertexAttrib3f(indx, x, y, z);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(VertexAttrib4f) {
@@ -922,7 +922,7 @@ NAN_METHOD(VertexAttrib4f) {
   float w = (float) args[4]->NumberValue();
 
   glVertexAttrib4f(indx, x, y, z, w);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(VertexAttrib1fv) {
@@ -932,7 +932,7 @@ NAN_METHOD(VertexAttrib1fv) {
   GLfloat *data = getArrayData<GLfloat>(args[1]);
   glVertexAttrib1fv(indx, data);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(VertexAttrib2fv) {
@@ -942,7 +942,7 @@ NAN_METHOD(VertexAttrib2fv) {
   GLfloat *data = getArrayData<GLfloat>(args[1]);
   glVertexAttrib2fv(indx, data);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(VertexAttrib3fv) {
@@ -952,7 +952,7 @@ NAN_METHOD(VertexAttrib3fv) {
   GLfloat *data = getArrayData<GLfloat>(args[1]);
   glVertexAttrib3fv(indx, data);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(VertexAttrib4fv) {
@@ -962,7 +962,7 @@ NAN_METHOD(VertexAttrib4fv) {
   GLfloat *data = getArrayData<GLfloat>(args[1]);
   glVertexAttrib4fv(indx, data);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(BlendColor) {
@@ -974,7 +974,7 @@ NAN_METHOD(BlendColor) {
   GLclampf a= (float) args[3]->NumberValue();
 
   glBlendColor(r,g,b,a);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(BlendEquationSeparate) {
@@ -984,7 +984,7 @@ NAN_METHOD(BlendEquationSeparate) {
   GLenum modeAlpha= args[1]->Int32Value();
 
   glBlendEquationSeparate(modeRGB,modeAlpha);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(BlendFuncSeparate) {
@@ -996,7 +996,7 @@ NAN_METHOD(BlendFuncSeparate) {
   GLenum dstAlpha= args[3]->Int32Value();
 
   glBlendFuncSeparate(srcRGB,dstRGB,srcAlpha,dstAlpha);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(ClearStencil) {
@@ -1005,7 +1005,7 @@ NAN_METHOD(ClearStencil) {
   GLint s = args[0]->Int32Value();
 
   glClearStencil(s);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(ColorMask) {
@@ -1017,7 +1017,7 @@ NAN_METHOD(ColorMask) {
   GLboolean a = args[3]->BooleanValue();
 
   glColorMask(r,g,b,a);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(CopyTexImage2D) {
@@ -1033,7 +1033,7 @@ NAN_METHOD(CopyTexImage2D) {
   GLint border = args[7]->Int32Value();
 
   glCopyTexImage2D( target, level, internalformat, x, y, width, height, border);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(CopyTexSubImage2D) {
@@ -1049,7 +1049,7 @@ NAN_METHOD(CopyTexSubImage2D) {
   GLsizei height = args[7]->Int32Value();
 
   glCopyTexSubImage2D( target, level, xoffset, yoffset, x, y, width, height);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(CullFace) {
@@ -1058,7 +1058,7 @@ NAN_METHOD(CullFace) {
   GLenum mode = args[0]->Int32Value();
 
   glCullFace(mode);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(DepthMask) {
@@ -1067,7 +1067,7 @@ NAN_METHOD(DepthMask) {
   GLboolean flag = args[0]->BooleanValue();
 
   glDepthMask(flag);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(DepthRange) {
@@ -1077,7 +1077,7 @@ NAN_METHOD(DepthRange) {
   GLclampf zFar = (float) args[1]->NumberValue();
 
   glDepthRangef(zNear, zFar);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(DisableVertexAttribArray) {
@@ -1086,7 +1086,7 @@ NAN_METHOD(DisableVertexAttribArray) {
   GLuint index = args[0]->Int32Value();
 
   glDisableVertexAttribArray(index);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Hint) {
@@ -1096,7 +1096,7 @@ NAN_METHOD(Hint) {
   GLenum mode = args[1]->Int32Value();
 
   glHint(target, mode);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(IsEnabled) {
@@ -1105,7 +1105,7 @@ NAN_METHOD(IsEnabled) {
   GLenum cap = args[0]->Int32Value();
 
   bool ret=glIsEnabled(cap)!=0;
-  NanReturnValue(Boolean::New(ret));
+  NanReturnValue(NanNew<Boolean>(ret));
 }
 
 NAN_METHOD(LineWidth) {
@@ -1114,7 +1114,7 @@ NAN_METHOD(LineWidth) {
   GLfloat width = (float) args[0]->NumberValue();
 
   glLineWidth(width);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(PolygonOffset) {
@@ -1124,7 +1124,7 @@ NAN_METHOD(PolygonOffset) {
   GLfloat units = (float) args[1]->NumberValue();
 
   glPolygonOffset(factor, units);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(SampleCoverage) {
@@ -1134,7 +1134,7 @@ NAN_METHOD(SampleCoverage) {
   GLboolean invert = args[1]->BooleanValue();
 
   glSampleCoverage(value, invert);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(Scissor) {
@@ -1146,7 +1146,7 @@ NAN_METHOD(Scissor) {
   GLsizei height = args[3]->Int32Value();
 
   glScissor(x, y, width, height);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(StencilFunc) {
@@ -1157,7 +1157,7 @@ NAN_METHOD(StencilFunc) {
   GLuint mask = args[2]->Int32Value();
 
   glStencilFunc(func, ref, mask);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(StencilFuncSeparate) {
@@ -1169,7 +1169,7 @@ NAN_METHOD(StencilFuncSeparate) {
   GLuint mask = args[3]->Int32Value();
 
   glStencilFuncSeparate(face, func, ref, mask);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(StencilMask) {
@@ -1178,7 +1178,7 @@ NAN_METHOD(StencilMask) {
   GLuint mask = args[0]->Uint32Value();
 
   glStencilMask(mask);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(StencilMaskSeparate) {
@@ -1188,7 +1188,7 @@ NAN_METHOD(StencilMaskSeparate) {
   GLuint mask = args[1]->Uint32Value();
 
   glStencilMaskSeparate(face, mask);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(StencilOp) {
@@ -1199,7 +1199,7 @@ NAN_METHOD(StencilOp) {
   GLenum zpass = args[2]->Int32Value();
 
   glStencilOp(fail, zfail, zpass);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(StencilOpSeparate) {
@@ -1211,7 +1211,7 @@ NAN_METHOD(StencilOpSeparate) {
   GLenum zpass = args[3]->Int32Value();
 
   glStencilOpSeparate(face, fail, zfail, zpass);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(BindRenderbuffer) {
@@ -1222,7 +1222,7 @@ NAN_METHOD(BindRenderbuffer) {
 
   glBindRenderbuffer(target, buffer);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(CreateRenderbuffer) {
@@ -1243,7 +1243,7 @@ NAN_METHOD(DeleteBuffer) {
   GLuint buffer = args[0]->Uint32Value();
 
   glDeleteBuffers(1,&buffer);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(DeleteFramebuffer) {
@@ -1252,7 +1252,7 @@ NAN_METHOD(DeleteFramebuffer) {
   GLuint buffer = args[0]->Uint32Value();
 
   glDeleteFramebuffers(1,&buffer);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(DeleteProgram) {
@@ -1261,7 +1261,7 @@ NAN_METHOD(DeleteProgram) {
   GLuint program = args[0]->Uint32Value();
 
   glDeleteProgram(program);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(DeleteRenderbuffer) {
@@ -1270,7 +1270,7 @@ NAN_METHOD(DeleteRenderbuffer) {
   GLuint renderbuffer = args[0]->Uint32Value();
 
   glDeleteRenderbuffers(1, &renderbuffer);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(DeleteShader) {
@@ -1279,7 +1279,7 @@ NAN_METHOD(DeleteShader) {
   GLuint shader = args[0]->Uint32Value();
 
   glDeleteShader(shader);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(DeleteTexture) {
@@ -1288,7 +1288,7 @@ NAN_METHOD(DeleteTexture) {
   GLuint texture = args[0]->Uint32Value();
 
   glDeleteTextures(1,&texture);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(DetachShader) {
@@ -1298,7 +1298,7 @@ NAN_METHOD(DetachShader) {
   GLuint shader = args[1]->Uint32Value();
 
   glDetachShader(program, shader);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(FramebufferRenderbuffer) {
@@ -1310,7 +1310,7 @@ NAN_METHOD(FramebufferRenderbuffer) {
   GLuint renderbuffer = args[3]->Uint32Value();
 
   glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(GetVertexAttribOffset) {
@@ -1369,7 +1369,7 @@ NAN_METHOD(RenderbufferStorage) {
   GLsizei height = args[3]->Uint32Value();
 
   glRenderbufferStorage(target, internalformat, width, height);
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(GetShaderSource) {
@@ -1393,7 +1393,7 @@ NAN_METHOD(ValidateProgram) {
 
   glValidateProgram(args[0]->Int32Value());
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(TexSubImage2D) {
@@ -1411,7 +1411,7 @@ NAN_METHOD(TexSubImage2D) {
 
   glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(ReadPixels) {
@@ -1427,7 +1427,7 @@ NAN_METHOD(ReadPixels) {
 
   glReadPixels(x, y, width, height, format, type, pixels);
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(GetTexParameter) {
@@ -1626,7 +1626,7 @@ NAN_METHOD(GetParameter) {
   }
   }
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(GetBufferParameter) {
@@ -1679,7 +1679,7 @@ NAN_METHOD(GetUniform) {
 
   GLuint program = args[0]->Int32Value();
   GLint location = args[1]->Int32Value();
-  if(location < 0 ) NanReturnValue(Undefined());
+  if(location < 0 ) NanReturnValue(NanUndefined());
 
   float data[16]; // worst case scenario is 16 floats
 
@@ -1727,7 +1727,7 @@ NAN_METHOD(GetVertexAttrib) {
     NanThrowError("GetVertexAttrib: Invalid Enum");
   }
 
-  NanReturnValue(Undefined());
+  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(GetSupportedExtensions) {
