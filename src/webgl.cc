@@ -1327,7 +1327,7 @@ NAN_METHOD(GetVertexAttribOffset) {
 NAN_METHOD(IsBuffer) {
   NanScope();
 
-  NanReturnValue(Boolean::New(glIsBuffer(args[0]->Uint32Value())!=0));
+  NanReturnValue(NanNew<Boolean>(glIsBuffer(args[0]->Uint32Value())!=0));
 }
 
 NAN_METHOD(IsFramebuffer) {

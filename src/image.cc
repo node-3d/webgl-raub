@@ -208,7 +208,7 @@ NAN_METHOD(Image::save) {
   }
   bool ret=FreeImage_Save(format, image, *filename)==1;
   FreeImage_Unload(image);
-  NanReturnValue(Boolean::New(ret));
+  NanReturnValue(NanNew<Boolean>(ret));
 }
 
 Image::~Image () {
