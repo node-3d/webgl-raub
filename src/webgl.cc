@@ -1454,7 +1454,7 @@ NAN_METHOD(GetActiveAttrib) {
   GLsizei size;
   glGetActiveAttrib(program, index, 1024, &length, &size, &type, name);
 
-  Local<Array> activeInfo = Array::New(3);
+  Local<Array> activeInfo = NanNew<Array>(3);
   activeInfo->Set(JS_STR("size"), JS_INT(size));
   activeInfo->Set(JS_STR("type"), JS_INT((int)type));
   activeInfo->Set(JS_STR("name"), JS_STR(name));
@@ -1474,7 +1474,7 @@ NAN_METHOD(GetActiveUniform) {
   GLsizei size;
   glGetActiveUniform(program, index, 1024, &length, &size, &type, name);
 
-  Local<Array> activeInfo = Array::New(3);
+  Local<Array> activeInfo = NanNew<Array>(3);
   activeInfo->Set(JS_STR("size"), JS_INT(size));
   activeInfo->Set(JS_STR("type"), JS_INT((int)type));
   activeInfo->Set(JS_STR("name"), JS_STR(name));
@@ -1491,7 +1491,7 @@ NAN_METHOD(GetAttachedShaders) {
   GLsizei count;
   glGetAttachedShaders(program, 1024, &count, shaders);
 
-  Local<Array> shadersArr = Array::New(count);
+  Local<Array> shadersArr = NanNew<Array>(count);
   for(int i=0;i<count;i++)
     shadersArr->Set(i, JS_INT((int)shaders[i]));
 
@@ -1550,7 +1550,7 @@ NAN_METHOD(GetParameter) {
     GLint params[2];
     ::glGetIntegerv(name, params);
 
-    Local<Array> arr=Array::New(2);
+    Local<Array> arr=NanNew<Array>(2);
     arr->Set(0,JS_INT(params[0]));
     arr->Set(1,JS_INT(params[1]));
     NanReturnValue(arr);
@@ -1562,7 +1562,7 @@ NAN_METHOD(GetParameter) {
     GLint params[4];
     ::glGetIntegerv(name, params);
 
-    Local<Array> arr=Array::New(4);
+    Local<Array> arr=NanNew<Array>(4);
     arr->Set(0,JS_INT(params[0]));
     arr->Set(1,JS_INT(params[1]));
     arr->Set(2,JS_INT(params[2]));
@@ -1576,7 +1576,7 @@ NAN_METHOD(GetParameter) {
     // return a float[2]
     GLfloat params[2];
     ::glGetFloatv(name, params);
-    Local<Array> arr=Array::New(2);
+    Local<Array> arr=NanNew<Array>(2);
     arr->Set(0,JS_FLOAT(params[0]));
     arr->Set(1,JS_FLOAT(params[1]));
     NanReturnValue(arr);
@@ -1587,7 +1587,7 @@ NAN_METHOD(GetParameter) {
     // return a float[4]
     GLfloat params[4];
     ::glGetFloatv(name, params);
-    Local<Array> arr=Array::New(4);
+    Local<Array> arr=NanNew<Array>(4);
     arr->Set(0,JS_FLOAT(params[0]));
     arr->Set(1,JS_FLOAT(params[1]));
     arr->Set(2,JS_FLOAT(params[2]));
@@ -1599,7 +1599,7 @@ NAN_METHOD(GetParameter) {
     // return a boolean[4]
     GLboolean params[4];
     ::glGetBooleanv(name, params);
-    Local<Array> arr=Array::New(4);
+    Local<Array> arr=NanNew<Array>(4);
     arr->Set(0,JS_BOOL(params[0]==1));
     arr->Set(1,JS_BOOL(params[1]==1));
     arr->Set(2,JS_BOOL(params[2]==1));
@@ -1685,7 +1685,7 @@ NAN_METHOD(GetUniform) {
 
   glGetUniformfv(program, location, data);
 
-  Local<Array> arr=Array::New(16);
+  Local<Array> arr=NanNew<Array>(16);
   for(int i=0;i<16;i++)
     arr->Set(i,JS_FLOAT(data[i]));
 
@@ -1716,7 +1716,7 @@ NAN_METHOD(GetVertexAttrib) {
   case GL_CURRENT_VERTEX_ATTRIB: {
     float vextex_attribs[4];
     glGetVertexAttribfv(index,pname,vextex_attribs);
-    Local<Array> arr=Array::New(4);
+    Local<Array> arr=NanNew<Array>(4);
     arr->Set(0,JS_FLOAT(vextex_attribs[0]));
     arr->Set(1,JS_FLOAT(vextex_attribs[1]));
     arr->Set(2,JS_FLOAT(vextex_attribs[2]));
