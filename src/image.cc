@@ -32,8 +32,8 @@ void Image::Initialize (Handle<Object> target) {
   NanScope();
 
   // constructor
-  Local<FunctionTemplate> ctor = FunctionTemplate::New(New);
-  NanAssignPersistent(FunctionTemplate, constructor_template, ctor);
+  Local<FunctionTemplate> ctor = NanNew<FunctionTemplate>(New);
+  NanAssignPersistent(constructor_template, ctor);
   ctor->InstanceTemplate()->SetInternalFieldCount(1);
   ctor->SetClassName(JS_STR("Image"));
 
@@ -46,7 +46,7 @@ void Image::Initialize (Handle<Object> target) {
   proto->SetAccessor(JS_STR("src"), SrcGetter, SrcSetter);
   //proto->SetAccessor(JS_STR("onload"), NULL, OnloadSetter);
 
-  target->Set(NanSymbol("Image"), ctor->GetFunction());
+  target->Set(NanNew<String>("Image"), ctor->GetFunction());
 
   FreeImage_Initialise(true);
 }
@@ -158,7 +158,7 @@ NAN_SETTER(Image::SrcSetter) {
                                                        (int) num_bytes);
 
   // emit event
-  Local<Value> emit_v = args.This()->Get(NanSymbol("emit"));
+  Local<Value> emit_v = args.This()->Get(NanNew<String>("emit"));
   assert(emit_v->IsFunction());
   Local<Function> emit_f = emit_v.As<Function>();
 
@@ -208,7 +208,7 @@ NAN_METHOD(Image::save) {
   }
   bool ret=FreeImage_Save(format, image, *filename)==1;
   FreeImage_Unload(image);
-  NanReturnValue(Boolean::New(ret));
+  NanReturnValue(NanNew<Boolean>(ret));
 }
 
 Image::~Image () {
