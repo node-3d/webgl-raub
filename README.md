@@ -12,16 +12,18 @@ Dependencies
 
 Installation
 ============
-node-gyp rebuild
+`npm install node-webgl`
 
-Installation for Windows 7
-==========================
+###Installation Notes for Windows 7
 Beware of the Node.JS distribution you use. The default Node.JS is 32-bit and this means that modules 
 will be compiled by node-gyp with 32-bit settings, which often leads to compilation errors especially
 on 64-bit systems.
 
 So for Windows 7 64-bit, instead of downloading the default Node.JS windows installer, select 'Other release files'.
 This will show you an ftp site for the latest release. Go into x64 folder and download that distribution.
+
+###Installation Notes for OSX
+`brew install anttweakbar freeimage`
 
 Usage
 =====
