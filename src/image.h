@@ -31,7 +31,7 @@ protected:
   virtual ~Image ();
 
 private:
-  static Persistent<FunctionTemplate> constructor_template;
+  static Persistent<Function> constructor_template;
 
   FIBITMAP *image_bmp;
   char *filename;
