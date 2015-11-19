@@ -110,7 +110,7 @@ function getShader(gl, id) {
 
   gl.shaderSource(shader, str);
   gl.compileShader(shader);
-
+  
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     alert(gl.getShaderInfoLog(shader));
     return null;
@@ -167,6 +167,12 @@ function mvPopMatrix() {
 
 function setMatrixUniforms() {
   gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
+             var error = gl.getError();
+if(error!==0){
+      console.log("Error occured",gl.viewportWidth+", "+gl.viewportHeight, error);
+  }
+  
+  
   gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 }
 
@@ -355,6 +361,8 @@ function initBuffers() {
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
   cubeVertexIndexBuffer.itemSize = 1;
   cubeVertexIndexBuffer.numItems = 36;
+  
+  console.log(gl.getError());
 }
 
 function initBuffers2() {
@@ -402,8 +410,12 @@ function initBuffers2() {
 }
 
 function drawScene() {
+        var error = gl.getError();
+    
   gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+
 
   mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 
@@ -414,6 +426,8 @@ function drawScene() {
   mat4.rotate(mvMatrix, degToRad(xRot), [1, 0, 0]);
   mat4.rotate(mvMatrix, degToRad(yRot), [0, 1, 0]);
 
+
+
   gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
   gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 
@@ -421,13 +435,23 @@ function drawScene() {
   gl.enable(gl.BLEND);
   gl.disable(gl.DEPTH_TEST);
 
+
+
   gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesColorBuffer);
   gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 4, gl.FLOAT, false, 0, 0);
   
+  
   gl.enable(gl.CULL_FACE);
+  
+
   gl.cullFace(gl.FRONT);
+  
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+  
+
   setMatrixUniforms();
+  
+  
   gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 
   gl.cullFace(gl.BACK);
@@ -436,6 +460,7 @@ function drawScene() {
   // cleanup GL state
   gl.bindBuffer(gl.ARRAY_BUFFER, null);
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
 }
 
 
@@ -495,7 +520,7 @@ function initAntTweakBar(canvas) {
   ATB.Define(" GLOBAL help='This example shows how to integrate AntTweakBar with GLFW and OpenGL.' "); // Message added to the help bar.
   ATB.WindowSize(canvas.width, canvas.height);
 
-  twBar=new ATB.NewBar("Cube");
+  twBar=ATB.NewBar("Cube");
   twBar.AddVar("z", ATB.TYPE_FLOAT, {
     getter: function(data){ return z},
     setter: function(val,data) { z=val; },
@@ -549,7 +574,7 @@ function webGLStart() {
   //initBuffers2();
   initAntTweakBar(canvas);
 
-  gl.clearColor(0, 0, 0, 1);
+  gl.clearColor(255, 0, 0, 1);
   gl.enable(gl.DEPTH_TEST);
 
   tick();

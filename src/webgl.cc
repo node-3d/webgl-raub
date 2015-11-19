@@ -12,6 +12,9 @@
   #define  strcasestr(s, t) strstr(strupr(s), strupr(t))
 #endif
 
+#define CHECK_ARRAY_BUFFER(val) if(!val->IsArrayBufferView()) \
+        {Nan::ThrowTypeError("Only support array buffer"); return;}
+
 namespace webgl {
 
 using namespace node;
@@ -31,42 +34,9 @@ enum GLObjectType {
 void registerGLObj(GLObjectType type, GLuint obj);
 void unregisterGLObj(GLuint obj);
 
-v8::Handle<v8::Value> ThrowError(const char* msg) {
-    NanThrowError(NanNew<String>(msg));
-}
-
 // A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.
 static GLuint ToGLuint(const void* ptr) {
   return static_cast<GLuint>(reinterpret_cast<size_t>(ptr));
-}
-
-static int SizeOfArrayElementForType(v8::ExternalArrayType type) {
-  switch (type) {
-  case v8::kExternalByteArray:
-  case v8::kExternalUnsignedByteArray:
-    return 1;
-  case v8::kExternalShortArray:
-  case v8::kExternalUnsignedShortArray:
-    return 2;
-  case v8::kExternalIntArray:
-  case v8::kExternalUnsignedIntArray:
-  case v8::kExternalFloatArray:
-    return 4;
-  default:
-    return 0;
-  }
-}
-
-inline void *getImageData(Local<Value> arg) {
-  void *pixels = NULL;
-  if (!arg->IsNull()) {
-    Local<Object> obj = Local<Object>::Cast(arg);
-    if (!obj->IsObject())
-      NanThrowError("Bad texture argument");
-
-    pixels = obj->GetIndexedPropertiesExternalArrayData();
-  }
-  return pixels;
 }
 
 template<typename Type>
@@ -76,370 +46,390 @@ inline Type* getArrayData(Local<Value> arg, int* num = NULL) {
 
   if(!arg->IsNull()) {
     if(arg->IsArray()) {
+      Nan::ThrowError("Not support array type");
+      /*
       Local<Array> arr = Local<Array>::Cast(arg);
       if(num) *num=arr->Length();
-      data = reinterpret_cast<Type*>(arr->GetIndexedPropertiesExternalArrayData());
+      data = reinterpret_cast<Type*>(arr->GetIndexedPropertiesExternalArrayData());*/
     }
     else if(arg->IsObject()) {
-      if(num) *num = arg->ToObject()->GetIndexedPropertiesExternalArrayDataLength();
-      data = reinterpret_cast<Type*>(arg->ToObject()->GetIndexedPropertiesExternalArrayData());
+      Local<ArrayBufferView> arr = Local<ArrayBufferView>::Cast(arg);
+      if(num) *num=arr->ByteLength()/sizeof(Type);
+      data = reinterpret_cast<Type*>(arr->Buffer()->GetContents().Data());
     }
     else
-      NanThrowError("Bad array argument");
+      Nan::ThrowError("Bad array argument");
   }
 
   return data;
 }
 
+inline void *getImageData(Local<Value> arg) {
+  void *pixels = NULL;
+  if (!arg->IsNull()) {
+    Local<Object> obj = Local<Object>::Cast(arg);
+    if (!obj->IsObject()){
+      Nan::ThrowError("Bad texture argument");
+    }else if(obj->IsArrayBufferView()){
+        int num;
+        
+        pixels = getArrayData<BYTE>(obj, &num);
+    }else{
+        pixels = node::Buffer::Data(Nan::Get(obj, JS_STR("data")).ToLocalChecked());
+    }
+  }
+  return pixels;
+}
+
 NAN_METHOD(Init) {
-  NanScope();
+  Nan::HandleScope scope;
   GLenum err = glewInit();
   if (GLEW_OK != err)
   {
     /* Problem: glewInit failed, something is seriously wrong. */
     fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-    NanReturnValue(JS_INT(-1));
-  }
-  //fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
-  NanReturnValue(JS_INT(0));
+    info.GetReturnValue().Set(JS_INT(-1));
+  }else{
+    //fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+    info.GetReturnValue().Set(JS_INT(0));  
+  } 
+  
 }
 
 NAN_METHOD(Uniform1f) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
-  float x = (float) args[1]->NumberValue();
+  int location = info[0]->Int32Value();
+  float x = (float) info[1]->NumberValue();
 
   glUniform1f(location, x);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform2f) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
-  float x = (float) args[1]->NumberValue();
-  float y = (float) args[2]->NumberValue();
+  int location = info[0]->Int32Value();
+  float x = (float) info[1]->NumberValue();
+  float y = (float) info[2]->NumberValue();
 
   glUniform2f(location, x, y);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform3f) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
-  float x = (float) args[1]->NumberValue();
-  float y = (float) args[2]->NumberValue();
-  float z = (float) args[3]->NumberValue();
+  int location = info[0]->Int32Value();
+  float x = (float) info[1]->NumberValue();
+  float y = (float) info[2]->NumberValue();
+  float z = (float) info[3]->NumberValue();
 
   glUniform3f(location, x, y, z);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform4f) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
-  float x = (float) args[1]->NumberValue();
-  float y = (float) args[2]->NumberValue();
-  float z = (float) args[3]->NumberValue();
-  float w = (float) args[4]->NumberValue();
+  int location = info[0]->Int32Value();
+  float x = (float) info[1]->NumberValue();
+  float y = (float) info[2]->NumberValue();
+  float z = (float) info[3]->NumberValue();
+  float w = (float) info[4]->NumberValue();
 
   glUniform4f(location, x, y, z, w);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform1i) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
-  int x = args[1]->Int32Value();
+  int location = info[0]->Int32Value();
+  int x = info[1]->Int32Value();
 
   glUniform1i(location, x);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform2i) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
-  int x = args[1]->Int32Value();
-  int y = args[2]->Int32Value();
+  int location = info[0]->Int32Value();
+  int x = info[1]->Int32Value();
+  int y = info[2]->Int32Value();
 
   glUniform2i(location, x, y);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform3i) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
-  int x = args[1]->Int32Value();
-  int y = args[2]->Int32Value();
-  int z = args[3]->Int32Value();
+  int location = info[0]->Int32Value();
+  int x = info[1]->Int32Value();
+  int y = info[2]->Int32Value();
+  int z = info[3]->Int32Value();
 
   glUniform3i(location, x, y, z);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform4i) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
-  int x = args[1]->Int32Value();
-  int y = args[2]->Int32Value();
-  int z = args[3]->Int32Value();
-  int w = args[4]->Int32Value();
+  int location = info[0]->Int32Value();
+  int x = info[1]->Int32Value();
+  int y = info[2]->Int32Value();
+  int z = info[3]->Int32Value();
+  int w = info[4]->Int32Value();
 
   glUniform4i(location, x, y, z, w);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform1fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
+  int location = info[0]->Int32Value();
   int num=0;
-  GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
+  GLfloat *ptr=getArrayData<GLfloat>(info[1],&num);
   glUniform1fv(location, num, ptr);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform2fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
+  int location = info[0]->Int32Value();
   int num=0;
-  GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
+  GLfloat *ptr=getArrayData<GLfloat>(info[1],&num);
   num /= 2;
 
   glUniform2fv(location, num, ptr);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform3fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
+  int location = info[0]->Int32Value();
   int num=0;
-  GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
+  GLfloat *ptr=getArrayData<GLfloat>(info[1],&num);
   num /= 3;
 
   glUniform3fv(location, num, ptr);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform4fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
+  int location = info[0]->Int32Value();
   int num=0;
-  GLfloat *ptr=getArrayData<GLfloat>(args[1],&num);
+  GLfloat *ptr=getArrayData<GLfloat>(info[1],&num);
   num /= 4;
 
   glUniform4fv(location, num, ptr);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform1iv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
+  int location = info[0]->Int32Value();
   int num=0;
-  GLint *ptr=getArrayData<GLint>(args[1],&num);
+  GLint *ptr=getArrayData<GLint>(info[1],&num);
 
   glUniform1iv(location, num, ptr);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform2iv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
+  int location = info[0]->Int32Value();
   int num=0;
-  GLint *ptr=getArrayData<GLint>(args[1],&num);
+  GLint *ptr=getArrayData<GLint>(info[1],&num);
   num /= 2;
 
   glUniform2iv(location, num, ptr);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform3iv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
+  int location = info[0]->Int32Value();
   int num=0;
-  GLint *ptr=getArrayData<GLint>(args[1],&num);
+  GLint *ptr=getArrayData<GLint>(info[1],&num);
   num /= 3;
   glUniform3iv(location, num, ptr);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Uniform4iv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int location = args[0]->Int32Value();
+  int location = info[0]->Int32Value();
   int num=0;
-  GLint *ptr=getArrayData<GLint>(args[1],&num);
+  GLint *ptr=getArrayData<GLint>(info[1],&num);
   num /= 4;
   glUniform4iv(location, num, ptr);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PixelStorei) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int pname = args[0]->Int32Value();
-  int param = args[1]->Int32Value();
+  int pname = info[0]->Int32Value();
+  int param = info[1]->Int32Value();
 
   glPixelStorei(pname,param);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(BindAttribLocation) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int program = args[0]->Int32Value();
-  int index = args[1]->Int32Value();
-  String::Utf8Value name(args[2]);
+  int program = info[0]->Int32Value();
+  int index = info[1]->Int32Value();
+  String::Utf8Value name(info[2]);
 
   glBindAttribLocation(program, index, *name);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(GetError) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  NanReturnValue(NanNew<Number>(glGetError()));
+  info.GetReturnValue().Set(Nan::New<Integer>(glGetError()));
 }
 
 
 NAN_METHOD(DrawArrays) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int mode = args[0]->Int32Value();
-  int first = args[1]->Int32Value();
-  int count = args[2]->Int32Value();
+  int mode = info[0]->Int32Value();
+  int first = info[1]->Int32Value();
+  int count = info[2]->Int32Value();
 
   glDrawArrays(mode, first, count);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(UniformMatrix2fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLint location = args[0]->Int32Value();
-  GLboolean transpose = args[1]->BooleanValue();
+  GLint location = info[0]->Int32Value();
+  GLboolean transpose = info[1]->BooleanValue();
 
   GLsizei count=0;
-  GLfloat* data=getArrayData<GLfloat>(args[2],&count);
+  GLfloat* data=getArrayData<GLfloat>(info[2],&count);
 
   if (count < 4) {
-    NanThrowError("Not enough data for UniformMatrix2fv");
+    Nan::ThrowError("Not enough data for UniformMatrix2fv");
+  }else{
+    glUniformMatrix2fv(location, count / 4, transpose, data);
+
+    info.GetReturnValue().Set(Nan::Undefined());
   }
-
-  glUniformMatrix2fv(location, count / 4, transpose, data);
-
-  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(UniformMatrix3fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLint location = args[0]->Int32Value();
-  GLboolean transpose = args[1]->BooleanValue();
+  GLint location = info[0]->Int32Value();
+  GLboolean transpose = info[1]->BooleanValue();
   GLsizei count=0;
-  GLfloat* data=getArrayData<GLfloat>(args[2],&count);
+  GLfloat* data=getArrayData<GLfloat>(info[2],&count);
 
   if (count < 9) {
-    NanThrowError("Not enough data for UniformMatrix3fv");
+    Nan::ThrowError("Not enough data for UniformMatrix3fv");
+  }else{
+    glUniformMatrix3fv(location, count / 9, transpose, data);
+    info.GetReturnValue().Set(Nan::Undefined());
   }
-
-  glUniformMatrix3fv(location, count / 9, transpose, data);
-
-  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(UniformMatrix4fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLint location = args[0]->Int32Value();
-  GLboolean transpose = args[1]->BooleanValue();
+  GLint location = info[0]->Int32Value();
+  GLboolean transpose = info[1]->BooleanValue();
   GLsizei count=0;
-  GLfloat* data=getArrayData<GLfloat>(args[2],&count);
+  GLfloat* data=getArrayData<GLfloat>(info[2],&count);
 
   if (count < 16) {
-    NanThrowError("Not enough data for UniformMatrix4fv");
+    Nan::ThrowError("Not enough data for UniformMatrix4fv");
+  }else{
+    glUniformMatrix4fv(location, count / 16, transpose, data);
+    info.GetReturnValue().Set(Nan::Undefined());
   }
-
-  glUniformMatrix4fv(location, count / 16, transpose, data);
-
-  NanReturnValue(NanUndefined());
 }
 
 NAN_METHOD(GenerateMipmap) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLint target = args[0]->Int32Value();
+  GLint target = info[0]->Int32Value();
   glGenerateMipmap(target);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(GetAttribLocation) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int program = args[0]->Int32Value();
-  String::Utf8Value name(args[1]);
+  int program = info[0]->Int32Value();
+  String::Utf8Value name(info[1]);
 
-  NanReturnValue(NanNew<Number>(glGetAttribLocation(program, *name)));
+  info.GetReturnValue().Set(Nan::New<Number>(glGetAttribLocation(program, *name)));
 }
 
 
 NAN_METHOD(DepthFunc) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glDepthFunc(args[0]->Int32Value());
+  glDepthFunc(info[0]->Int32Value());
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(Viewport) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int x = args[0]->Int32Value();
-  int y = args[1]->Int32Value();
-  int width = args[2]->Int32Value();
-  int height = args[3]->Int32Value();
+  int x = info[0]->Int32Value();
+  int y = info[1]->Int32Value();
+  int width = info[2]->Int32Value();
+  int height = info[3]->Int32Value();
 
   glViewport(x, y, width, height);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(CreateShader) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint shader=glCreateShader(args[0]->Int32Value());
+  GLuint shader=glCreateShader(info[0]->Int32Value());
   #ifdef LOGGING
   cout<<"createShader "<<shader<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_SHADER, shader);
-  NanReturnValue(NanNew<Number>(shader));
+  info.GetReturnValue().Set(Nan::New<Number>(shader));
 }
 
 
 NAN_METHOD(ShaderSource) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int id = args[0]->Int32Value();
-  String::Utf8Value code(args[1]);
+  int id = info[0]->Int32Value();
+  String::Utf8Value code(info[1]);
 
   const char* codes[1];
   codes[0] = *code;
@@ -447,101 +437,104 @@ NAN_METHOD(ShaderSource) {
 
   glShaderSource  (id, 1, codes, &length);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(CompileShader) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glCompileShader(args[0]->Int32Value());
+  glCompileShader(info[0]->Int32Value());
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(FrontFace) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glFrontFace(args[0]->Int32Value());
+  glFrontFace(info[0]->Int32Value());
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(GetShaderParameter) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int shader = args[0]->Int32Value();
-  int pname = args[1]->Int32Value();
+  int shader = info[0]->Int32Value();
+  int pname = info[1]->Int32Value();
   int value = 0;
   switch (pname) {
   case GL_DELETE_STATUS:
   case GL_COMPILE_STATUS:
     glGetShaderiv(shader, pname, &value);
-    NanReturnValue(JS_BOOL(static_cast<bool>(value!=0)));
+    info.GetReturnValue().Set(JS_BOOL(static_cast<bool>(value!=0)));
+    break;
   case GL_SHADER_TYPE:
     glGetShaderiv(shader, pname, &value);
-    NanReturnValue(JS_FLOAT(static_cast<unsigned long>(value)));
+    info.GetReturnValue().Set(JS_FLOAT(static_cast<unsigned long>(value)));
+    break;
   case GL_INFO_LOG_LENGTH:
   case GL_SHADER_SOURCE_LENGTH:
     glGetShaderiv(shader, pname, &value);
-    NanReturnValue(JS_FLOAT(static_cast<long>(value)));
+    info.GetReturnValue().Set(JS_FLOAT(static_cast<long>(value)));
+    break;
   default:
-    NanThrowTypeError("GetShaderParameter: Invalid Enum");
+    Nan::ThrowTypeError("GetShaderParameter: Invalid Enum");
   }
-  NanReturnUndefined();
+  //info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(GetShaderInfoLog) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int id = args[0]->Int32Value();
+  int id = info[0]->Int32Value();
   int Len = 1024;
   char Error[1024];
   glGetShaderInfoLog(id, 1024, &Len, Error);
 
-  NanReturnValue(NanNew<String>(Error));
+  info.GetReturnValue().Set(JS_STR(Error));
 }
 
 
 NAN_METHOD(CreateProgram) {
-  NanScope();
+  Nan::HandleScope scope;
 
   GLuint program=glCreateProgram();
   #ifdef LOGGING
   cout<<"createProgram "<<program<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_PROGRAM, program);
-  NanReturnValue(NanNew<Number>(program));
+  info.GetReturnValue().Set(Nan::New<Number>(program));
 }
 
 
 NAN_METHOD(AttachShader) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int program = args[0]->Int32Value();
-  int shader = args[1]->Int32Value();
+  int program = info[0]->Int32Value();
+  int shader = info[1]->Int32Value();
 
   glAttachShader(program, shader);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(LinkProgram) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glLinkProgram(args[0]->Int32Value());
+  glLinkProgram(info[0]->Int32Value());
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(GetProgramParameter) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int program = args[0]->Int32Value();
-  int pname = args[1]->Int32Value();
+  int program = info[0]->Int32Value();
+  int pname = info[1]->Int32Value();
 
   int value = 0;
   switch (pname) {
@@ -549,70 +542,72 @@ NAN_METHOD(GetProgramParameter) {
   case GL_LINK_STATUS:
   case GL_VALIDATE_STATUS:
     glGetProgramiv(program, pname, &value);
-    NanReturnValue(JS_BOOL(static_cast<bool>(value!=0)));
+    info.GetReturnValue().Set(JS_BOOL(static_cast<bool>(value!=0)));
+    break;
   case GL_ATTACHED_SHADERS:
   case GL_ACTIVE_ATTRIBUTES:
   case GL_ACTIVE_UNIFORMS:
     glGetProgramiv(program, pname, &value);
-    NanReturnValue(JS_FLOAT(static_cast<long>(value)));
+    info.GetReturnValue().Set(JS_FLOAT(static_cast<long>(value)));
+    break;
   default:
-    NanThrowTypeError("GetProgramParameter: Invalid Enum");
+    Nan::ThrowTypeError("GetProgramParameter: Invalid Enum");
   }
-  NanReturnUndefined();
+  //info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(GetUniformLocation) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int program = args[0]->Int32Value();
-  NanAsciiString name(args[1]);
-
-  NanReturnValue(JS_INT(glGetUniformLocation(program, *name)));
+  int program = info[0]->Int32Value();
+  v8::String::Utf8Value name(info[1]);
+  
+  info.GetReturnValue().Set(JS_INT(glGetUniformLocation(program, *name)));
 }
 
 
 NAN_METHOD(ClearColor) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  float red = (float) args[0]->NumberValue();
-  float green = (float) args[1]->NumberValue();
-  float blue = (float) args[2]->NumberValue();
-  float alpha = (float) args[3]->NumberValue();
+  float red = (float) info[0]->NumberValue();
+  float green = (float) info[1]->NumberValue();
+  float blue = (float) info[2]->NumberValue();
+  float alpha = (float) info[3]->NumberValue();
 
   glClearColor(red, green, blue, alpha);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(ClearDepth) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  float depth = (float) args[0]->NumberValue();
+  float depth = (float) info[0]->NumberValue();
 
   glClearDepth(depth);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Disable) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glDisable(args[0]->Int32Value());
-  NanReturnValue(NanUndefined());
+  glDisable(info[0]->Int32Value());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Enable) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glEnable(args[0]->Int32Value());
-  NanReturnValue(NanUndefined());
+  glEnable(info[0]->Int32Value());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(CreateTexture) {
-  NanScope();
+  Nan::HandleScope scope;
 
   GLuint texture;
   glGenTextures(1, &texture);
@@ -620,84 +615,84 @@ NAN_METHOD(CreateTexture) {
   cout<<"createTexture "<<texture<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_TEXTURE, texture);
-  NanReturnValue(NanNew<Number>(texture));
+  info.GetReturnValue().Set(Nan::New<Number>(texture));
 }
 
 
 NAN_METHOD(BindTexture) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int texture = args[1]->IsNull() ? 0 : args[1]->Int32Value();
+  int target = info[0]->Int32Value();
+  int texture = info[1]->IsNull() ? 0 : info[1]->Int32Value();
 
   glBindTexture(target, texture);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(TexImage2D) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int level = args[1]->Int32Value();
-  int internalformat = args[2]->Int32Value();
-  int width = args[3]->Int32Value();
-  int height = args[4]->Int32Value();
-  int border = args[5]->Int32Value();
-  int format = args[6]->Int32Value();
-  int type = args[7]->Int32Value();
-  void *pixels=getImageData(args[8]);
+  int target = info[0]->Int32Value();
+  int level = info[1]->Int32Value();
+  int internalformat = info[2]->Int32Value();
+  int width = info[3]->Int32Value();
+  int height = info[4]->Int32Value();
+  int border = info[5]->Int32Value();
+  int format = info[6]->Int32Value();
+  int type = info[7]->Int32Value();
+  void *pixels=getImageData(info[8]);
 
   glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(TexParameteri) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int pname = args[1]->Int32Value();
-  int param = args[2]->Int32Value();
+  int target = info[0]->Int32Value();
+  int pname = info[1]->Int32Value();
+  int param = info[2]->Int32Value();
 
   glTexParameteri(target, pname, param);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(TexParameterf) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int pname = args[1]->Int32Value();
-  float param = (float) args[2]->NumberValue();
+  int target = info[0]->Int32Value();
+  int pname = info[1]->Int32Value();
+  float param = (float) info[2]->NumberValue();
 
   glTexParameterf(target, pname, param);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(Clear) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glClear(args[0]->Int32Value());
+  glClear(info[0]->Int32Value());
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(UseProgram) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glUseProgram(args[0]->Int32Value());
+  glUseProgram(info[0]->Int32Value());
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(CreateBuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
   GLuint buffer;
   glGenBuffers(1, &buffer);
@@ -705,22 +700,22 @@ NAN_METHOD(CreateBuffer) {
   cout<<"createBuffer "<<buffer<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_BUFFER, buffer);
-  NanReturnValue(NanNew<Number>(buffer));
+  info.GetReturnValue().Set(Nan::New<Number>(buffer));
 }
 
 NAN_METHOD(BindBuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int buffer = args[1]->Uint32Value();
+  int target = info[0]->Int32Value();
+  int buffer = info[1]->Uint32Value();
   glBindBuffer(target,buffer);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(CreateFramebuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
   GLuint buffer;
   glGenFramebuffers(1, &buffer);
@@ -728,505 +723,511 @@ NAN_METHOD(CreateFramebuffer) {
   cout<<"createFrameBuffer "<<buffer<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_FRAMEBUFFER, buffer);
-  NanReturnValue(NanNew<Number>(buffer));
+  info.GetReturnValue().Set(Nan::New<Number>(buffer));
 }
 
 
 NAN_METHOD(BindFramebuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int buffer = args[1]->IsNull() ? 0 : args[1]->Int32Value();
+  int target = info[0]->Int32Value();
+  int buffer = info[1]->IsNull() ? 0 : info[1]->Int32Value();
 
   glBindFramebuffer(target, buffer);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(FramebufferTexture2D) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int attachment = args[1]->Int32Value();
-  int textarget = args[2]->Int32Value();
-  int texture = args[3]->Int32Value();
-  int level = args[4]->Int32Value();
+  int target = info[0]->Int32Value();
+  int attachment = info[1]->Int32Value();
+  int textarget = info[2]->Int32Value();
+  int texture = info[3]->Int32Value();
+  int level = info[4]->Int32Value();
 
   glFramebufferTexture2D(target, attachment, textarget, texture, level);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
-
 NAN_METHOD(BufferData) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  if(args[1]->IsObject()) {
-    Local<Object> obj = Local<Object>::Cast(args[1]);
-    GLenum usage = args[2]->Int32Value();
-
-    int element_size = SizeOfArrayElementForType(obj->GetIndexedPropertiesExternalArrayDataType());
-    GLsizeiptr size = obj->GetIndexedPropertiesExternalArrayDataLength() * element_size;
-    void* data = obj->GetIndexedPropertiesExternalArrayData();
+  int target = info[0]->Int32Value();
+  if(info[1]->IsObject()) {
+    Local<Object> obj = Local<Object>::Cast(info[1]);
+    GLenum usage = info[2]->Int32Value();
+    
+    CHECK_ARRAY_BUFFER(obj);
+    
+         
+            
+    int element_size = 1;
+    Local<ArrayBufferView> arr = Local<ArrayBufferView>::Cast(obj);
+    int size = arr->ByteLength()* element_size;
+    void* data = arr->Buffer()->GetContents().Data();
+    
     glBufferData(target, size, data, usage);
   }
-  else if(args[1]->IsNumber()) {
-    GLsizeiptr size = args[1]->Uint32Value();
-    GLenum usage = args[2]->Int32Value();
+  else if(info[1]->IsNumber()) {
+    GLsizeiptr size = info[1]->Uint32Value();
+    GLenum usage = info[2]->Int32Value();
     glBufferData(target, size, NULL, usage);
   }
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(BufferSubData) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int offset = args[1]->Int32Value();
-  Local<Object> obj = Local<Object>::Cast(args[2]);
+  int target = info[0]->Int32Value();
+  int offset = info[1]->Int32Value();
+  Local<Object> obj = Local<Object>::Cast(info[2]);
 
-  int element_size = SizeOfArrayElementForType( obj->GetIndexedPropertiesExternalArrayDataType());
-  int size = obj->GetIndexedPropertiesExternalArrayDataLength() * element_size;
-  void* data = obj->GetIndexedPropertiesExternalArrayData();
+   int element_size = 1;
+   Local<ArrayBufferView> arr = Local<ArrayBufferView>::Cast(obj);
+   int size = arr->ByteLength()* element_size;
+   void* data = arr->Buffer()->GetContents().Data();
 
   glBufferSubData(target, offset, size, data);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(BlendEquation) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int mode=args[0]->Int32Value();;
+  int mode=info[0]->Int32Value();;
 
   glBlendEquation(mode);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(BlendFunc) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int sfactor=args[0]->Int32Value();;
-  int dfactor=args[1]->Int32Value();;
+  int sfactor=info[0]->Int32Value();;
+  int dfactor=info[1]->Int32Value();;
 
   glBlendFunc(sfactor,dfactor);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(EnableVertexAttribArray) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glEnableVertexAttribArray(args[0]->Int32Value());
+  glEnableVertexAttribArray(info[0]->Int32Value());
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(VertexAttribPointer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int indx = args[0]->Int32Value();
-  int size = args[1]->Int32Value();
-  int type = args[2]->Int32Value();
-  int normalized = args[3]->BooleanValue();
-  int stride = args[4]->Int32Value();
-  long offset = args[5]->Int32Value();
+  int indx = info[0]->Int32Value();
+  int size = info[1]->Int32Value();
+  int type = info[2]->Int32Value();
+  int normalized = info[3]->BooleanValue();
+  int stride = info[4]->Int32Value();
+  long offset = info[5]->Int32Value();
 
   //    printf("VertexAttribPointer %d %d %d %d %d %d\n", indx, size, type, normalized, stride, offset);
   glVertexAttribPointer(indx, size, type, normalized, stride, (const GLvoid *)offset);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(ActiveTexture) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glActiveTexture(args[0]->Int32Value());
-  NanReturnValue(NanUndefined());
+  glActiveTexture(info[0]->Int32Value());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(DrawElements) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int mode = args[0]->Int32Value();
-  int count = args[1]->Int32Value();
-  int type = args[2]->Int32Value();
-  GLvoid *offset = reinterpret_cast<GLvoid*>(args[3]->Uint32Value());
+  int mode = info[0]->Int32Value();
+  int count = info[1]->Int32Value();
+  int type = info[2]->Int32Value();
+  GLvoid *offset = reinterpret_cast<GLvoid*>(info[3]->Uint32Value());
   glDrawElements(mode, count, type, offset);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 
 NAN_METHOD(Flush) {
-  NanScope();
+  Nan::HandleScope scope;
   glFlush();
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Finish) {
-  NanScope();
+  Nan::HandleScope scope;
   glFinish();
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(VertexAttrib1f) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint indx = args[0]->Int32Value();
-  float x = (float) args[1]->NumberValue();
+  GLuint indx = info[0]->Int32Value();
+  float x = (float) info[1]->NumberValue();
 
   glVertexAttrib1f(indx, x);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(VertexAttrib2f) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint indx = args[0]->Int32Value();
-  float x = (float) args[1]->NumberValue();
-  float y = (float) args[2]->NumberValue();
+  GLuint indx = info[0]->Int32Value();
+  float x = (float) info[1]->NumberValue();
+  float y = (float) info[2]->NumberValue();
 
   glVertexAttrib2f(indx, x, y);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(VertexAttrib3f) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint indx = args[0]->Int32Value();
-  float x = (float) args[1]->NumberValue();
-  float y = (float) args[2]->NumberValue();
-  float z = (float) args[3]->NumberValue();
+  GLuint indx = info[0]->Int32Value();
+  float x = (float) info[1]->NumberValue();
+  float y = (float) info[2]->NumberValue();
+  float z = (float) info[3]->NumberValue();
 
   glVertexAttrib3f(indx, x, y, z);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(VertexAttrib4f) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint indx = args[0]->Int32Value();
-  float x = (float) args[1]->NumberValue();
-  float y = (float) args[2]->NumberValue();
-  float z = (float) args[3]->NumberValue();
-  float w = (float) args[4]->NumberValue();
+  GLuint indx = info[0]->Int32Value();
+  float x = (float) info[1]->NumberValue();
+  float y = (float) info[2]->NumberValue();
+  float z = (float) info[3]->NumberValue();
+  float w = (float) info[4]->NumberValue();
 
   glVertexAttrib4f(indx, x, y, z, w);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(VertexAttrib1fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int indx = args[0]->Int32Value();
-  GLfloat *data = getArrayData<GLfloat>(args[1]);
+  int indx = info[0]->Int32Value();
+  GLfloat *data = getArrayData<GLfloat>(info[1]);
   glVertexAttrib1fv(indx, data);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(VertexAttrib2fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int indx = args[0]->Int32Value();
-  GLfloat *data = getArrayData<GLfloat>(args[1]);
+  int indx = info[0]->Int32Value();
+  GLfloat *data = getArrayData<GLfloat>(info[1]);
   glVertexAttrib2fv(indx, data);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(VertexAttrib3fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int indx = args[0]->Int32Value();
-  GLfloat *data = getArrayData<GLfloat>(args[1]);
+  int indx = info[0]->Int32Value();
+  GLfloat *data = getArrayData<GLfloat>(info[1]);
   glVertexAttrib3fv(indx, data);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(VertexAttrib4fv) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int indx = args[0]->Int32Value();
-  GLfloat *data = getArrayData<GLfloat>(args[1]);
+  int indx = info[0]->Int32Value();
+  GLfloat *data = getArrayData<GLfloat>(info[1]);
   glVertexAttrib4fv(indx, data);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(BlendColor) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLclampf r= (float) args[0]->NumberValue();
-  GLclampf g= (float) args[1]->NumberValue();
-  GLclampf b= (float) args[2]->NumberValue();
-  GLclampf a= (float) args[3]->NumberValue();
+  GLclampf r= (float) info[0]->NumberValue();
+  GLclampf g= (float) info[1]->NumberValue();
+  GLclampf b= (float) info[2]->NumberValue();
+  GLclampf a= (float) info[3]->NumberValue();
 
   glBlendColor(r,g,b,a);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(BlendEquationSeparate) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum modeRGB= args[0]->Int32Value();
-  GLenum modeAlpha= args[1]->Int32Value();
+  GLenum modeRGB= info[0]->Int32Value();
+  GLenum modeAlpha= info[1]->Int32Value();
 
   glBlendEquationSeparate(modeRGB,modeAlpha);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(BlendFuncSeparate) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum srcRGB= args[0]->Int32Value();
-  GLenum dstRGB= args[1]->Int32Value();
-  GLenum srcAlpha= args[2]->Int32Value();
-  GLenum dstAlpha= args[3]->Int32Value();
+  GLenum srcRGB= info[0]->Int32Value();
+  GLenum dstRGB= info[1]->Int32Value();
+  GLenum srcAlpha= info[2]->Int32Value();
+  GLenum dstAlpha= info[3]->Int32Value();
 
   glBlendFuncSeparate(srcRGB,dstRGB,srcAlpha,dstAlpha);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(ClearStencil) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLint s = args[0]->Int32Value();
+  GLint s = info[0]->Int32Value();
 
   glClearStencil(s);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(ColorMask) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLboolean r = args[0]->BooleanValue();
-  GLboolean g = args[1]->BooleanValue();
-  GLboolean b = args[2]->BooleanValue();
-  GLboolean a = args[3]->BooleanValue();
+  GLboolean r = info[0]->BooleanValue();
+  GLboolean g = info[1]->BooleanValue();
+  GLboolean b = info[2]->BooleanValue();
+  GLboolean a = info[3]->BooleanValue();
 
   glColorMask(r,g,b,a);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(CopyTexImage2D) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLint level = args[1]->Int32Value();
-  GLenum internalformat = args[2]->Int32Value();
-  GLint x = args[3]->Int32Value();
-  GLint y = args[4]->Int32Value();
-  GLsizei width = args[5]->Int32Value();
-  GLsizei height = args[6]->Int32Value();
-  GLint border = args[7]->Int32Value();
+  GLenum target = info[0]->Int32Value();
+  GLint level = info[1]->Int32Value();
+  GLenum internalformat = info[2]->Int32Value();
+  GLint x = info[3]->Int32Value();
+  GLint y = info[4]->Int32Value();
+  GLsizei width = info[5]->Int32Value();
+  GLsizei height = info[6]->Int32Value();
+  GLint border = info[7]->Int32Value();
 
   glCopyTexImage2D( target, level, internalformat, x, y, width, height, border);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(CopyTexSubImage2D) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLint level = args[1]->Int32Value();
-  GLint xoffset = args[2]->Int32Value();
-  GLint yoffset = args[3]->Int32Value();
-  GLint x = args[4]->Int32Value();
-  GLint y = args[5]->Int32Value();
-  GLsizei width = args[6]->Int32Value();
-  GLsizei height = args[7]->Int32Value();
+  GLenum target = info[0]->Int32Value();
+  GLint level = info[1]->Int32Value();
+  GLint xoffset = info[2]->Int32Value();
+  GLint yoffset = info[3]->Int32Value();
+  GLint x = info[4]->Int32Value();
+  GLint y = info[5]->Int32Value();
+  GLsizei width = info[6]->Int32Value();
+  GLsizei height = info[7]->Int32Value();
 
   glCopyTexSubImage2D( target, level, xoffset, yoffset, x, y, width, height);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(CullFace) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum mode = args[0]->Int32Value();
+  GLenum mode = info[0]->Int32Value();
 
   glCullFace(mode);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(DepthMask) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLboolean flag = args[0]->BooleanValue();
+  GLboolean flag = info[0]->BooleanValue();
 
   glDepthMask(flag);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(DepthRange) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLclampf zNear = (float) args[0]->NumberValue();
-  GLclampf zFar = (float) args[1]->NumberValue();
+  GLclampf zNear = (float) info[0]->NumberValue();
+  GLclampf zFar = (float) info[1]->NumberValue();
 
   glDepthRangef(zNear, zFar);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(DisableVertexAttribArray) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint index = args[0]->Int32Value();
+  GLuint index = info[0]->Int32Value();
 
   glDisableVertexAttribArray(index);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Hint) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLenum mode = args[1]->Int32Value();
+  GLenum target = info[0]->Int32Value();
+  GLenum mode = info[1]->Int32Value();
 
   glHint(target, mode);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(IsEnabled) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum cap = args[0]->Int32Value();
+  GLenum cap = info[0]->Int32Value();
 
   bool ret=glIsEnabled(cap)!=0;
-  NanReturnValue(NanNew<Boolean>(ret));
+  info.GetReturnValue().Set(Nan::New<Boolean>(ret));
 }
 
 NAN_METHOD(LineWidth) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLfloat width = (float) args[0]->NumberValue();
+  GLfloat width = (float) info[0]->NumberValue();
 
   glLineWidth(width);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(PolygonOffset) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLfloat factor = (float) args[0]->NumberValue();
-  GLfloat units = (float) args[1]->NumberValue();
+  GLfloat factor = (float) info[0]->NumberValue();
+  GLfloat units = (float) info[1]->NumberValue();
 
   glPolygonOffset(factor, units);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(SampleCoverage) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLclampf value = (float) args[0]->NumberValue();
-  GLboolean invert = args[1]->BooleanValue();
+  GLclampf value = (float) info[0]->NumberValue();
+  GLboolean invert = info[1]->BooleanValue();
 
   glSampleCoverage(value, invert);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(Scissor) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLint x = args[0]->Int32Value();
-  GLint y = args[1]->Int32Value();
-  GLsizei width = args[2]->Int32Value();
-  GLsizei height = args[3]->Int32Value();
+  GLint x = info[0]->Int32Value();
+  GLint y = info[1]->Int32Value();
+  GLsizei width = info[2]->Int32Value();
+  GLsizei height = info[3]->Int32Value();
 
   glScissor(x, y, width, height);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(StencilFunc) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum func = args[0]->Int32Value();
-  GLint ref = args[1]->Int32Value();
-  GLuint mask = args[2]->Int32Value();
+  GLenum func = info[0]->Int32Value();
+  GLint ref = info[1]->Int32Value();
+  GLuint mask = info[2]->Int32Value();
 
   glStencilFunc(func, ref, mask);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(StencilFuncSeparate) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum face = args[0]->Int32Value();
-  GLenum func = args[1]->Int32Value();
-  GLint ref = args[2]->Int32Value();
-  GLuint mask = args[3]->Int32Value();
+  GLenum face = info[0]->Int32Value();
+  GLenum func = info[1]->Int32Value();
+  GLint ref = info[2]->Int32Value();
+  GLuint mask = info[3]->Int32Value();
 
   glStencilFuncSeparate(face, func, ref, mask);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(StencilMask) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint mask = args[0]->Uint32Value();
+  GLuint mask = info[0]->Uint32Value();
 
   glStencilMask(mask);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(StencilMaskSeparate) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum face = args[0]->Int32Value();
-  GLuint mask = args[1]->Uint32Value();
+  GLenum face = info[0]->Int32Value();
+  GLuint mask = info[1]->Uint32Value();
 
   glStencilMaskSeparate(face, mask);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(StencilOp) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum fail = args[0]->Int32Value();
-  GLenum zfail = args[1]->Int32Value();
-  GLenum zpass = args[2]->Int32Value();
+  GLenum fail = info[0]->Int32Value();
+  GLenum zfail = info[1]->Int32Value();
+  GLenum zpass = info[2]->Int32Value();
 
   glStencilOp(fail, zfail, zpass);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(StencilOpSeparate) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum face = args[0]->Int32Value();
-  GLenum fail = args[1]->Int32Value();
-  GLenum zfail = args[2]->Int32Value();
-  GLenum zpass = args[3]->Int32Value();
+  GLenum face = info[0]->Int32Value();
+  GLenum fail = info[1]->Int32Value();
+  GLenum zfail = info[2]->Int32Value();
+  GLenum zpass = info[3]->Int32Value();
 
   glStencilOpSeparate(face, fail, zfail, zpass);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(BindRenderbuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLuint buffer = args[1]->IsNull() ? 0 : args[1]->Int32Value();
+  GLenum target = info[0]->Int32Value();
+  GLuint buffer = info[1]->IsNull() ? 0 : info[1]->Int32Value();
 
   glBindRenderbuffer(target, buffer);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(CreateRenderbuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
   GLuint renderbuffers;
   glGenRenderbuffers(1,&renderbuffers);
@@ -1234,219 +1235,219 @@ NAN_METHOD(CreateRenderbuffer) {
   cout<<"createRenderBuffer "<<renderbuffers<<endl;
   #endif
   registerGLObj(GLOBJECT_TYPE_RENDERBUFFER, renderbuffers);
-  NanReturnValue(NanNew<Number>(renderbuffers));
+  info.GetReturnValue().Set(Nan::New<Number>(renderbuffers));
 }
 
 NAN_METHOD(DeleteBuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint buffer = args[0]->Uint32Value();
+  GLuint buffer = info[0]->Uint32Value();
 
   glDeleteBuffers(1,&buffer);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(DeleteFramebuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint buffer = args[0]->Uint32Value();
+  GLuint buffer = info[0]->Uint32Value();
 
   glDeleteFramebuffers(1,&buffer);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(DeleteProgram) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint program = args[0]->Uint32Value();
+  GLuint program = info[0]->Uint32Value();
 
   glDeleteProgram(program);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(DeleteRenderbuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint renderbuffer = args[0]->Uint32Value();
+  GLuint renderbuffer = info[0]->Uint32Value();
 
   glDeleteRenderbuffers(1, &renderbuffer);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(DeleteShader) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint shader = args[0]->Uint32Value();
+  GLuint shader = info[0]->Uint32Value();
 
   glDeleteShader(shader);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(DeleteTexture) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint texture = args[0]->Uint32Value();
+  GLuint texture = info[0]->Uint32Value();
 
   glDeleteTextures(1,&texture);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(DetachShader) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint program = args[0]->Uint32Value();
-  GLuint shader = args[1]->Uint32Value();
+  GLuint program = info[0]->Uint32Value();
+  GLuint shader = info[1]->Uint32Value();
 
   glDetachShader(program, shader);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(FramebufferRenderbuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLenum attachment = args[1]->Int32Value();
-  GLenum renderbuffertarget = args[2]->Int32Value();
-  GLuint renderbuffer = args[3]->Uint32Value();
+  GLenum target = info[0]->Int32Value();
+  GLenum attachment = info[1]->Int32Value();
+  GLenum renderbuffertarget = info[2]->Int32Value();
+  GLuint renderbuffer = info[3]->Uint32Value();
 
   glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(GetVertexAttribOffset) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint index = args[0]->Uint32Value();
-  GLenum pname = args[1]->Int32Value();
+  GLuint index = info[0]->Uint32Value();
+  GLenum pname = info[1]->Int32Value();
   void *ret=NULL;
 
   glGetVertexAttribPointerv(index, pname, &ret);
-  NanReturnValue(JS_INT(ToGLuint(ret)));
+  info.GetReturnValue().Set(JS_INT(ToGLuint(ret)));
 }
 
 NAN_METHOD(IsBuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  NanReturnValue(NanNew<Boolean>(glIsBuffer(args[0]->Uint32Value())!=0));
+  info.GetReturnValue().Set(Nan::New<Boolean>(glIsBuffer(info[0]->Uint32Value())!=0));
 }
 
 NAN_METHOD(IsFramebuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  NanReturnValue(JS_BOOL(glIsFramebuffer(args[0]->Uint32Value())!=0));
+  info.GetReturnValue().Set(JS_BOOL(glIsFramebuffer(info[0]->Uint32Value())!=0));
 }
 
 NAN_METHOD(IsProgram) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  NanReturnValue(JS_BOOL(glIsProgram(args[0]->Uint32Value())!=0));
+  info.GetReturnValue().Set(JS_BOOL(glIsProgram(info[0]->Uint32Value())!=0));
 }
 
 NAN_METHOD(IsRenderbuffer) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  NanReturnValue(JS_BOOL(glIsRenderbuffer( args[0]->Uint32Value())!=0));
+  info.GetReturnValue().Set(JS_BOOL(glIsRenderbuffer( info[0]->Uint32Value())!=0));
 }
 
 NAN_METHOD(IsShader) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  NanReturnValue(JS_BOOL(glIsShader(args[0]->Uint32Value())!=0));
+  info.GetReturnValue().Set(JS_BOOL(glIsShader(info[0]->Uint32Value())!=0));
 }
 
 NAN_METHOD(IsTexture) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  NanReturnValue(JS_BOOL(glIsTexture(args[0]->Uint32Value())!=0));
+  info.GetReturnValue().Set(JS_BOOL(glIsTexture(info[0]->Uint32Value())!=0));
 }
 
 NAN_METHOD(RenderbufferStorage) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLenum internalformat = args[1]->Int32Value();
-  GLsizei width = args[2]->Uint32Value();
-  GLsizei height = args[3]->Uint32Value();
+  GLenum target = info[0]->Int32Value();
+  GLenum internalformat = info[1]->Int32Value();
+  GLsizei width = info[2]->Uint32Value();
+  GLsizei height = info[3]->Uint32Value();
 
   glRenderbufferStorage(target, internalformat, width, height);
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(GetShaderSource) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int shader = args[0]->Int32Value();
+  int shader = info[0]->Int32Value();
 
   GLint len;
   glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &len);
   GLchar *source=new GLchar[len];
   glGetShaderSource(shader, len, NULL, source);
 
-  Local<String> str = NanNew<String>(source);
+  Local<String> str = JS_STR(source);
   delete source;
 
-  NanReturnValue(str);
+  info.GetReturnValue().Set(str);
 }
 
 NAN_METHOD(ValidateProgram) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  glValidateProgram(args[0]->Int32Value());
+  glValidateProgram(info[0]->Int32Value());
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(TexSubImage2D) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLint level = args[1]->Int32Value();
-  GLint xoffset = args[2]->Int32Value();
-  GLint yoffset = args[3]->Int32Value();
-  GLsizei width = args[4]->Int32Value();
-  GLsizei height = args[5]->Int32Value();
-  GLenum format = args[6]->Int32Value();
-  GLenum type = args[7]->Int32Value();
-  void *pixels=getImageData(args[8]);
+  GLenum target = info[0]->Int32Value();
+  GLint level = info[1]->Int32Value();
+  GLint xoffset = info[2]->Int32Value();
+  GLint yoffset = info[3]->Int32Value();
+  GLsizei width = info[4]->Int32Value();
+  GLsizei height = info[5]->Int32Value();
+  GLenum format = info[6]->Int32Value();
+  GLenum type = info[7]->Int32Value();
+  void *pixels=getImageData(info[8]);
 
   glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(ReadPixels) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLint x = args[0]->Int32Value();
-  GLint y = args[1]->Int32Value();
-  GLsizei width = args[2]->Int32Value();
-  GLsizei height = args[3]->Int32Value();
-  GLenum format = args[4]->Int32Value();
-  GLenum type = args[5]->Int32Value();
-  void *pixels=getImageData(args[6]);
+  GLint x = info[0]->Int32Value();
+  GLint y = info[1]->Int32Value();
+  GLsizei width = info[2]->Int32Value();
+  GLsizei height = info[3]->Int32Value();
+  GLenum format = info[4]->Int32Value();
+  GLenum type = info[5]->Int32Value();
+  void *pixels=getImageData(info[6]);
 
   glReadPixels(x, y, width, height, format, type, pixels);
 
-  NanReturnValue(NanUndefined());
+  info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(GetTexParameter) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLenum pname = args[1]->Int32Value();
+  GLenum target = info[0]->Int32Value();
+  GLenum pname = info[1]->Int32Value();
 
   GLint param_value=0;
   glGetTexParameteriv(target, pname, &param_value);
 
-  NanReturnValue(NanNew<Number>(param_value));
+  info.GetReturnValue().Set(Nan::New<Number>(param_value));
 }
 
 NAN_METHOD(GetActiveAttrib) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint program = args[0]->Int32Value();
-  GLuint index = args[1]->Int32Value();
+  GLuint program = info[0]->Int32Value();
+  GLuint index = info[1]->Int32Value();
 
   char name[1024];
   GLsizei length=0;
@@ -1454,19 +1455,19 @@ NAN_METHOD(GetActiveAttrib) {
   GLsizei size;
   glGetActiveAttrib(program, index, 1024, &length, &size, &type, name);
 
-  Local<Array> activeInfo = NanNew<Array>(3);
+  Local<Array> activeInfo = Nan::New<Array>(3);
   activeInfo->Set(JS_STR("size"), JS_INT(size));
   activeInfo->Set(JS_STR("type"), JS_INT((int)type));
   activeInfo->Set(JS_STR("name"), JS_STR(name));
 
-  NanReturnValue(activeInfo);
+  info.GetReturnValue().Set(activeInfo);
 }
 
 NAN_METHOD(GetActiveUniform) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint program = args[0]->Int32Value();
-  GLuint index = args[1]->Int32Value();
+  GLuint program = info[0]->Int32Value();
+  GLuint index = info[1]->Int32Value();
 
   char name[1024];
   GLsizei length=0;
@@ -1474,34 +1475,34 @@ NAN_METHOD(GetActiveUniform) {
   GLsizei size;
   glGetActiveUniform(program, index, 1024, &length, &size, &type, name);
 
-  Local<Array> activeInfo = NanNew<Array>(3);
+  Local<Array> activeInfo = Nan::New<Array>(3);
   activeInfo->Set(JS_STR("size"), JS_INT(size));
   activeInfo->Set(JS_STR("type"), JS_INT((int)type));
   activeInfo->Set(JS_STR("name"), JS_STR(name));
 
-  NanReturnValue(activeInfo);
+  info.GetReturnValue().Set(activeInfo);
 }
 
 NAN_METHOD(GetAttachedShaders) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint program = args[0]->Int32Value();
+  GLuint program = info[0]->Int32Value();
 
   GLuint shaders[1024];
   GLsizei count;
   glGetAttachedShaders(program, 1024, &count, shaders);
 
-  Local<Array> shadersArr = NanNew<Array>(count);
+  Local<Array> shadersArr = Nan::New<Array>(count);
   for(int i=0;i<count;i++)
     shadersArr->Set(i, JS_INT((int)shaders[i]));
 
-  NanReturnValue(shadersArr);
+  info.GetReturnValue().Set(shadersArr);
 }
 
 NAN_METHOD(GetParameter) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum name = args[0]->Int32Value();
+  GLenum name = info[0]->Int32Value();
 
   switch(name) {
   case GL_BLEND:
@@ -1519,7 +1520,8 @@ NAN_METHOD(GetParameter) {
     // return a boolean
     GLboolean params;
     ::glGetBooleanv(name, &params);
-    NanReturnValue(JS_BOOL(params!=0));
+    info.GetReturnValue().Set(JS_BOOL(params!=0));
+    break;
   }
   case GL_DEPTH_CLEAR_VALUE:
   case GL_LINE_WIDTH:
@@ -1530,7 +1532,8 @@ NAN_METHOD(GetParameter) {
     // return a float
     GLfloat params;
     ::glGetFloatv(name, &params);
-    NanReturnValue(JS_FLOAT(params));
+    info.GetReturnValue().Set(JS_FLOAT(params));
+    break;
   }
   case GL_RENDERER:
   case GL_SHADING_LANGUAGE_VERSION:
@@ -1540,9 +1543,14 @@ NAN_METHOD(GetParameter) {
   {
     // return a string
     char *params=(char*) ::glGetString(name);
-    if(params)
-      NanReturnValue(JS_STR(params));
-    NanReturnUndefined();
+    
+    if(params!=NULL){
+      info.GetReturnValue().Set(JS_STR(params));
+    }else{
+      info.GetReturnValue().Set(Nan::Undefined());
+    }
+    
+    break;
   }
   case GL_MAX_VIEWPORT_DIMS:
   {
@@ -1550,10 +1558,11 @@ NAN_METHOD(GetParameter) {
     GLint params[2];
     ::glGetIntegerv(name, params);
 
-    Local<Array> arr=NanNew<Array>(2);
+    Local<Array> arr=Nan::New<Array>(2);
     arr->Set(0,JS_INT(params[0]));
     arr->Set(1,JS_INT(params[1]));
-    NanReturnValue(arr);
+    info.GetReturnValue().Set(arr);
+    break;
   }
   case GL_SCISSOR_BOX:
   case GL_VIEWPORT:
@@ -1562,12 +1571,13 @@ NAN_METHOD(GetParameter) {
     GLint params[4];
     ::glGetIntegerv(name, params);
 
-    Local<Array> arr=NanNew<Array>(4);
+    Local<Array> arr=Nan::New<Array>(4);
     arr->Set(0,JS_INT(params[0]));
     arr->Set(1,JS_INT(params[1]));
     arr->Set(2,JS_INT(params[2]));
     arr->Set(3,JS_INT(params[3]));
-    NanReturnValue(arr);
+    info.GetReturnValue().Set(arr);
+    break;
   }
   case GL_ALIASED_LINE_WIDTH_RANGE:
   case GL_ALIASED_POINT_SIZE_RANGE:
@@ -1576,10 +1586,11 @@ NAN_METHOD(GetParameter) {
     // return a float[2]
     GLfloat params[2];
     ::glGetFloatv(name, params);
-    Local<Array> arr=NanNew<Array>(2);
+    Local<Array> arr=Nan::New<Array>(2);
     arr->Set(0,JS_FLOAT(params[0]));
     arr->Set(1,JS_FLOAT(params[1]));
-    NanReturnValue(arr);
+    info.GetReturnValue().Set(arr);
+    break;
   }
   case GL_BLEND_COLOR:
   case GL_COLOR_CLEAR_VALUE:
@@ -1587,24 +1598,26 @@ NAN_METHOD(GetParameter) {
     // return a float[4]
     GLfloat params[4];
     ::glGetFloatv(name, params);
-    Local<Array> arr=NanNew<Array>(4);
+    Local<Array> arr=Nan::New<Array>(4);
     arr->Set(0,JS_FLOAT(params[0]));
     arr->Set(1,JS_FLOAT(params[1]));
     arr->Set(2,JS_FLOAT(params[2]));
     arr->Set(3,JS_FLOAT(params[3]));
-    NanReturnValue(arr);
+    info.GetReturnValue().Set(arr);
+    break;
   }
   case GL_COLOR_WRITEMASK:
   {
     // return a boolean[4]
     GLboolean params[4];
     ::glGetBooleanv(name, params);
-    Local<Array> arr=NanNew<Array>(4);
+    Local<Array> arr=Nan::New<Array>(4);
     arr->Set(0,JS_BOOL(params[0]==1));
     arr->Set(1,JS_BOOL(params[1]==1));
     arr->Set(2,JS_BOOL(params[2]==1));
     arr->Set(3,JS_BOOL(params[3]==1));
-    NanReturnValue(arr);
+    info.GetReturnValue().Set(arr);
+    break;
   }
   case GL_ARRAY_BUFFER_BINDING:
   case GL_CURRENT_PROGRAM:
@@ -1616,87 +1629,88 @@ NAN_METHOD(GetParameter) {
   {
     GLint params;
     ::glGetIntegerv(name, &params);
-    NanReturnValue(JS_INT(params));
+    info.GetReturnValue().Set(JS_INT(params));
+    break;
   }
   default: {
     // return a long
     GLint params;
     ::glGetIntegerv(name, &params);
-    NanReturnValue(JS_INT(params));
+    info.GetReturnValue().Set(JS_INT(params));
   }
   }
 
-  NanReturnValue(NanUndefined());
+  //info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(GetBufferParameter) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLenum pname = args[1]->Int32Value();
+  GLenum target = info[0]->Int32Value();
+  GLenum pname = info[1]->Int32Value();
 
   GLint params;
   glGetBufferParameteriv(target,pname,&params);
-  NanReturnValue(JS_INT(params));
+  info.GetReturnValue().Set(JS_INT(params));
 }
 
 NAN_METHOD(GetFramebufferAttachmentParameter) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target = args[0]->Int32Value();
-  GLenum attachment = args[1]->Int32Value();
-  GLenum pname = args[2]->Int32Value();
+  GLenum target = info[0]->Int32Value();
+  GLenum attachment = info[1]->Int32Value();
+  GLenum pname = info[2]->Int32Value();
 
   GLint params;
   glGetFramebufferAttachmentParameteriv(target,attachment, pname,&params);
-  NanReturnValue(JS_INT(params));
+  info.GetReturnValue().Set(JS_INT(params));
 }
 
 NAN_METHOD(GetProgramInfoLog) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint program = args[0]->Int32Value();
+  GLuint program = info[0]->Int32Value();
   int Len = 1024;
   char Error[1024];
   glGetProgramInfoLog(program, 1024, &Len, Error);
 
-  NanReturnValue(NanNew<String>(Error));
+  info.GetReturnValue().Set(JS_STR(Error));
 }
 
 NAN_METHOD(GetRenderbufferParameter) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  int target = args[0]->Int32Value();
-  int pname = args[1]->Int32Value();
+  int target = info[0]->Int32Value();
+  int pname = info[1]->Int32Value();
   int value = 0;
   glGetRenderbufferParameteriv(target,pname,&value);
 
-  NanReturnValue(JS_INT(value));
+  info.GetReturnValue().Set(JS_INT(value));
 }
 
 NAN_METHOD(GetUniform) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint program = args[0]->Int32Value();
-  GLint location = args[1]->Int32Value();
-  if(location < 0 ) NanReturnValue(NanUndefined());
+  GLuint program = info[0]->Int32Value();
+  GLint location = info[1]->Int32Value();
+  if(location < 0 ) info.GetReturnValue().Set(Nan::Undefined());
 
   float data[16]; // worst case scenario is 16 floats
 
   glGetUniformfv(program, location, data);
 
-  Local<Array> arr=NanNew<Array>(16);
+  Local<Array> arr=Nan::New<Array>(16);
   for(int i=0;i<16;i++)
     arr->Set(i,JS_FLOAT(data[i]));
 
-  NanReturnValue(arr);
+  info.GetReturnValue().Set(arr);
 }
 
 NAN_METHOD(GetVertexAttrib) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLuint index = args[0]->Int32Value();
-  GLuint pname = args[1]->Int32Value();
+  GLuint index = info[0]->Int32Value();
+  GLuint pname = info[1]->Int32Value();
 
   GLint value=0;
 
@@ -1704,60 +1718,66 @@ NAN_METHOD(GetVertexAttrib) {
   case GL_VERTEX_ATTRIB_ARRAY_ENABLED:
   case GL_VERTEX_ATTRIB_ARRAY_NORMALIZED:
     glGetVertexAttribiv(index,pname,&value);
-    NanReturnValue(JS_BOOL(value!=0));
+    info.GetReturnValue().Set(JS_BOOL(value!=0));
+    break;
   case GL_VERTEX_ATTRIB_ARRAY_SIZE:
   case GL_VERTEX_ATTRIB_ARRAY_STRIDE:
   case GL_VERTEX_ATTRIB_ARRAY_TYPE:
     glGetVertexAttribiv(index,pname,&value);
-    NanReturnValue(JS_INT(value));
+    info.GetReturnValue().Set(JS_INT(value));
+    break;
   case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
     glGetVertexAttribiv(index,pname,&value);
-    NanReturnValue(JS_INT(value));
+    info.GetReturnValue().Set(JS_INT(value));
+    break;
   case GL_CURRENT_VERTEX_ATTRIB: {
     float vextex_attribs[4];
     glGetVertexAttribfv(index,pname,vextex_attribs);
-    Local<Array> arr=NanNew<Array>(4);
+    Local<Array> arr=Nan::New<Array>(4);
     arr->Set(0,JS_FLOAT(vextex_attribs[0]));
     arr->Set(1,JS_FLOAT(vextex_attribs[1]));
     arr->Set(2,JS_FLOAT(vextex_attribs[2]));
     arr->Set(3,JS_FLOAT(vextex_attribs[3]));
-    NanReturnValue(arr);
+    info.GetReturnValue().Set(arr);
+    break;
   }
   default:
-    NanThrowError("GetVertexAttrib: Invalid Enum");
+    Nan::ThrowError("GetVertexAttrib: Invalid Enum");
   }
 
-  NanReturnValue(NanUndefined());
+  //info.GetReturnValue().Set(Nan::Undefined());
 }
 
 NAN_METHOD(GetSupportedExtensions) {
-  NanScope();
+  Nan::HandleScope scope;
 
   char *extensions=(char*) glGetString(GL_EXTENSIONS);
 
-  NanReturnValue(JS_STR(extensions));
+  info.GetReturnValue().Set(JS_STR(extensions));
 }
 
 // TODO GetExtension(name) return the extension name if found, should be an object...
 NAN_METHOD(GetExtension) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  NanAsciiString name(args[0]);
+  String::Utf8Value name(info[0]);
   char *sname=*name;
   char *extensions=(char*) glGetString(GL_EXTENSIONS);
-
   char *ext=strcasestr(extensions, sname);
-
-  if(!ext) NanReturnValue(NanUndefined());
-  NanReturnValue(JS_STR(ext, (int)::strlen(sname)));
+  
+  if(ext==NULL){ 
+      info.GetReturnValue().Set(Nan::Undefined());
+  }else{
+     info.GetReturnValue().Set(JS_STR(ext, (int)::strlen(sname))); 
+  }
 }
 
 NAN_METHOD(CheckFramebufferStatus) {
-  NanScope();
+  Nan::HandleScope scope;
 
-  GLenum target=args[0]->Int32Value();
+  GLenum target=info[0]->Int32Value();
 
-  NanReturnValue(JS_INT((int)glCheckFramebufferStatus(target)));
+  info.GetReturnValue().Set(JS_INT((int)glCheckFramebufferStatus(target)));
 }
 
 struct GLObj {
