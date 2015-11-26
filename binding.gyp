@@ -11,9 +11,9 @@
     {
       'target_name': 'webgl',
       'defines': [
-        'VERSION=0.4.3'
+        'VERSION=0.5.0'
       ],
-      'sources': [ 
+      'sources': [
           'src/bindings.cc',
           'src/image.cc',
           'src/webgl.cc',
@@ -21,9 +21,6 @@
       'include_dirs': [
         "<!(node -e \"require('nan')\")",
         '<(module_root_dir)/deps/include',
-      ],
-      'library_dirs': [
-        '<(module_root_dir)/deps/<(platform)',
       ],
       'conditions': [
         ['OS=="mac"',
@@ -37,15 +34,13 @@
         ['OS=="win"',
           {
             'include_dirs': [
-              './deps/glew/include',
-              './deps/FreeImage/include'
+              './deps/include',
               ],
             'library_dirs': [
-              './deps/glew/windows/lib/<(target_arch)',
-              './deps/FreeImage/windows/lib/<(target_arch)'
+              './deps/windows/lib/<(target_arch)',
               ],
             'libraries': [
-              'glew32.lib', 
+              'glew32.lib',
               'opengl32.lib',
               'FreeImage.lib'
               ],
@@ -54,7 +49,7 @@
               'VC_EXTRALEAN'
             ],
             'cflags' : [
-              '/O2','/Oy','/GL','/GF','/Gm-','/EHsc','/MT','/GS','/Gy','/GR-','/Gd','/wd"4530"','/wd"4251"' 
+              '/O2','/Oy','/GL','/GF','/Gm-','/EHsc','/MT','/GS','/Gy','/GR-','/Gd','/wd"4530"','/wd"4251"'
             ],
             'ldflags' : [
               '/OPT:REF','/OPT:ICF','/LTCG'
