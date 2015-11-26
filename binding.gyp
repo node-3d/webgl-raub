@@ -11,7 +11,7 @@
     {
       'target_name': 'webgl',
       'defines': [
-        'VERSION=0.4.3'
+        'VERSION=0.5.2'
       ],
       'sources': [
           'src/bindings.cc',
@@ -21,9 +21,6 @@
       'include_dirs': [
         "<!(node -e \"require('nan')\")",
         '<(module_root_dir)/deps/include',
-      ],
-      'library_dirs': [
-        '<(module_root_dir)/deps/<(platform)',
       ],
       'conditions': [
         ['OS=="mac"',
@@ -37,30 +34,28 @@
         ['OS=="win"',
           {
             'include_dirs': [
-              './deps/glew/include',
-              './deps/FreeImage/include'
+              './deps/include',
               ],
             'library_dirs': [
-              './deps/glew/windows/lib/<(target_arch)',
-              './deps/FreeImage/windows/lib/<(target_arch)'
+              './deps/windows/lib/<(target_arch)',
               ],
             'libraries': [
-              'glew32.lib', 
+              'glew32.lib',
               'opengl32.lib',
               'FreeImage.lib'
               ],
-           'defines' : [
-            'WIN32_LEAN_AND_MEAN',
-            'VC_EXTRALEAN'
-          ],
-          'msvs_settings' : {
-            'VCCLCompilerTool' : {
-              'AdditionalOptions' : ['/O2','/Oy','/GL','/GF','/Gm-','/EHsc','/MT','/GS','/Gy','/GR-','/Gd']
+            'defines' : [
+              'WIN32_LEAN_AND_MEAN',
+              'VC_EXTRALEAN'
+            ],
+            'msvs_settings' : {
+              'VCCLCompilerTool' : {
+                'AdditionalOptions' : ['/O2','/Oy','/GL','/GF','/Gm-','/EHsc','/MT','/GS','/Gy','/GR-','/Gd']
+              },
+              'VCLinkerTool' : {
+                'AdditionalOptions' : ['/OPT:REF','/OPT:ICF','/LTCG']
+              },
             },
-            'VCLinkerTool' : {
-              'AdditionalOptions' : ['/OPT:REF','/OPT:ICF','/LTCG']
-            },
-          },
           }
         ],
       ],

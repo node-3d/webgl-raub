@@ -2,7 +2,7 @@
   "author": "Mikael Bourges-Sevenier <mikeseven@gmail.com>",
   "name": "node-webgl",
   "description": "WebGL bindings for node",
-  "version": "0.4.4",
+  "version": "0.5.2",
   "main": "index.js",
   "keywords": [
     "webgl",
@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "bindings": "^1.2.1",
-    "nan": "^1.6.2",
-    "node-glfw": ">=0.3.0"
+    "nan": "^2.1.0",
+    "node-glfw": ">=0.4.0"
   }
 }
