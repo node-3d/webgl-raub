@@ -11,7 +11,7 @@
     {
       'target_name': 'webgl',
       'defines': [
-        'VERSION=0.5.1'
+        'VERSION=0.5.2'
       ],
       'sources': [
           'src/bindings.cc',
@@ -48,12 +48,14 @@
               'WIN32_LEAN_AND_MEAN',
               'VC_EXTRALEAN'
             ],
-            'cflags' : [
-              '/O2','/Oy','/GL','/GF','/Gm-','/EHsc','/MT','/GS','/Gy','/GR-','/Gd','/wd"4530"','/wd"4251"'
-            ],
-            'ldflags' : [
-              '/OPT:REF','/OPT:ICF','/LTCG'
-            ]
+            'msvs_settings' : {
+              'VCCLCompilerTool' : {
+                'AdditionalOptions' : ['/O2','/Oy','/GL','/GF','/Gm-','/EHsc','/MT','/GS','/Gy','/GR-','/Gd']
+              },
+              'VCLinkerTool' : {
+                'AdditionalOptions' : ['/OPT:REF','/OPT:ICF','/LTCG']
+              },
+            },
           }
         ],
       ],
