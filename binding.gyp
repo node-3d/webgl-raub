@@ -11,7 +11,7 @@
     {
       'target_name': 'webgl',
       'defines': [
-        'VERSION=0.5.2'
+        'VERSION=0.5.3'
       ],
       'sources': [
           'src/bindings.cc',
@@ -30,7 +30,11 @@
             'library_dirs': ['/usr/local/lib'],
           }
         ],
-        ['OS=="linux"', {'libraries': ['-lfreeimage','-lGLEW','-lGL']}],
+        ['OS=="linux"', {
+          'libraries': [
+            '-lfreeimage','-lGLEW','-lGL']
+          }
+        ],
         ['OS=="win"',
           {
             'include_dirs': [
