@@ -189,21 +189,21 @@ var shaders = {
   var halted = false;
   var it = 1;
   var frames = 0;
-  var fps = 30; 
+  var fps = 30;
   var delay = 1000/fps; // framerate speed
   var time;
   var mouseX = 0.5;
   var mouseY = 0.5;
   var animation;
   var timer;
-  
+
   // texture size (must be powers of two, remember 2048x1024 flat could also be a 128x128x128 voxel)
   var sizeX = 256, sizeY = 256; // 2048x1024 flat or 128x128x128 cube
   var viewX, viewY; // viewport size
   var resized=true;
 
   load();
-  
+
   function load() {
     clearInterval(timer);
     var canvas = document.createElement("canvas");
@@ -349,7 +349,7 @@ var shaders = {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
     // gl.uniform1i(gl.getUniformLocation(prog, "uTexSamp"), 0);
-    
+
     FBO_main = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, FBO_main);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture_main_l, 0);
@@ -493,15 +493,15 @@ var shaders = {
     if (!halted)
       advance();
     composite();
-    
+
 //      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 //    gl.clearColor(1,0,0,1);
 //    gl.clear(gl.COLOR_BUFFER_BIT);
     //gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    
+
     switch (animation) {
     case "animate":
-      requestAnimationFrame(anim, delay);  
+      requestAnimationFrame(anim, delay);
       break;
     case "reset":
       load();
