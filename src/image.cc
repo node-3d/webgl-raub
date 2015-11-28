@@ -39,7 +39,7 @@ void Image::Initialize (Handle<Object> target) {
   // prototype
   Nan::SetPrototypeMethod(ctor, "save",save);// NODE_SET_PROTOTYPE_METHOD(ctor, "save", save);
   Local<ObjectTemplate> proto = ctor->PrototypeTemplate();
-  
+
   Nan::SetAccessor(proto,JS_STR("width"), WidthGetter);
   Nan::SetAccessor(proto,JS_STR("height"), HeightGetter);
   Nan::SetAccessor(proto,JS_STR("pitch"), PitchGetter);
@@ -47,7 +47,7 @@ void Image::Initialize (Handle<Object> target) {
   Nan::Set(target, JS_STR("Image"), ctor->GetFunction());
 
   constructor_template.Reset(Isolate::GetCurrent(), ctor->GetFunction());
-  
+
   FreeImage_Initialise(true);
 }
 
@@ -133,7 +133,7 @@ NAN_GETTER(Image::SrcGetter) {
 NAN_SETTER(Image::SrcSetter) {
   Nan::HandleScope scope;
   Nan::MaybeLocal<v8::Object> buffer;
-  
+
   Image *image = ObjectWrap::Unwrap<Image>(info.This());
   String::Utf8Value filename_s(value->ToString());
   image->Load(*filename_s);
@@ -142,7 +142,7 @@ NAN_SETTER(Image::SrcSetter) {
   size_t num_pixels = FreeImage_GetWidth(image->image_bmp) * FreeImage_GetHeight(image->image_bmp);
   BYTE *pixels = FreeImage_GetBits(image->image_bmp);
   size_t num_bytes = num_pixels * 4;
-  
+
   // FreeImage stores data in BGR
   // Convert from BGR to RGB
   for(size_t i = 0; i < num_pixels; i++)
@@ -152,13 +152,13 @@ NAN_SETTER(Image::SrcSetter) {
     pixels[i4 + 0] = pixels[i4 + 2];
     pixels[i4 + 2] = temp;
   }
-  
-  buffer= Nan::NewBuffer((int)num_bytes); 
-  
+
+  buffer= Nan::NewBuffer((int)num_bytes);
+
   std::memcpy(node::Buffer::Data(buffer.ToLocalChecked()),pixels, (int)num_bytes);
-  
+
   Nan::Set(info.This(), JS_STR("data"), buffer.ToLocalChecked());
-  
+
   // emit event
   Nan::MaybeLocal<Value> emit_v = Nan::Get(info.This(), JS_STR("emit"));//info.This()->Get(Nan::New<String>("emit"));
   assert(emit_v.ToLocalChecked()->IsFunction());
