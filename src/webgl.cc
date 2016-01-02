@@ -6,7 +6,9 @@
 #include "image.h"
 #include <node.h>
 #include <node_buffer.h>
+#ifndef __RASPBERRY__
 #include <GL/glew.h>
+#endif
 
 #ifdef _WIN32
   #define  strcasestr(s, t) strstr(strupr(s), strupr(t))
@@ -83,6 +85,9 @@ inline void *getImageData(Local<Value> arg) {
 
 NAN_METHOD(Init) {
   Nan::HandleScope scope;
+#ifdef __RASPBERRY__
+  info.GetReturnValue().Set(JS_INT(0));
+#else
   GLenum err = glewInit();
   if (GLEW_OK != err)
   {
@@ -93,7 +98,7 @@ NAN_METHOD(Init) {
     //fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
     info.GetReturnValue().Set(JS_INT(0));  
   } 
-  
+#endif
 }
 
 NAN_METHOD(Uniform1f) {
@@ -586,7 +591,11 @@ NAN_METHOD(ClearDepth) {
 
   float depth = (float) info[0]->NumberValue();
 
+#if __RASPBERRY__
+  glClearDepthf(depth);
+#else
   glClearDepth(depth);
+#endif
 
   info.GetReturnValue().Set(Nan::Undefined());
 }

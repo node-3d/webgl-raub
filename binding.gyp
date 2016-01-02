@@ -1,11 +1,15 @@
 {
   'variables': {
     'platform': '<(OS)',
+    'variant': 'default',
+    'bcm_host': '<!(test ! -e /opt/vc/include/bcm_host.h ; echo $?)',
   },
   'conditions': [
     # Replace gyp platform with node platform, blech
     ['platform == "mac"', {'variables': {'platform': 'darwin'}}],
     ['platform == "win"', {'variables': {'platform': 'win32'}}],
+    # Detect Raspberry PI
+    ['platform == "linux" and target_arch=="arm" and bcm_host==1', {'variables': {'variant': 'raspberry'}}],
   ],
   'targets': [
     {
@@ -30,9 +34,17 @@
             'library_dirs': ['/usr/local/lib'],
           }
         ],
-        ['OS=="linux"', {
+        ['OS=="linux" and variant=="default"', {
           'libraries': [
             '-lfreeimage','-lGLEW','-lGL']
+          }
+        ],
+        ['OS=="linux" and variant=="raspberry"',
+          {
+            'library_dirs': ['/opt/vc/lib/'],
+            'include_dirs': ['/opt/vc/include/'],
+            'libraries': ['-lfreeimage','-lGLESv2'],
+            'defines': ['__RASPBERRY__'],
           }
         ],
         ['OS=="win"',

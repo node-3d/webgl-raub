@@ -581,8 +581,10 @@ void init(Handle<Object> target)
   JS_GL_CONSTANT(DEPTH_COMPONENT16);
   JS_GL_CONSTANT(STENCIL_INDEX);
   JS_GL_CONSTANT(STENCIL_INDEX8);
+#ifndef __RASPBERRY__
   JS_GL_CONSTANT(DEPTH_STENCIL);
   JS_GL_CONSTANT(DEPTH24_STENCIL8);
+#endif
 
   JS_GL_CONSTANT(RENDERBUFFER_WIDTH);
   JS_GL_CONSTANT(RENDERBUFFER_HEIGHT);
@@ -602,7 +604,16 @@ void init(Handle<Object> target)
   JS_GL_CONSTANT(COLOR_ATTACHMENT0);
   JS_GL_CONSTANT(DEPTH_ATTACHMENT);
   JS_GL_CONSTANT(STENCIL_ATTACHMENT);
+#ifndef __RASPBERRY__
   JS_GL_CONSTANT(DEPTH_STENCIL_ATTACHMENT);
+#else
+  // There is no support for GL_DEPTH_STENCIL_ATTACHMENT in OpenGL ES 2.0,
+  // and although some related extensions exist, they seem to be unsupported
+  // on Raspberry PI. Additional information:
+  // https://groups.google.com/forum/#!msg/vispy-dev/a0wdoO5Pn-I/T4tAqfOSvREJ
+  // https://stackoverflow.com/questions/28996721/using-a-depth-and-stencil-renderbuffer-attachment-for-framebuffer-in-opengl-es
+  // https://mail.gnome.org/archives/commits-list/2013-June/msg02459.html
+#endif
 
   JS_GL_CONSTANT(NONE);
 

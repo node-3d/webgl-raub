@@ -5,6 +5,9 @@
     #include <OpenGLES/ES2/gl.h>
     #include <OpenGLES/ES2/glext.h>
     typedef double GLclampd;
+#elif __RASPBERRY__
+    #include <GLES2/gl2.h>
+    #include <GLES2/gl2ext.h>
 #else
     /*#if defined (__APPLE__) || defined(MACOSX)
       #include <OpenGL/gl3.h>
