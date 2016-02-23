@@ -2,7 +2,7 @@
   'variables': {
     'platform': '<(OS)',
     'variant': 'default',
-    'bcm_host': '<!(test ! -e /opt/vc/include/bcm_host.h ; echo $?)',
+	'bcm_host': '<!(node -e "require(\\"fs\\").existsSync(\\"/opt/vc/include/bcm_host.h\\")")',
   },
   'conditions': [
     # Replace gyp platform with node platform, blech
