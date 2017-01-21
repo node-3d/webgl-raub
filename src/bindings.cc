@@ -435,6 +435,10 @@ void init(Handle<Object> target)
   JS_GL_CONSTANT(INCR_WRAP);
   JS_GL_CONSTANT(DECR_WRAP);
 
+//add missing const for point clouds, sprites:
+  JS_GL_CONSTANT(PROGRAM_POINT_SIZE);
+  JS_GL_CONSTANT(POINT_SPRITE);
+
   /* StringName */
   JS_GL_CONSTANT(VENDOR);
   JS_GL_CONSTANT(RENDERER);
