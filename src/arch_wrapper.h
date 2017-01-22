@@ -8,6 +8,11 @@
 #elif __RASPBERRY__
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
+//    #include <GL/glext.h> //GL_POINT_SPRITE, GL_PROGRAM_POINT_SIZE
+//from GL/glext.h:
+//defined inline to avoid conflicts/dependencies with GL/glew.h + GL/glext.h
+    #define GL_POINT_SPRITE                   0x8861
+    #define GL_PROGRAM_POINT_SIZE             0x8642
 #else
     /*#if defined (__APPLE__) || defined(MACOSX)
       #include <OpenGL/gl3.h>
