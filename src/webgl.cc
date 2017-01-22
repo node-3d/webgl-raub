@@ -552,6 +552,7 @@ NAN_METHOD(GetProgramParameter) {
   case GL_ATTACHED_SHADERS:
   case GL_ACTIVE_ATTRIBUTES:
   case GL_ACTIVE_UNIFORMS:
+  case GL_INFO_LOG_LENGTH:
     glGetProgramiv(program, pname, &value);
     info.GetReturnValue().Set(JS_FLOAT(static_cast<long>(value)));
     break;
