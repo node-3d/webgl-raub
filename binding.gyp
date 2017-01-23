@@ -1,8 +1,9 @@
 {
 	'variables': {
-		'platform': '<(OS)',
-		'variant' : 'default',
-		'bcm_host': '<!(node -e "console.log(+require(\\"fs\\").existsSync(\\"/opt/vc/include/bcm_host.h\\"))")',
+		'platform' : '<(OS)',
+		'variant'  : 'default',
+		'bcm_host' : '<!(node -e "console.log(+require(\\"fs\\").existsSync(\\"/opt/vc/include/bcm_host.h\\"))")',
+		'deps_root': '<!(node -e "console.log(require(\'node-deps-opengl-raub\'))")',
 	},
 	'conditions': [
 		# Replace gyp platform with node platform, blech
@@ -22,7 +23,7 @@
 			],
 			'include_dirs': [
 				"<!(node -e \"require('nan')\")",
-				'<(module_root_dir)/deps/include',
+				'<(deps_root)/include',
 			],
 			'conditions': [
 				[
@@ -51,8 +52,7 @@
 				[
 					'OS=="win"',
 					{
-						'include_dirs': [ './deps/include' ],
-						'library_dirs': [ './deps/windows/lib/<(target_arch)' ],
+						'library_dirs': [ '<(deps_root)/bin_<(platform)' ],
 						'libraries': [
 							'glew32.lib',
 							'opengl32.lib',
@@ -118,8 +118,8 @@
 								'destination': '<(module_root_dir)/bin_win32',
 								'files': [
 									'<(module_root_dir)/build/Release/webgl.node',
-									'<(module_root_dir)/deps/windows/dll/FreeImage.dll',
-									'<(module_root_dir)/deps/windows/dll/glew32.dll',
+									'<(deps_root)/bin_<(platform)/FreeImage.dll',
+									'<(deps_root)/bin_<(platform)/glew32.dll',
 								]
 							}
 						]
