@@ -2,7 +2,7 @@
 	"name": "node-webgl-raub",
 	"author": "Luis Blanco <raubtierxxx@gmail.com>",
 	"description": "WebGL for nodejs. Fork of https://github.com/djulien/node-webgl .",
-	"version": "0.5.8",
+	"version": "0.5.9",
 	"main": "index.js",
 	"keywords": [
 		"webgl",
@@ -17,7 +17,7 @@
 			"skype": "rauber666"
 		}
 	],
-	"license" : "BSD-3-Clause",
+	"license" : "MIT",
 	"directories": {
 		"src": "src",
 		"lib": "lib",
