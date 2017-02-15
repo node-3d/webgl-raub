@@ -3,7 +3,9 @@
 		'platform' : '<(OS)',
 		'variant'  : 'default',
 		'bcm_host' : '<!(node -e "console.log(+require(\\"fs\\").existsSync(\\"/opt/vc/include/bcm_host.h\\"))")',
-		'deps_root': '<!(node -e "console.log(require(\'node-deps-opengl-raub\'))")',
+		'opengl_root'   : '<!(node -e "console.log(require(\'node-deps-opengl-raub\').root)")',
+		'opengl_include': '<(opengl_root)/include',
+		'opengl_bin'    : '<!(node -e "console.log(require(\'node-deps-opengl-raub\').bin)")',
 	},
 	'conditions': [
 		# Replace gyp platform with node platform, blech
@@ -23,8 +25,9 @@
 			],
 			'include_dirs': [
 				"<!(node -e \"require('nan')\")",
-				'<(deps_root)/include',
+				'<(opengl_include)',
 			],
+			'library_dirs': [ '<(opengl_bin)' ],
 			'conditions': [
 				[
 					'OS=="mac"',
@@ -52,12 +55,7 @@
 				[
 					'OS=="win"',
 					{
-						'library_dirs': [ '<(deps_root)/bin_<(platform)' ],
-						'libraries': [
-							'glew32.lib',
-							'opengl32.lib',
-							'FreeImage.lib'
-						],
+						'libraries': [ 'FreeImage.lib', 'glfw3dll.lib', 'glew32.lib', 'opengl32.lib' ],
 						'defines' : [
 							'WIN32_LEAN_AND_MEAN',
 							'VC_EXTRALEAN'
@@ -80,53 +78,35 @@
 		},
 		
 		{
-			'target_name': 'copy_binary',
-			'type':'none',
+			'target_name'  : 'copy_binary',
+			'type'         :'none',
 			'dependencies' : ['webgl'],
-			'conditions': [
-				[
-					'OS=="linux"',
-					{
-						'copies': [
+			'copies'       : [
+				{
+					'destination': '<(module_root_dir)/bin_<(platform)',
+					'conditions': [
+						[
+							'OS=="linux"',
 							{
-								'destination': '<(module_root_dir)/bin_linux',
-								'files': [
-									'<(module_root_dir)/build/Release/webgl.node',
-								]
+								'files': [ '<(module_root_dir)/build/Release/webgl.node' ]
 							}
-						]
-					}
-				],
-				[
-					'OS=="mac"',
-					{
-						'copies': [
+						],
+						[
+							'OS=="mac"',
 							{
-								'destination': '<(module_root_dir)/bin_darwin',
-								'files': [
-									'<(module_root_dir)/build/Release/webgl.node',
-								]
+								'files': [ '<(module_root_dir)/build/Release/webgl.node' ]
 							}
-						]
-					}
-				],
-				[
-					'OS=="win"',
-					{
-						'copies': [
+						],
+						[
+							'OS=="win"',
 							{
-								'destination': '<(module_root_dir)/bin_win32',
-								'files': [
-									'<(module_root_dir)/build/Release/webgl.node',
-									'<(deps_root)/bin_<(platform)/FreeImage.dll',
-									'<(deps_root)/bin_<(platform)/glew32.dll',
-								]
-							}
-						]
-					},
-				],
-				
-			],
+								'files': [ '<(module_root_dir)/build/Release/webgl.node' ]
+							},
+						],
+						
+					]
+				}
+			]
 			
 		}
 	]

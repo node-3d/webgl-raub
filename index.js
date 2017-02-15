@@ -1,5 +1,6 @@
 'use strict';
 
+require('node-glfw-raub');
 
 module.exports = {
 	webgl   : require('./lib/webgl'),

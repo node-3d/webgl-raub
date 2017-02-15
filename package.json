@@ -2,7 +2,7 @@
 	"name": "node-webgl-raub",
 	"author": "Luis Blanco <raubtierxxx@gmail.com>",
 	"description": "WebGL for nodejs. Fork of https://github.com/djulien/node-webgl .",
-	"version": "0.5.8",
+	"version": "0.5.9",
 	"main": "index.js",
 	"keywords": [
 		"webgl",
@@ -34,7 +34,6 @@
 	},
 	"dependencies": {
 		"nan": "^2.1.0",
-		"node-glfw-raub": "^0.4.6",
-		"node-deps-opengl-raub": "0.1.2"
+		"node-glfw-raub": "^0.4.8"
 	}
 }
