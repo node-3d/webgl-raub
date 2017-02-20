@@ -79,35 +79,67 @@
 		
 		{
 			'target_name'  : 'copy_binary',
-			'type'         :'none',
+			'type'         : 'none',
 			'dependencies' : ['webgl'],
+			'message'      : 'Copying the addon into the platform-specific directory.',
 			'copies'       : [
 				{
-					'destination': '<(module_root_dir)/bin_<(platform)',
-					'conditions': [
+					'destination' : '<(module_root_dir)/bin_<(platform)',
+					'conditions'  : [
 						[
 							'OS=="linux"',
-							{
-								'files': [ '<(module_root_dir)/build/Release/webgl.node' ]
-							}
+							{ 'files' : [] }
 						],
 						[
 							'OS=="mac"',
-							{
-								'files': [ '<(module_root_dir)/build/Release/webgl.node' ]
-							}
+							{ 'files' : [] }
 						],
 						[
 							'OS=="win"',
-							{
-								'files': [ '<(module_root_dir)/build/Release/webgl.node' ]
-							},
+							{ 'files' : [ '<(module_root_dir)/build/Release/webgl.node' ] },
 						],
-						
 					]
 				}
-			]
-			
-		}
+			],
+		},
+		
+		{
+			'target_name'  : 'remove_temporaries',
+			'type'         : 'none',
+			'dependencies' : ['copy_binary'],
+			'message'      : 'Removing temporary files.',
+			'actions'      : [
+				{
+					'action_name' : 'action_remove1',
+					'inputs'      : ['build/Release/webgl.*'],
+					'outputs'     : ['build'],
+					'conditions'  : [
+						[ 'OS=="linux"', { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
+						[ 'OS=="mac"'  , { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
+						[ 'OS=="win"'  , { 'action' : [ '<(module_root_dir)/_del', '<@(_inputs)' ] } ],
+					],
+				},
+				{
+					'action_name' : 'action_remove2',
+					'inputs'      : ['build/Release/obj/webgl/*.obj'],
+					'outputs'     : ['build'],
+					'conditions'  : [
+						[ 'OS=="linux"', { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
+						[ 'OS=="mac"'  , { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
+						[ 'OS=="win"'  , { 'action' : [ '<(module_root_dir)/_del', '<@(_inputs)' ] } ],
+					],
+				},
+				{
+					'action_name' : 'action_remove3',
+					'inputs'      : ['build/Release/obj/webgl/*.pdb'],
+					'outputs'     : ['build'],
+					'conditions'  : [
+						[ 'OS=="linux"', { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
+						[ 'OS=="mac"'  , { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
+						[ 'OS=="win"'  , { 'action' : [ '<(module_root_dir)/_del', '<@(_inputs)' ] } ],
+					],
+				},
+			],
+		},
 	]
 }
