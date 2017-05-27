@@ -10,7 +10,7 @@
 	'conditions': [
 		# Replace gyp platform with node platform, blech
 		['platform == "mac"', {'variables': {'platform': 'darwin'}}],
-		['platform == "win"', {'variables': {'platform': 'win32'}}],
+		['platform == "win"', {'variables': {'platform': 'windows'}}],
 		# Detect Raspberry PI
 		['platform == "linux" and target_arch=="arm" and bcm_host==1', {'variables': {'variant': 'raspberry'}}],
 	],
@@ -81,7 +81,6 @@
 			'target_name'  : 'copy_binary',
 			'type'         : 'none',
 			'dependencies' : ['webgl'],
-			'message'      : 'Copying the addon into the platform-specific directory.',
 			'copies'       : [
 				{
 					'destination' : '<(module_root_dir)/bin_<(platform)',
@@ -104,10 +103,9 @@
 		},
 		
 		{
-			'target_name'  : 'remove_temporaries',
+			'target_name'  : 'remove_extras',
 			'type'         : 'none',
 			'dependencies' : ['copy_binary'],
-			'message'      : 'Removing temporary files.',
 			'actions'      : [
 				{
 					'action_name' : 'action_remove1',
