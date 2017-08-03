@@ -2,7 +2,7 @@ nodejs=true;
 
 //Read and eval library
 fs=require('fs');
-eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
+eval(fs.readFileSync(__dirname+ '/libs/glMatrix-0.9.5.min.js','utf8'));
 
 var WebGL=require('../index'),
     Image = WebGL.Image,
@@ -187,7 +187,7 @@ function initTexture() {
   };
 
   if(nodejs)
-    glassTexture.image.src = __dirname+"/glass.gif";
+    glassTexture.image.src = __dirname+"/img/glass.gif";
   else
     glassTexture.image.src = "glass.gif";
 }

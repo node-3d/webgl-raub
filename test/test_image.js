@@ -1,9 +1,12 @@
-var Image = require('../lib/image');
+'use strict';
 
-var img = new Image();
+const Image = require('../lib/image');
 
-img.onload=function() {
+
+const img = new Image();
+
+img.onload = function () {
   console.log("web onload called");
-}
+};
 
-img.src=__dirname+"/node_logo.png";
+img.src = 'img/glass.gif';
