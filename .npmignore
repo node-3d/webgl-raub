@@ -7,5 +7,6 @@ build*
 .DS_Store
 Debug
 node_modules
+package-lock.json
 bin_*
 *.log
