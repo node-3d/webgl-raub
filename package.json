@@ -1,29 +1,29 @@
 {
-	"name": "node-webgl-raub",
-	"author": "Luis Blanco <raubtierxxx@gmail.com>",
-	"description": "WebGL for nodejs. Fork of https://github.com/djulien/node-webgl .",
-	"version": "0.7.1",
-	"main": "index.js",
-	"keywords": [
-		"webgl",
-		"opengl",
-		"3d",
-		"graphics"
-	],
-	"maintainers": [
-		{
-			"name": "Luis Blanco",
-			"email": "raubtierxxx@gmail.com",
-			"skype": "rauber666"
-		}
-	],
-	"license" : "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/raub/node-webgl.git"
-	},
-	"dependencies": {
-		"nan": "^2.1.0",
-		"node-glfw-raub": "^0.5.0"
-	}
+  "name": "node-webgl-raub",
+  "author": "Luis Blanco <raubtierxxx@gmail.com>",
+  "description": "WebGL for nodejs",
+  "version": "0.7.5",
+  "main": "index.js",
+  "keywords": [
+    "webgl",
+    "opengl",
+    "3d",
+    "graphics"
+  ],
+  "maintainers": [
+    {
+      "name": "Luis Blanco",
+      "email": "raubtierxxx@gmail.com",
+      "skype": "rauber666"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/raub/node-webgl.git"
+  },
+  "dependencies": {
+    "nan": "2.8.0",
+    "node-glfw-raub": "0.5.3"
+  }
 }

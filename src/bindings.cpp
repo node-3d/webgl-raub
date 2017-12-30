@@ -13,7 +13,7 @@
 v8::PropertyAttribute constant_attributes = 
         static_cast<v8::PropertyAttribute>(v8::ReadOnly | v8::DontDelete);    
 // Used to be a macro, hence the uppercase name.
-#define JS_GL_SET_CONSTANT(name, constant) Nan::ForceSet(target, JS_STR( name ), \
+#define JS_GL_SET_CONSTANT(name, constant) Nan::DefineOwnProperty(target, JS_STR( name ), \
     JS_INT(constant), constant_attributes)
 
 //#define JS_GL_SET_CONSTANT(name, value) NODE_DEFINE_CONSTANTNODE_DEFINE_CONSTANT

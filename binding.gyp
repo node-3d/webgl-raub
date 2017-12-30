@@ -106,38 +106,20 @@
 			'target_name'  : 'remove_extras',
 			'type'         : 'none',
 			'dependencies' : ['copy_binary'],
-			'actions'      : [
-				{
-					'action_name' : 'action_remove1',
-					'inputs'      : ['build/Release/webgl.*'],
-					'outputs'     : ['build'],
-					'conditions'  : [
-						[ 'OS=="linux"', { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
-						[ 'OS=="mac"'  , { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
-						[ 'OS=="win"'  , { 'action' : [ '<(module_root_dir)/_del', '<@(_inputs)' ] } ],
-					],
-				},
-				{
-					'action_name' : 'action_remove2',
-					'inputs'      : ['build/Release/obj/webgl/*.obj'],
-					'outputs'     : ['build'],
-					'conditions'  : [
-						[ 'OS=="linux"', { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
-						[ 'OS=="mac"'  , { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
-						[ 'OS=="win"'  , { 'action' : [ '<(module_root_dir)/_del', '<@(_inputs)' ] } ],
-					],
-				},
-				{
-					'action_name' : 'action_remove3',
-					'inputs'      : ['build/Release/obj/webgl/*.pdb'],
-					'outputs'     : ['build'],
-					'conditions'  : [
-						[ 'OS=="linux"', { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
-						[ 'OS=="mac"'  , { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
-						[ 'OS=="win"'  , { 'action' : [ '<(module_root_dir)/_del', '<@(_inputs)' ] } ],
-					],
-				},
-			],
+			'actions'      : [{
+				'action_name' : 'Build intermediates removed.',
+				'inputs'      : [],
+				'outputs'     : ['build'],
+				'conditions'  : [
+					[ 'OS=="linux"', { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
+					[ 'OS=="mac"'  , { 'action' : [ 'rm -rf <@(_inputs)' ] } ],
+					[ 'OS=="win"'  , { 'action' : [
+						'<(module_root_dir)/_del "<(module_root_dir)/build/Release/webgl.*" && ' +
+						'<(module_root_dir)/_del "<(module_root_dir)/build/Release/obj/webgl/*.*'
+					] } ],
+				],
+			}],
 		},
+		
 	]
 }

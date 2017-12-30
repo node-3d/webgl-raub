@@ -1,1 +1,1 @@
-cmd /C "del /F %*"
+del /f /q %*
