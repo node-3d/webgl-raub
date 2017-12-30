@@ -11,17 +11,15 @@
 		# Replace gyp platform with node platform, blech
 		['platform == "mac"', {'variables': {'platform': 'darwin'}}],
 		['platform == "win"', {'variables': {'platform': 'windows'}}],
-		# Detect Raspberry PI
-		['platform == "linux" and target_arch=="arm" and bcm_host==1', {'variables': {'variant': 'raspberry'}}],
 	],
 	'targets': [
 		{
 			'target_name': 'webgl',
 			'defines': [ 'VERSION=0.5.5' ],
 			'sources': [
-				'src/bindings.cc',
-				'src/image.cc',
-				'src/webgl.cc',
+				'src/bindings.cpp',
+				'src/image.cpp',
+				'src/webgl.cpp',
 			],
 			'include_dirs': [
 				"<!(node -e \"require('nan')\")",
@@ -38,18 +36,9 @@
 					}
 				],
 				[
-					'OS=="linux" and variant=="default"',
+					'OS=="linux"',
 					{
 						'libraries': [ '-lfreeimage','-lGLEW','-lGL' ]
-					}
-				],
-				[
-					'OS=="linux" and variant=="raspberry"',
-					{
-						'library_dirs': ['/opt/vc/lib/'],
-						'include_dirs': ['/opt/vc/include/'],
-						'libraries': ['-lfreeimage','-lGLESv2'],
-						'defines': ['__RASPBERRY__'],
 					}
 				],
 				[

@@ -1,12 +1,13 @@
-#ifndef COMMON_H_
-#define COMMON_H_
+#ifndef _COMMON_HPP_
+#define _COMMON_HPP_
+
 
 #include <node.h>
 #include <nan.h>
 #include <v8.h>
 
-#include "arch_wrapper.h"
 
+#include <GL/glew.h>
 
 #define JS_STR(...) Nan::New<String>(__VA_ARGS__).ToLocalChecked()
 #define JS_INT(val) Nan::New<v8::Integer>(val)
@@ -48,12 +49,25 @@
 #define REQ_UINT32_ARG(I, VAR)                                          \
 	if (info.Length() <= (I) || ! info[I]->IsUint32())                  \
 		Nan::ThrowTypeError("Argument " #I " must be a uint32");        \
-	int VAR = info[I]->Uint32Value();
+	unsigned int VAR = info[I]->Uint32Value();
+
+#define USE_UINT32_ARG(I, VAR, DEF)                                     \
+	if ( ! (info[I]->IsNull() || info[I]->IsUint32()) )                 \
+		Nan::ThrowTypeError("Argument " #I " must be an uint32 or null");\
+	unsigned int VAR = info[I]->IsNull() ? (DEF) : info[I]->Uint32Value();
+	
+#define LET_UINT32_ARG(I, VAR)                                          \
+	USE_UINT32_ARG(I, VAR, 0)
 
 #define REQ_INT_ARG(I, VAR)                                             \
 	if (info.Length() <= (I) || ! info[I]->IsNumber())                  \
 		Nan::ThrowTypeError("Argument " #I " must be a int");           \
-	size_t VAR = static_cast<size_t>(info[I]->NumberValue());
+	size_t VAR = static_cast<size_t>(info[I]->IntegerValue());
+
+#define REQ_DOUBLE_ARG(I, VAR)                                          \
+	if (info.Length() <= (I) || ! info[I]->IsNumber())                  \
+		Nan::ThrowTypeError("Argument " #I " must be a int");           \
+	double VAR = static_cast<size_t>(info[I]->NumberValue());
 
 #define REQ_FLOAT_ARG(I, VAR)                                           \
 	if (info.Length() <= (I) || ! info[I]->IsNumber())                  \
@@ -75,11 +89,11 @@
 		Nan::ThrowTypeError("Argument " #I " must be an object");       \
 	Local<Object> VAR = Local<Object>::Cast(info[I]);
 
-#define REQ_ARR_ARG(I, VAR)                                             \
+#define REQ_ARRV_ARG(I, VAR)                                            \
 	REQ_OBJ_ARG(I, _obj_##VAR);                                         \
 	if( ! _obj_##VAR->IsArrayBufferView() )                             \
 		Nan::ThrowTypeError("Argument " #I " must be an array buffer"); \
-	Local<ArrayBufferView> VAR = Local<ArrayBufferView>::Cast(obj);
+	Local<ArrayBufferView> VAR = Local<ArrayBufferView>::Cast(_obj_##VAR);
 
 #define REQ_ERROR_THROW(error)                                          \
 	if (ret == error)                                                   \
@@ -90,4 +104,4 @@
 #define RET_VALUE(VAL) info.GetReturnValue().Set(VAL);
 #define RET_UNDEFINED info.GetReturnValue().Set(Nan::Undefined());
 
-#endif /* COMMON_H_ */
+#endif // _COMMON_HPP_

@@ -2,10 +2,10 @@
 #include <vector>
 #include <iostream>
 
-#include <GL/glew.h>
-
 #include <node.h>
 #include <node_buffer.h>
+
+#include <GL/glew.h>
 
 #include "webgl.hpp"
 #include "image.hpp"
@@ -104,8 +104,6 @@ NAN_METHOD(Uniform1f) { NAN_HS;
 	
 	glUniform1f(location, x);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -116,8 +114,6 @@ NAN_METHOD(Uniform2f) { NAN_HS;
 	REQ_FLOAT_ARG(2, y);
 	
 	glUniform2f(location, x, y);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -130,8 +126,6 @@ NAN_METHOD(Uniform3f) { NAN_HS;
 	REQ_FLOAT_ARG(3, z);
 	
 	glUniform3f(location, x, y, z);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -146,8 +140,6 @@ NAN_METHOD(Uniform4f) { NAN_HS;
 	
 	glUniform4f(location, x, y, z, w);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -157,8 +149,6 @@ NAN_METHOD(Uniform1i) { NAN_HS;
 	REQ_INT32_ARG(1, x);
 	
 	glUniform1i(location, x);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -171,8 +161,6 @@ NAN_METHOD(Uniform2i) { NAN_HS;
 	
 	glUniform2i(location, x, y);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -184,8 +172,6 @@ NAN_METHOD(Uniform3i) { NAN_HS;
 	REQ_INT32_ARG(3, z);
 	
 	glUniform3i(location, x, y, z);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -200,8 +186,6 @@ NAN_METHOD(Uniform4i) { NAN_HS;
 	
 	glUniform4i(location, x, y, z, w);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -213,8 +197,6 @@ NAN_METHOD(Uniform1fv) { NAN_HS;
 	GLfloat *ptr = getArrayData<GLfloat>(info[1], &num);
 	
 	glUniform1fv(location, num, ptr);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -229,8 +211,6 @@ NAN_METHOD(Uniform2fv) { NAN_HS;
 	
 	glUniform2fv(location, num, ptr);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -243,8 +223,6 @@ NAN_METHOD(Uniform3fv) { NAN_HS;
 	num /= 3;
 	
 	glUniform3fv(location, num, ptr);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -259,8 +237,6 @@ NAN_METHOD(Uniform4fv) { NAN_HS;
 	
 	glUniform4fv(location, num, ptr);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -272,8 +248,6 @@ NAN_METHOD(Uniform1iv) { NAN_HS;
 	GLint *ptr = getArrayData<GLint>(info[1], &num);
 	
 	glUniform1iv(location, num, ptr);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -288,8 +262,6 @@ NAN_METHOD(Uniform2iv) { NAN_HS;
 	
 	glUniform2iv(location, num, ptr);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -302,8 +274,6 @@ NAN_METHOD(Uniform3iv) { NAN_HS;
 	num /= 3;
 	
 	glUniform3iv(location, num, ptr);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -318,8 +288,6 @@ NAN_METHOD(Uniform4iv) { NAN_HS;
 	
 	glUniform4iv(location, num, ptr);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -329,8 +297,6 @@ NAN_METHOD(PixelStorei) { NAN_HS;
 	REQ_INT32_ARG(1, param);
 	
 	glPixelStorei(name, param);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -342,8 +308,6 @@ NAN_METHOD(BindAttribLocation) { NAN_HS;
 	REQ_UTF8_ARG(2, name);
 	
 	glBindAttribLocation(program, index, *name);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -362,8 +326,6 @@ NAN_METHOD(DrawArrays) { NAN_HS;
 	REQ_INT32_ARG(2, count);
 	
 	glDrawArrays(mode, first, count);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -428,8 +390,6 @@ NAN_METHOD(GenerateMipmap) { NAN_HS;
 	
 	glGenerateMipmap(target);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -449,8 +409,6 @@ NAN_METHOD(DepthFunc) { NAN_HS;
 	
 	glDepthFunc(id);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -462,8 +420,6 @@ NAN_METHOD(Viewport) { NAN_HS;
 	REQ_INT32_ARG(3, h);
 	
 	glViewport(x, y, w, h);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -496,8 +452,6 @@ NAN_METHOD(ShaderSource) { NAN_HS;
 	
 	glShaderSource(id, 1, codes, &length);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -507,8 +461,6 @@ NAN_METHOD(CompileShader) { NAN_HS;
 	
 	glCompileShader(id);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -517,8 +469,6 @@ NAN_METHOD(FrontFace) { NAN_HS;
 	REQ_INT32_ARG(0, id);
 	
 	glFrontFace(id);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -540,13 +490,13 @@ NAN_METHOD(GetShaderParameter) { NAN_HS;
 	
 	case GL_SHADER_TYPE:
 		glGetShaderiv(shader, pname, &value);
-		RET_VALUE(JS_FLOAT(static_cast<unsigned long>(value)));
+		RET_VALUE(JS_NUM(static_cast<unsigned long>(value)));
 		break;
 	
 	case GL_INFO_LOG_LENGTH:
 	case GL_SHADER_SOURCE_LENGTH:
 		glGetShaderiv(shader, pname, &value);
-		RET_VALUE(JS_FLOAT(static_cast<long>(value)));
+		RET_VALUE(JS_NUM(static_cast<long>(value)));
 		break;
 	
 	default:
@@ -592,8 +542,6 @@ NAN_METHOD(AttachShader) { NAN_HS;
 	
 	glAttachShader(program, shader);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -602,8 +550,6 @@ NAN_METHOD(LinkProgram) { NAN_HS;
 	REQ_INT32_ARG(0, id);
 	
 	glLinkProgram(id);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -629,7 +575,7 @@ NAN_METHOD(GetProgramParameter) { NAN_HS;
 	case GL_ACTIVE_UNIFORMS:
 	case GL_INFO_LOG_LENGTH:
 		glGetProgramiv(program, name, &value);
-		RET_VALUE(JS_FLOAT(static_cast<long>(value)));
+		RET_VALUE(JS_NUM(static_cast<long>(value)));
 		break;
 	
 	default:
@@ -659,8 +605,6 @@ NAN_METHOD(ClearColor) { NAN_HS;
 	
 	glClearColor(red, green, blue, alpha);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -668,8 +612,6 @@ NAN_METHOD(ClearDepth) { NAN_HS;
 	
 	REQ_FLOAT_ARG(0, depth);
 	glClearDepth(depth);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -680,8 +622,6 @@ NAN_METHOD(Disable) { NAN_HS;
 	
 	glDisable(id);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -690,8 +630,6 @@ NAN_METHOD(Enable) { NAN_HS;
 	REQ_INT32_ARG(0, id);
 	
 	glEnable(id);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -719,8 +657,6 @@ NAN_METHOD(BindTexture) { NAN_HS;
 	
 	glBindTexture(target, texture);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -739,8 +675,6 @@ NAN_METHOD(TexImage2D) { NAN_HS;
 	
 	glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -751,8 +685,6 @@ NAN_METHOD(TexParameteri) { NAN_HS;
 	REQ_INT32_ARG(2, param);
 	
 	glTexParameteri(target, name, param);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -765,8 +697,6 @@ NAN_METHOD(TexParameterf) { NAN_HS;
 	
 	glTexParameterf(target, name, param);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -776,8 +706,6 @@ NAN_METHOD(Clear) { NAN_HS;
 	
 	glClear(target);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -786,8 +714,6 @@ NAN_METHOD(UseProgram) { NAN_HS;
 	REQ_INT32_ARG(0, id);
 	
 	glUseProgram(id);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -815,8 +741,6 @@ NAN_METHOD(BindBuffer) { NAN_HS;
 	
 	glBindBuffer(target,buffer);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -843,8 +767,6 @@ NAN_METHOD(BindFramebuffer) { NAN_HS;
 	
 	glBindFramebuffer(target, buffer);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -857,8 +779,6 @@ NAN_METHOD(FramebufferTexture2D) { NAN_HS;
 	REQ_INT32_ARG(4, level);
 	
 	glFramebufferTexture2D(target, attachment, textarget, texture, level);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -888,8 +808,6 @@ NAN_METHOD(BufferData) { NAN_HS;
 		
 	}
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -905,8 +823,6 @@ NAN_METHOD(BufferSubData) { NAN_HS;
 	
 	glBufferSubData(target, offset, size, data);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -915,8 +831,6 @@ NAN_METHOD(BlendEquation) { NAN_HS;
 	REQ_INT32_ARG(0, mode);
 	
 	glBlendEquation(mode);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -928,8 +842,6 @@ NAN_METHOD(BlendFunc) { NAN_HS;
 	
 	glBlendFunc(sfactor,dfactor);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -938,8 +850,6 @@ NAN_METHOD(EnableVertexAttribArray) { NAN_HS;
 	REQ_INT32_ARG(0, id);
 	
 	glEnableVertexAttribArray(id);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -951,12 +861,12 @@ NAN_METHOD(VertexAttribPointer) { NAN_HS;
 	REQ_INT32_ARG(2, type);
 	REQ_BOOL_ARG(3, normalized);
 	REQ_INT32_ARG(4, stride);
-	REQ_INT32_ARG(5, offset);
+	REQ_INT_ARG(5, ptr);
+	
+	GLvoid *vertices = reinterpret_cast<GLvoid*>(ptr);
 	
 	// printf("VertexAttribPointer %d %d %d %d %d %d\n", indx, size, type, normalized, stride, offset);
-	glVertexAttribPointer(indx, size, type, normalized, stride, (const GLvoid *)offset);
-	
-	RET_UNDEFINED;
+	glVertexAttribPointer(indx, size, type, normalized, stride, vertices);
 	
 }
 
@@ -967,8 +877,6 @@ NAN_METHOD(ActiveTexture) { NAN_HS;
 	
 	glActiveTexture(id);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -977,13 +885,11 @@ NAN_METHOD(DrawElements) { NAN_HS;
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, count);
 	REQ_INT32_ARG(2, type);
-	REQ_UINT32_ARG(3, ptr);
+	REQ_INT_ARG(3, ptr);
 	
 	GLvoid *indices = reinterpret_cast<GLvoid*>(ptr);
 	
 	glDrawElements(mode, count, type, indices);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -992,16 +898,12 @@ NAN_METHOD(Flush) { NAN_HS;
 	
 	glFlush();
 	
-	RET_UNDEFINED;
-	
 }
 
 
 NAN_METHOD(Finish) { NAN_HS;
 	
 	glFinish();
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1012,8 +914,6 @@ NAN_METHOD(VertexAttrib1f) { NAN_HS;
 	REQ_FLOAT_ARG(1, x);
 	
 	glVertexAttrib1f(location, x);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1026,8 +926,6 @@ NAN_METHOD(VertexAttrib2f) { NAN_HS;
 	
 	glVertexAttrib2f(location, x, y);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1039,8 +937,6 @@ NAN_METHOD(VertexAttrib3f) { NAN_HS;
 	REQ_FLOAT_ARG(3, z);
 	
 	glVertexAttrib3f(location, x, y, z);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1055,8 +951,6 @@ NAN_METHOD(VertexAttrib4f) { NAN_HS;
 	
 	glVertexAttrib4f(location, x, y, z, w);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1066,8 +960,6 @@ NAN_METHOD(VertexAttrib1fv) { NAN_HS;
 	GLfloat *data = getArrayData<GLfloat>(info[1]);
 	
 	glVertexAttrib1fv(location, data);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1079,8 +971,6 @@ NAN_METHOD(VertexAttrib2fv) { NAN_HS;
 	
 	glVertexAttrib2fv(location, data);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1091,8 +981,6 @@ NAN_METHOD(VertexAttrib3fv) { NAN_HS;
 	
 	glVertexAttrib3fv(location, data);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1102,8 +990,6 @@ NAN_METHOD(VertexAttrib4fv) { NAN_HS;
 	GLfloat *data = getArrayData<GLfloat>(info[1]);
 	
 	glVertexAttrib4fv(location, data);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1117,8 +1003,6 @@ NAN_METHOD(BlendColor) { NAN_HS;
 	
 	glBlendColor(red, green, blue, alpha);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1128,8 +1012,6 @@ NAN_METHOD(BlendEquationSeparate) { NAN_HS;
 	REQ_INT32_ARG(1, modeAlpha);
 	
 	glBlendEquationSeparate(modeRGB, modeAlpha);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1143,8 +1025,6 @@ NAN_METHOD(BlendFuncSeparate) { NAN_HS;
 	
 	glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1153,8 +1033,6 @@ NAN_METHOD(ClearStencil) { NAN_HS;
 	REQ_INT32_ARG(0, s);
 	
 	glClearStencil(s);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1167,8 +1045,6 @@ NAN_METHOD(ColorMask) { NAN_HS;
 	REQ_BOOL_ARG(3, alpha);
 	
 	glColorMask(red, green, blue, alpha);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1186,8 +1062,6 @@ NAN_METHOD(CopyTexImage2D) { NAN_HS;
 	
 	glCopyTexImage2D( target, level, internalformat, x, y, width, height, border);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1204,8 +1078,6 @@ NAN_METHOD(CopyTexSubImage2D) { NAN_HS;
 	
 	glCopyTexSubImage2D( target, level, xoffset, yoffset, x, y, width, height);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1215,8 +1087,6 @@ NAN_METHOD(CullFace) { NAN_HS;
 	
 	glCullFace(mode);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1225,8 +1095,6 @@ NAN_METHOD(DepthMask) { NAN_HS;
 	REQ_BOOL_ARG(0, flag);
 	
 	glDepthMask(flag);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1238,8 +1106,6 @@ NAN_METHOD(DepthRange) { NAN_HS;
 	
 	glDepthRangef(zNear, zFar);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1248,8 +1114,6 @@ NAN_METHOD(DisableVertexAttribArray) { NAN_HS;
 	REQ_INT32_ARG(0, index);
 	
 	glDisableVertexAttribArray(index);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1260,8 +1124,6 @@ NAN_METHOD(Hint) { NAN_HS;
 	REQ_INT32_ARG(1, mode);
 	
 	glHint(target, mode);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1283,8 +1145,6 @@ NAN_METHOD(LineWidth) { NAN_HS;
 	
 	glLineWidth(width);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1295,8 +1155,6 @@ NAN_METHOD(PolygonOffset) { NAN_HS;
 	
 	glPolygonOffset(factor, units);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1306,8 +1164,6 @@ NAN_METHOD(SampleCoverage) { NAN_HS;
 	REQ_BOOL_ARG(1, invert);
 	
 	glSampleCoverage(value, invert);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1321,8 +1177,6 @@ NAN_METHOD(Scissor) { NAN_HS;
 	
 	glScissor(x, y, width, height);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1333,8 +1187,6 @@ NAN_METHOD(StencilFunc) { NAN_HS;
 	REQ_INT32_ARG(2, mask);
 	
 	glStencilFunc(func, ref, mask);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1348,8 +1200,6 @@ NAN_METHOD(StencilFuncSeparate) { NAN_HS;
 	
 	glStencilFuncSeparate(face, func, ref, mask);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1358,8 +1208,6 @@ NAN_METHOD(StencilMask) { NAN_HS;
 	REQ_UINT32_ARG(0, mask);
 	
 	glStencilMask(mask);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1371,8 +1219,6 @@ NAN_METHOD(StencilMaskSeparate) { NAN_HS;
 	
 	glStencilMaskSeparate(face, mask);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1383,8 +1229,6 @@ NAN_METHOD(StencilOp) { NAN_HS;
 	REQ_INT32_ARG(2, zpass);
 	
 	glStencilOp(fail, zfail, zpass);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1398,8 +1242,6 @@ NAN_METHOD(StencilOpSeparate) { NAN_HS;
 	
 	glStencilOpSeparate(face, fail, zfail, zpass);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1409,8 +1251,6 @@ NAN_METHOD(BindRenderbuffer) { NAN_HS;
 	LET_INT32_ARG(1, buffer);
 	
 	glBindRenderbuffer(target, buffer);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1435,9 +1275,7 @@ NAN_METHOD(DeleteBuffer) { NAN_HS;
 	
 	REQ_UINT32_ARG(0, buffer);
 	
-	glDeleteBuffers(1, &buffer);
-	
-	RET_UNDEFINED;
+	glDeleteBuffers(1, reinterpret_cast<GLuint*>(&buffer));
 	
 }
 
@@ -1446,9 +1284,7 @@ NAN_METHOD(DeleteFramebuffer) { NAN_HS;
 	
 	REQ_UINT32_ARG(0, buffer);
 	
-	glDeleteFramebuffers(1, &buffer);
-	
-	RET_UNDEFINED;
+	glDeleteFramebuffers(1, reinterpret_cast<GLuint*>(&buffer));
 	
 }
 
@@ -1459,8 +1295,6 @@ NAN_METHOD(DeleteProgram) { NAN_HS;
 	
 	glDeleteProgram(program);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1468,9 +1302,7 @@ NAN_METHOD(DeleteRenderbuffer) { NAN_HS;
 	
 	REQ_UINT32_ARG(0, renderbuffer);
 	
-	glDeleteRenderbuffers(1, &renderbuffer);
-	
-	RET_UNDEFINED;
+	glDeleteRenderbuffers(1, reinterpret_cast<GLuint*>(&renderbuffer));
 	
 }
 
@@ -1481,8 +1313,6 @@ NAN_METHOD(DeleteShader) { NAN_HS;
 	
 	glDeleteShader(shader);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1490,9 +1320,7 @@ NAN_METHOD(DeleteTexture) { NAN_HS;
 	
 	REQ_UINT32_ARG(0, texture);
 	
-	glDeleteTextures(1, &texture);
-	
-	RET_UNDEFINED;
+	glDeleteTextures(1, reinterpret_cast<GLuint*>(&texture));
 	
 }
 
@@ -1503,8 +1331,6 @@ NAN_METHOD(DetachShader) { NAN_HS;
 	REQ_UINT32_ARG(1, shader);
 	
 	glDetachShader(program, shader);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1517,8 +1343,6 @@ NAN_METHOD(FramebufferRenderbuffer) { NAN_HS;
 	REQ_UINT32_ARG(3, renderbuffer);
 	
 	glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1599,8 +1423,6 @@ NAN_METHOD(RenderbufferStorage) { NAN_HS;
 	
 	glRenderbufferStorage(target, internalformat, width, height);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1627,8 +1449,6 @@ NAN_METHOD(ValidateProgram) { NAN_HS;
 	
 	glValidateProgram(program);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1646,8 +1466,6 @@ NAN_METHOD(TexSubImage2D) { NAN_HS;
 	
 	glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 	
-	RET_UNDEFINED;
-	
 }
 
 
@@ -1662,8 +1480,6 @@ NAN_METHOD(ReadPixels) { NAN_HS;
 	void *pixels = getImageData(info[6]);
 	
 	glReadPixels(x, y, width, height, format, type, pixels);
-	
-	RET_UNDEFINED;
 	
 }
 
@@ -1694,7 +1510,7 @@ NAN_METHOD(GetActiveAttrib) { NAN_HS;
 	
 	Local<Array> activeInfo = Nan::New<Array>(3);
 	activeInfo->Set(JS_STR("size"), JS_INT(size));
-	activeInfo->Set(JS_STR("type"), JS_INT((int)type));
+	activeInfo->Set(JS_STR("type"), JS_INT(static_cast<int>(type)));
 	activeInfo->Set(JS_STR("name"), JS_STR(name));
 	
 	RET_VALUE(activeInfo);
@@ -1715,7 +1531,7 @@ NAN_METHOD(GetActiveUniform) { NAN_HS;
 	
 	Local<Array> activeInfo = Nan::New<Array>(3);
 	activeInfo->Set(JS_STR("size"), JS_INT(size));
-	activeInfo->Set(JS_STR("type"), JS_INT((int)type));
+	activeInfo->Set(JS_STR("type"), JS_INT(static_cast<int>(type)));
 	activeInfo->Set(JS_STR("name"), JS_STR(name));
 	
 	RET_VALUE(activeInfo);
@@ -1732,8 +1548,9 @@ NAN_METHOD(GetAttachedShaders) { NAN_HS;
 	glGetAttachedShaders(program, 1024, &count, shaders);
 	
 	Local<Array> shadersArr = Nan::New<Array>(count);
-	for(int i=0;i<count;i++)
-		shadersArr->Set(i, JS_INT((int)shaders[i]));
+	for (int i = 0; i < count; i++) {
+		shadersArr->Set(i, JS_INT(static_cast<int>(shaders[i])));
+	}
 	
 	RET_VALUE(shadersArr);
 	
@@ -1744,8 +1561,15 @@ NAN_METHOD(GetParameter) { NAN_HS;
 	
 	REQ_INT32_ARG(0, name);
 	
+	GLboolean bParams[4];
+	const char *cParams;
+	GLint iParams[4];
+	GLfloat fParams[4];
+	Local<Array> arr;
+	
 	switch(name) {
-		
+	
+	// returns a boolean
 	case GL_BLEND:
 	case GL_CULL_FACE:
 	case GL_DEPTH_TEST:
@@ -1757,101 +1581,92 @@ NAN_METHOD(GetParameter) { NAN_HS;
 	case GL_STENCIL_TEST:
 	case 0x9240 /* UNPACK_FLIP_Y_WEBGL */:
 	case 0x9241 /* UNPACK_PREMULTIPLY_ALPHA_WEBGL*/:
-		// return a boolean
-		GLboolean params;
-		glGetBooleanv(name, &params);
-		RET_VALUE(JS_BOOL(params!=0));
+		glGetBooleanv(name, bParams);
+		RET_VALUE(JS_BOOL(bParams[0] != 0));
 		break;
 	
+	// returns a float
 	case GL_DEPTH_CLEAR_VALUE:
 	case GL_LINE_WIDTH:
 	case GL_POLYGON_OFFSET_FACTOR:
 	case GL_POLYGON_OFFSET_UNITS:
 	case GL_SAMPLE_COVERAGE_VALUE:
-		// return a float
-		GLfloat params;
-		glGetFloatv(name, &params);
-		RET_VALUE(JS_FLOAT(params));
+		glGetFloatv(name, fParams);
+		RET_VALUE(JS_NUM(fParams[0]));
 		break;
 	
+	// returns a string
 	case GL_RENDERER:
 	case GL_SHADING_LANGUAGE_VERSION:
 	case GL_VENDOR:
 	case GL_VERSION:
 	case GL_EXTENSIONS:
-		// return a string
-		char *params=(char*) ::glGetString(name);
-		
-		if (params!=NULL) {
-			RET_VALUE(JS_STR(params));
+		cParams = reinterpret_cast<const char*>(glGetString(name));
+		if (cParams != NULL) {
+			RET_VALUE(JS_STR(cParams));
 		} else {
 			RET_UNDEFINED;
 		}
 		
 		break;
 	
+	// returns a int32[2]
 	case GL_MAX_VIEWPORT_DIMS:
-		// return a int32[2]
-		GLint params[2];
-		glGetIntegerv(name, params);
-		
-		Local<Array> arr=Nan::New<Array>(2);
-		arr->Set(0,JS_INT(params[0]));
-		arr->Set(1,JS_INT(params[1]));
+		glGetIntegerv(name, iParams);
+		arr = Nan::New<Array>(2);
+		arr->Set(0, JS_INT(iParams[0]));
+		arr->Set(1, JS_INT(iParams[1]));
 		RET_VALUE(arr);
 		break;
 	
+	
+	// returns a int32[4]
 	case GL_SCISSOR_BOX:
 	case GL_VIEWPORT:
-		// return a int32[4]
-		GLint params[4];
-		glGetIntegerv(name, params);
-		
-		Local<Array> arr=Nan::New<Array>(4);
-		arr->Set(0,JS_INT(params[0]));
-		arr->Set(1,JS_INT(params[1]));
-		arr->Set(2,JS_INT(params[2]));
-		arr->Set(3,JS_INT(params[3]));
+		glGetIntegerv(name, iParams);
+		arr = Nan::New<Array>(4);
+		arr->Set(0, JS_INT(iParams[0]));
+		arr->Set(1, JS_INT(iParams[1]));
+		arr->Set(2, JS_INT(iParams[2]));
+		arr->Set(3, JS_INT(iParams[3]));
 		RET_VALUE(arr);
 		break;
 	
+	// returns a float[2]
 	case GL_ALIASED_LINE_WIDTH_RANGE:
 	case GL_ALIASED_POINT_SIZE_RANGE:
 	case GL_DEPTH_RANGE:
-		// return a float[2]
-		GLfloat params[2];
-		glGetFloatv(name, params);
-		Local<Array> arr=Nan::New<Array>(2);
-		arr->Set(0,JS_FLOAT(params[0]));
-		arr->Set(1,JS_FLOAT(params[1]));
+		glGetFloatv(name, fParams);
+		arr = Nan::New<Array>(2);
+		arr->Set(0, JS_NUM(fParams[0]));
+		arr->Set(1, JS_NUM(fParams[1]));
 		RET_VALUE(arr);
 		break;
 	
+	// returns a float[4]
 	case GL_BLEND_COLOR:
 	case GL_COLOR_CLEAR_VALUE:
-		// return a float[4]
-		GLfloat params[4];
-		glGetFloatv(name, params);
-		Local<Array> arr=Nan::New<Array>(4);
-		arr->Set(0,JS_FLOAT(params[0]));
-		arr->Set(1,JS_FLOAT(params[1]));
-		arr->Set(2,JS_FLOAT(params[2]));
-		arr->Set(3,JS_FLOAT(params[3]));
+		glGetFloatv(name, fParams);
+		arr = Nan::New<Array>(4);
+		arr->Set(0, JS_NUM(fParams[0]));
+		arr->Set(1, JS_NUM(fParams[1]));
+		arr->Set(2, JS_NUM(fParams[2]));
+		arr->Set(3, JS_NUM(fParams[3]));
 		RET_VALUE(arr);
 		break;
 	
+	// returns a boolean[4]
 	case GL_COLOR_WRITEMASK:
-		// return a boolean[4]
-		GLboolean params[4];
-		glGetBooleanv(name, params);
-		Local<Array> arr=Nan::New<Array>(4);
-		arr->Set(0,JS_BOOL(params[0]==1));
-		arr->Set(1,JS_BOOL(params[1]==1));
-		arr->Set(2,JS_BOOL(params[2]==1));
-		arr->Set(3,JS_BOOL(params[3]==1));
+		glGetBooleanv(name, bParams);
+		arr = Nan::New<Array>(4);
+		arr->Set(0, JS_BOOL(bParams[0] != 0));
+		arr->Set(1, JS_BOOL(bParams[1] != 0));
+		arr->Set(2, JS_BOOL(bParams[2] != 0));
+		arr->Set(3, JS_BOOL(bParams[3] != 0));
 		RET_VALUE(arr);
 		break;
 	
+	// returns an int
 	case GL_ARRAY_BUFFER_BINDING:
 	case GL_CURRENT_PROGRAM:
 	case GL_ELEMENT_ARRAY_BUFFER_BINDING:
@@ -1859,16 +1674,15 @@ NAN_METHOD(GetParameter) { NAN_HS;
 	case GL_RENDERBUFFER_BINDING:
 	case GL_TEXTURE_BINDING_2D:
 	case GL_TEXTURE_BINDING_CUBE_MAP:
-		GLint params;
-		::glGetIntegerv(name, &params);
-		RET_VALUE(JS_INT(params));
+		glGetIntegerv(name, iParams);
+		RET_VALUE(JS_INT(iParams[0]));
 		break;
 	
+	// returns an int
 	default:
-		// return a long
-		GLint params;
-		glGetIntegerv(name, &params);
-		RET_VALUE(JS_INT(params));
+		glGetIntegerv(name, iParams);
+		RET_VALUE(JS_INT(iParams[0]));
+		break;
 	
 	}
 	
@@ -1940,9 +1754,9 @@ NAN_METHOD(GetUniform) { NAN_HS;
 	float data[16]; // worst case scenario is 16 floats
 	glGetUniformfv(program, location, data);
 	
-	Local<Array> arr=Nan::New<Array>(16);
-	for(int i = 0; i < 16; i++) {
-		arr->Set(i,JS_FLOAT(data[i]));
+	Local<Array> arr = Nan::New<Array>(16);
+	for (int i = 0; i < 16; i++) {
+		arr->Set(i, JS_NUM(data[i]));
 	}
 	
 	RET_VALUE(arr);
@@ -1956,6 +1770,8 @@ NAN_METHOD(GetVertexAttrib) { NAN_HS;
 	REQ_INT32_ARG(1, pname);
 	
 	GLint value = 0;
+	float vextex_attribs[4];
+	Local<Array> arr;
 	
 	switch (pname) {
 		
@@ -1978,13 +1794,12 @@ NAN_METHOD(GetVertexAttrib) { NAN_HS;
 		break;
 	
 	case GL_CURRENT_VERTEX_ATTRIB:
-		float vextex_attribs[4];
 		glGetVertexAttribfv(index,pname,vextex_attribs);
-		Local<Array> arr=Nan::New<Array>(4);
-		arr->Set(0,JS_FLOAT(vextex_attribs[0]));
-		arr->Set(1,JS_FLOAT(vextex_attribs[1]));
-		arr->Set(2,JS_FLOAT(vextex_attribs[2]));
-		arr->Set(3,JS_FLOAT(vextex_attribs[3]));
+		arr = Nan::New<Array>(4);
+		arr->Set(0, JS_NUM(vextex_attribs[0]));
+		arr->Set(1, JS_NUM(vextex_attribs[1]));
+		arr->Set(2, JS_NUM(vextex_attribs[2]));
+		arr->Set(3, JS_NUM(vextex_attribs[3]));
 		RET_VALUE(arr);
 		break;
 	
@@ -1998,7 +1813,7 @@ NAN_METHOD(GetVertexAttrib) { NAN_HS;
 
 NAN_METHOD(GetSupportedExtensions) { NAN_HS;
 	
-	char *extensions = static_cast<char*>(glGetString(GL_EXTENSIONS));
+	const char *extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
 	
 	RET_VALUE(JS_STR(extensions));
 	
@@ -2009,11 +1824,11 @@ NAN_METHOD(GetExtension) { NAN_HS;
 	
 	REQ_UTF8_ARG(0, name);
 	
-	char *sname=*name;
-	char *extensions=(char*) glGetString(GL_EXTENSIONS);
-	char *ext=strcasestr(extensions, sname);
+	char *sname = *name;
+	char *extensions = (char*)(glGetString(GL_EXTENSIONS));
+	char *ext = strcasestr(extensions, sname);
 	
-	if (ext==NULL) {
+	if (ext == NULL) {
 		RET_UNDEFINED;
 	} else {
 		 RET_VALUE(JS_STR(ext, static_cast<int>(strlen(sname))));
