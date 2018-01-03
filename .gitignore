@@ -8,5 +8,5 @@ build*
 Debug
 node_modules
 package-lock.json
-bin_*
+binary
 *.log

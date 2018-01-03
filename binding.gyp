@@ -1,8 +1,6 @@
 {
 	'variables': {
 		'platform' : '<(OS)',
-		'variant'  : 'default',
-		'bcm_host' : '<!(node -e "console.log(+require(\\"fs\\").existsSync(\\"/opt/vc/include/bcm_host.h\\"))")',
 		'opengl_root'   : '<!(node -e "console.log(require(\'node-deps-opengl-raub\').root)")',
 		'opengl_include': '<(opengl_root)/include',
 		'opengl_bin'    : '<!(node -e "console.log(require(\'node-deps-opengl-raub\').bin)")',
@@ -22,8 +20,9 @@
 				'src/webgl.cpp',
 			],
 			'include_dirs': [
-				"<!(node -e \"require('nan')\")",
+				'<!(node -e "require(\'nan\')")',
 				'<(opengl_include)',
+				'<!(node -e "console.log(require(\'node-addon-tools-raub\'))")',
 			],
 			'library_dirs': [ '<(opengl_bin)' ],
 			'conditions': [
@@ -70,25 +69,25 @@
 			'target_name'  : 'copy_binary',
 			'type'         : 'none',
 			'dependencies' : ['webgl'],
-			'copies'       : [
-				{
-					'destination' : '<(module_root_dir)/bin_<(platform)',
-					'conditions'  : [
-						[
-							'OS=="linux"',
-							{ 'files' : [] }
-						],
-						[
-							'OS=="mac"',
-							{ 'files' : [] }
-						],
-						[
-							'OS=="win"',
-							{ 'files' : [ '<(module_root_dir)/build/Release/webgl.node' ] },
-						],
-					]
-				}
-			],
+			'actions'      : [{
+				'action_name' : 'Module copied.',
+				'inputs'      : [],
+				'outputs'     : ['build'],
+				'conditions'  : [
+					[ 'OS=="linux"', { 'action' : [
+						'cp "<(module_root_dir)/build/Release/webgl.node"' +
+						' "<(module_root_dir)/binary"'
+					] } ],
+					[ 'OS=="mac"', { 'action' : [
+						'cp "<(module_root_dir)/build/Release/webgl.node"' +
+						' "<(module_root_dir)/binary"'
+					] } ],
+					[ 'OS=="win"', { 'action' : [
+						'copy "<(module_root_dir)/build/Release/webgl.node"' +
+						' "<(module_root_dir)/binary"'
+					] } ],
+				],
+			}],
 		},
 		
 		{
