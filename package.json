@@ -2,7 +2,7 @@
   "name": "node-webgl-raub",
   "author": "Luis Blanco <raubtierxxx@gmail.com>",
   "description": "WebGL for nodejs",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "main": "index.js",
   "keywords": [
     "webgl",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "nan": "2.8.0",
-    "node-glfw-raub": "0.5.3",
-    "node-addon-tools-raub" : "0.0.2"
+    "node-glfw-raub": "0.6.0",
+    "node-addon-tools-raub" : "0.0.4"
   }
 }

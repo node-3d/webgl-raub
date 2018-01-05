@@ -1,14 +1,6 @@
 'use strict';
 
-const platformPaths = {
-	win32  : '../bin_windows/webgl',
-	linux  : '../bin_linux/webgl'  ,
-	darwin : '../bin_darwin/webgl' ,
-};
-
-const binPath = platformPaths[process.platform];
-
-const gl = require(binPath);
+const gl = require('../binary/webgl');
 
 const Image = require('./image'); // jshint ignore: line
 

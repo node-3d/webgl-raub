@@ -861,7 +861,7 @@ NAN_METHOD(VertexAttribPointer) { NAN_HS;
 	REQ_INT32_ARG(2, type);
 	REQ_BOOL_ARG(3, normalized);
 	REQ_INT32_ARG(4, stride);
-	REQ_INT_ARG(5, ptr);
+	REQ_OFFS_ARG(5, ptr);
 	
 	GLvoid *vertices = reinterpret_cast<GLvoid*>(ptr);
 	
@@ -885,7 +885,7 @@ NAN_METHOD(DrawElements) { NAN_HS;
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, count);
 	REQ_INT32_ARG(2, type);
-	REQ_INT_ARG(3, ptr);
+	REQ_OFFS_ARG(3, ptr);
 	
 	GLvoid *indices = reinterpret_cast<GLvoid*>(ptr);
 	
