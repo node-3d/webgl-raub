@@ -1,7 +1,6 @@
 'use strict';
 
-const gl = require('../binary/webgl');
-
+const gl    = require('../binary/webgl');
 const Image = require('./image'); // jshint ignore: line
 
 
