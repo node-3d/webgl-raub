@@ -1,8 +1,10 @@
 'use strict';
 
-const gl     = require('../binary/webgl');
-const Image  = gl.Image;
-const events = require('events');
+const EventEmitter = require('events');
+
+const gl = require('../binary/webgl');
+
+const { Image } = gl;
 
 
 Object.defineProperty(Image.prototype, 'onload', {
@@ -20,7 +22,7 @@ function inherit(target, source) {
 	
 }
 
-inherit(Image, events.EventEmitter);
+inherit(Image, EventEmitter);
 
 
 module.exports = Image;

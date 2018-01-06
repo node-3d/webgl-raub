@@ -5,7 +5,7 @@ const glMatrix = require('./libs/glMatrix-0.9.5.min');
 
 
 const Image    = WebGL.Image;
-const document = WebGL.document();
+const document = new WebGL.Document();
 const frame    = document.requestAnimationFrame;
 
 let xRot   = 0;
@@ -60,6 +60,7 @@ function initGL(canvas) {
 	} catch (e) {
 		
 		console.error("Could not initialise WebGL, sorry :-(");
+		console.error(e);
 		process.exit(-1);
 		
 	}
