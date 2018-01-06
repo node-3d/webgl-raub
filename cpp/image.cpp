@@ -188,12 +188,12 @@ NAN_SETTER(Image::SrcSetter) { NAN_HS;
 		value	// argument
 	};
 	
-	TryCatch tc;
+	Nan::TryCatch tc;
 	
 	emit_f->Call(info.This(), 2, argv);
 	
 	if (tc.HasCaught()) {
-		FatalException(info.GetIsolate(),tc);
+		Nan::FatalException(tc);
 	}
 	
 }
