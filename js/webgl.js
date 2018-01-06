@@ -36,6 +36,9 @@ module.exports = gl;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+const _getParameter = gl.getParameter;
+gl.getParameter = pname => pname === gl.VERSION ? 'WebGL 1.0' : _getParameter(pname);
+
 
 const _getSupportedExtensions = gl.getSupportedExtensions;
 gl.getSupportedExtensions = () => _getSupportedExtensions().split(' ');

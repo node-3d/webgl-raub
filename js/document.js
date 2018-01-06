@@ -44,6 +44,8 @@ class Document extends glfw.Window {
 	
 	get context() { return webgl; }
 	
+	get body() { return this; }
+	
 	get ratio() { return this._ratio; }
 	
 	get clientWidth() { return this._width;  }
