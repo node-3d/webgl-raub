@@ -23,7 +23,7 @@ class Document extends glfw.Window {
 			}
 			
 			this.on('quit', () => process.exit(0));
-			this.on('keydown', e => evt.keyCode === ESC_KEY && process.exit(0));
+			this.on('keydown', e => e.keyCode === ESC_KEY && process.exit(0));
 			
 		}
 		
