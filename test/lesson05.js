@@ -1,14 +1,15 @@
 'use strict';
 
-const WebGL    = require('../index');
-const glMatrix = require('./libs/glMatrix-0.9.5.min');
+const { mat4 } = require('./libs/glMatrix-0.9.5.min');
+
+const { Document, Image } = require('..');
 
 
-const Image    = WebGL.Image;
-const document = WebGL.document();
-const frame    = document.requestAnimationFrame;
+const document = new Document();
+const canvas = document.createElement('canvas');
+const frame = document.requestAnimationFrame;
 
-document.setTitle("Lesson05");
+document.title = 'Lesson05';
 document.on('resize', evt => {
 	gl.viewportWidth  = evt.width;
 	gl.viewportHeight = evt.height;
@@ -140,15 +141,15 @@ function initTexture() {
 
 
 
-let mvMatrix = glMatrix.mat4.create();
-let pMatrix  = glMatrix.mat4.create();
+let mvMatrix = mat4.create();
+let pMatrix  = mat4.create();
 
 const mvMatrixStack = [];
 
 
 function mvPushMatrix() {
-	const copy = glMatrix.mat4.create();
-	glMatrix.mat4.set(mvMatrix, copy);
+	const copy = mat4.create();
+	mat4.set(mvMatrix, copy);
 	mvMatrixStack.push(copy);
 }
 
@@ -299,15 +300,15 @@ function drawScene() {
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-	glMatrix.mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+	mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 	
-	glMatrix.mat4.identity(mvMatrix);
+	mat4.identity(mvMatrix);
 	
-	glMatrix.mat4.translate(mvMatrix, [0.0, 0.0, -5.0]);
+	mat4.translate(mvMatrix, [0.0, 0.0, -5.0]);
 	
-	glMatrix.mat4.rotate(mvMatrix, degToRad(xRot), [1, 0, 0]);
-	glMatrix.mat4.rotate(mvMatrix, degToRad(yRot), [0, 1, 0]);
-	glMatrix.mat4.rotate(mvMatrix, degToRad(zRot), [0, 0, 1]);
+	mat4.rotate(mvMatrix, degToRad(xRot), [1, 0, 0]);
+	mat4.rotate(mvMatrix, degToRad(yRot), [0, 1, 0]);
+	mat4.rotate(mvMatrix, degToRad(zRot), [0, 0, 1]);
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);

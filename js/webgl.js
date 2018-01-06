@@ -223,7 +223,9 @@ gl.shaderSource = (shader, source) => _shaderSource(shader ? shader._ : 0, sourc
 
 
 const _texImage2D = gl.texImage2D;
-gl.texImage2D = (target, level, internalformat, width, height, border, format, type, pixels) => {
+gl.texImage2D = function (
+	target, level, internalformat, width, height, border, format, type, pixels
+) {
 	if (arguments.length === 6) {
 		// width is now format, height is now type, and border is now pixels
 		pixels = border;
@@ -249,13 +251,17 @@ gl.uniform1fv = (location, v) => {
 }
 
 
+const _pixelStorei = gl.pixelStorei;
+gl.pixelStorei = (pname, param) =>_pixelStorei(
+	pname, typeof param === 'boolean' ? (param ? 1 : 0) : param
+);
+
+
 const _uniform1i = gl.uniform1i;
-gl.uniform1i = (location, x) => {
-	if (c_pt(x, 'boolean')) {
-		x = x ? 1 : 0;
-	}
-	return _uniform1i(location ? location._ : 0, x);
-}
+gl.uniform1i = (location, x) => _uniform1i(
+	location ? location._ : 0, typeof x === 'boolean' ? (x ? 1 : 0) : x
+);
+
 
 const _uniform1iv = gl.uniform1iv;
 gl.uniform1iv = (location, v) => {

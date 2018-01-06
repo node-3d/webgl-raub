@@ -1,25 +1,24 @@
-nodejs=true;
+'use strict';
 
-//Read and eval library
-fs=require('fs');
-eval(fs.readFileSync(__dirname+ '/libs/glMatrix-0.9.5.min.js','utf8'));
+const { mat4, mat3 } = require('./libs/glMatrix-0.9.5.min');
 
-var WebGL=require('../index'),
-    Image = WebGL.Image,
-    document = WebGL.document(),
-	alert=console.error;
-document.setTitle("Lesson08");
-requestAnimationFrame = document.requestAnimationFrame;
+const { Document, Image } = require('..');
 
+
+const document = new Document();
+const canvas = document.createElement('canvas');
+const frame = document.requestAnimationFrame;
+
+document.title = 'Lesson05';
 document.on("resize",function(evt){
-  gl.viewportWidth=evt.width;
-  gl.viewportHeight=evt.height;
+	gl.viewportWidth = evt.width;
+	gl.viewportHeight = evt.height;
 });
 
 
-var shaders= {
-    "shader-fs" : 
-      [     
+var shaders = {
+    "shader-fs" :
+      [
        "#ifdef GL_ES",
        "  precision mediump float;",
        "#endif",
@@ -78,39 +77,17 @@ function initGL(canvas) {
 
 function getShader(gl, id) {
   var shader;
-  if(nodejs) {
-    if (!shaders.hasOwnProperty(id)) return null;
-    var str = shaders[id];
+  
+if (!shaders.hasOwnProperty(id)) return null;
+var str = shaders[id];
 
-    if (id.match(/-fs/)) {
-      shader = gl.createShader(gl.FRAGMENT_SHADER);
-    } else if (id.match(/-vs/)) {
-      shader = gl.createShader(gl.VERTEX_SHADER);
-    } else { return null; }
+if (id.match(/-fs/)) {
+  shader = gl.createShader(gl.FRAGMENT_SHADER);
+} else if (id.match(/-vs/)) {
+  shader = gl.createShader(gl.VERTEX_SHADER);
+} else { return null; }
 
-  }
-  else {
-    var shaderScript = document.getElementById(id);
-    if (!shaderScript) {
-      return null;
-    }
-
-    var str = "";
-    var k = shaderScript.firstChild;
-    while (k) {
-      if (k.nodeType == 3) {
-        str += k.textContent;
-      }
-      k = k.nextSibling;
-    }
-    if (shaderScript.type == "x-shader/x-fragment") {
-      shader = gl.createShader(gl.FRAGMENT_SHADER);
-    } else if (shaderScript.type == "x-shader/x-vertex") {
-      shader = gl.createShader(gl.VERTEX_SHADER);
-    } else {
-      return null;
-    }
-  }
+  
 
   gl.shaderSource(shader, str);
   gl.compileShader(shader);
@@ -164,7 +141,7 @@ function initShaders() {
 }
 
 
-function handleLoadedTexture(texture) {
+function handleLoadedTexture(texture) {console.log('lesson08.js', gl.UNPACK_FLIP_Y_WEBGL);
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
   gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -186,10 +163,9 @@ function initTexture() {
     handleLoadedTexture(glassTexture)
   };
 
-  if(nodejs)
-    glassTexture.image.src = __dirname+"/img/glass.gif";
-  else
-    glassTexture.image.src = "glass.gif";
+  
+  glassTexture.image.src = __dirname+"/img/glass.gif";
+
 }
 
 
@@ -287,7 +263,7 @@ var cubeVertexIndexBuffer;
 function initBuffers() {
   cubeVertexPositionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-  vertices = [
+  const vertices = [
               // Front face
               -1.0, -1.0,  1.0,
               1.0, -1.0,  1.0,
@@ -468,17 +444,17 @@ function drawScene() {
   }
 
   var lighting = false; //document.getElementById("lighting").checked;
-  ambientR=0.2;
-  ambientG=0.2;
-  ambientB=0.2;
+  let ambientR=0.2;
+  let ambientG=0.2;
+  let ambientB=0.2;
   
-  lightDirectionX=-0.25;
-  lightDirectionY=-0.25;
-  lightDirectionZ=-1;
+  let lightDirectionX=-0.25;
+  let lightDirectionY=-0.25;
+  let lightDirectionZ=-1;
   
-  directionalR=0.8;
-  directionalG=0.8;
-  directionalB=0.8;
+  let directionalR=0.8;
+  let directionalG=0.8;
+  let directionalB=0.8;
   
   gl.uniform1i(shaderProgram.useLightingUniform, lighting);
   if (lighting) {
@@ -530,12 +506,11 @@ function tick() {
   drawScene();
   animate();
 
-  requestAnimationFrame(tick);
+  frame(tick);
 }
 
 
 function webGLStart() {
-  var canvas = document.createElement("lesson08-canvas");
   initGL(canvas);
   initShaders();
   initBuffers();

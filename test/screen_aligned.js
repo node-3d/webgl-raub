@@ -1,16 +1,15 @@
-nodejs=true;
-alert=console.log;
+'use strict';
 
-//Read and eval library
-fs=require('fs');
-eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
+const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
-var WebGL=require('../index'),
-    Image = WebGL.Image,
-    document = WebGL.document();
+const { Document, Image } = require('..');
 
-document.setTitle("screen aligned texture");
-requestAnimFrame = document.requestAnimationFrame;
+
+const document = new Document();
+const canvas = document.createElement('canvas');
+
+document.title = 'Screen-aligned texture';
+const requestAnimFrame = document.requestAnimationFrame;
 
 var shaders= {
     "shader-fs" : 
@@ -56,7 +55,7 @@ function initGL(canvas) {
 
 function getShader(gl, id) {
   var shader;
-  if(nodejs) {
+  
     if (!shaders.hasOwnProperty(id)) return null;
     var str = shaders[id];
 
@@ -66,29 +65,7 @@ function getShader(gl, id) {
       shader = gl.createShader(gl.VERTEX_SHADER);
     } else { return null; }
 
-  }
-  else {
-    var shaderScript = document.getElementById(id);
-    if (!shaderScript) {
-      return null;
-    }
-
-    var str = "";
-    var k = shaderScript.firstChild;
-    while (k) {
-      if (k.nodeType == 3) {
-        str += k.textContent;
-      }
-      k = k.nextSibling;
-    }
-    if (shaderScript.type == "x-shader/x-fragment") {
-      shader = gl.createShader(gl.FRAGMENT_SHADER);
-    } else if (shaderScript.type == "x-shader/x-vertex") {
-      shader = gl.createShader(gl.VERTEX_SHADER);
-    } else {
-      return null;
-    }
-  }
+  
 
   gl.shaderSource(shader, str);
   gl.compileShader(shader);
@@ -151,7 +128,7 @@ function initTexture() {
     handleLoadedTexture(lena)
   };
 
-  lena.image.src = nodejs ? __dirname+"/lena.jpg" : "lena.jpg";
+  lena.image.src = __dirname+"/img/glass.gif";
 }
 
 
@@ -190,7 +167,7 @@ var cubeVertexIndexBuffer;
 function initBuffers() {
   cubeVertexPositionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-  vertices = [
+  const vertices = [
               // Front face
               -1.0, -1.0,  0.5,
               1.0, -1.0,  0.5,

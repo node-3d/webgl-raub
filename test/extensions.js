@@ -1,9 +1,9 @@
 'use strict';
 
-const WebGL = require('../index');
+const { Document } = require('..');
 
 
-const document = WebGL.document();
+const document = new Document();
 const canvas = document.createElement('canvas');
 const gl = canvas.getContext('webgl');
 

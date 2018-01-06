@@ -1,14 +1,15 @@
 'use strict';
 
-const WebGL    = require('../index');
-const glMatrix = require('./libs/glMatrix-0.9.5.min');
+const { mat4 } = require('./libs/glMatrix-0.9.5.min');
+
+const { Document, Image } = require('..');
 
 
-const Image    = WebGL.Image;
-const document = WebGL.document();
-const frame    = document.requestAnimationFrame;
+const document = new Document();
+const canvas = document.createElement('canvas');
+const frame = document.requestAnimationFrame;
 
-document.setTitle("Lesson02");
+document.title = 'Lesson02';
 document.on('resize', evt => {
 	gl.viewportWidth  = evt.width;
 	gl.viewportHeight = evt.height;
@@ -113,8 +114,8 @@ function initShaders() {
 }
 
 
-let mvMatrix = glMatrix.mat4.create();
-let pMatrix  = glMatrix.mat4.create();
+let mvMatrix = mat4.create();
+let pMatrix  = mat4.create();
 
 function setMatrixUniforms() {
 	
@@ -193,11 +194,11 @@ function drawScene() {
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-	glMatrix.mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+	mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
 	
-	glMatrix.mat4.identity(mvMatrix);
+	mat4.identity(mvMatrix);
 	
-	glMatrix.mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
+	mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
 	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	
@@ -207,7 +208,7 @@ function drawScene() {
 	setMatrixUniforms();
 	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);
 	
-	glMatrix.mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
+	mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
 	

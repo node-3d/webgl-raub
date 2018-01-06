@@ -1,12 +1,12 @@
 'use strict';
 
-const Image = require('../lib/image');
+const { Image } = require('..');
 
 
 const img = new Image();
 
 img.onload = function () {
-  console.log("web onload called");
+  console.log(`Image 'onload' called.`);
 };
 
-img.src = 'img/glass.gif';
+img.src = `${__dirname}/img/glass.gif`;

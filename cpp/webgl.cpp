@@ -1429,14 +1429,14 @@ NAN_METHOD(RenderbufferStorage) { NAN_HS;
 NAN_METHOD(GetShaderSource) { NAN_HS;
 	
 	REQ_INT32_ARG(0, shader);
-	cout << "hui" << endl;
+	
 	GLint len;
 	glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &len);
 	GLchar *source = new GLchar[len];
 	glGetShaderSource(shader, len, NULL, source);
 	
 	Local<String> str = JS_STR(source);
-	delete source;
+	delete [] source;
 	
 	RET_VALUE(str);
 	
