@@ -141,7 +141,7 @@ function initShaders() {
 }
 
 
-function handleLoadedTexture(texture) {console.log('lesson08.js', gl.UNPACK_FLIP_Y_WEBGL);
+function handleLoadedTexture(texture) {
   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
   gl.bindTexture(gl.TEXTURE_2D, texture);

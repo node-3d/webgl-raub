@@ -47,16 +47,20 @@ class Document extends glfw.Window {
 	get body() { return this; }
 	
 	get ratio() { return this._ratio; }
+	get devicePixelRatio() { return this._ratio; }
 	
-	get clientWidth() { return this._width;  }
-	set clientWidth(v) { this._width = v;  }
+	get innerWidth() { return this._width; }
+	set innerWidth(v) { this._width = v; }
+	get innerHeight() { return this._height; }
+	set innerHeight(v) { this._height = v; }
 	
+	get clientWidth() { return this._width; }
+	set clientWidth(v) { this._width = v; }
 	get clientHeight() { return this._height; }
 	set clientHeight(v) { this._height = v; }
 	
-	get width() { return this._width;  }
-	set width(v) { this._width = v;  }
-	
+	get width() { return this._width; }
+	set width(v) { this._width = v; }
 	get height() { return this._height; }
 	set height(v) { this._height = v; }
 	

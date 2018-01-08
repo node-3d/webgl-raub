@@ -1,66 +1,71 @@
-This is a Node.JS port of WebGL for desktops: windows, linux, mac
+# WebGL for Node.js
 
-It started as an extension of creationix/node-webgl and their great example com.creationix.minimason that 
-you can find in examples/wavefront.js. However, it is now quite different and support different platform 
-bindings, mainly GLFW instead of SDL.
+WebGL crossplatform addon with minimized dependencies.
 
-Dependencies
-============
-- node-glfw, which depends on GLEW, GLFW as well as AntTweakBar. See node-glfw for installation instructions.
-- freeimage is used to load/save a variety of image formats.
-- node-gyp if not already available in your distribution
 
-Installation
-============
-`npm install node-webgl`
+## Install
 
-###Installation Notes for Windows 7
-Beware of the Node.JS distribution you use. The default Node.JS is 32-bit and this means that modules 
-will be compiled by node-gyp with 32-bit settings, which often leads to compilation errors especially
-on 64-bit systems.
+```
+npm i -s node-webgl-raub
+```
 
-So for Windows 7 64-bit, instead of downloading the default Node.JS windows installer, select 'Other release files'.
-This will show you an ftp site for the latest release. Go into x64 folder and download that distribution.
+Note: as this is a compiled addon, compilation tools must be in place on your system.
+Such as MSVS13 for Windows, where `npm install --global windows-build-tools` most probably helps.
 
-###Installation Notes for OSX
-`brew install anttweakbar freeimage`
 
-Usage
-=====
-examples/   contains examples from other the web
-test/       contains lessons from www.learningwebgl.com and other tests
+## Use
 
-simply type: node test/lesson02.js
+This module tries to implement the whole required layer of features to run WebGL as if
+in a browser. As of now, those are 3: WebGL itself, Image and document.
 
-Enjoy!
+```js
+const { Document, Image, webgl } = require('node-webgl-raub');
+```
 
-Limitations
-===========
-WebGL is based on OpenGL ES, a restriction of OpenGL found on desktops, for embedded systems.
-Because this module wraps OpenGL, it is possible to do things that may not work on web browsers. 
-Please read http://www.khronos.org/webgl/wiki_1_15/index.php/WebGL_and_OpenGL_Differences 
-to learn about the differences.
+Here `webgl` is what contains all the WebGL api. However a window is required to
+exercise your GL skills on. Then we have `Document` which spawns a new system
+window, while also mimicking WEB `document`, `window`, and `canvas`. So this is what
+happens:
 
-- shaders
-Remember to add this on top of your fragment shaders:
-<pre>
-#ifdef GL_ES
-precision highp float;
-#endif
-</pre>
+```
+const doc = new Document();
+global.document = global.window = doc;
+const canvas = document.createElement('canvas'); // === doc
+const gl = canvas.getContext('webgl'); // === webgl
+```
 
-- loading external scripts
-If your code uses external libraries, you can load them like this. No code change to external scripts ;-)
-<pre>
-fs=require('fs');
-eval(fs.readFileSync(__dirname+ '/glMatrix-0.9.5.min.js','utf8'));
-</pre>
+It allows mimicking browser interfaces to a degree where the majority of WebGL code
+works after copy-pasting from a browser environment. If some interfaces are missing,
+please do report.
 
-- frame rate
-requestAnimationFrame(callback [, delay]) works as in the browser. 
-If delay is specified, it is the requested delay in milliseconds between animation frames 
-e.g. 16 will provide 1000 / 16 = 62 fps at best, which is the default value if delay is undefined. 
-If delay = 0, then the fastest possible framerate on your machine is used.
+---
 
-The timestamp now uses the high-resolution timer in your machine (not new Date()). This provides a much more precise
-framerate as well as much better timing for animations.
+`Image` is used to load textures. Consider the following example:
+
+```js
+const texture = gl.createTexture();
+
+const image = new Image();
+
+image.onload = () => {
+	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+	gl.generateMipmap(gl.TEXTURE_2D);
+	gl.bindTexture(gl.TEXTURE_2D, null);
+};
+
+image.src = `${__dirname}/texture.jpg`;
+```
+
+
+## Three.js
+
+Being a low level interface, WebGL requires a lot of effort to build apps. For
+that matter there are numerous frameworks around it. One of them is
+[three.js](https://threejs.org/). It is known to work well on Node.js with this
+implementation of WebGL. You can try to use three.js your own way, but there is
+a far better option: [node-3d-ready-raub](https://github.com/raub/node-3d-ready),
+which gets you two more steps ahead for free.
