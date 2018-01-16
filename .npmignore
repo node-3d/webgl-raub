@@ -1,5 +1,4 @@
 .idea
-.cproject,.project
 .cproject
 .project
 .lock-wscript
@@ -8,5 +7,7 @@ build*
 Debug
 node_modules
 package-lock.json
-bin_*
+binary
 *.log
+.gitignore
+examples
