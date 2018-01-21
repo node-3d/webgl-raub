@@ -1,7 +1,6 @@
 #include <cstdlib>
 
 #include "webgl.hpp"
-#include "image.hpp"
 
 using namespace v8;
 using namespace node;
@@ -17,158 +16,157 @@ PropertyAttribute constant_attributes = static_cast<PropertyAttribute>(ReadOnly 
 
 #define JS_GL_CONSTANT(name) JS_GL_SET_CONSTANT(#name, GL_ ## name)
 
+#define JS_GL_SET_METHOD(name) JS_GL_SET_METHOD(#name );
+
 
 extern "C" {
 
-void init(Handle<Object> target) {
+NAN_MODULE_INIT(_init) {
 	
-	atexit(webgl::AtExit);
-	atexit(Image::AtExit);
+	atexit(webgl::deinit);
 	
-	Image::Initialize(target);
+	JS_GL_SET_METHOD("init");
 	
-	Nan::SetMethod(target, "Init", webgl::Init);
+	JS_GL_SET_METHOD("uniform1f");
+	JS_GL_SET_METHOD("uniform2f");
+	JS_GL_SET_METHOD("uniform3f");
+	JS_GL_SET_METHOD("uniform4f");
+	JS_GL_SET_METHOD("uniform1i");
+	JS_GL_SET_METHOD("uniform2i");
+	JS_GL_SET_METHOD("uniform3i");
+	JS_GL_SET_METHOD("uniform4i");
+	JS_GL_SET_METHOD("uniform1fv");
+	JS_GL_SET_METHOD("uniform2fv");
+	JS_GL_SET_METHOD("uniform3fv");
+	JS_GL_SET_METHOD("uniform4fv");
+	JS_GL_SET_METHOD("uniform1iv");
+	JS_GL_SET_METHOD("uniform2iv");
+	JS_GL_SET_METHOD("uniform3iv");
+	JS_GL_SET_METHOD("uniform4iv");
+	JS_GL_SET_METHOD("pixelStorei");
+	JS_GL_SET_METHOD("bindAttribLocation");
+	JS_GL_SET_METHOD("getError");
+	JS_GL_SET_METHOD("drawArrays");
+	JS_GL_SET_METHOD("uniformMatrix2fv");
+	JS_GL_SET_METHOD("uniformMatrix3fv");
+	JS_GL_SET_METHOD("uniformMatrix4fv");
 	
-	Nan::SetMethod(target, "uniform1f", webgl::Uniform1f);
-	Nan::SetMethod(target, "uniform2f", webgl::Uniform2f);
-	Nan::SetMethod(target, "uniform3f", webgl::Uniform3f);
-	Nan::SetMethod(target, "uniform4f", webgl::Uniform4f);
-	Nan::SetMethod(target, "uniform1i", webgl::Uniform1i);
-	Nan::SetMethod(target, "uniform2i", webgl::Uniform2i);
-	Nan::SetMethod(target, "uniform3i", webgl::Uniform3i);
-	Nan::SetMethod(target, "uniform4i", webgl::Uniform4i);
-	Nan::SetMethod(target, "uniform1fv", webgl::Uniform1fv);
-	Nan::SetMethod(target, "uniform2fv", webgl::Uniform2fv);
-	Nan::SetMethod(target, "uniform3fv", webgl::Uniform3fv);
-	Nan::SetMethod(target, "uniform4fv", webgl::Uniform4fv);
-	Nan::SetMethod(target, "uniform1iv", webgl::Uniform1iv);
-	Nan::SetMethod(target, "uniform2iv", webgl::Uniform2iv);
-	Nan::SetMethod(target, "uniform3iv", webgl::Uniform3iv);
-	Nan::SetMethod(target, "uniform4iv", webgl::Uniform4iv);
-	Nan::SetMethod(target, "pixelStorei", webgl::PixelStorei);
-	Nan::SetMethod(target, "bindAttribLocation", webgl::BindAttribLocation);
-	Nan::SetMethod(target, "getError", webgl::GetError);
-	Nan::SetMethod(target, "drawArrays", webgl::DrawArrays);
-	Nan::SetMethod(target, "uniformMatrix2fv", webgl::UniformMatrix2fv);
-	Nan::SetMethod(target, "uniformMatrix3fv", webgl::UniformMatrix3fv);
-	Nan::SetMethod(target, "uniformMatrix4fv", webgl::UniformMatrix4fv);
+	JS_GL_SET_METHOD("generateMipmap");
 	
-	Nan::SetMethod(target, "generateMipmap", webgl::GenerateMipmap);
+	JS_GL_SET_METHOD("getAttribLocation");
+	JS_GL_SET_METHOD("depthFunc");
+	JS_GL_SET_METHOD("viewport");
+	JS_GL_SET_METHOD("createShader");
+	JS_GL_SET_METHOD("shaderSource");
+	JS_GL_SET_METHOD("compileShader");
+	JS_GL_SET_METHOD("getShaderParameter");
+	JS_GL_SET_METHOD("getShaderInfoLog");
+	JS_GL_SET_METHOD("createProgram");
+	JS_GL_SET_METHOD("attachShader");
+	JS_GL_SET_METHOD("linkProgram");
+	JS_GL_SET_METHOD("getProgramParameter");
+	JS_GL_SET_METHOD("getUniformLocation");
+	JS_GL_SET_METHOD("clearColor");
+	JS_GL_SET_METHOD("clearDepth");
 	
-	Nan::SetMethod(target, "getAttribLocation", webgl::GetAttribLocation);
-	Nan::SetMethod(target, "depthFunc", webgl::DepthFunc);
-	Nan::SetMethod(target, "viewport", webgl::Viewport);
-	Nan::SetMethod(target, "createShader", webgl::CreateShader);
-	Nan::SetMethod(target, "shaderSource", webgl::ShaderSource);
-	Nan::SetMethod(target, "compileShader", webgl::CompileShader);
-	Nan::SetMethod(target, "getShaderParameter", webgl::GetShaderParameter);
-	Nan::SetMethod(target, "getShaderInfoLog", webgl::GetShaderInfoLog);
-	Nan::SetMethod(target, "createProgram", webgl::CreateProgram);
-	Nan::SetMethod(target, "attachShader", webgl::AttachShader);
-	Nan::SetMethod(target, "linkProgram", webgl::LinkProgram);
-	Nan::SetMethod(target, "getProgramParameter", webgl::GetProgramParameter);
-	Nan::SetMethod(target, "getUniformLocation", webgl::GetUniformLocation);
-	Nan::SetMethod(target, "clearColor", webgl::ClearColor);
-	Nan::SetMethod(target, "clearDepth", webgl::ClearDepth);
+	JS_GL_SET_METHOD("disable");
+	JS_GL_SET_METHOD("createTexture");
+	JS_GL_SET_METHOD("bindTexture");
+	JS_GL_SET_METHOD("texImage2D");
+	JS_GL_SET_METHOD("texParameteri");
+	JS_GL_SET_METHOD("texParameterf");
+	JS_GL_SET_METHOD("clear");
+	JS_GL_SET_METHOD("useProgram");
+	JS_GL_SET_METHOD("createFramebuffer");
+	JS_GL_SET_METHOD("bindFramebuffer");
+	JS_GL_SET_METHOD("framebufferTexture2D");
+	JS_GL_SET_METHOD("createBuffer");
+	JS_GL_SET_METHOD("bindBuffer");
+	JS_GL_SET_METHOD("bufferData");
+	JS_GL_SET_METHOD("bufferSubData");
+	JS_GL_SET_METHOD("enable");
+	JS_GL_SET_METHOD("blendEquation");
+	JS_GL_SET_METHOD("blendFunc");
+	JS_GL_SET_METHOD("enableVertexAttribArray");
+	JS_GL_SET_METHOD("vertexAttribPointer");
+	JS_GL_SET_METHOD("activeTexture");
+	JS_GL_SET_METHOD("drawElements");
+	JS_GL_SET_METHOD("flush");
+	JS_GL_SET_METHOD("finish");
 	
-	Nan::SetMethod(target, "disable", webgl::Disable);
-	Nan::SetMethod(target, "createTexture", webgl::CreateTexture);
-	Nan::SetMethod(target, "bindTexture", webgl::BindTexture);
-	Nan::SetMethod(target, "texImage2D", webgl::TexImage2D);
-	Nan::SetMethod(target, "texParameteri", webgl::TexParameteri);
-	Nan::SetMethod(target, "texParameterf", webgl::TexParameterf);
-	Nan::SetMethod(target, "clear", webgl::Clear);
-	Nan::SetMethod(target, "useProgram", webgl::UseProgram);
-	Nan::SetMethod(target, "createFramebuffer", webgl::CreateFramebuffer);
-	Nan::SetMethod(target, "bindFramebuffer", webgl::BindFramebuffer);
-	Nan::SetMethod(target, "framebufferTexture2D", webgl::FramebufferTexture2D);
-	Nan::SetMethod(target, "createBuffer", webgl::CreateBuffer);
-	Nan::SetMethod(target, "bindBuffer", webgl::BindBuffer);
-	Nan::SetMethod(target, "bufferData", webgl::BufferData);
-	Nan::SetMethod(target, "bufferSubData", webgl::BufferSubData);
-	Nan::SetMethod(target, "enable", webgl::Enable);
-	Nan::SetMethod(target, "blendEquation", webgl::BlendEquation);
-	Nan::SetMethod(target, "blendFunc", webgl::BlendFunc);
-	Nan::SetMethod(target, "enableVertexAttribArray", webgl::EnableVertexAttribArray);
-	Nan::SetMethod(target, "vertexAttribPointer", webgl::VertexAttribPointer);
-	Nan::SetMethod(target, "activeTexture", webgl::ActiveTexture);
-	Nan::SetMethod(target, "drawElements", webgl::DrawElements);
-	Nan::SetMethod(target, "flush", webgl::Flush);
-	Nan::SetMethod(target, "finish", webgl::Finish);
+	JS_GL_SET_METHOD("vertexAttrib1f");
+	JS_GL_SET_METHOD("vertexAttrib2f");
+	JS_GL_SET_METHOD("vertexAttrib3f");
+	JS_GL_SET_METHOD("vertexAttrib4f");
+	JS_GL_SET_METHOD("vertexAttrib1fv");
+	JS_GL_SET_METHOD("vertexAttrib2fv");
+	JS_GL_SET_METHOD("vertexAttrib3fv");
+	JS_GL_SET_METHOD("vertexAttrib4fv");
 	
-	Nan::SetMethod(target, "vertexAttrib1f", webgl::VertexAttrib1f);
-	Nan::SetMethod(target, "vertexAttrib2f", webgl::VertexAttrib2f);
-	Nan::SetMethod(target, "vertexAttrib3f", webgl::VertexAttrib3f);
-	Nan::SetMethod(target, "vertexAttrib4f", webgl::VertexAttrib4f);
-	Nan::SetMethod(target, "vertexAttrib1fv", webgl::VertexAttrib1fv);
-	Nan::SetMethod(target, "vertexAttrib2fv", webgl::VertexAttrib2fv);
-	Nan::SetMethod(target, "vertexAttrib3fv", webgl::VertexAttrib3fv);
-	Nan::SetMethod(target, "vertexAttrib4fv", webgl::VertexAttrib4fv);
+	JS_GL_SET_METHOD("blendColor");
+	JS_GL_SET_METHOD("blendEquationSeparate");
+	JS_GL_SET_METHOD("blendFuncSeparate");
+	JS_GL_SET_METHOD("clearStencil");
+	JS_GL_SET_METHOD("colorMask");
+	JS_GL_SET_METHOD("copyTexImage2D");
+	JS_GL_SET_METHOD("copyTexSubImage2D");
+	JS_GL_SET_METHOD("cullFace");
+	JS_GL_SET_METHOD("depthMask");
+	JS_GL_SET_METHOD("depthRange");
+	JS_GL_SET_METHOD("disableVertexAttribArray");
+	JS_GL_SET_METHOD("hint");
+	JS_GL_SET_METHOD("isEnabled");
+	JS_GL_SET_METHOD("lineWidth");
+	JS_GL_SET_METHOD("polygonOffset");
 	
-	Nan::SetMethod(target, "blendColor", webgl::BlendColor);
-	Nan::SetMethod(target, "blendEquationSeparate", webgl::BlendEquationSeparate);
-	Nan::SetMethod(target, "blendFuncSeparate", webgl::BlendFuncSeparate);
-	Nan::SetMethod(target, "clearStencil", webgl::ClearStencil);
-	Nan::SetMethod(target, "colorMask", webgl::ColorMask);
-	Nan::SetMethod(target, "copyTexImage2D", webgl::CopyTexImage2D);
-	Nan::SetMethod(target, "copyTexSubImage2D", webgl::CopyTexSubImage2D);
-	Nan::SetMethod(target, "cullFace", webgl::CullFace);
-	Nan::SetMethod(target, "depthMask", webgl::DepthMask);
-	Nan::SetMethod(target, "depthRange", webgl::DepthRange);
-	Nan::SetMethod(target, "disableVertexAttribArray", webgl::DisableVertexAttribArray);
-	Nan::SetMethod(target, "hint", webgl::Hint);
-	Nan::SetMethod(target, "isEnabled", webgl::IsEnabled);
-	Nan::SetMethod(target, "lineWidth", webgl::LineWidth);
-	Nan::SetMethod(target, "polygonOffset", webgl::PolygonOffset);
+	JS_GL_SET_METHOD("scissor");
+	JS_GL_SET_METHOD("stencilFunc");
+	JS_GL_SET_METHOD("stencilFuncSeparate");
+	JS_GL_SET_METHOD("stencilMask");
+	JS_GL_SET_METHOD("stencilMaskSeparate");
+	JS_GL_SET_METHOD("stencilOp");
+	JS_GL_SET_METHOD("stencilOpSeparate");
+	JS_GL_SET_METHOD("bindRenderbuffer");
+	JS_GL_SET_METHOD("createRenderbuffer");
 	
-	Nan::SetMethod(target, "scissor", webgl::Scissor);
-	Nan::SetMethod(target, "stencilFunc", webgl::StencilFunc);
-	Nan::SetMethod(target, "stencilFuncSeparate", webgl::StencilFuncSeparate);
-	Nan::SetMethod(target, "stencilMask", webgl::StencilMask);
-	Nan::SetMethod(target, "stencilMaskSeparate", webgl::StencilMaskSeparate);
-	Nan::SetMethod(target, "stencilOp", webgl::StencilOp);
-	Nan::SetMethod(target, "stencilOpSeparate", webgl::StencilOpSeparate);
-	Nan::SetMethod(target, "bindRenderbuffer", webgl::BindRenderbuffer);
-	Nan::SetMethod(target, "createRenderbuffer", webgl::CreateRenderbuffer);
+	JS_GL_SET_METHOD("deleteBuffer");
+	JS_GL_SET_METHOD("deleteFramebuffer");
+	JS_GL_SET_METHOD("deleteProgram");
+	JS_GL_SET_METHOD("deleteRenderbuffer");
+	JS_GL_SET_METHOD("deleteShader");
+	JS_GL_SET_METHOD("deleteTexture");
+	JS_GL_SET_METHOD("detachShader");
+	JS_GL_SET_METHOD("framebufferRenderbuffer");
+	JS_GL_SET_METHOD("getVertexAttribOffset");
 	
-	Nan::SetMethod(target, "deleteBuffer", webgl::DeleteBuffer);
-	Nan::SetMethod(target, "deleteFramebuffer", webgl::DeleteFramebuffer);
-	Nan::SetMethod(target, "deleteProgram", webgl::DeleteProgram);
-	Nan::SetMethod(target, "deleteRenderbuffer", webgl::DeleteRenderbuffer);
-	Nan::SetMethod(target, "deleteShader", webgl::DeleteShader);
-	Nan::SetMethod(target, "deleteTexture", webgl::DeleteTexture);
-	Nan::SetMethod(target, "detachShader", webgl::DetachShader);
-	Nan::SetMethod(target, "framebufferRenderbuffer", webgl::FramebufferRenderbuffer);
-	Nan::SetMethod(target, "getVertexAttribOffset", webgl::GetVertexAttribOffset);
+	JS_GL_SET_METHOD("isBuffer");
+	JS_GL_SET_METHOD("isFramebuffer");
+	JS_GL_SET_METHOD("isProgram");
+	JS_GL_SET_METHOD("isRenderbuffer");
+	JS_GL_SET_METHOD("isShader");
+	JS_GL_SET_METHOD("isTexture");
 	
-	Nan::SetMethod(target, "isBuffer", webgl::IsBuffer);
-	Nan::SetMethod(target, "isFramebuffer", webgl::IsFramebuffer);
-	Nan::SetMethod(target, "isProgram", webgl::IsProgram);
-	Nan::SetMethod(target, "isRenderbuffer", webgl::IsRenderbuffer);
-	Nan::SetMethod(target, "isShader", webgl::IsShader);
-	Nan::SetMethod(target, "isTexture", webgl::IsTexture);
+	JS_GL_SET_METHOD("renderbufferStorage");
+	JS_GL_SET_METHOD("getShaderSource");
+	JS_GL_SET_METHOD("validateProgram");
 	
-	Nan::SetMethod(target, "renderbufferStorage", webgl::RenderbufferStorage);
-	Nan::SetMethod(target, "getShaderSource", webgl::GetShaderSource);
-	Nan::SetMethod(target, "validateProgram", webgl::ValidateProgram);
+	JS_GL_SET_METHOD("texSubImage2D");
+	JS_GL_SET_METHOD("readPixels");
+	JS_GL_SET_METHOD("getTexParameter");
+	JS_GL_SET_METHOD("getActiveAttrib");
+	JS_GL_SET_METHOD("getActiveUniform");
+	JS_GL_SET_METHOD("getAttachedShaders");
+	JS_GL_SET_METHOD("getParameter");
+	JS_GL_SET_METHOD("getBufferParameter");
+	JS_GL_SET_METHOD("getFramebufferAttachmentParameter");
+	JS_GL_SET_METHOD("getProgramInfoLog");
+	JS_GL_SET_METHOD("getRenderbufferParameter");
+	JS_GL_SET_METHOD("getVertexAttrib");
+	JS_GL_SET_METHOD("getSupportedExtensions");
+	JS_GL_SET_METHOD("getExtension");
+	JS_GL_SET_METHOD("checkFramebufferStatus");
 	
-	Nan::SetMethod(target, "texSubImage2D", webgl::TexSubImage2D);
-	Nan::SetMethod(target, "readPixels", webgl::ReadPixels);
-	Nan::SetMethod(target, "getTexParameter", webgl::GetTexParameter);
-	Nan::SetMethod(target, "getActiveAttrib", webgl::GetActiveAttrib);
-	Nan::SetMethod(target, "getActiveUniform", webgl::GetActiveUniform);
-	Nan::SetMethod(target, "getAttachedShaders", webgl::GetAttachedShaders);
-	Nan::SetMethod(target, "getParameter", webgl::GetParameter);
-	Nan::SetMethod(target, "getBufferParameter", webgl::GetBufferParameter);
-	Nan::SetMethod(target, "getFramebufferAttachmentParameter", webgl::GetFramebufferAttachmentParameter);
-	Nan::SetMethod(target, "getProgramInfoLog", webgl::GetProgramInfoLog);
-	Nan::SetMethod(target, "getRenderbufferParameter", webgl::GetRenderbufferParameter);
-	Nan::SetMethod(target, "getVertexAttrib", webgl::GetVertexAttrib);
-	Nan::SetMethod(target, "getSupportedExtensions", webgl::GetSupportedExtensions);
-	Nan::SetMethod(target, "getExtension", webgl::GetExtension);
-	Nan::SetMethod(target, "checkFramebufferStatus", webgl::CheckFramebufferStatus);
-	
-	Nan::SetMethod(target, "frontFace", webgl::FrontFace);
+	JS_GL_SET_METHOD("frontFace");
 	
 	// OpenGL ES 2.1 constants
 	
@@ -647,6 +645,6 @@ void init(Handle<Object> target) {
 }
 
 
-NODE_MODULE(webgl, init)
+NODE_MODULE(webgl, _init)
 
 } // extern "C"

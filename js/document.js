@@ -4,13 +4,12 @@ const glfw  = require('node-glfw-raub');
 const { Window } = glfw;
 
 const webgl = require('./webgl');
-const Img   = require('./image');
 
 
 const ESC_KEY = 27;
 
 
-class Document extends glfw.Window {
+class Document extends Window {
 	
 	constructor(opts = {}) {
 		
@@ -27,8 +26,7 @@ class Document extends glfw.Window {
 			
 		}
 		
-		// Make sure GLEW is initialized
-		webgl.Init();
+		
 		
 		this.swapBuffers();
 		
@@ -97,7 +95,7 @@ class Document extends glfw.Window {
 			
 		} else if (name.indexOf('img') >= 0) {
 			
-			const img = new Img();
+			const img = new Document.Image();
 			img.addEventListener = img.on;
 			return img;
 			
@@ -117,15 +115,28 @@ class Document extends glfw.Window {
 	
 	_requestAnimationFrame(cb) {
 		this.swapBuffers();
-		glfw.PollEvents();
+		glfw.pollEvents();
 		setImmediate(() => cb(Date.now()));
 	}
 	
 };
 
 
-global.HTMLImageElement = Img;
 global.HTMLCanvasElement = Document;
+
+
+Document.setImageClass = (Image) => {
+	Document.Image = Image;
+	global.HTMLImageElement = Image;
+};
+
+
+Document.setImageClass(class FakeImage {
+	on() {}
+	onload() {}
+	onerror() {}
+	get complete() { return false; }
+});
 
 
 module.exports = Document;

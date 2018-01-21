@@ -1,7 +1,15 @@
 #ifndef WEBGL_HPP_
 #define WEBGL_HPP_
 
-#include "common.hpp"
+#include <addon-tools.hpp>
+
+#include <GL/glew.h>
+
+
+#define USE_UINT32_ARG(I, VAR, DEF)                                           \
+	CHECK_LET_ARG(I, IsUint32(), "uint32");                                   \
+	unsigned int VAR = IS_ARG_EMPTY(I) ? (DEF) : info[I]->Uint32Value();
+
 
 
 namespace webgl {
@@ -22,147 +30,147 @@ namespace webgl {
 	
 	
 	
-	void AtExit();
+	void deinit();
 	
-	NAN_METHOD(Init);
+	NAN_METHOD(init);
 	
-	NAN_METHOD(Uniform1f);
-	NAN_METHOD(Uniform2f);
-	NAN_METHOD(Uniform3f);
-	NAN_METHOD(Uniform4f);
-	NAN_METHOD(Uniform1i);
-	NAN_METHOD(Uniform2i);
-	NAN_METHOD(Uniform3i);
-	NAN_METHOD(Uniform4i);
-	NAN_METHOD(Uniform1fv);
-	NAN_METHOD(Uniform2fv);
-	NAN_METHOD(Uniform3fv);
-	NAN_METHOD(Uniform4fv);
-	NAN_METHOD(Uniform1iv);
-	NAN_METHOD(Uniform2iv);
-	NAN_METHOD(Uniform3iv);
-	NAN_METHOD(Uniform4iv);
-	NAN_METHOD(PixelStorei);
-	NAN_METHOD(BindAttribLocation);
-	NAN_METHOD(GetError);
-	NAN_METHOD(DrawArrays);
-	NAN_METHOD(UniformMatrix2fv);
-	NAN_METHOD(UniformMatrix3fv);
-	NAN_METHOD(UniformMatrix4fv);
-	NAN_METHOD(GenerateMipmap);
-	NAN_METHOD(GetAttribLocation);
-	NAN_METHOD(DepthFunc);
-	NAN_METHOD(Viewport);
-	NAN_METHOD(CreateShader);
-	NAN_METHOD(ShaderSource);
-	NAN_METHOD(CompileShader);
-	NAN_METHOD(GetShaderParameter);
-	NAN_METHOD(GetShaderInfoLog);
-	NAN_METHOD(CreateProgram);
-	NAN_METHOD(AttachShader);
-	NAN_METHOD(LinkProgram);
-	NAN_METHOD(GetProgramParameter);
-	NAN_METHOD(GetUniformLocation);
-	NAN_METHOD(ClearColor);
-	NAN_METHOD(ClearDepth);
-	NAN_METHOD(Disable);
-	NAN_METHOD(Enable);
-	NAN_METHOD(CreateTexture);
-	NAN_METHOD(BindTexture);
-	NAN_METHOD(TexImage2D);
-	NAN_METHOD(TexParameteri);
-	NAN_METHOD(TexParameterf);
-	NAN_METHOD(Clear);
-	NAN_METHOD(UseProgram);
-	NAN_METHOD(CreateBuffer);
-	NAN_METHOD(BindBuffer);
-	NAN_METHOD(CreateFramebuffer);
-	NAN_METHOD(BindFramebuffer);
-	NAN_METHOD(FramebufferTexture2D);
-	NAN_METHOD(BufferData);
-	NAN_METHOD(BufferSubData);
-	NAN_METHOD(BlendEquation);
-	NAN_METHOD(BlendFunc);
-	NAN_METHOD(EnableVertexAttribArray);
-	NAN_METHOD(VertexAttribPointer);
-	NAN_METHOD(ActiveTexture);
-	NAN_METHOD(DrawElements);
-	NAN_METHOD(Flush);
-	NAN_METHOD(Finish);
+	NAN_METHOD(uniform1f);
+	NAN_METHOD(uniform2f);
+	NAN_METHOD(uniform3f);
+	NAN_METHOD(uniform4f);
+	NAN_METHOD(uniform1i);
+	NAN_METHOD(uniform2i);
+	NAN_METHOD(uniform3i);
+	NAN_METHOD(uniform4i);
+	NAN_METHOD(uniform1fv);
+	NAN_METHOD(uniform2fv);
+	NAN_METHOD(uniform3fv);
+	NAN_METHOD(uniform4fv);
+	NAN_METHOD(uniform1iv);
+	NAN_METHOD(uniform2iv);
+	NAN_METHOD(uniform3iv);
+	NAN_METHOD(uniform4iv);
+	NAN_METHOD(pixelStorei);
+	NAN_METHOD(bindAttribLocation);
+	NAN_METHOD(getError);
+	NAN_METHOD(drawArrays);
+	NAN_METHOD(uniformMatrix2fv);
+	NAN_METHOD(uniformMatrix3fv);
+	NAN_METHOD(uniformMatrix4fv);
+	NAN_METHOD(generateMipmap);
+	NAN_METHOD(getAttribLocation);
+	NAN_METHOD(depthFunc);
+	NAN_METHOD(viewport);
+	NAN_METHOD(createShader);
+	NAN_METHOD(shaderSource);
+	NAN_METHOD(compileShader);
+	NAN_METHOD(getShaderParameter);
+	NAN_METHOD(getShaderInfoLog);
+	NAN_METHOD(createProgram);
+	NAN_METHOD(attachShader);
+	NAN_METHOD(linkProgram);
+	NAN_METHOD(getProgramParameter);
+	NAN_METHOD(getUniformLocation);
+	NAN_METHOD(clearColor);
+	NAN_METHOD(clearDepth);
+	NAN_METHOD(disable);
+	NAN_METHOD(enable);
+	NAN_METHOD(createTexture);
+	NAN_METHOD(bindTexture);
+	NAN_METHOD(texImage2D);
+	NAN_METHOD(texParameteri);
+	NAN_METHOD(texParameterf);
+	NAN_METHOD(clear);
+	NAN_METHOD(useProgram);
+	NAN_METHOD(createBuffer);
+	NAN_METHOD(bindBuffer);
+	NAN_METHOD(createFramebuffer);
+	NAN_METHOD(bindFramebuffer);
+	NAN_METHOD(framebufferTexture2D);
+	NAN_METHOD(bufferData);
+	NAN_METHOD(bufferSubData);
+	NAN_METHOD(blendEquation);
+	NAN_METHOD(blendFunc);
+	NAN_METHOD(enableVertexAttribArray);
+	NAN_METHOD(vertexAttribPointer);
+	NAN_METHOD(activeTexture);
+	NAN_METHOD(drawElements);
+	NAN_METHOD(flush);
+	NAN_METHOD(finish);
 	
-	NAN_METHOD(VertexAttrib1f);
-	NAN_METHOD(VertexAttrib2f);
-	NAN_METHOD(VertexAttrib3f);
-	NAN_METHOD(VertexAttrib4f);
-	NAN_METHOD(VertexAttrib1fv);
-	NAN_METHOD(VertexAttrib2fv);
-	NAN_METHOD(VertexAttrib3fv);
-	NAN_METHOD(VertexAttrib4fv);
+	NAN_METHOD(vertexAttrib1f);
+	NAN_METHOD(vertexAttrib2f);
+	NAN_METHOD(vertexAttrib3f);
+	NAN_METHOD(vertexAttrib4f);
+	NAN_METHOD(vertexAttrib1fv);
+	NAN_METHOD(vertexAttrib2fv);
+	NAN_METHOD(vertexAttrib3fv);
+	NAN_METHOD(vertexAttrib4fv);
 	
-	NAN_METHOD(BlendColor);
-	NAN_METHOD(BlendEquationSeparate);
-	NAN_METHOD(BlendFuncSeparate);
-	NAN_METHOD(ClearStencil);
-	NAN_METHOD(ColorMask);
-	NAN_METHOD(CopyTexImage2D);
-	NAN_METHOD(CopyTexSubImage2D);
-	NAN_METHOD(CullFace);
-	NAN_METHOD(DepthMask);
-	NAN_METHOD(DepthRange);
-	NAN_METHOD(DisableVertexAttribArray);
-	NAN_METHOD(Hint);
-	NAN_METHOD(IsEnabled);
-	NAN_METHOD(LineWidth);
-	NAN_METHOD(PolygonOffset);
+	NAN_METHOD(blendColor);
+	NAN_METHOD(blendEquationSeparate);
+	NAN_METHOD(blendFuncSeparate);
+	NAN_METHOD(clearStencil);
+	NAN_METHOD(colorMask);
+	NAN_METHOD(copyTexImage2D);
+	NAN_METHOD(copyTexSubImage2D);
+	NAN_METHOD(cullFace);
+	NAN_METHOD(depthMask);
+	NAN_METHOD(depthRange);
+	NAN_METHOD(disableVertexAttribArray);
+	NAN_METHOD(hint);
+	NAN_METHOD(isEnabled);
+	NAN_METHOD(lineWidth);
+	NAN_METHOD(polygonOffset);
 	
-	NAN_METHOD(Scissor);
-	NAN_METHOD(StencilFunc);
-	NAN_METHOD(StencilFuncSeparate);
-	NAN_METHOD(StencilMask);
-	NAN_METHOD(StencilMaskSeparate);
-	NAN_METHOD(StencilOp);
-	NAN_METHOD(StencilOpSeparate);
-	NAN_METHOD(BindRenderbuffer);
-	NAN_METHOD(CreateRenderbuffer);
+	NAN_METHOD(scissor);
+	NAN_METHOD(stencilFunc);
+	NAN_METHOD(stencilFuncSeparate);
+	NAN_METHOD(stencilMask);
+	NAN_METHOD(stencilMaskSeparate);
+	NAN_METHOD(stencilOp);
+	NAN_METHOD(stencilOpSeparate);
+	NAN_METHOD(bindRenderbuffer);
+	NAN_METHOD(createRenderbuffer);
 	
-	NAN_METHOD(DeleteBuffer);
-	NAN_METHOD(DeleteFramebuffer);
-	NAN_METHOD(DeleteProgram);
-	NAN_METHOD(DeleteRenderbuffer);
-	NAN_METHOD(DeleteShader);
-	NAN_METHOD(DeleteTexture);
-	NAN_METHOD(DetachShader);
-	NAN_METHOD(FramebufferRenderbuffer);
-	NAN_METHOD(GetVertexAttribOffset);
+	NAN_METHOD(deleteBuffer);
+	NAN_METHOD(deleteFramebuffer);
+	NAN_METHOD(deleteProgram);
+	NAN_METHOD(deleteRenderbuffer);
+	NAN_METHOD(deleteShader);
+	NAN_METHOD(deleteTexture);
+	NAN_METHOD(detachShader);
+	NAN_METHOD(framebufferRenderbuffer);
+	NAN_METHOD(getVertexAttribOffset);
 	
-	NAN_METHOD(IsBuffer);
-	NAN_METHOD(IsFramebuffer);
-	NAN_METHOD(IsProgram);
-	NAN_METHOD(IsRenderbuffer);
-	NAN_METHOD(IsShader);
-	NAN_METHOD(IsTexture);
+	NAN_METHOD(isBuffer);
+	NAN_METHOD(isFramebuffer);
+	NAN_METHOD(isProgram);
+	NAN_METHOD(isRenderbuffer);
+	NAN_METHOD(isShader);
+	NAN_METHOD(isTexture);
 	
-	NAN_METHOD(RenderbufferStorage);
-	NAN_METHOD(GetShaderSource);
-	NAN_METHOD(ValidateProgram);
+	NAN_METHOD(renderbufferStorage);
+	NAN_METHOD(getShaderSource);
+	NAN_METHOD(validateProgram);
 	
-	NAN_METHOD(TexSubImage2D);
-	NAN_METHOD(ReadPixels);
-	NAN_METHOD(GetTexParameter);
-	NAN_METHOD(GetActiveAttrib);
-	NAN_METHOD(GetActiveUniform);
-	NAN_METHOD(GetAttachedShaders);
-	NAN_METHOD(GetParameter);
-	NAN_METHOD(GetBufferParameter);
-	NAN_METHOD(GetFramebufferAttachmentParameter);
-	NAN_METHOD(GetProgramInfoLog);
-	NAN_METHOD(GetRenderbufferParameter);
-	NAN_METHOD(GetVertexAttrib);
-	NAN_METHOD(GetSupportedExtensions);
-	NAN_METHOD(GetExtension);
-	NAN_METHOD(CheckFramebufferStatus);
+	NAN_METHOD(texSubImage2D);
+	NAN_METHOD(readPixels);
+	NAN_METHOD(getTexParameter);
+	NAN_METHOD(getActiveAttrib);
+	NAN_METHOD(getActiveUniform);
+	NAN_METHOD(getAttachedShaders);
+	NAN_METHOD(getParameter);
+	NAN_METHOD(getBufferParameter);
+	NAN_METHOD(getFramebufferAttachmentParameter);
+	NAN_METHOD(getProgramInfoLog);
+	NAN_METHOD(getRenderbufferParameter);
+	NAN_METHOD(getVertexAttrib);
+	NAN_METHOD(getSupportedExtensions);
+	NAN_METHOD(getExtension);
+	NAN_METHOD(checkFramebufferStatus);
 	
-	NAN_METHOD(FrontFace);
+	NAN_METHOD(frontFace);
 	
 }
 

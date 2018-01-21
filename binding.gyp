@@ -1,5 +1,7 @@
 {
 	'variables': {
+		'_del'           : '<!(node -e "console.log(require(\'node-addon-tools-raub\')._del)")',
+		'_rd'            : '<!(node -e "console.log(require(\'node-addon-tools-raub\')._rd)")',
 		'opengl_include' : '<!(node -e "console.log(require(\'node-deps-opengl-raub\').include)")',
 		'opengl_bin'     : '<!(node -e "console.log(require(\'node-deps-opengl-raub\').bin)")',
 	},
@@ -13,9 +15,9 @@
 				'cpp/webgl.cpp',
 			],
 			'include_dirs': [
-				'<!(node -e "require(\'nan\')")',
+				'<!(node -e "require(\'node-addon-tools-raub\').printNan()")',
+				'<!(node -e "console.log(require(\'node-addon-tools-raub\').include)")',
 				'<(opengl_include)',
-				'<!(node -e "require(\'node-addon-tools-raub\')")',
 			],
 			'library_dirs': [ '<(opengl_bin)' ],
 			'conditions': [
@@ -24,7 +26,6 @@
 					{
 						'libraries': [
 							'-Wl,-rpath,<(opengl_bin)',
-							'<(opengl_bin)/libfreeimage.so',
 							'<(opengl_bin)/libglfw.so.3',
 							'<(opengl_bin)/libGLEW.so.2.0',
 							'<(opengl_bin)/libGL.so',
@@ -37,7 +38,6 @@
 					{
 						'libraries': [
 							'-Wl,-rpath,<(opengl_bin)',
-							'<(opengl_bin)/freeimage.dylib',
 							'<(opengl_bin)/glfw.dylib',
 							'<(opengl_bin)/glew.dylib'
 						],
@@ -46,7 +46,7 @@
 				[
 					'OS=="win"',
 					{
-						'libraries': [ 'FreeImage.lib', 'glfw3dll.lib', 'glew32.lib', 'opengl32.lib' ],
+						'libraries': [ 'glfw3dll.lib', 'glew32.lib', 'opengl32.lib' ],
 						'defines' : [
 							'WIN32_LEAN_AND_MEAN',
 							'VC_EXTRALEAN'
@@ -79,7 +79,7 @@
 					[ 'OS=="linux"', { 'action': ['mkdir', '-p', 'binary'] } ],
 					[ 'OS=="mac"', { 'action': ['mkdir', '-p', 'binary'] } ],
 					[ 'OS=="win"', { 'action': [
-						'<(module_root_dir)/_rd "<(module_root_dir)/binary" && ' +
+						'<(_rd) "<(module_root_dir)/binary" && ' +
 						'md "<(module_root_dir)/binary"'
 					] } ],
 				],
@@ -133,8 +133,8 @@
 						'<(module_root_dir)/build/Release/webgl.node'
 					] } ],
 					[ 'OS=="win"', { 'action' : [
-						'<(module_root_dir)/_del "<(module_root_dir)/build/Release/webgl.*" && ' +
-						'<(module_root_dir)/_del "<(module_root_dir)/build/Release/obj/webgl/*.*"'
+						'<(_del) "<(module_root_dir)/build/Release/webgl.*" && ' +
+						'<(_del) "<(module_root_dir)/build/Release/obj/webgl/*.*"'
 					] } ],
 				],
 			}],
