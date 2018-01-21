@@ -11,7 +11,6 @@
 			'defines': [ 'VERSION=0.5.5' ],
 			'sources': [
 				'cpp/bindings.cpp',
-				'cpp/image.cpp',
 				'cpp/webgl.cpp',
 			],
 			'include_dirs': [

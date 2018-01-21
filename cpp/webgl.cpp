@@ -8,7 +8,6 @@
 #include <GL/glew.h>
 
 #include "webgl.hpp"
-#include "image.hpp"
 
 using namespace node;
 using namespace v8;
