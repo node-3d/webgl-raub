@@ -28,60 +28,7 @@ static GLuint ToGLuint(const void* ptr) {
 }
 
 
-template<typename Type>
-inline Type* getArrayData(Local<Value> arg, int *num = NULL) {
-	
-	Type *data = NULL;
-	
-	if (num) {
-		*num = 0;
-	}
-	
-	if ( ! arg->IsNull() ) {
-		
-		if (arg->IsArray()) {
-			Nan::ThrowError("Array is not supported here");
-		} else if (arg->IsObject()) {
-			Local<ArrayBufferView> arr = Local<ArrayBufferView>::Cast(arg);
-			if (num)
-				*num = arr->ByteLength() / sizeof(Type);
-			data = reinterpret_cast<Type*>(arr->Buffer()->GetContents().Data());
-		} else {
-			Nan::ThrowError("Bad array argument");
-		}
-		
-	}
-	
-	return data;
-	
-}
-
-
-inline void *getImageData(Local<Value> arg) {
-	
-	void *pixels = NULL;
-	
-	if ( ! arg->IsNull() ) {
-		
-		Local<Object> obj = Local<Object>::Cast(arg);
-		
-		if ( ! obj->IsObject() ) {
-			Nan::ThrowError("Bad texture argument");
-		} else if (obj->IsArrayBufferView()) {
-			int num;
-			pixels = getArrayData<BYTE>(obj, &num);
-		} else {
-			pixels = node::Buffer::Data(Nan::Get(obj, JS_STR("data")).ToLocalChecked());
-		}
-		
-	}
-	
-	return pixels;
-	
-}
-
-
-NAN_METHOD(Init) { NAN_HS;
+NAN_METHOD(init) {
 	
 	GLenum err = glewInit();
 	
@@ -96,7 +43,7 @@ NAN_METHOD(Init) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform1f) { NAN_HS;
+NAN_METHOD(uniform1f) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -106,7 +53,7 @@ NAN_METHOD(Uniform1f) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform2f) { NAN_HS;
+NAN_METHOD(uniform2f) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -117,7 +64,7 @@ NAN_METHOD(Uniform2f) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform3f) { NAN_HS;
+NAN_METHOD(uniform3f) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -129,7 +76,7 @@ NAN_METHOD(Uniform3f) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform4f) { NAN_HS;
+NAN_METHOD(uniform4f) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -142,7 +89,7 @@ NAN_METHOD(Uniform4f) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform1i) { NAN_HS;
+NAN_METHOD(uniform1i) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_INT32_ARG(1, x);
@@ -152,7 +99,7 @@ NAN_METHOD(Uniform1i) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform2i) { NAN_HS;
+NAN_METHOD(uniform2i) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_INT32_ARG(1, x);
@@ -163,7 +110,7 @@ NAN_METHOD(Uniform2i) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform3i) { NAN_HS;
+NAN_METHOD(uniform3i) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_INT32_ARG(1, x);
@@ -175,7 +122,7 @@ NAN_METHOD(Uniform3i) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform4i) { NAN_HS;
+NAN_METHOD(uniform4i) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_INT32_ARG(1, x);
@@ -188,7 +135,7 @@ NAN_METHOD(Uniform4i) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform1fv) { NAN_HS;
+NAN_METHOD(uniform1fv) {
 	
 	REQ_INT32_ARG(0, location);
 	
@@ -200,7 +147,7 @@ NAN_METHOD(Uniform1fv) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform2fv) { NAN_HS;
+NAN_METHOD(uniform2fv) {
 	
 	REQ_INT32_ARG(0, location);
 	
@@ -213,7 +160,7 @@ NAN_METHOD(Uniform2fv) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform3fv) { NAN_HS;
+NAN_METHOD(uniform3fv) {
 	
 	REQ_INT32_ARG(0, location);
 	
@@ -226,7 +173,7 @@ NAN_METHOD(Uniform3fv) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform4fv) { NAN_HS;
+NAN_METHOD(uniform4fv) {
 	
 	REQ_INT32_ARG(0, location);
 	
@@ -239,7 +186,7 @@ NAN_METHOD(Uniform4fv) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform1iv) { NAN_HS;
+NAN_METHOD(uniform1iv) {
 	
 	REQ_INT32_ARG(0, location);
 	
@@ -251,7 +198,7 @@ NAN_METHOD(Uniform1iv) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform2iv) { NAN_HS;
+NAN_METHOD(uniform2iv) {
 	
 	REQ_INT32_ARG(0, location);
 	
@@ -264,7 +211,7 @@ NAN_METHOD(Uniform2iv) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform3iv) { NAN_HS;
+NAN_METHOD(uniform3iv) {
 	
 	REQ_INT32_ARG(0, location);
 	
@@ -277,7 +224,7 @@ NAN_METHOD(Uniform3iv) { NAN_HS;
 }
 
 
-NAN_METHOD(Uniform4iv) { NAN_HS;
+NAN_METHOD(uniform4iv) {
 	
 	REQ_INT32_ARG(0, location);
 	
@@ -290,7 +237,7 @@ NAN_METHOD(Uniform4iv) { NAN_HS;
 }
 
 
-NAN_METHOD(PixelStorei) { NAN_HS;
+NAN_METHOD(pixelStorei) {
 	
 	REQ_INT32_ARG(0, name);
 	REQ_INT32_ARG(1, param);
@@ -300,7 +247,7 @@ NAN_METHOD(PixelStorei) { NAN_HS;
 }
 
 
-NAN_METHOD(BindAttribLocation) { NAN_HS;
+NAN_METHOD(bindAttribLocation) {
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, index);
@@ -311,14 +258,14 @@ NAN_METHOD(BindAttribLocation) { NAN_HS;
 }
 
 
-NAN_METHOD(GetError) { NAN_HS;
+NAN_METHOD(getError) {
 	
 	RET_VALUE(Nan::New<Integer>(glGetError()));
 	
 }
 
 
-NAN_METHOD(DrawArrays) { NAN_HS;
+NAN_METHOD(drawArrays) {
 	
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, first);
@@ -329,7 +276,7 @@ NAN_METHOD(DrawArrays) { NAN_HS;
 }
 
 
-NAN_METHOD(UniformMatrix2fv) { NAN_HS;
+NAN_METHOD(uniformMatrix2fv) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_BOOL_ARG(1, transpose);
@@ -347,7 +294,7 @@ NAN_METHOD(UniformMatrix2fv) { NAN_HS;
 }
 
 
-NAN_METHOD(UniformMatrix3fv) { NAN_HS;
+NAN_METHOD(uniformMatrix3fv) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_BOOL_ARG(1, transpose);
@@ -365,7 +312,7 @@ NAN_METHOD(UniformMatrix3fv) { NAN_HS;
 }
 
 
-NAN_METHOD(UniformMatrix4fv) { NAN_HS;
+NAN_METHOD(uniformMatrix4fv) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_BOOL_ARG(1, transpose);
@@ -383,7 +330,7 @@ NAN_METHOD(UniformMatrix4fv) { NAN_HS;
 }
 
 
-NAN_METHOD(GenerateMipmap) { NAN_HS;
+NAN_METHOD(generateMipmap) {
 	
 	REQ_INT32_ARG(0, target);
 	
@@ -392,7 +339,7 @@ NAN_METHOD(GenerateMipmap) { NAN_HS;
 }
 
 
-NAN_METHOD(GetAttribLocation) { NAN_HS;
+NAN_METHOD(getAttribLocation) {
 	
 	REQ_INT32_ARG(0, program);
 	REQ_UTF8_ARG(1, name);
@@ -402,7 +349,7 @@ NAN_METHOD(GetAttribLocation) { NAN_HS;
 }
 
 
-NAN_METHOD(DepthFunc) { NAN_HS;
+NAN_METHOD(depthFunc) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -411,7 +358,7 @@ NAN_METHOD(DepthFunc) { NAN_HS;
 }
 
 
-NAN_METHOD(Viewport) { NAN_HS;
+NAN_METHOD(viewport) {
 	
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
@@ -423,7 +370,7 @@ NAN_METHOD(Viewport) { NAN_HS;
 }
 
 
-NAN_METHOD(CreateShader) { NAN_HS;
+NAN_METHOD(createShader) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -440,7 +387,7 @@ NAN_METHOD(CreateShader) { NAN_HS;
 }
 
 
-NAN_METHOD(ShaderSource) { NAN_HS;
+NAN_METHOD(shaderSource) {
 	
 	REQ_INT32_ARG(0, id);
 	REQ_UTF8_ARG(1, code);
@@ -454,7 +401,7 @@ NAN_METHOD(ShaderSource) { NAN_HS;
 }
 
 
-NAN_METHOD(CompileShader) { NAN_HS;
+NAN_METHOD(compileShader) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -463,7 +410,7 @@ NAN_METHOD(CompileShader) { NAN_HS;
 }
 
 
-NAN_METHOD(FrontFace) { NAN_HS;
+NAN_METHOD(frontFace) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -472,7 +419,7 @@ NAN_METHOD(FrontFace) { NAN_HS;
 }
 
 
-NAN_METHOD(GetShaderParameter) { NAN_HS;
+NAN_METHOD(getShaderParameter) {
 	
 	REQ_INT32_ARG(0, shader);
 	REQ_INT32_ARG(1, pname);
@@ -506,7 +453,7 @@ NAN_METHOD(GetShaderParameter) { NAN_HS;
 }
 
 
-NAN_METHOD(GetShaderInfoLog) { NAN_HS;
+NAN_METHOD(getShaderInfoLog) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -519,7 +466,7 @@ NAN_METHOD(GetShaderInfoLog) { NAN_HS;
 }
 
 
-NAN_METHOD(CreateProgram) { NAN_HS;
+NAN_METHOD(createProgram) {
 	
 	GLuint program = glCreateProgram();
 	
@@ -534,7 +481,7 @@ NAN_METHOD(CreateProgram) { NAN_HS;
 }
 
 
-NAN_METHOD(AttachShader) { NAN_HS;
+NAN_METHOD(attachShader) {
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, shader);
@@ -544,7 +491,7 @@ NAN_METHOD(AttachShader) { NAN_HS;
 }
 
 
-NAN_METHOD(LinkProgram) { NAN_HS;
+NAN_METHOD(linkProgram) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -553,7 +500,7 @@ NAN_METHOD(LinkProgram) { NAN_HS;
 }
 
 
-NAN_METHOD(GetProgramParameter) { NAN_HS;
+NAN_METHOD(getProgramParameter) {
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, name);
@@ -585,7 +532,7 @@ NAN_METHOD(GetProgramParameter) { NAN_HS;
 }
 
 
-NAN_METHOD(GetUniformLocation) { NAN_HS;
+NAN_METHOD(getUniformLocation) {
 	
 	REQ_INT32_ARG(0, program);
 	REQ_UTF8_ARG(1, name);
@@ -595,7 +542,7 @@ NAN_METHOD(GetUniformLocation) { NAN_HS;
 }
 
 
-NAN_METHOD(ClearColor) { NAN_HS;
+NAN_METHOD(clearColor) {
 	
 	REQ_FLOAT_ARG(0, red);
 	REQ_FLOAT_ARG(1, green);
@@ -607,7 +554,7 @@ NAN_METHOD(ClearColor) { NAN_HS;
 }
 
 
-NAN_METHOD(ClearDepth) { NAN_HS;
+NAN_METHOD(clearDepth) {
 	
 	REQ_FLOAT_ARG(0, depth);
 	glClearDepth(depth);
@@ -615,7 +562,7 @@ NAN_METHOD(ClearDepth) { NAN_HS;
 }
 
 
-NAN_METHOD(Disable) { NAN_HS;
+NAN_METHOD(disable) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -624,7 +571,7 @@ NAN_METHOD(Disable) { NAN_HS;
 }
 
 
-NAN_METHOD(Enable) { NAN_HS;
+NAN_METHOD(enable) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -633,7 +580,7 @@ NAN_METHOD(Enable) { NAN_HS;
 }
 
 
-NAN_METHOD(CreateTexture) { NAN_HS;
+NAN_METHOD(createTexture) {
 	
 	GLuint texture;
 	glGenTextures(1, &texture);
@@ -649,7 +596,7 @@ NAN_METHOD(CreateTexture) { NAN_HS;
 }
 
 
-NAN_METHOD(BindTexture) { NAN_HS;
+NAN_METHOD(bindTexture) {
 	
 	REQ_INT32_ARG(0, target);
 	LET_INT32_ARG(1, texture);
@@ -659,7 +606,7 @@ NAN_METHOD(BindTexture) { NAN_HS;
 }
 
 
-NAN_METHOD(TexImage2D) { NAN_HS;
+NAN_METHOD(texImage2D) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
@@ -677,7 +624,7 @@ NAN_METHOD(TexImage2D) { NAN_HS;
 }
 
 
-NAN_METHOD(TexParameteri) { NAN_HS;
+NAN_METHOD(texParameteri) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
@@ -688,7 +635,7 @@ NAN_METHOD(TexParameteri) { NAN_HS;
 }
 
 
-NAN_METHOD(TexParameterf) { NAN_HS;
+NAN_METHOD(texParameterf) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
@@ -699,7 +646,7 @@ NAN_METHOD(TexParameterf) { NAN_HS;
 }
 
 
-NAN_METHOD(Clear) { NAN_HS;
+NAN_METHOD(clear) {
 	
 	REQ_INT32_ARG(0, target);
 	
@@ -708,7 +655,7 @@ NAN_METHOD(Clear) { NAN_HS;
 }
 
 
-NAN_METHOD(UseProgram) { NAN_HS;
+NAN_METHOD(useProgram) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -717,7 +664,7 @@ NAN_METHOD(UseProgram) { NAN_HS;
 }
 
 
-NAN_METHOD(CreateBuffer) { NAN_HS;
+NAN_METHOD(createBuffer) {
 	
 	GLuint buffer;
 	glGenBuffers(1, &buffer);
@@ -733,7 +680,7 @@ NAN_METHOD(CreateBuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(BindBuffer) { NAN_HS;
+NAN_METHOD(bindBuffer) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, buffer);
@@ -743,7 +690,7 @@ NAN_METHOD(BindBuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(CreateFramebuffer) { NAN_HS;
+NAN_METHOD(createFramebuffer) {
 	
 	GLuint buffer;
 	glGenFramebuffers(1, &buffer);
@@ -759,7 +706,7 @@ NAN_METHOD(CreateFramebuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(BindFramebuffer) { NAN_HS;
+NAN_METHOD(bindFramebuffer) {
 	
 	REQ_INT32_ARG(0, target);
 	LET_INT32_ARG(1, buffer);
@@ -769,7 +716,7 @@ NAN_METHOD(BindFramebuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(FramebufferTexture2D) { NAN_HS;
+NAN_METHOD(framebufferTexture2D) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, attachment);
@@ -782,7 +729,7 @@ NAN_METHOD(FramebufferTexture2D) { NAN_HS;
 }
 
 
-NAN_METHOD(BufferData) { NAN_HS;
+NAN_METHOD(bufferData) {
 	
 	REQ_INT32_ARG(0, target);
 	
@@ -810,7 +757,7 @@ NAN_METHOD(BufferData) { NAN_HS;
 }
 
 
-NAN_METHOD(BufferSubData) { NAN_HS;
+NAN_METHOD(bufferSubData) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, offset);
@@ -825,7 +772,7 @@ NAN_METHOD(BufferSubData) { NAN_HS;
 }
 
 
-NAN_METHOD(BlendEquation) { NAN_HS;
+NAN_METHOD(blendEquation) {
 	
 	REQ_INT32_ARG(0, mode);
 	
@@ -834,7 +781,7 @@ NAN_METHOD(BlendEquation) { NAN_HS;
 }
 
 
-NAN_METHOD(BlendFunc) { NAN_HS;
+NAN_METHOD(blendFunc) {
 	
 	REQ_INT32_ARG(0, sfactor);
 	REQ_INT32_ARG(1, dfactor);
@@ -844,7 +791,7 @@ NAN_METHOD(BlendFunc) { NAN_HS;
 }
 
 
-NAN_METHOD(EnableVertexAttribArray) { NAN_HS;
+NAN_METHOD(enableVertexAttribArray) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -853,7 +800,7 @@ NAN_METHOD(EnableVertexAttribArray) { NAN_HS;
 }
 
 
-NAN_METHOD(VertexAttribPointer) { NAN_HS;
+NAN_METHOD(vertexAttribPointer) {
 	
 	REQ_INT32_ARG(0, indx);
 	REQ_INT32_ARG(1, size);
@@ -870,7 +817,7 @@ NAN_METHOD(VertexAttribPointer) { NAN_HS;
 }
 
 
-NAN_METHOD(ActiveTexture) { NAN_HS;
+NAN_METHOD(activeTexture) {
 	
 	REQ_INT32_ARG(0, id);
 	
@@ -879,7 +826,7 @@ NAN_METHOD(ActiveTexture) { NAN_HS;
 }
 
 
-NAN_METHOD(DrawElements) { NAN_HS;
+NAN_METHOD(drawElements) {
 	
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, count);
@@ -893,21 +840,21 @@ NAN_METHOD(DrawElements) { NAN_HS;
 }
 
 
-NAN_METHOD(Flush) { NAN_HS;
+NAN_METHOD(flush) {
 	
 	glFlush();
 	
 }
 
 
-NAN_METHOD(Finish) { NAN_HS;
+NAN_METHOD(finish) {
 	
 	glFinish();
 	
 }
 
 
-NAN_METHOD(VertexAttrib1f) { NAN_HS;
+NAN_METHOD(vertexAttrib1f) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -917,7 +864,7 @@ NAN_METHOD(VertexAttrib1f) { NAN_HS;
 }
 
 
-NAN_METHOD(VertexAttrib2f) { NAN_HS;
+NAN_METHOD(vertexAttrib2f) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -928,7 +875,7 @@ NAN_METHOD(VertexAttrib2f) { NAN_HS;
 }
 
 
-NAN_METHOD(VertexAttrib3f) { NAN_HS;
+NAN_METHOD(vertexAttrib3f) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -940,7 +887,7 @@ NAN_METHOD(VertexAttrib3f) { NAN_HS;
 }
 
 
-NAN_METHOD(VertexAttrib4f) { NAN_HS;
+NAN_METHOD(vertexAttrib4f) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -953,7 +900,7 @@ NAN_METHOD(VertexAttrib4f) { NAN_HS;
 }
 
 
-NAN_METHOD(VertexAttrib1fv) { NAN_HS;
+NAN_METHOD(vertexAttrib1fv) {
 	
 	REQ_INT32_ARG(0, location);
 	GLfloat *data = getArrayData<GLfloat>(info[1]);
@@ -963,7 +910,7 @@ NAN_METHOD(VertexAttrib1fv) { NAN_HS;
 }
 
 
-NAN_METHOD(VertexAttrib2fv) { NAN_HS;
+NAN_METHOD(vertexAttrib2fv) {
 	
 	REQ_INT32_ARG(0, location);
 	GLfloat *data = getArrayData<GLfloat>(info[1]);
@@ -973,7 +920,7 @@ NAN_METHOD(VertexAttrib2fv) { NAN_HS;
 }
 
 
-NAN_METHOD(VertexAttrib3fv) { NAN_HS;
+NAN_METHOD(vertexAttrib3fv) {
 	
 	REQ_INT32_ARG(0, location);
 	GLfloat *data = getArrayData<GLfloat>(info[1]);
@@ -983,7 +930,7 @@ NAN_METHOD(VertexAttrib3fv) { NAN_HS;
 }
 
 
-NAN_METHOD(VertexAttrib4fv) { NAN_HS;
+NAN_METHOD(vertexAttrib4fv) {
 	
 	REQ_INT32_ARG(0, location);
 	GLfloat *data = getArrayData<GLfloat>(info[1]);
@@ -993,7 +940,7 @@ NAN_METHOD(VertexAttrib4fv) { NAN_HS;
 }
 
 
-NAN_METHOD(BlendColor) { NAN_HS;
+NAN_METHOD(blendColor) {
 	
 	REQ_FLOAT_ARG(0, red);
 	REQ_FLOAT_ARG(1, green);
@@ -1005,7 +952,7 @@ NAN_METHOD(BlendColor) { NAN_HS;
 }
 
 
-NAN_METHOD(BlendEquationSeparate) { NAN_HS;
+NAN_METHOD(blendEquationSeparate) {
 	
 	REQ_INT32_ARG(0, modeRGB);
 	REQ_INT32_ARG(1, modeAlpha);
@@ -1015,7 +962,7 @@ NAN_METHOD(BlendEquationSeparate) { NAN_HS;
 }
 
 
-NAN_METHOD(BlendFuncSeparate) { NAN_HS;
+NAN_METHOD(blendFuncSeparate) {
 	
 	REQ_INT32_ARG(0, srcRGB);
 	REQ_INT32_ARG(1, dstRGB);
@@ -1027,7 +974,7 @@ NAN_METHOD(BlendFuncSeparate) { NAN_HS;
 }
 
 
-NAN_METHOD(ClearStencil) { NAN_HS;
+NAN_METHOD(clearStencil) {
 	
 	REQ_INT32_ARG(0, s);
 	
@@ -1036,7 +983,7 @@ NAN_METHOD(ClearStencil) { NAN_HS;
 }
 
 
-NAN_METHOD(ColorMask) { NAN_HS;
+NAN_METHOD(colorMask) {
 	
 	REQ_BOOL_ARG(0, red);
 	REQ_BOOL_ARG(1, green);
@@ -1048,7 +995,7 @@ NAN_METHOD(ColorMask) { NAN_HS;
 }
 
 
-NAN_METHOD(CopyTexImage2D) { NAN_HS;
+NAN_METHOD(copyTexImage2D) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
@@ -1064,7 +1011,7 @@ NAN_METHOD(CopyTexImage2D) { NAN_HS;
 }
 
 
-NAN_METHOD(CopyTexSubImage2D) { NAN_HS;
+NAN_METHOD(copyTexSubImage2D) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
@@ -1080,7 +1027,7 @@ NAN_METHOD(CopyTexSubImage2D) { NAN_HS;
 }
 
 
-NAN_METHOD(CullFace) { NAN_HS;
+NAN_METHOD(cullFace) {
 	
 	REQ_INT32_ARG(0, mode);
 	
@@ -1089,7 +1036,7 @@ NAN_METHOD(CullFace) { NAN_HS;
 }
 
 
-NAN_METHOD(DepthMask) { NAN_HS;
+NAN_METHOD(depthMask) {
 	
 	REQ_BOOL_ARG(0, flag);
 	
@@ -1098,7 +1045,7 @@ NAN_METHOD(DepthMask) { NAN_HS;
 }
 
 
-NAN_METHOD(DepthRange) { NAN_HS;
+NAN_METHOD(depthRange) {
 	
 	REQ_FLOAT_ARG(0, zNear);
 	REQ_FLOAT_ARG(1, zFar);
@@ -1108,7 +1055,7 @@ NAN_METHOD(DepthRange) { NAN_HS;
 }
 
 
-NAN_METHOD(DisableVertexAttribArray) { NAN_HS;
+NAN_METHOD(disableVertexAttribArray) {
 	
 	REQ_INT32_ARG(0, index);
 	
@@ -1117,7 +1064,7 @@ NAN_METHOD(DisableVertexAttribArray) { NAN_HS;
 }
 
 
-NAN_METHOD(Hint) { NAN_HS;
+NAN_METHOD(hint) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, mode);
@@ -1127,7 +1074,7 @@ NAN_METHOD(Hint) { NAN_HS;
 }
 
 
-NAN_METHOD(IsEnabled) { NAN_HS;
+NAN_METHOD(isEnabled) {
 	
 	REQ_INT32_ARG(0, cap);
 	
@@ -1138,7 +1085,7 @@ NAN_METHOD(IsEnabled) { NAN_HS;
 }
 
 
-NAN_METHOD(LineWidth) { NAN_HS;
+NAN_METHOD(lineWidth) {
 	
 	REQ_FLOAT_ARG(0, width);
 	
@@ -1147,7 +1094,7 @@ NAN_METHOD(LineWidth) { NAN_HS;
 }
 
 
-NAN_METHOD(PolygonOffset) { NAN_HS;
+NAN_METHOD(polygonOffset) {
 	
 	REQ_FLOAT_ARG(0, factor);
 	REQ_FLOAT_ARG(1, units);
@@ -1157,7 +1104,7 @@ NAN_METHOD(PolygonOffset) { NAN_HS;
 }
 
 
-NAN_METHOD(SampleCoverage) { NAN_HS;
+NAN_METHOD(sampleCoverage) {
 	
 	REQ_FLOAT_ARG(0, value);
 	REQ_BOOL_ARG(1, invert);
@@ -1167,7 +1114,7 @@ NAN_METHOD(SampleCoverage) { NAN_HS;
 }
 
 
-NAN_METHOD(Scissor) { NAN_HS;
+NAN_METHOD(scissor) {
 	
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
@@ -1179,7 +1126,7 @@ NAN_METHOD(Scissor) { NAN_HS;
 }
 
 
-NAN_METHOD(StencilFunc) { NAN_HS;
+NAN_METHOD(stencilFunc) {
 	
 	REQ_INT32_ARG(0, func);
 	REQ_INT32_ARG(1, ref);
@@ -1190,7 +1137,7 @@ NAN_METHOD(StencilFunc) { NAN_HS;
 }
 
 
-NAN_METHOD(StencilFuncSeparate) { NAN_HS;
+NAN_METHOD(stencilFuncSeparate) {
 	
 	REQ_INT32_ARG(0, face);
 	REQ_INT32_ARG(1, func);
@@ -1202,7 +1149,7 @@ NAN_METHOD(StencilFuncSeparate) { NAN_HS;
 }
 
 
-NAN_METHOD(StencilMask) { NAN_HS;
+NAN_METHOD(stencilMask) {
 	
 	REQ_UINT32_ARG(0, mask);
 	
@@ -1211,7 +1158,7 @@ NAN_METHOD(StencilMask) { NAN_HS;
 }
 
 
-NAN_METHOD(StencilMaskSeparate) { NAN_HS;
+NAN_METHOD(stencilMaskSeparate) {
 	
 	REQ_INT32_ARG(0, face);
 	REQ_UINT32_ARG(1, mask);
@@ -1221,7 +1168,7 @@ NAN_METHOD(StencilMaskSeparate) { NAN_HS;
 }
 
 
-NAN_METHOD(StencilOp) { NAN_HS;
+NAN_METHOD(stencilOp) {
 	
 	REQ_INT32_ARG(0, fail);
 	REQ_INT32_ARG(1, zfail);
@@ -1232,7 +1179,7 @@ NAN_METHOD(StencilOp) { NAN_HS;
 }
 
 
-NAN_METHOD(StencilOpSeparate) { NAN_HS;
+NAN_METHOD(stencilOpSeparate) {
 	
 	REQ_INT32_ARG(0, face);
 	REQ_INT32_ARG(1, fail);
@@ -1244,7 +1191,7 @@ NAN_METHOD(StencilOpSeparate) { NAN_HS;
 }
 
 
-NAN_METHOD(BindRenderbuffer) { NAN_HS;
+NAN_METHOD(bindRenderbuffer) {
 	
 	REQ_INT32_ARG(0, target);
 	LET_INT32_ARG(1, buffer);
@@ -1254,7 +1201,7 @@ NAN_METHOD(BindRenderbuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(CreateRenderbuffer) { NAN_HS;
+NAN_METHOD(createRenderbuffer) {
 	
 	GLuint renderbuffers;
 	glGenRenderbuffers(1, &renderbuffers);
@@ -1270,7 +1217,7 @@ NAN_METHOD(CreateRenderbuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(DeleteBuffer) { NAN_HS;
+NAN_METHOD(deleteBuffer) {
 	
 	REQ_UINT32_ARG(0, buffer);
 	
@@ -1279,7 +1226,7 @@ NAN_METHOD(DeleteBuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(DeleteFramebuffer) { NAN_HS;
+NAN_METHOD(deleteFramebuffer) {
 	
 	REQ_UINT32_ARG(0, buffer);
 	
@@ -1288,7 +1235,7 @@ NAN_METHOD(DeleteFramebuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(DeleteProgram) { NAN_HS;
+NAN_METHOD(deleteProgram) {
 	
 	REQ_UINT32_ARG(0, program);
 	
@@ -1297,7 +1244,7 @@ NAN_METHOD(DeleteProgram) { NAN_HS;
 }
 
 
-NAN_METHOD(DeleteRenderbuffer) { NAN_HS;
+NAN_METHOD(deleteRenderbuffer) {
 	
 	REQ_UINT32_ARG(0, renderbuffer);
 	
@@ -1306,7 +1253,7 @@ NAN_METHOD(DeleteRenderbuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(DeleteShader) { NAN_HS;
+NAN_METHOD(deleteShader) {
 	
 	REQ_UINT32_ARG(0, shader);
 	
@@ -1315,7 +1262,7 @@ NAN_METHOD(DeleteShader) { NAN_HS;
 }
 
 
-NAN_METHOD(DeleteTexture) { NAN_HS;
+NAN_METHOD(deleteTexture) {
 	
 	REQ_UINT32_ARG(0, texture);
 	
@@ -1324,7 +1271,7 @@ NAN_METHOD(DeleteTexture) { NAN_HS;
 }
 
 
-NAN_METHOD(DetachShader) { NAN_HS;
+NAN_METHOD(detachShader) {
 	
 	REQ_UINT32_ARG(0, program);
 	REQ_UINT32_ARG(1, shader);
@@ -1334,7 +1281,7 @@ NAN_METHOD(DetachShader) { NAN_HS;
 }
 
 
-NAN_METHOD(FramebufferRenderbuffer) { NAN_HS;
+NAN_METHOD(framebufferRenderbuffer) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, attachment);
@@ -1346,7 +1293,7 @@ NAN_METHOD(FramebufferRenderbuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(GetVertexAttribOffset) { NAN_HS;
+NAN_METHOD(getVertexAttribOffset) {
 	
 	REQ_UINT32_ARG(0, index);
 	REQ_INT32_ARG(1, name);
@@ -1359,7 +1306,7 @@ NAN_METHOD(GetVertexAttribOffset) { NAN_HS;
 }
 
 
-NAN_METHOD(IsBuffer) { NAN_HS;
+NAN_METHOD(isBuffer) {
 	
 	REQ_UINT32_ARG(0, buffer);
 	
@@ -1368,7 +1315,7 @@ NAN_METHOD(IsBuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(IsFramebuffer) { NAN_HS;
+NAN_METHOD(isFramebuffer) {
 	
 	REQ_UINT32_ARG(0, buffer);
 	
@@ -1377,7 +1324,7 @@ NAN_METHOD(IsFramebuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(IsProgram) { NAN_HS;
+NAN_METHOD(isProgram) {
 	
 	REQ_UINT32_ARG(0, program);
 	
@@ -1386,7 +1333,7 @@ NAN_METHOD(IsProgram) { NAN_HS;
 }
 
 
-NAN_METHOD(IsRenderbuffer) { NAN_HS;
+NAN_METHOD(isRenderbuffer) {
 	
 	REQ_UINT32_ARG(0, buffer);
 	
@@ -1395,7 +1342,7 @@ NAN_METHOD(IsRenderbuffer) { NAN_HS;
 }
 
 
-NAN_METHOD(IsShader) { NAN_HS;
+NAN_METHOD(isShader) {
 	
 	REQ_UINT32_ARG(0, shader);
 	
@@ -1404,7 +1351,7 @@ NAN_METHOD(IsShader) { NAN_HS;
 }
 
 
-NAN_METHOD(IsTexture) { NAN_HS;
+NAN_METHOD(isTexture) {
 	
 	REQ_UINT32_ARG(0, texture);
 	
@@ -1413,7 +1360,7 @@ NAN_METHOD(IsTexture) { NAN_HS;
 }
 
 
-NAN_METHOD(RenderbufferStorage) { NAN_HS;
+NAN_METHOD(renderbufferStorage) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, internalformat);
@@ -1425,7 +1372,7 @@ NAN_METHOD(RenderbufferStorage) { NAN_HS;
 }
 
 
-NAN_METHOD(GetShaderSource) { NAN_HS;
+NAN_METHOD(getShaderSource) {
 	
 	REQ_INT32_ARG(0, shader);
 	
@@ -1442,7 +1389,7 @@ NAN_METHOD(GetShaderSource) { NAN_HS;
 }
 
 
-NAN_METHOD(ValidateProgram) { NAN_HS;
+NAN_METHOD(validateProgram) {
 	
 	REQ_INT32_ARG(0, program);
 	
@@ -1451,7 +1398,7 @@ NAN_METHOD(ValidateProgram) { NAN_HS;
 }
 
 
-NAN_METHOD(TexSubImage2D) { NAN_HS;
+NAN_METHOD(texSubImage2D) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
@@ -1468,7 +1415,7 @@ NAN_METHOD(TexSubImage2D) { NAN_HS;
 }
 
 
-NAN_METHOD(ReadPixels) { NAN_HS;
+NAN_METHOD(readPixels) {
 	
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
@@ -1483,7 +1430,7 @@ NAN_METHOD(ReadPixels) { NAN_HS;
 }
 
 
-NAN_METHOD(GetTexParameter) { NAN_HS;
+NAN_METHOD(getTexParameter) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
@@ -1496,7 +1443,7 @@ NAN_METHOD(GetTexParameter) { NAN_HS;
 }
 
 
-NAN_METHOD(GetActiveAttrib) { NAN_HS;
+NAN_METHOD(getActiveAttrib) {
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, index);
@@ -1517,7 +1464,7 @@ NAN_METHOD(GetActiveAttrib) { NAN_HS;
 }
 
 
-NAN_METHOD(GetActiveUniform) { NAN_HS;
+NAN_METHOD(getActiveUniform) {
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, index);
@@ -1538,7 +1485,7 @@ NAN_METHOD(GetActiveUniform) { NAN_HS;
 }
 
 
-NAN_METHOD(GetAttachedShaders) { NAN_HS;
+NAN_METHOD(getAttachedShaders) {
 	
 	REQ_INT32_ARG(0, program);
 	
@@ -1556,7 +1503,7 @@ NAN_METHOD(GetAttachedShaders) { NAN_HS;
 }
 
 
-NAN_METHOD(GetParameter) { NAN_HS;
+NAN_METHOD(getParameter) {
 	
 	REQ_INT32_ARG(0, name);
 	
@@ -1688,7 +1635,7 @@ NAN_METHOD(GetParameter) { NAN_HS;
 }
 
 
-NAN_METHOD(GetBufferParameter) { NAN_HS;
+NAN_METHOD(getBufferParameter) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
@@ -1701,7 +1648,7 @@ NAN_METHOD(GetBufferParameter) { NAN_HS;
 }
 
 
-NAN_METHOD(GetFramebufferAttachmentParameter) { NAN_HS;
+NAN_METHOD(getFramebufferAttachmentParameter) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, attachment);
@@ -1715,7 +1662,7 @@ NAN_METHOD(GetFramebufferAttachmentParameter) { NAN_HS;
 }
 
 
-NAN_METHOD(GetProgramInfoLog) { NAN_HS;
+NAN_METHOD(getProgramInfoLog) {
 	
 	REQ_INT32_ARG(0, program);
 	
@@ -1728,7 +1675,7 @@ NAN_METHOD(GetProgramInfoLog) { NAN_HS;
 }
 
 
-NAN_METHOD(GetRenderbufferParameter) { NAN_HS;
+NAN_METHOD(getRenderbufferParameter) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
@@ -1741,7 +1688,7 @@ NAN_METHOD(GetRenderbufferParameter) { NAN_HS;
 }
 
 
-NAN_METHOD(GetUniform) { NAN_HS;
+NAN_METHOD(getUniform) {
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, location);
@@ -1763,7 +1710,7 @@ NAN_METHOD(GetUniform) { NAN_HS;
 }
 
 
-NAN_METHOD(GetVertexAttrib) { NAN_HS;
+NAN_METHOD(getVertexAttrib) {
 	
 	REQ_INT32_ARG(0, index);
 	REQ_INT32_ARG(1, pname);
@@ -1810,7 +1757,7 @@ NAN_METHOD(GetVertexAttrib) { NAN_HS;
 }
 
 
-NAN_METHOD(GetSupportedExtensions) { NAN_HS;
+NAN_METHOD(getSupportedExtensions) {
 	
 	const char *extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
 	
@@ -1819,7 +1766,7 @@ NAN_METHOD(GetSupportedExtensions) { NAN_HS;
 }
 
 // TODO GetExtension(name) return the extension name if found, should be an object...
-NAN_METHOD(GetExtension) { NAN_HS;
+NAN_METHOD(getExtension) {
 	
 	REQ_UTF8_ARG(0, name);
 	
@@ -1836,7 +1783,7 @@ NAN_METHOD(GetExtension) { NAN_HS;
 }
 
 
-NAN_METHOD(CheckFramebufferStatus) { NAN_HS;
+NAN_METHOD(checkFramebufferStatus) {
 	
 	REQ_INT32_ARG(0, target);
 	
@@ -1890,7 +1837,7 @@ void unregisterGLObj(GLuint obj) {
 	
 }
 
-void AtExit() {
+void deinit() {
 	
 	atExit = true;
 	
