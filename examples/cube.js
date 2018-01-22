@@ -4,7 +4,7 @@ const webgl = require('node-webgl-raub');
 
 const { Document } = require('node-glfw-raub');
 
-const glMatrix = require('./libs/glMatrix-0.9.5.min');
+const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
 
 Document.setWebgl(webgl);
@@ -122,15 +122,15 @@ function initShaders() {
 }
 
 
-let mvMatrix = glMatrix.mat4.create();
-let pMatrix  = glMatrix.mat4.create();
+let mvMatrix = mat4.create();
+let pMatrix  = mat4.create();
 
 const mvMatrixStack = [];
 
 
 function mvPushMatrix() {
-	const copy = glMatrix.mat4.create();
-	glMatrix.mat4.set(mvMatrix, copy);
+	const copy = mat4.create();
+	mat4.set(mvMatrix, copy);
 	mvMatrixStack.push(copy);
 }
 
@@ -396,11 +396,11 @@ function drawScene() {
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-	glMatrix.mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
-	glMatrix.mat4.identity(mvMatrix);
-	glMatrix.mat4.translate(mvMatrix, [0.0, 0.0, z]);
-	glMatrix.mat4.rotate(mvMatrix, degToRad(xRot), [1, 0, 0]);
-	glMatrix.mat4.rotate(mvMatrix, degToRad(yRot), [0, 1, 0]);
+	mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+	mat4.identity(mvMatrix);
+	mat4.translate(mvMatrix, [0.0, 0.0, z]);
+	mat4.rotate(mvMatrix, degToRad(xRot), [1, 0, 0]);
+	mat4.rotate(mvMatrix, degToRad(yRot), [0, 1, 0]);
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);

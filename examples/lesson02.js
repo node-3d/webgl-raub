@@ -1,11 +1,15 @@
 'use strict';
 
+const webgl = require('node-webgl-raub');
+
+const { Document } = require('node-glfw-raub');
+
 const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
-const { Document, Image } = require('..');
 
-
+Document.setWebgl(webgl);
 const document = new Document();
+
 const canvas = document.createElement('canvas');
 const frame = document.requestAnimationFrame;
 

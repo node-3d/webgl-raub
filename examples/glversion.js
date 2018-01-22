@@ -1,11 +1,12 @@
 'use strict';
 
-const { Document } = require('..');
+const gl = require('node-webgl-raub');
+
+const { Document } = require('node-glfw-raub');
 
 
+Document.setWebgl(gl);
 const document = new Document();
-const canvas = document.createElement('canvas');
-const gl = canvas.getContext('webgl');
 
 console.log(`
 OpenGL

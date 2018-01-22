@@ -1,11 +1,12 @@
 'use strict';
 
-const { Document } = require('..');
+const webgl = require('node-webgl-raub');
+
+const { Document } = require('node-glfw-raub');
 
 
+Document.setWebgl(webgl);
 const document = new Document();
-const canvas = document.createElement('canvas');
-const gl = canvas.getContext('webgl');
 
-const extensions = gl.getSupportedExtensions();
+const extensions = webgl.getSupportedExtensions();
 console.log(extensions.sort().join('\n'));
