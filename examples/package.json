@@ -23,9 +23,8 @@
     "url": "https://github.com/raub/node-webgl.git"
   },
   "dependencies": {
-    "node-image-raub": "0.0.3",
-    "node-glfw-raub": "0.7.3",
-    "node-webgl-raub": "0.8.4",
-    "node-addon-tools-raub" : "0.1.2"
+    "node-image-raub": "0.0.4",
+    "node-glfw-raub": "0.7.4",
+    "node-webgl-raub": "0.9.1"
   }
 }
