@@ -2,8 +2,8 @@
   "name": "EXAMPLES",
   "author": "Luis Blanco <raubtierxxx@gmail.com>",
   "description": "EXAMPLES",
-  "version": "0.9.0",
-  "main": "index.js",
+  "version": "0.0.1",
+  "main": "lesson05.js",
   "keywords": [
     "webgl",
     "opengl",
@@ -23,7 +23,9 @@
     "url": "https://github.com/raub/node-webgl.git"
   },
   "dependencies": {
-    "node-deps-opengl-raub": "0.3.5",
-    "node-addon-tools-raub" : "0.1.1"
+    "node-image-raub": "0.0.3",
+    "node-glfw-raub": "0.7.3",
+    "node-webgl-raub": "0.8.4",
+    "node-addon-tools-raub" : "0.1.2"
   }
 }
