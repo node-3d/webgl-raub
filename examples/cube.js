@@ -1,11 +1,13 @@
 'use strict';
 
-const WebGL    = require('../index');
+const webgl    = require('node-webgl-raub');
+const Document = require('node-glfw-raub');
+
 const glMatrix = require('./libs/glMatrix-0.9.5.min');
 
 
-const Image    = WebGL.Image;
-const document = new WebGL.Document();
+Document.setWebgl(webgl);
+const document = new Document();
 const frame    = document.requestAnimationFrame;
 
 let xRot   = 0;

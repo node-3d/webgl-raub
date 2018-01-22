@@ -1,6 +1,6 @@
 'use strict';
 
-require('node-glfw-raub');
+require('node-deps-opengl-raub');
 
 const webgl = require('./binary/webgl');
 
