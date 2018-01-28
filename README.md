@@ -2,14 +2,11 @@
 
 WebGL crossplatform addon with minimized dependencies.
 
-* IMPORTANT: as of 0.9.0 the ownership of `Document` is given to
-[node-glfw](https://github.com/raub/node-glfw).
-
 
 ## Install
 
 ```
-npm i -s node-webgl-raub
+npm i -s webgl-raub
 ```
 
 Note: as this is a compiled addon, compilation tools must be in place on your system.
@@ -21,7 +18,7 @@ Such as MSVS13 for Windows, where **ADMIN PRIVELEGED** `npm i -g windows-build-t
 This is an implementation of WebGL for Node.js.
 
 ```js
-const webgl = require('node-webgl-raub');
+const webgl = require('webgl-raub');
 ```
 
 Here `webgl` is what contains all the WebGL api - `WebGLRenderingContext`.
@@ -38,8 +35,8 @@ There is [node-glfw](https://github.com/raub/node-glfw) module, which exports th
 `Document` class. It can be used the following way:
 
 ```
-const webgl = require('node-webgl-raub');
-const { Document } = require('node-webgl-raub');
+const webgl = require('webgl-raub');
+const { Document } = require('glfw-raub');
 
 Document.setWebgl(webgl); // plug this WebGL impl into the Document
 
@@ -62,5 +59,5 @@ implementation of WebGL.
 
 
 You can try to use three.js your own way, but there is
-a far better option: [node-3d-ready](https://github.com/raub/node-3d-ready),
+a far better option: [node-3d-core](https://github.com/raub/node-3d-core),
 which gets you two more steps ahead for free.

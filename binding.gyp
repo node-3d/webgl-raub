@@ -1,9 +1,9 @@
 {
 	'variables': {
-		'_del'           : '<!(node -e "console.log(require(\'node-addon-tools-raub\')._del)")',
-		'_rd'            : '<!(node -e "console.log(require(\'node-addon-tools-raub\')._rd)")',
-		'opengl_include' : '<!(node -e "console.log(require(\'node-deps-opengl-raub\').include)")',
-		'opengl_bin'     : '<!(node -e "console.log(require(\'node-deps-opengl-raub\').bin)")',
+		'_del'           : '<!(node -e "console.log(require(\'addon-tools-raub\')._del)")',
+		'_rd'            : '<!(node -e "console.log(require(\'addon-tools-raub\')._rd)")',
+		'opengl_include' : '<!(node -e "console.log(require(\'deps-opengl-raub\').include)")',
+		'opengl_bin'     : '<!(node -e "console.log(require(\'deps-opengl-raub\').bin)")',
 	},
 	'targets': [
 		{
@@ -14,8 +14,8 @@
 				'cpp/webgl.cpp',
 			],
 			'include_dirs': [
-				'<!(node -e "require(\'node-addon-tools-raub\').printNan()")',
-				'<!(node -e "console.log(require(\'node-addon-tools-raub\').include)")',
+				'<!(node -e "require(\'addon-tools-raub\').printNan()")',
+				'<!(node -e "console.log(require(\'addon-tools-raub\').include)")',
 				'<(opengl_include)',
 			],
 			'library_dirs': [ '<(opengl_bin)' ],
