@@ -1,9 +1,13 @@
 {
-  "name": "webgl-raub",
-  "version": "0.0.2",
-  "description": "WebGL for Node.js",
+  "name": "TEST",
   "author": "Luis Blanco <raubtierxxx@gmail.com>",
-  "main": "index.js",
+  "description": "TEST",
+  "version": "0.0.1",
+  "main": "mocha",
+  "scripts": {
+    "test": "mocha",
+    "start": "mocha"
+  },
   "keywords": [
     "webgl",
     "opengl",
@@ -20,10 +24,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/raub/node-webgl.git"
+    "url": "https://github.com/raub/node-glfw.git"
   },
   "dependencies": {
-    "deps-opengl-raub": "0.0.4",
-    "addon-tools-raub": "0.0.7"
+    "glfw-raub": "https://github.com/raub/node-webgl.git",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0",
+    "sinon": "^4.2.2"
   }
 }
