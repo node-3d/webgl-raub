@@ -1,21 +1,20 @@
 {
 	'variables': {
-		'_del'           : '<!(node -e "console.log(require(\'addon-tools-raub\')._del)")',
-		'_rd'            : '<!(node -e "console.log(require(\'addon-tools-raub\')._rd)")',
-		'opengl_include' : '<!(node -e "console.log(require(\'deps-opengl-raub\').include)")',
-		'opengl_bin'     : '<!(node -e "console.log(require(\'deps-opengl-raub\').bin)")',
+		'rm'             : '<!(node -e "require(\'addon-tools-raub\').rm()")',
+		'cp'             : '<!(node -e "require(\'addon-tools-raub\').cp()")',
+		'mkdir'          : '<!(node -e "require(\'addon-tools-raub\').mkdir()")',
+		'opengl_include' : '<!(node -e "require(\'deps-opengl-raub\').include()")',
+		'opengl_bin'     : '<!(node -e "require(\'deps-opengl-raub\').bin()")',
 	},
 	'targets': [
 		{
 			'target_name': 'webgl',
-			'defines': [ 'VERSION=0.5.5' ],
 			'sources': [
 				'cpp/bindings.cpp',
 				'cpp/webgl.cpp',
 			],
 			'include_dirs': [
-				'<!(node -e "require(\'addon-tools-raub\').printNan()")',
-				'<!(node -e "console.log(require(\'addon-tools-raub\').include)")',
+				'<!@(node -e "require(\'addon-tools-raub\').include()")',
 				'<(opengl_include)',
 			],
 			'library_dirs': [ '<(opengl_bin)' ],
@@ -74,14 +73,7 @@
 				'action_name' : 'Directory created.',
 				'inputs'      : [],
 				'outputs'     : ['build'],
-				'conditions'  : [
-					[ 'OS=="linux"', { 'action': ['mkdir', '-p', 'binary'] } ],
-					[ 'OS=="mac"', { 'action': ['mkdir', '-p', 'binary'] } ],
-					[ 'OS=="win"', { 'action': [
-						'<(_rd) "<(module_root_dir)/binary" && ' +
-						'md "<(module_root_dir)/binary"'
-					] } ],
-				],
+				'action': ['<(mkdir)', '-p', 'binary']
 			}],
 		},
 		{
@@ -92,25 +84,9 @@
 				'action_name' : 'Module copied.',
 				'inputs'      : [],
 				'outputs'     : ['binary'],
-				'conditions'  : [
-					[ 'OS=="linux"', { 'action' : [
-						'cp',
-						'<(module_root_dir)/build/Release/webgl.node',
-						'<(module_root_dir)/binary/webgl.node'
-					] } ],
-					[ 'OS=="mac"', { 'action' : [
-						'cp',
-						'<(module_root_dir)/build/Release/webgl.node',
-						'<(module_root_dir)/binary/webgl.node'
-					] } ],
-					[ 'OS=="win"', { 'action' : [
-						'copy "<(module_root_dir)/build/Release/webgl.node"' +
-						' "<(module_root_dir)/binary/webgl.node"'
-					] } ],
-				],
+				'action'      : ['<(cp)', 'build/Release/webgl.node', 'binary/webgl.node'],
 			}],
 		},
-		
 		{
 			'target_name'  : 'remove_extras',
 			'type'         : 'none',
@@ -121,23 +97,23 @@
 				'outputs'     : ['cpp'],
 				'conditions'  : [
 					[ 'OS=="linux"', { 'action' : [
-						'rm',
+						'<(rm)',
 						'<(module_root_dir)/build/Release/obj.target/webgl/cpp/webgl.o',
 						'<(module_root_dir)/build/Release/obj.target/webgl.node',
 						'<(module_root_dir)/build/Release/webgl.node'
 					] } ],
 					[ 'OS=="mac"', { 'action' : [
-						'rm',
+						'<(rm)',
 						'<(module_root_dir)/build/Release/obj.target/webgl/cpp/webgl.o',
 						'<(module_root_dir)/build/Release/webgl.node'
 					] } ],
 					[ 'OS=="win"', { 'action' : [
-						'<(_del) "<(module_root_dir)/build/Release/webgl.*" && ' +
-						'<(_del) "<(module_root_dir)/build/Release/obj/webgl/*.*"'
+						'<(rm)',
+						'<(module_root_dir)/build/Release/webgl.*',
+						'<(module_root_dir)/build/Release/obj/webgl/*.*'
 					] } ],
 				],
 			}],
 		},
-		
 	]
 }
