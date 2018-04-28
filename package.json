@@ -1,29 +1,34 @@
 {
-  "name": "webgl-raub",
-  "version": "0.0.3",
-  "description": "WebGL for Node.js",
-  "author": "Luis Blanco <raubtierxxx@gmail.com>",
-  "main": "index.js",
-  "keywords": [
-    "webgl",
-    "opengl",
-    "3d",
-    "graphics"
-  ],
-  "maintainers": [
-    {
-      "name": "Luis Blanco",
-      "email": "raubtierxxx@gmail.com",
-      "skype": "rauber666"
-    }
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/raub/node-webgl.git"
-  },
-  "dependencies": {
-    "deps-opengl-raub": "0.0.4",
-    "addon-tools-raub": "0.0.8"
-  }
+	"author": "Luis Blanco <luisblanco1337@gmail.com>",
+	"name": "webgl-raub",
+	"version": "0.0.4",
+	"description": "WebGL for Node.js",
+	"license": "MIT",
+	"main": "index.js",
+	"keywords": [
+		"addon",
+		"webgl",
+		"opengl",
+		"gl",
+		"graphics"
+	],
+	"engines": {
+		"node": ">=8.11.1",
+		"npm": ">=5.6.0"
+	},
+	"maintainers": [
+		{
+			"name": "Luis Blanco",
+			"email": "luisblanco1337@gmail.com",
+			"skype": "rauber666"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/node-3d/webgl-raub.git"
+	},
+	"dependencies": {
+		"deps-opengl-raub": "0.0.5",
+		"addon-tools-raub": "0.1.7"
+	}
 }

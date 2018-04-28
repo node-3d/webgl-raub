@@ -1,35 +1,17 @@
 {
-  "name": "TEST",
-  "author": "Luis Blanco <raubtierxxx@gmail.com>",
-  "description": "TEST",
-  "version": "0.0.1",
-  "main": "mocha",
-  "scripts": {
-    "test": "mocha",
-    "start": "mocha"
-  },
-  "keywords": [
-    "webgl",
-    "opengl",
-    "3d",
-    "graphics"
-  ],
-  "maintainers": [
-    {
-      "name": "Luis Blanco",
-      "email": "raubtierxxx@gmail.com",
-      "skype": "rauber666"
-    }
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/raub/node-glfw.git"
-  },
-  "dependencies": {
-    "glfw-raub": "file:../",
-    "chai": "^4.1.2",
-    "mocha": "^5.0.0",
-    "sinon": "^4.2.2"
-  }
+	"name": "test",
+	"version": "0.0.0",
+	"private": true,
+	"main": "mocha",
+	"scripts": {
+		"test": "mocha",
+		"start": "mocha",
+		"preinstall": "cd .. && npm i"
+	},
+	"dependencies": {
+		"webgl-raub": "file:../",
+		"chai": "^4.1.2",
+		"mocha": "^5.0.0",
+		"sinon": "^4.2.2"
+	}
 }

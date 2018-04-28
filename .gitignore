@@ -2,10 +2,10 @@
 .cproject
 .project
 .lock-wscript
-build*
+build*/
 .DS_Store
-Debug
-node_modules
+Debug/
+node_modules/
 package-lock.json
-binary
+binary/
 *.log

@@ -1,30 +1,15 @@
 {
-  "name": "EXAMPLES",
-  "author": "Luis Blanco <raubtierxxx@gmail.com>",
-  "description": "EXAMPLES",
-  "version": "0.0.1",
-  "main": "lesson05.js",
-  "keywords": [
-    "webgl",
-    "opengl",
-    "3d",
-    "graphics"
-  ],
-  "maintainers": [
-    {
-      "name": "Luis Blanco",
-      "email": "raubtierxxx@gmail.com",
-      "skype": "rauber666"
-    }
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/raub/node-webgl.git"
-  },
-  "dependencies": {
-    "node-image-raub": "0.0.5",
-    "node-glfw-raub": "0.7.6",
-    "node-webgl-raub": "0.9.3"
-  }
+	"name": "example",
+	"version": "0.0.0",
+	"private": true,
+	"main": "lesson05.js",
+	"scripts": {
+		"preinstall": "cd .. && npm i"
+	},
+	"dependencies": {
+		"webgl-raub": "file:../",
+		"image-raub": "0.0.5",
+		"glfw-raub": "0.7.6"
+		
+	}
 }
