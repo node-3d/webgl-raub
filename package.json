@@ -29,6 +29,6 @@
 	},
 	"dependencies": {
 		"deps-opengl-raub": "0.0.5",
-		"addon-tools-raub": "0.1.7"
+		"addon-tools-raub": "0.1.8"
 	}
 }
