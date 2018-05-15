@@ -3,6 +3,7 @@
 .project
 .lock-wscript
 build*/
+bin-*/
 .DS_Store
 Debug/
 node_modules/

@@ -1,9 +1,9 @@
 'use strict';
 
-const webgl = require('node-webgl-raub');
-const Image = require('node-image-raub');
+const webgl = require('webgl-raub');
+const Image = require('image-raub');
 
-const { Document } = require('node-glfw-raub');
+const { Document } = require('glfw-raub');
 
 const { mat4, mat3 } = require('./libs/glMatrix-0.9.5.min');
 

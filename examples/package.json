@@ -8,8 +8,7 @@
 	},
 	"dependencies": {
 		"webgl-raub": "file:../",
-		"image-raub": "0.0.5",
-		"glfw-raub": "0.7.6"
-		
+		"image-raub": "1.0.1",
+		"glfw-raub": "0.0.10"
 	}
 }

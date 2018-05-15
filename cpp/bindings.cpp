@@ -11,8 +11,13 @@ PropertyAttribute constant_attributes = static_cast<PropertyAttribute>(ReadOnly 
 
 
 // Used to be a macro, hence the uppercase name.
-#define JS_GL_SET_CONSTANT(name, constant) Nan::DefineOwnProperty(target, JS_STR( name ), \
-	JS_INT(constant), constant_attributes)
+#define JS_GL_SET_CONSTANT(name, constant)                                    \
+	Nan::DefineOwnProperty(                                                   \
+		target,                                                               \
+		JS_STR(name),                                                         \
+		JS_INT(constant),                                                     \
+		constant_attributes                                                   \
+	)
 
 #define JS_GL_CONSTANT(name) JS_GL_SET_CONSTANT(#name, GL_ ## name)
 
@@ -626,20 +631,20 @@ NAN_MODULE_INIT(_init) {
 	JS_GL_CONSTANT(INVALID_FRAMEBUFFER_OPERATION);
 	
 	/* WebGL-specific enums */
-	JS_GL_SET_CONSTANT( "UNPACK_FLIP_Y_WEBGL" , 0x9240);
-	JS_GL_SET_CONSTANT("UNPACK_PREMULTIPLY_ALPHA_WEBGL" , 0x9241);
-	JS_GL_SET_CONSTANT("CONTEXT_LOST_WEBGL" , 0x9242);
+	JS_GL_SET_CONSTANT("UNPACK_FLIP_Y_WEBGL", 0x9240);
+	JS_GL_SET_CONSTANT("UNPACK_PREMULTIPLY_ALPHA_WEBGL", 0x9241);
+	JS_GL_SET_CONSTANT("CONTEXT_LOST_WEBGL", 0x9242);
 	JS_GL_SET_CONSTANT("UNPACK_COLORSPACE_CONVERSION_WEBGL", 0x9243);
-	JS_GL_SET_CONSTANT("BROWSER_DEFAULT_WEBGL" , 0x9244);
+	JS_GL_SET_CONSTANT("BROWSER_DEFAULT_WEBGL", 0x9244);
 	
 	//////////////////////////////
 	// NOT in WebGL spec
 	//////////////////////////////
 	
 	// PBO
-	JS_GL_SET_CONSTANT("PIXEL_PACK_BUFFER" , 0x88EB);
-	JS_GL_SET_CONSTANT("PIXEL_UNPACK_BUFFER" , 0x88EC);
-	JS_GL_SET_CONSTANT("PIXEL_PACK_BUFFER_BINDING" , 0x88ED);
+	JS_GL_SET_CONSTANT("PIXEL_PACK_BUFFER", 0x88EB);
+	JS_GL_SET_CONSTANT("PIXEL_UNPACK_BUFFER", 0x88EC);
+	JS_GL_SET_CONSTANT("PIXEL_PACK_BUFFER_BINDING", 0x88ED);
 	JS_GL_SET_CONSTANT("PIXEL_UNPACK_BUFFER_BINDING", 0x88EF);
 	
 }

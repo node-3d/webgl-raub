@@ -1,5 +1,5 @@
-#ifndef WEBGL_HPP_
-#define WEBGL_HPP_
+#ifndef _WEBGL_HPP_
+#define _WEBGL_HPP_
 
 #include <addon-tools.hpp>
 
@@ -11,9 +11,7 @@
 	unsigned int VAR = IS_ARG_EMPTY(I) ? (DEF) : info[I]->Uint32Value();
 
 
-
 namespace webgl {
-	
 	
 	// forward declarations
 	enum GLObjectType {
@@ -172,6 +170,6 @@ namespace webgl {
 	
 	NAN_METHOD(frontFace);
 	
-}
+} // namespace webgl
 
-#endif /* WEBGL_HPP_ */
+#endif /* _WEBGL_HPP_ */

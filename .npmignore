@@ -6,6 +6,7 @@
 .lock-wscript
 .project
 binary/
+bin-*/
 build*/
 CPPLINT.cfg
 Debug/

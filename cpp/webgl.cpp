@@ -1,11 +1,7 @@
 #include <cstring>
 #include <vector>
-#include <iostream>
 
-#include <node.h>
 #include <node_buffer.h>
-
-#include <GL/glew.h>
 
 #include "webgl.hpp"
 
@@ -24,7 +20,6 @@ namespace webgl {
 // A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.
 static GLuint ToGLuint(const void* ptr) {
 	return static_cast<GLuint>(reinterpret_cast<size_t>(ptr));
-	
 }
 
 
@@ -138,9 +133,10 @@ NAN_METHOD(uniform4i) {
 NAN_METHOD(uniform1fv) {
 	
 	REQ_INT32_ARG(0, location);
+	REQ_OBJ_ARG(1, abv);
 	
 	int num = 0;
-	GLfloat *ptr = getArrayData<GLfloat>(info[1], &num);
+	GLfloat *ptr = getArrayData<GLfloat>(abv, &num);
 	
 	glUniform1fv(location, num, ptr);
 	
@@ -150,9 +146,10 @@ NAN_METHOD(uniform1fv) {
 NAN_METHOD(uniform2fv) {
 	
 	REQ_INT32_ARG(0, location);
+	REQ_OBJ_ARG(1, abv);
 	
 	int num = 0;
-	GLfloat *ptr = getArrayData<GLfloat>(info[1], &num);
+	GLfloat *ptr = getArrayData<GLfloat>(abv, &num);
 	num /= 2;
 	
 	glUniform2fv(location, num, ptr);
@@ -163,9 +160,10 @@ NAN_METHOD(uniform2fv) {
 NAN_METHOD(uniform3fv) {
 	
 	REQ_INT32_ARG(0, location);
+	REQ_OBJ_ARG(1, abv);
 	
 	int num = 0;
-	GLfloat *ptr = getArrayData<GLfloat>(info[1], &num);
+	GLfloat *ptr = getArrayData<GLfloat>(abv, &num);
 	num /= 3;
 	
 	glUniform3fv(location, num, ptr);
@@ -176,9 +174,10 @@ NAN_METHOD(uniform3fv) {
 NAN_METHOD(uniform4fv) {
 	
 	REQ_INT32_ARG(0, location);
+	REQ_OBJ_ARG(1, abv);
 	
 	int num = 0;
-	GLfloat *ptr = getArrayData<GLfloat>(info[1], &num);
+	GLfloat *ptr = getArrayData<GLfloat>(abv, &num);
 	num /= 4;
 	
 	glUniform4fv(location, num, ptr);
@@ -189,9 +188,10 @@ NAN_METHOD(uniform4fv) {
 NAN_METHOD(uniform1iv) {
 	
 	REQ_INT32_ARG(0, location);
+	REQ_OBJ_ARG(1, abv);
 	
 	int num = 0;
-	GLint *ptr = getArrayData<GLint>(info[1], &num);
+	GLint *ptr = getArrayData<GLint>(abv, &num);
 	
 	glUniform1iv(location, num, ptr);
 	
@@ -201,9 +201,10 @@ NAN_METHOD(uniform1iv) {
 NAN_METHOD(uniform2iv) {
 	
 	REQ_INT32_ARG(0, location);
+	REQ_OBJ_ARG(1, abv);
 	
 	int num = 0;
-	GLint *ptr = getArrayData<GLint>(info[1], &num);
+	GLint *ptr = getArrayData<GLint>(abv, &num);
 	num /= 2;
 	
 	glUniform2iv(location, num, ptr);
@@ -214,9 +215,10 @@ NAN_METHOD(uniform2iv) {
 NAN_METHOD(uniform3iv) {
 	
 	REQ_INT32_ARG(0, location);
+	REQ_OBJ_ARG(1, abv);
 	
 	int num = 0;
-	GLint *ptr = getArrayData<GLint>(info[1], &num);
+	GLint *ptr = getArrayData<GLint>(abv, &num);
 	num /= 3;
 	
 	glUniform3iv(location, num, ptr);
@@ -227,9 +229,10 @@ NAN_METHOD(uniform3iv) {
 NAN_METHOD(uniform4iv) {
 	
 	REQ_INT32_ARG(0, location);
+	REQ_OBJ_ARG(1, abv);
 	
 	int num = 0;
-	GLint *ptr = getArrayData<GLint>(info[1], &num);
+	GLint *ptr = getArrayData<GLint>(abv, &num);
 	num /= 4;
 	
 	glUniform4iv(location, num, ptr);
@@ -280,9 +283,10 @@ NAN_METHOD(uniformMatrix2fv) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_BOOL_ARG(1, transpose);
+	REQ_OBJ_ARG(2, abv);
 	
-	GLsizei count=0;
-	GLfloat* data=getArrayData<GLfloat>(info[2], &count);
+	GLsizei count = 0;
+	GLfloat* data = getArrayData<GLfloat>(abv, &count);
 	
 	if (count < 4) {
 		Nan::ThrowError("Not enough data for UniformMatrix2fv");
@@ -298,9 +302,10 @@ NAN_METHOD(uniformMatrix3fv) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_BOOL_ARG(1, transpose);
+	REQ_OBJ_ARG(2, abv);
 	
-	GLsizei count=0;
-	GLfloat* data=getArrayData<GLfloat>(info[2], &count);
+	GLsizei count = 0;
+	GLfloat* data = getArrayData<GLfloat>(abv, &count);
 	
 	if (count < 9) {
 		Nan::ThrowError("Not enough data for UniformMatrix3fv");
@@ -316,9 +321,10 @@ NAN_METHOD(uniformMatrix4fv) {
 	
 	REQ_INT32_ARG(0, location);
 	REQ_BOOL_ARG(1, transpose);
+	REQ_OBJ_ARG(2, abv);
 	
-	GLsizei count=0;
-	GLfloat* data=getArrayData<GLfloat>(info[2], &count);
+	GLsizei count = 0;
+	GLfloat* data = getArrayData<GLfloat>(abv, &count);
 	
 	if (count < 16) {
 		Nan::ThrowError("Not enough data for UniformMatrix4fv");
@@ -376,10 +382,6 @@ NAN_METHOD(createShader) {
 	
 	GLuint shader = glCreateShader(id);
 	
-	#ifdef LOGGING
-		cout<<"createShader "<<shader<<endl;
-	#endif
-	
 	registerGLObj(GLOBJECT_TYPE_SHADER, shader);
 	
 	RET_VALUE(Nan::New<Number>(shader));
@@ -394,7 +396,7 @@ NAN_METHOD(shaderSource) {
 	
 	const char* codes[1];
 	codes[0] = *code;
-	GLint length=code.length();
+	GLint length = code.length();
 	
 	glShaderSource(id, 1, codes, &length);
 	
@@ -431,18 +433,18 @@ NAN_METHOD(getShaderParameter) {
 	case GL_DELETE_STATUS:
 	case GL_COMPILE_STATUS:
 		glGetShaderiv(shader, pname, &value);
-		RET_VALUE(JS_BOOL(static_cast<bool>(value!=0)));
+		RET_VALUE(JS_BOOL(static_cast<bool>(value != 0)));
 		break;
 	
 	case GL_SHADER_TYPE:
 		glGetShaderiv(shader, pname, &value);
-		RET_VALUE(JS_NUM(static_cast<unsigned long>(value)));
+		RET_VALUE(JS_NUM(static_cast<double>(value)));
 		break;
 	
 	case GL_INFO_LOG_LENGTH:
 	case GL_SHADER_SOURCE_LENGTH:
 		glGetShaderiv(shader, pname, &value);
-		RET_VALUE(JS_NUM(static_cast<long>(value)));
+		RET_VALUE(JS_NUM(static_cast<double>(value)));
 		break;
 	
 	default:
@@ -469,10 +471,6 @@ NAN_METHOD(getShaderInfoLog) {
 NAN_METHOD(createProgram) {
 	
 	GLuint program = glCreateProgram();
-	
-	#ifdef LOGGING
-		cout<<"createProgram "<<program<<endl;
-	#endif
 	
 	registerGLObj(GLOBJECT_TYPE_PROGRAM, program);
 	
@@ -513,7 +511,7 @@ NAN_METHOD(getProgramParameter) {
 	case GL_LINK_STATUS:
 	case GL_VALIDATE_STATUS:
 		glGetProgramiv(program, name, &value);
-		RET_VALUE(JS_BOOL(static_cast<bool>(value!=0)));
+		RET_VALUE(JS_BOOL(static_cast<bool>(value != 0)));
 		break;
 	
 	case GL_ATTACHED_SHADERS:
@@ -521,7 +519,7 @@ NAN_METHOD(getProgramParameter) {
 	case GL_ACTIVE_UNIFORMS:
 	case GL_INFO_LOG_LENGTH:
 		glGetProgramiv(program, name, &value);
-		RET_VALUE(JS_NUM(static_cast<long>(value)));
+		RET_VALUE(JS_NUM(static_cast<double>(value)));
 		break;
 	
 	default:
@@ -585,10 +583,6 @@ NAN_METHOD(createTexture) {
 	GLuint texture;
 	glGenTextures(1, &texture);
 	
-	#ifdef LOGGING
-		cout<<"createTexture "<<texture<<endl;
-	#endif
-	
 	registerGLObj(GLOBJECT_TYPE_TEXTURE, texture);
 	
 	RET_VALUE(Nan::New<Number>(texture));
@@ -616,8 +610,9 @@ NAN_METHOD(texImage2D) {
 	REQ_INT32_ARG(5, border);
 	REQ_INT32_ARG(6, format);
 	REQ_INT32_ARG(7, type);
+	REQ_OBJ_ARG(8, image);
 	
-	void *pixels = getImageData(info[8]);
+	void *pixels = getData(image);
 	
 	glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 	
@@ -669,10 +664,6 @@ NAN_METHOD(createBuffer) {
 	GLuint buffer;
 	glGenBuffers(1, &buffer);
 	
-	#ifdef LOGGING
-		cout<<"createBuffer "<<buffer<<endl;
-	#endif
-	
 	registerGLObj(GLOBJECT_TYPE_BUFFER, buffer);
 	
 	RET_VALUE(Nan::New<Number>(buffer));
@@ -685,7 +676,7 @@ NAN_METHOD(bindBuffer) {
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, buffer);
 	
-	glBindBuffer(target,buffer);
+	glBindBuffer(target, buffer);
 	
 }
 
@@ -694,10 +685,6 @@ NAN_METHOD(createFramebuffer) {
 	
 	GLuint buffer;
 	glGenFramebuffers(1, &buffer);
-	
-	#ifdef LOGGING
-		cout<<"createFrameBuffer "<<buffer<<endl;
-	#endif
 	
 	registerGLObj(GLOBJECT_TYPE_FRAMEBUFFER, buffer);
 	
@@ -786,7 +773,7 @@ NAN_METHOD(blendFunc) {
 	REQ_INT32_ARG(0, sfactor);
 	REQ_INT32_ARG(1, dfactor);
 	
-	glBlendFunc(sfactor,dfactor);
+	glBlendFunc(sfactor, dfactor);
 	
 }
 
@@ -903,7 +890,9 @@ NAN_METHOD(vertexAttrib4f) {
 NAN_METHOD(vertexAttrib1fv) {
 	
 	REQ_INT32_ARG(0, location);
-	GLfloat *data = getArrayData<GLfloat>(info[1]);
+	REQ_OBJ_ARG(1, abv);
+	
+	GLfloat *data = getArrayData<GLfloat>(abv);
 	
 	glVertexAttrib1fv(location, data);
 	
@@ -913,7 +902,9 @@ NAN_METHOD(vertexAttrib1fv) {
 NAN_METHOD(vertexAttrib2fv) {
 	
 	REQ_INT32_ARG(0, location);
-	GLfloat *data = getArrayData<GLfloat>(info[1]);
+	REQ_OBJ_ARG(1, abv);
+	
+	GLfloat *data = getArrayData<GLfloat>(abv);
 	
 	glVertexAttrib2fv(location, data);
 	
@@ -923,7 +914,9 @@ NAN_METHOD(vertexAttrib2fv) {
 NAN_METHOD(vertexAttrib3fv) {
 	
 	REQ_INT32_ARG(0, location);
-	GLfloat *data = getArrayData<GLfloat>(info[1]);
+	REQ_OBJ_ARG(1, abv);
+	
+	GLfloat *data = getArrayData<GLfloat>(abv);
 	
 	glVertexAttrib3fv(location, data);
 	
@@ -933,7 +926,9 @@ NAN_METHOD(vertexAttrib3fv) {
 NAN_METHOD(vertexAttrib4fv) {
 	
 	REQ_INT32_ARG(0, location);
-	GLfloat *data = getArrayData<GLfloat>(info[1]);
+	REQ_OBJ_ARG(1, abv);
+	
+	GLfloat *data = getArrayData<GLfloat>(abv);
 	
 	glVertexAttrib4fv(location, data);
 	
@@ -1006,7 +1001,7 @@ NAN_METHOD(copyTexImage2D) {
 	REQ_INT32_ARG(6, height);
 	REQ_INT32_ARG(7, border);
 	
-	glCopyTexImage2D( target, level, internalformat, x, y, width, height, border);
+	glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
 	
 }
 
@@ -1022,7 +1017,7 @@ NAN_METHOD(copyTexSubImage2D) {
 	REQ_INT32_ARG(6, width);
 	REQ_INT32_ARG(7, height);
 	
-	glCopyTexSubImage2D( target, level, xoffset, yoffset, x, y, width, height);
+	glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 	
 }
 
@@ -1078,7 +1073,7 @@ NAN_METHOD(isEnabled) {
 	
 	REQ_INT32_ARG(0, cap);
 	
-	bool ret = glIsEnabled(cap)!=0;
+	bool ret = glIsEnabled(cap) != 0;
 	
 	RET_VALUE(Nan::New<Boolean>(ret));
 	
@@ -1205,10 +1200,6 @@ NAN_METHOD(createRenderbuffer) {
 	
 	GLuint renderbuffers;
 	glGenRenderbuffers(1, &renderbuffers);
-	
-	#ifdef LOGGING
-		cout<<"createRenderBuffer "<<renderbuffers<<endl;
-	#endif
 	
 	registerGLObj(GLOBJECT_TYPE_RENDERBUFFER, renderbuffers);
 	
@@ -1408,8 +1399,9 @@ NAN_METHOD(texSubImage2D) {
 	REQ_INT32_ARG(5, height);
 	REQ_INT32_ARG(6, format);
 	REQ_INT32_ARG(7, type);
-	void *pixels = getImageData(info[8]);
+	REQ_OBJ_ARG(8, image);
 	
+	void *pixels = getData(image);
 	glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 	
 }
@@ -1423,8 +1415,9 @@ NAN_METHOD(readPixels) {
 	REQ_INT32_ARG(3, height);
 	REQ_INT32_ARG(4, format);
 	REQ_INT32_ARG(5, type);
-	void *pixels = getImageData(info[6]);
+	REQ_OBJ_ARG(6, image);
 	
+	void *pixels = getData(image);
 	glReadPixels(x, y, width, height, format, type, pixels);
 	
 }
@@ -1435,7 +1428,7 @@ NAN_METHOD(getTexParameter) {
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
 	
-	GLint param_value=0;
+	GLint param_value = 0;
 	glGetTexParameteriv(target, name, &param_value);
 	
 	RET_VALUE(Nan::New<Number>(param_value));
@@ -1449,7 +1442,7 @@ NAN_METHOD(getActiveAttrib) {
 	REQ_INT32_ARG(1, index);
 	
 	char name[1024];
-	GLsizei length=0;
+	GLsizei length = 0;
 	GLenum type;
 	GLsizei size;
 	glGetActiveAttrib(program, index, 1024, &length, &size, &type, name);
@@ -1470,7 +1463,7 @@ NAN_METHOD(getActiveUniform) {
 	REQ_INT32_ARG(1, index);
 	
 	char name[1024];
-	GLsizei length=0;
+	GLsizei length = 0;
 	GLenum type;
 	GLsizei size;
 	glGetActiveUniform(program, index, 1024, &length, &size, &type, name);
@@ -1693,7 +1686,7 @@ NAN_METHOD(getUniform) {
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, location);
 	
-	if (location < 0 ) {
+	if (location < 0) {
 		RET_UNDEFINED;
 	}
 	
@@ -1723,24 +1716,24 @@ NAN_METHOD(getVertexAttrib) {
 		
 	case GL_VERTEX_ATTRIB_ARRAY_ENABLED:
 	case GL_VERTEX_ATTRIB_ARRAY_NORMALIZED:
-		glGetVertexAttribiv(index,pname, &value);
+		glGetVertexAttribiv(index, pname, &value);
 		RET_VALUE(JS_BOOL(value != 0));
 		break;
 	
 	case GL_VERTEX_ATTRIB_ARRAY_SIZE:
 	case GL_VERTEX_ATTRIB_ARRAY_STRIDE:
 	case GL_VERTEX_ATTRIB_ARRAY_TYPE:
-		glGetVertexAttribiv(index,pname, &value);
+		glGetVertexAttribiv(index, pname, &value);
 		RET_VALUE(JS_INT(value));
 		break;
 	
 	case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
-		glGetVertexAttribiv(index,pname, &value);
+		glGetVertexAttribiv(index, pname, &value);
 		RET_VALUE(JS_INT(value));
 		break;
 	
 	case GL_CURRENT_VERTEX_ATTRIB:
-		glGetVertexAttribfv(index,pname,vextex_attribs);
+		glGetVertexAttribfv(index, pname, vextex_attribs);
 		arr = Nan::New<Array>(4);
 		arr->Set(0, JS_NUM(vextex_attribs[0]));
 		arr->Set(1, JS_NUM(vextex_attribs[1]));
@@ -1771,7 +1764,9 @@ NAN_METHOD(getExtension) {
 	REQ_UTF8_ARG(0, name);
 	
 	char *sname = *name;
-	char *extensions = (char*)(glGetString(GL_EXTENSIONS));
+	char *extensions = const_cast<char*>(
+		reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS))
+	);
 	char *ext = strcasestr(extensions, sname);
 	
 	if (ext == NULL) {
@@ -1809,7 +1804,7 @@ vector<GLObj*> globjs;
 static bool atExit = false;
 
 void registerGLObj(GLObjectType type, GLuint obj) {
-	globjs.push_back(new GLObj(type,obj));
+	globjs.push_back(new GLObj(type, obj));
 }
 
 
@@ -1843,32 +1838,6 @@ void deinit() {
 	
 	vector<GLObj*>::iterator it;
 	
-	#ifdef LOGGING
-		cout<<"WebGL AtExit() called"<<endl;
-		cout<<"	# objects allocated: "<<globjs.size()<<endl;
-		
-		it = globjs.begin();
-		while(globjs.size() && it != globjs.end()) {
-			
-			GLObj *obj=*it;
-			cout<<"[";
-			
-			switch(obj->type) {
-			case GLOBJECT_TYPE_BUFFER: cout<<"buffer"; break;
-			case GLOBJECT_TYPE_FRAMEBUFFER: cout<<"framebuffer"; break;
-			case GLOBJECT_TYPE_PROGRAM: cout<<"program"; break;
-			case GLOBJECT_TYPE_RENDERBUFFER: cout<<"renderbuffer"; break;
-			case GLOBJECT_TYPE_SHADER: cout<<"shader"; break;
-			case GLOBJECT_TYPE_TEXTURE: cout<<"texture"; break;
-			};
-			
-			cout<<": "<<obj->obj<<"] ";
-			++it;
-			
-		}
-		cout<<endl;
-	#endif
-	
 	it = globjs.begin();
 	while(globjs.size() && it != globjs.end()) {
 		
@@ -1876,47 +1845,34 @@ void deinit() {
 		GLuint obj = globj->obj;
 		
 		switch(globj->type) {
+			
 		case GLOBJECT_TYPE_PROGRAM:
-			#ifdef LOGGING
-			cout<<"	Destroying GL program "<<obj<<endl;
-			#endif
 			glDeleteProgram(obj);
 			break;
+			
 		case GLOBJECT_TYPE_BUFFER:
-			#ifdef LOGGING
-			cout<<"	Destroying GL buffer "<<obj<<endl;
-			#endif
 			glDeleteBuffers(1, &obj);
 			break;
+			
 		case GLOBJECT_TYPE_FRAMEBUFFER:
-			#ifdef LOGGING
-			cout<<"	Destroying GL frame buffer "<<obj<<endl;
-			#endif
 			glDeleteFramebuffers(1, &obj);
 			break;
+			
 		case GLOBJECT_TYPE_RENDERBUFFER:
-			#ifdef LOGGING
-			cout<<"	Destroying GL render buffer "<<obj<<endl;
-			#endif
 			glDeleteRenderbuffers(1, &obj);
 			break;
+			
 		case GLOBJECT_TYPE_SHADER:
-			#ifdef LOGGING
-			cout<<"	Destroying GL shader "<<obj<<endl;
-			#endif
 			glDeleteShader(obj);
 			break;
+			
 		case GLOBJECT_TYPE_TEXTURE:
-			#ifdef LOGGING
-			cout<<"	Destroying GL texture "<<obj<<endl;
-			#endif
 			glDeleteTextures(1, &obj);
 			break;
+			
 		default:
-			#ifdef LOGGING
-			cout<<"	Unknown object "<<obj<<endl;
-			#endif
 			break;
+			
 		}
 		
 		delete globj;
