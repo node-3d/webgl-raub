@@ -28,11 +28,9 @@ NAN_METHOD(init) {
 	GLenum err = glewInit();
 	
 	if (GLEW_OK != err) {
-		/* Problem: glewInit failed, something is seriously wrong. */
+		// Problem: glewInit failed, something is seriously wrong
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-		RET_VALUE(JS_INT(-1));
-	} else {
-		RET_VALUE(JS_INT(0));
+		Nan::ThrowError("Can't create GLFW window");
 	}
 	
 }
@@ -610,10 +608,15 @@ NAN_METHOD(texImage2D) {
 	REQ_INT32_ARG(5, border);
 	REQ_INT32_ARG(6, format);
 	REQ_INT32_ARG(7, type);
+	
+	if (info.Length() <= 8 || ! info[8]->IsNullOrUndefined()) {
+		glTexImage2D(target, level, internalformat, width, height, border, format, type, nullptr);
+		return;
+	}
+	
 	REQ_OBJ_ARG(8, image);
 	
 	void *pixels = getData(image);
-	
 	glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 	
 }
@@ -1399,6 +1402,12 @@ NAN_METHOD(texSubImage2D) {
 	REQ_INT32_ARG(5, height);
 	REQ_INT32_ARG(6, format);
 	REQ_INT32_ARG(7, type);
+	
+	if (info.Length() <= 8 || ! info[8]->IsNullOrUndefined()) {
+		glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, nullptr);
+		return;
+	}
+	
 	REQ_OBJ_ARG(8, image);
 	
 	void *pixels = getData(image);
