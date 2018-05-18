@@ -609,7 +609,7 @@ NAN_METHOD(texImage2D) {
 	REQ_INT32_ARG(6, format);
 	REQ_INT32_ARG(7, type);
 	
-	if (info.Length() <= 8 || ! info[8]->IsNullOrUndefined()) {
+	if (info.Length() <= 8 || info[8]->IsNullOrUndefined()) {
 		glTexImage2D(target, level, internalformat, width, height, border, format, type, nullptr);
 		return;
 	}
@@ -1403,7 +1403,7 @@ NAN_METHOD(texSubImage2D) {
 	REQ_INT32_ARG(6, format);
 	REQ_INT32_ARG(7, type);
 	
-	if (info.Length() <= 8 || ! info[8]->IsNullOrUndefined()) {
+	if (info.Length() <= 8 || info[8]->IsNullOrUndefined()) {
 		glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, nullptr);
 		return;
 	}
