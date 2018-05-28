@@ -135,7 +135,7 @@ const methods = [
 
 describe('WebGL', () => {
 	
-	it(`exports an object`, () => {
+	it('exports an object', () => {
 		expect(webgl).to.be.an('object');
 	});
 	

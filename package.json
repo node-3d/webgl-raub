@@ -1,7 +1,7 @@
 {
 	"author": "Luis Blanco <luisblanco1337@gmail.com>",
 	"name": "webgl-raub",
-	"version": "0.0.7",
+	"version": "1.0.0",
 	"description": "WebGL for Node.js",
 	"license": "MIT",
 	"main": "index.js",
@@ -10,10 +10,15 @@
 		"webgl",
 		"opengl",
 		"gl",
-		"graphics"
+		"graphics",
+		"window",
+		"c++",
+		"bindings",
+		"native",
+		"gyp"
 	],
 	"engines": {
-		"node": ">=8.11.1",
+		"node": ">=8.11.2",
 		"npm": ">=5.6.0"
 	},
 	"maintainers": [
@@ -28,7 +33,7 @@
 		"url": "https://github.com/node-3d/webgl-raub.git"
 	},
 	"dependencies": {
-		"deps-opengl-raub": "0.0.7",
-		"addon-tools-raub": "^2.0.1"
+		"deps-opengl-raub": "https://github.com/node-3d/deps-opengl-raub.git",
+		"addon-tools-raub": "~3.0.0"
 	}
 }

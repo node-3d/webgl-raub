@@ -2,6 +2,10 @@
 
 This is a part of [Node3D](https://github.com/node-3d) project.
 
+![NPM](https://nodei.co/npm/webgl-raub.png?compact=true)
+
+![Build Status](https://api.travis-ci.org/node-3d/webgl-raub.svg?branch=master)
+
 
 ## Synopsis
 
@@ -14,9 +18,9 @@ This is a part of [Node3D](https://github.com/node-3d) project.
 npm i -s webgl-raub
 ```
 
-> Note: compilation tools must be in place on your system.
+> Note: for `npm i` to succeed, compilation tools must be in place on your system.
 For Windows, use **ADMIN PRIVELEGED** command line:
-\`npm i -g windows-build-tools\`.
+`npm i -g windows-build-tools`.
 Also **Windows** needs **vcredist 2013** to be installed.
 
 

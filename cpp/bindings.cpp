@@ -2,13 +2,11 @@
 
 #include "webgl.hpp"
 
+
 using namespace v8;
-using namespace node;
-using namespace std;
 
 
 PropertyAttribute constant_attributes = static_cast<PropertyAttribute>(ReadOnly | DontDelete);
-
 
 // Used to be a macro, hence the uppercase name.
 #define JS_GL_SET_CONSTANT(name, constant)                                    \
@@ -26,7 +24,7 @@ PropertyAttribute constant_attributes = static_cast<PropertyAttribute>(ReadOnly 
 
 extern "C" {
 
-NAN_MODULE_INIT(_init) {
+void _init(V8_VAR_OBJ target) {
 	
 	atexit(webgl::deinit);
 	
