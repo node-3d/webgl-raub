@@ -24,7 +24,7 @@ PropertyAttribute constant_attributes = static_cast<PropertyAttribute>(ReadOnly 
 
 extern "C" {
 
-void _init(V8_VAR_OBJ target) {
+void initialize(V8_VAR_OBJ target) {
 	
 	atexit(webgl::deinit);
 	
@@ -648,6 +648,6 @@ void _init(V8_VAR_OBJ target) {
 }
 
 
-NODE_MODULE(webgl, _init)
+NODE_MODULE(webgl, initialize)
 
 } // extern "C"
