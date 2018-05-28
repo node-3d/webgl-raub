@@ -11,12 +11,7 @@ This is a part of [Node3D](https://github.com/node-3d) project.
 
 **Node.js** addon with **WebGL** bindings.
 
-
-## Install
-
-```
-npm i -s webgl-raub
-```
+[WebGLRenderingContext docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext)
 
 > Note: for `npm i` to succeed, compilation tools must be in place on your system.
 For Windows, use **ADMIN PRIVELEGED** command line:
@@ -38,7 +33,7 @@ though different ones are quite possible.
 As soon as you create and set up a window, simply follow the
 [WebGLRenderingContext docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext).
 
-NOTE: If you are planning to use browser **WebGL** libs, be aware of their browser-affinity.
+> Note: if you are planning to use browser **WebGL** libs, be aware of their browser-affinity.
 You would have to provide several additional interfaces to mimic the browser.
 There is [node-glfw](https://github.com/raub/node-glfw) module, which exports the
 `Document` class. It can be used the following way:
