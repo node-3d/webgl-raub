@@ -96,24 +96,22 @@
 				'action_name' : 'Build intermediates removed.',
 				'inputs'      : [],
 				'outputs'     : ['cpp'],
-				'conditions'  : [
-					[ 'OS=="linux"', { 'action' : [
-						'<(rm)',
-						'<(module_root_dir)/build/Release/obj.target/webgl/cpp/webgl.o',
-						'<(module_root_dir)/build/Release/obj.target/webgl.node',
-						'<(module_root_dir)/build/Release/webgl.node'
-					] } ],
-					[ 'OS=="mac"', { 'action' : [
-						'<(rm)',
-						'<(module_root_dir)/build/Release/obj.target/webgl/cpp/webgl.o',
-						'<(module_root_dir)/build/Release/webgl.node'
-					] } ],
-					[ 'OS=="win"', { 'action' : [
+				'conditions'  : [[
+					# IF WINDOWS
+					'OS=="win"',
+					{ 'action' : [
 						'<(rm)',
 						'<(module_root_dir)/build/Release/webgl.*',
 						'<(module_root_dir)/build/Release/obj/webgl/*.*'
-					] } ],
-				],
+					] },
+					# ELSE
+					{ 'action' : [
+						'<(rm)',
+						'<(module_root_dir)/build/Release/obj.target/webgl/cpp/bindings.o',
+						'<(module_root_dir)/build/Release/obj.target/webgl/cpp/webgl.o',
+						'<(module_root_dir)/build/Release/webgl.node'
+					] }
+				]],
 			}],
 		},
 	]
