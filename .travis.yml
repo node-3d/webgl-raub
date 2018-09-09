@@ -4,7 +4,7 @@ dist: trusty
 language: node_js
 
 node_js:
-  - "8.11.2"
+  - "8.11.4"
 
 
 addons:
@@ -21,23 +21,19 @@ before_install:
        export CXX="clang++-3.5";
        export CC="clang-3.5";
     fi;
-  - npm install -g npm@5.6.0
+  - npm conf set strict-ssl false
+  - npm install -g npm@6.4.0
   - export DISPLAY=:99
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
 
 
 install:
+  - cd test
   - npm i --clang=1
-  - cd test && npm i --clang=1
   - cd ..
 
 
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
-
-
 script:
-  - cd test && npm test
+  - cd test
+  - npm test
   - cd ..
