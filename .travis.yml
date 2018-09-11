@@ -1,5 +1,5 @@
-sudo: true
 dist: trusty
+sudo: false
 
 language: node_js
 
@@ -7,20 +7,7 @@ node_js:
   - "8.11.4"
 
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.5
-    packages:
-      - clang-3.5
-
-
 before_install:
-  - if [[ $(uname -s) == 'Linux' ]]; then
-       export CXX="clang++-3.5";
-       export CC="clang-3.5";
-    fi;
   - npm conf set strict-ssl false
   - npm install -g npm@6.4.0
   - export DISPLAY=:99
@@ -29,7 +16,7 @@ before_install:
 
 install:
   - cd test
-  - npm i --clang=1
+  - npm i
   - cd ..
 
 
