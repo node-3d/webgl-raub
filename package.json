@@ -18,8 +18,8 @@
 		"gyp"
 	],
 	"engines": {
-		"node": ">=8.11.4",
-		"npm": ">=6.3.0"
+		"node": ">=10.13.0",
+		"npm": ">=6.4.1"
 	},
 	"maintainers": [
 		{
@@ -33,7 +33,7 @@
 		"url": "https://github.com/node-3d/webgl-raub.git"
 	},
 	"dependencies": {
-		"deps-opengl-raub": "~1.0.0",
-		"addon-tools-raub": "4.0.0"
+		"deps-opengl-raub": "2.0.0",
+		"addon-tools-raub": "https://github.com/node-3d/addon-tools-raub.git"
 	}
 }

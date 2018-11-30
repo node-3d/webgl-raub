@@ -1,6 +1,7 @@
 #ifndef _WEBGL_HPP_
 #define _WEBGL_HPP_
 
+
 #include <addon-tools.hpp>
 
 #include <GL/glew.h>
@@ -8,7 +9,7 @@
 
 #define USE_UINT32_ARG(I, VAR, DEF)                                           \
 	CHECK_LET_ARG(I, IsUint32(), "uint32");                                   \
-	unsigned int VAR = IS_ARG_EMPTY(I) ? (DEF) : info[I]->Uint32Value();
+	unsigned int VAR = IS_ARG_EMPTY(I) ? (DEF) : info[I].As<v8::Uint32>()->Value();
 
 
 namespace webgl {

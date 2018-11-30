@@ -30,7 +30,7 @@ NAN_METHOD(init) {
 	if (GLEW_OK != err) {
 		// Problem: glewInit failed, something is seriously wrong
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-		Nan::ThrowError("Can't create GLFW window");
+		Nan::ThrowError("Can't initialize GLEW");
 	}
 	
 }
