@@ -278,6 +278,15 @@ NAN_METHOD(blitFrameBuffer) {
 }
 
 
+NAN_METHOD(bindFrameBuffer) {
+	
+	REQ_UINT32_ARG(0, fbo);
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	
+}
+
+
 NAN_METHOD(getRenderTarget) {
 	
 	REQ_UINT32_ARG(0, width);

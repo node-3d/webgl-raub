@@ -48,6 +48,7 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(uniform4iv);
 	JS_GL_SET_METHOD(pixelStorei);
 	JS_GL_SET_METHOD(bindAttribLocation);
+	JS_GL_SET_METHOD(bindFrameBuffer);
 	JS_GL_SET_METHOD(blitFrameBuffer);
 	JS_GL_SET_METHOD(getRenderTarget);
 	JS_GL_SET_METHOD(getError);
