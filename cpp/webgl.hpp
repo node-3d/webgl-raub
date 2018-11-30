@@ -52,6 +52,7 @@ namespace webgl {
 	NAN_METHOD(pixelStorei);
 	NAN_METHOD(bindAttribLocation);
 	NAN_METHOD(blitFrameBuffer);
+	NAN_METHOD(getRenderTarget);
 	NAN_METHOD(getError);
 	NAN_METHOD(drawArrays);
 	NAN_METHOD(uniformMatrix2fv);
