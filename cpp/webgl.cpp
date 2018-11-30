@@ -259,6 +259,25 @@ NAN_METHOD(bindAttribLocation) {
 }
 
 
+NAN_METHOD(blitFrameBuffer) {
+	
+	REQ_UINT32_ARG(0, fbo1);
+	REQ_UINT32_ARG(1, fbo2);
+	REQ_UINT32_ARG(2, sw);
+	REQ_UINT32_ARG(3, sh);
+	REQ_UINT32_ARG(4, dw);
+	REQ_UINT32_ARG(5, dh);
+	
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo1);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo2);
+	
+	glBlitFramebuffer(0, 0, sw, sh, 0, 0, dw, dh, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
+}
+
+
 NAN_METHOD(getError) {
 	
 	RET_VALUE(Nan::New<Integer>(glGetError()));
