@@ -36,7 +36,6 @@
 					{
 						'libraries': [
 							'-Wl,-rpath,<(opengl_bin)',
-							'<(opengl_bin)/glfw.dylib',
 							'<(opengl_bin)/glew.dylib'
 						],
 					}
@@ -44,7 +43,7 @@
 				[
 					'OS=="win"',
 					{
-						'libraries': [ 'glfw3dll.lib', 'glew32.lib', 'opengl32.lib' ],
+						'libraries': [ 'glew32.lib', 'opengl32.lib' ],
 						'defines' : [
 							'WIN32_LEAN_AND_MEAN',
 							'VC_EXTRALEAN'
