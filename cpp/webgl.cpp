@@ -369,7 +369,7 @@ NAN_METHOD(drawArrays) {
 NAN_METHOD(uniformMatrix2fv) {
 	
 	REQ_INT32_ARG(0, location);
-	REQ_BOOL_ARG(1, transpose);
+	LET_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -388,7 +388,7 @@ NAN_METHOD(uniformMatrix2fv) {
 NAN_METHOD(uniformMatrix3fv) {
 	
 	REQ_INT32_ARG(0, location);
-	REQ_BOOL_ARG(1, transpose);
+	LET_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -407,7 +407,7 @@ NAN_METHOD(uniformMatrix3fv) {
 NAN_METHOD(uniformMatrix4fv) {
 	
 	REQ_INT32_ARG(0, location);
-	REQ_BOOL_ARG(1, transpose);
+	LET_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -884,7 +884,7 @@ NAN_METHOD(vertexAttribPointer) {
 	REQ_INT32_ARG(0, indx);
 	REQ_INT32_ARG(1, size);
 	REQ_INT32_ARG(2, type);
-	REQ_BOOL_ARG(3, normalized);
+	LET_BOOL_ARG(3, normalized);
 	REQ_INT32_ARG(4, stride);
 	REQ_OFFS_ARG(5, ptr);
 	
@@ -1072,10 +1072,10 @@ NAN_METHOD(clearStencil) {
 
 NAN_METHOD(colorMask) {
 	
-	REQ_BOOL_ARG(0, red);
-	REQ_BOOL_ARG(1, green);
-	REQ_BOOL_ARG(2, blue);
-	REQ_BOOL_ARG(3, alpha);
+	LET_BOOL_ARG(0, red);
+	LET_BOOL_ARG(1, green);
+	LET_BOOL_ARG(2, blue);
+	LET_BOOL_ARG(3, alpha);
 	
 	glColorMask(red, green, blue, alpha);
 	
@@ -1125,7 +1125,7 @@ NAN_METHOD(cullFace) {
 
 NAN_METHOD(depthMask) {
 	
-	REQ_BOOL_ARG(0, flag);
+	LET_BOOL_ARG(0, flag);
 	
 	glDepthMask(flag);
 	
@@ -1194,7 +1194,7 @@ NAN_METHOD(polygonOffset) {
 NAN_METHOD(sampleCoverage) {
 	
 	REQ_FLOAT_ARG(0, value);
-	REQ_BOOL_ARG(1, invert);
+	LET_BOOL_ARG(1, invert);
 	
 	glSampleCoverage(value, invert);
 	
