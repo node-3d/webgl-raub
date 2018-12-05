@@ -168,8 +168,8 @@ namespace webgl {
 	NAN_METHOD(getProgramInfoLog);
 	NAN_METHOD(getRenderbufferParameter);
 	NAN_METHOD(getVertexAttrib);
-	NAN_METHOD(getSupportedExtensions);
-	NAN_METHOD(getExtension);
+	// NAN_METHOD(getSupportedExtensions);
+	// NAN_METHOD(getExtension);
 	NAN_METHOD(checkFramebufferStatus);
 	
 	NAN_METHOD(frontFace);

@@ -1848,32 +1848,32 @@ NAN_METHOD(getVertexAttrib) {
 }
 
 
-NAN_METHOD(getSupportedExtensions) {
+// NAN_METHOD(getSupportedExtensions) {
 	
-	const char *extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
+// 	const char *extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
 	
-	RET_VALUE(JS_STR(extensions));
+// 	RET_VALUE(JS_STR(extensions));
 	
-}
+// }
 
 // TODO GetExtension(name) return the extension name if found, should be an object...
-NAN_METHOD(getExtension) {
+// NAN_METHOD(getExtension) {
 	
-	REQ_UTF8_ARG(0, name);
+// 	REQ_UTF8_ARG(0, name);
 	
-	char *sname = *name;
-	char *extensions = const_cast<char*>(
-		reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS))
-	);
-	char *ext = strcasestr(extensions, sname);
+// 	char *sname = *name;
+// 	char *extensions = const_cast<char*>(
+// 		reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS))
+// 	);
+// 	char *ext = strcasestr(extensions, sname);
 	
-	if (ext == NULL) {
-		RET_UNDEFINED;
-	} else {
-		 RET_VALUE(JS_STR(ext, static_cast<int>(strlen(sname))));
-	}
+// 	if (ext == NULL) {
+// 		RET_UNDEFINED;
+// 	} else {
+// 		 RET_VALUE(JS_STR(ext, static_cast<int>(strlen(sname))));
+// 	}
 	
-}
+// }
 
 
 NAN_METHOD(checkFramebufferStatus) {
