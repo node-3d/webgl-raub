@@ -149,7 +149,7 @@ const extensions = {
 		COMPRESSED_SRGB8_PUNCHTHROUGH_ALPHA1_ETC2 : 0x9279,
 	},
 	WEBGL_compressed_texture_etc1: {
-		COMPRESSED_RGB_ETC1_WEBGL	0x8D64
+		COMPRESSED_RGB_ETC1_WEBGL : 0x8D64,
 	},
 	WEBGL_compressed_texture_pvrtc: {
 		COMPRESSED_RGB_PVRTC_4BPPV1_IMG : 0x8C00,
