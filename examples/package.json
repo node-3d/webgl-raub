@@ -3,12 +3,9 @@
 	"version": "0.0.0",
 	"private": true,
 	"main": "lesson05.js",
-	"scripts": {
-		"preinstall": "cd .. && npm i"
-	},
 	"dependencies": {
-		"webgl-raub": "file:../",
-		"image-raub": "1.0.1",
-		"glfw-raub": "0.0.10"
+		"webgl-raub": "https://github.com/node-3d/webgl-raub.git",
+		"image-raub": "https://github.com/node-3d/image-raub.git",
+		"glfw-raub": "https://github.com/node-3d/glfw-raub.git"
 	}
 }
