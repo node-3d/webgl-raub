@@ -33,7 +33,6 @@ global.WebGLActiveInfo = gl.WebGLActiveInfo;
 
 module.exports = gl;
 
-// const supportedExts = gl.getSupportedExtensions();
 
 const extensions = {
 	ANGLE_instanced_arrays: {
@@ -222,7 +221,9 @@ const extensions = {
 	},
 };
 
+const _getSupportedExtensions = gl.getSupportedExtensions;
 gl.getSupportedExtensions = () => {
+	gl._realExtensions = _getSupportedExtensions();
 	return Object.keys(extensions);
 };
 
@@ -235,10 +236,6 @@ gl.getExtension = name => {
 
 const _getParameter = gl.getParameter;
 gl.getParameter = pname => pname === gl.VERSION ? 'WebGL 1.0' : _getParameter(pname);
-
-
-// const _getSupportedExtensions = gl.getSupportedExtensions;
-// gl.getSupportedExtensions = () => _getSupportedExtensions().split(' ');
 
 
 const _attachShader = gl.attachShader;
