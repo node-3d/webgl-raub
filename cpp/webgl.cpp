@@ -1848,13 +1848,13 @@ NAN_METHOD(getVertexAttrib) {
 }
 
 
-// NAN_METHOD(getSupportedExtensions) {
+NAN_METHOD(getSupportedExtensions) {
 	
-// 	const char *extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
+	const char *extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
 	
-// 	RET_VALUE(JS_STR(extensions));
+	RET_VALUE(JS_STR(extensions));
 	
-// }
+}
 
 // TODO GetExtension(name) return the extension name if found, should be an object...
 // NAN_METHOD(getExtension) {

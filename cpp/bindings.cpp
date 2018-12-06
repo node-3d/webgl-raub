@@ -168,7 +168,7 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(getProgramInfoLog);
 	JS_GL_SET_METHOD(getRenderbufferParameter);
 	JS_GL_SET_METHOD(getVertexAttrib);
-	// JS_GL_SET_METHOD(getSupportedExtensions);
+	JS_GL_SET_METHOD(getSupportedExtensions);
 	// JS_GL_SET_METHOD(getExtension);
 	JS_GL_SET_METHOD(checkFramebufferStatus);
 	
