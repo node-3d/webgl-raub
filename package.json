@@ -33,7 +33,7 @@
 		"url": "https://github.com/node-3d/webgl-raub.git"
 	},
 	"dependencies": {
-		"deps-opengl-raub": "https://github.com/node-3d/deps-opengl-raub.git",
-		"addon-tools-raub": "https://github.com/node-3d/addon-tools-raub.git"
+		"addon-tools-raub": "4.1.0",
+		"deps-opengl-raub": "2.1.0"
 	}
 }
