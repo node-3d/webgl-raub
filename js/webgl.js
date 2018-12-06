@@ -33,7 +33,7 @@ global.WebGLActiveInfo = gl.WebGLActiveInfo;
 
 module.exports = gl;
 
-const supportedExts = gl.getSupportedExtensions();
+// const supportedExts = gl.getSupportedExtensions();
 
 const extensions = {
 	ANGLE_instanced_arrays: {
