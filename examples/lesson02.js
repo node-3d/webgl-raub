@@ -229,8 +229,6 @@ function drawScene() {
 
 function start() {
 	
-	const canvas = document.createElement('canvas');
-	
 	initGL(canvas);
 	initShaders();
 	initBuffers();

@@ -13,8 +13,8 @@ const document = new Document();
 const canvas = document.createElement('canvas');
 const frame = document.requestAnimationFrame;
 
-document.title = 'Lesson05';
-document.on("resize",function(evt){
+document.title = 'Lesson08';
+document.on('resize',function(evt){
 	gl.viewportWidth = evt.width;
 	gl.viewportHeight = evt.height;
 });
@@ -68,7 +68,7 @@ var gl;
 
 function initGL(canvas) {
   try {
-    gl = canvas.getContext("experimental-webgl");
+    gl = canvas.getContext('webgl');
     gl.viewportWidth = canvas.width;
     gl.viewportHeight = canvas.height;
   } catch (e) {
@@ -176,19 +176,6 @@ function initTexture() {
 var mvMatrix = mat4.create();
 var mvMatrixStack = [];
 var pMatrix = mat4.create();
-
-function mvPushMatrix() {
-  var copy = mat4.create();
-  mat4.set(mvMatrix, copy);
-  mvMatrixStack.push(copy);
-}
-
-function mvPopMatrix() {
-  if (mvMatrixStack.length == 0) {
-    throw "Invalid popMatrix!";
-  }
-  mvMatrix = mvMatrixStack.pop();
-}
 
 
 function setMatrixUniforms() {

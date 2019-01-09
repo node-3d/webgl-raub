@@ -151,22 +151,6 @@ let pMatrix  = mat4.create();
 
 const mvMatrixStack = [];
 
-
-function mvPushMatrix() {
-	const copy = mat4.create();
-	mat4.set(mvMatrix, copy);
-	mvMatrixStack.push(copy);
-}
-
-
-function mvPopMatrix() {
-	if (mvMatrixStack.length == 0) {
-		throw "Invalid popMatrix!";
-	}
-	mvMatrix = mvMatrixStack.pop();
-}
-
-
 function setMatrixUniforms() {
 	
 	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
@@ -359,8 +343,6 @@ function tick() {
 
 
 function start() {
-	
-	const canvas = document.createElement('canvas');
 	
 	initGL(canvas);
 	initShaders();

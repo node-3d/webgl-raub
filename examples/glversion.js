@@ -6,7 +6,7 @@ const { Document } = require('glfw-raub');
 
 
 Document.setWebgl(gl);
-const document = new Document();
+new Document();
 
 console.log(`
 OpenGL

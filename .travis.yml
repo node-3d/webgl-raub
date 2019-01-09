@@ -17,6 +17,10 @@ matrix:
     os: osx
     script:
       - echo OK.
+  - name: "Windows"
+    os: windows
+    script:
+      - echo OK.
 
 
 install:

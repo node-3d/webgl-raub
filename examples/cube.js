@@ -128,21 +128,6 @@ let pMatrix  = mat4.create();
 const mvMatrixStack = [];
 
 
-function mvPushMatrix() {
-	const copy = mat4.create();
-	mat4.set(mvMatrix, copy);
-	mvMatrixStack.push(copy);
-}
-
-
-function mvPopMatrix() {
-	if (mvMatrixStack.length == 0) {
-		throw "Invalid popMatrix!";
-	}
-	mvMatrix = mvMatrixStack.pop();
-}
-
-
 function setMatrixUniforms() {
 	
 	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
@@ -344,53 +329,6 @@ function initBuffers() {
 }
 
 
-function initBuffers2() {
-	
-	const n = [
-		[-1.0, 0.0, 0.0],
-		[0.0, 1.0, 0.0],
-		[1.0, 0.0, 0.0],
-		[0.0, -1.0, 0.0],
-		[0.0, 0.0, 1.0],
-		[0.0, 0.0, -1.0]
-	];
-	
-	const faces = [
-		[0, 1, 2, 3],
-		[3, 2, 6, 7],
-		[7, 6, 5, 4],
-		[4, 5, 1, 0],
-		[5, 6, 2, 1],
-		[7, 4, 0, 3]
-	];
-	
-	const v=new Array(8);
-	for(let i = 0; i < 8; i++) {
-		v[i] = new Array(4);
-	}
-	
-	const size = 2;
-	
-	v[0][0] = v[1][0] = v[2][0] = v[3][0] = -size / 2;
-	v[4][0] = v[5][0] = v[6][0] = v[7][0] = size / 2;
-	v[0][1] = v[1][1] = v[4][1] = v[5][1] = -size / 2;
-	v[2][1] = v[3][1] = v[6][1] = v[7][1] = size / 2;
-	v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size / 2;
-	v[1][2] = v[2][2] = v[5][2] = v[6][2] = size / 2;
-	
-	const normals  = new Array();
-	const vertices = new Array();
-	for (let i = 5; i >= 0; i--) {
-		normals.push(n[i][0],n[i][1],n[i][2]);
-		vertices.push(v[faces[i][0]][0],v[faces[i][0]][1],v[faces[i][0]][2]);
-		vertices.push(v[faces[i][0]][1],v[faces[i][1]][1],v[faces[i][1]][2]);
-		vertices.push(v[faces[i][0]][2],v[faces[i][2]][1],v[faces[i][2]][2]);
-		vertices.push(v[faces[i][0]][3],v[faces[i][3]][1],v[faces[i][3]][2]);
-	}
-
-}
-
-
 function drawScene() {
 	
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
@@ -452,28 +390,9 @@ function animate(timeNow) {
 }
 
 
-/* Before calling AntTweakBar or any other library that could use programs,
- * one must make sure to disable the VertexAttribArray used by the current
- * program otherwise this may have some unpredictable consequences aka
- * wrong vertex attrib arrays being used by another program!
- */
-function enableProgram() {
-	gl.useProgram(shaderProgram);
-	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-	gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
-}
-
-
-function disableProgram() {
-	gl.disableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-	gl.disableVertexAttribArray(shaderProgram.vertexColorAttribute);
-	gl.useProgram(null);
-}
-
-
 function tick(timeNow) {
 	
-	drawScene(timeNow);
+	drawScene();
 	animate(timeNow);
 	
 	gl.finish(); // for timing
