@@ -234,11 +234,11 @@ gl.getExtension = name => {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const enforceF32 = v instanceof Array ? new Float32Array(v) : v;
+const enforceF32 = v => v instanceof Array ? new Float32Array(v) : v;
 
 const enforceId = x => x ? x._ : 0;
 
-const enforceBool = x => typeof x === 'boolean' ? (x ? 1 : 0) : x
+const enforceBool = x => typeof x === 'boolean' ? (x ? 1 : 0) : x;
 
 
 const _getParameter = gl.getParameter;
