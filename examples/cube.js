@@ -376,7 +376,6 @@ function drawScene() {
 
 
 let lastTime = 0;
-let fps = 0;
 
 function animate(timeNow) {
 	
