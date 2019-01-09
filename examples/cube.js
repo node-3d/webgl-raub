@@ -376,13 +376,14 @@ function drawScene() {
 
 
 let lastTime = 0;
+// let fps = 0;
 
 function animate(timeNow) {
 	
 	if (lastTime) {
 		
 		const elapsed = timeNow - lastTime;
-		fps = Math.round(1000 / elapsed);
+		// fps = Math.round(1000 / elapsed);
 		
 		xRot += (xSpeed * elapsed) / 1000.0;
 		yRot += (ySpeed * elapsed) / 1000.0;
