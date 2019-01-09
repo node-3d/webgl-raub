@@ -449,7 +449,10 @@ function drawScene() {
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 		gl.enable(gl.BLEND);
 		gl.disable(gl.DEPTH_TEST);
-		gl.uniform1f(shaderProgram.alphaUniform, parseFloat(blending /*document.getElementById("alpha").value*/));
+		gl.uniform1f(
+			shaderProgram.alphaUniform,
+			parseFloat(blending /*document.getElementById("alpha").value*/)
+		);
 	} else {
 		gl.disable(gl.BLEND);
 		gl.enable(gl.DEPTH_TEST);
@@ -471,16 +474,16 @@ function drawScene() {
 	gl.uniform1i(shaderProgram.useLightingUniform, lighting);
 	if (lighting) {
 		gl.uniform3f(
-		shaderProgram.ambientColorUniform,
+			shaderProgram.ambientColorUniform,
 			parseFloat(ambientR /*document.getElementById("ambientR").value*/),
 			parseFloat(ambientG /*document.getElementById("ambientG").value*/),
 			parseFloat(ambientB /*document.getElementById("ambientB").value*/)
 		);
 		
 		var lightingDirection = [
-			 parseFloat(lightDirectionX /*document.getElementById("lightDirectionX").value*/),
-			 parseFloat(lightDirectionY /*document.getElementById("lightDirectionY").value*/),
-			 parseFloat(lightDirectionZ /*document.getElementById("lightDirectionZ").value*/)
+			parseFloat(lightDirectionX /*document.getElementById("lightDirectionX").value*/),
+			parseFloat(lightDirectionY /*document.getElementById("lightDirectionY").value*/),
+			parseFloat(lightDirectionZ /*document.getElementById("lightDirectionZ").value*/)
 		];
 		var adjustedLD = vec3.create();
 		vec3.normalize(lightingDirection, adjustedLD);
@@ -488,7 +491,7 @@ function drawScene() {
 		gl.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);
 		
 		gl.uniform3f(
-		shaderProgram.directionalColorUniform,
+			shaderProgram.directionalColorUniform,
 			parseFloat(directionalR /*document.getElementById("directionalR").value*/),
 			parseFloat(directionalG /*document.getElementById("directionalG").value*/),
 			parseFloat(directionalB /*document.getElementById("directionalB").value*/)
