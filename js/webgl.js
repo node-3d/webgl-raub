@@ -234,40 +234,47 @@ gl.getExtension = name => {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+const enforceF32 = v instanceof Array ? new Float32Array(v) : v;
+
+const enforceId = x => x ? x._ : 0;
+
+const enforceBool = x => typeof x === 'boolean' ? (x ? 1 : 0) : x
+
+
 const _getParameter = gl.getParameter;
 gl.getParameter = pname => pname === gl.VERSION ? 'WebGL 1.0' : _getParameter(pname);
 
 
 const _attachShader = gl.attachShader;
 gl.attachShader = (program, shader) => _attachShader(
-	program ? program._ : 0, shader ? shader._ : 0
+	enforceId(program), enforceId(shader)
 );
 
 
 const _bindAttribLocation = gl.bindAttribLocation;
 gl.bindAttribLocation = (program, index, name) => _bindAttribLocation(
-	program ? program._ : 0, index, name
+	enforceId(program), index, name
 );
 
 
 const _bindBuffer = gl.bindBuffer;
-gl.bindBuffer = (target, buffer) => _bindBuffer(target, buffer ? buffer._ : 0);
+gl.bindBuffer = (target, buffer) => _bindBuffer(target, enforceId(buffer));
 
 
 const _bindFramebuffer = gl.bindFramebuffer;
-gl.bindFramebuffer = (target, framebuffer) => _bindFramebuffer(target, framebuffer ? framebuffer._ : 0);
+gl.bindFramebuffer = (target, framebuffer) => _bindFramebuffer(target, enforceId(framebuffer));
 
 
 const _bindRenderbuffer = gl.bindRenderbuffer;
-gl.bindRenderbuffer = (target, renderbuffer) => _bindRenderbuffer(target, renderbuffer ? renderbuffer._ : 0);
+gl.bindRenderbuffer = (target, renderbuffer) => _bindRenderbuffer(target, enforceId(renderbuffer));
 
 
 const _bindTexture = gl.bindTexture;
-gl.bindTexture = (target, texture) => _bindTexture(target, texture ? texture._ : 0);
+gl.bindTexture = (target, texture) => _bindTexture(target, enforceId(texture));
 
 
 const _compileShader = gl.compileShader;
-gl.compileShader = shader => _compileShader(shader ? shader._ : 0);
+gl.compileShader = shader => _compileShader(enforceId(shader));
 
 
 const _createBuffer = gl.createBuffer;
@@ -295,38 +302,38 @@ gl.createTexture = () => new gl.WebGLTexture(_createTexture());
 
 
 const _deleteBuffer = gl.deleteBuffer;
-gl.deleteBuffer = buffer => _deleteBuffer(buffer ? buffer._ : 0);
+gl.deleteBuffer = buffer => _deleteBuffer(enforceId(buffer));
 
 
 const _deleteFramebuffer = gl.deleteFramebuffer;
-gl.deleteFramebuffer = framebuffer => _deleteFramebuffer(framebuffer ? framebuffer._ : 0);
+gl.deleteFramebuffer = framebuffer => _deleteFramebuffer(enforceId(framebuffer));
 
 
 const _deleteProgram = gl.deleteProgram;
-gl.deleteProgram = program => _deleteProgram(program ? program._ : 0);
+gl.deleteProgram = program => _deleteProgram(enforceId(program));
 
 
 const _deleteRenderbuffer = gl.deleteRenderbuffer;
-gl.deleteRenderbuffer = renderbuffer => _deleteRenderbuffer(renderbuffer ? renderbuffer._ : 0);
+gl.deleteRenderbuffer = renderbuffer => _deleteRenderbuffer(enforceId(renderbuffer));
 
 
 const _deleteShader = gl.deleteShader;
-gl.deleteShader = shader => _deleteShader(shader ? shader._ : 0);
+gl.deleteShader = shader => _deleteShader(enforceId(shader));
 
 
 const _deleteTexture = gl.deleteTexture;
-gl.deleteTexture = texture => _deleteTexture(texture ? texture._ : 0);
+gl.deleteTexture = texture => _deleteTexture(enforceId(texture));
 
 
 const _detachShader = gl.detachShader;
-gl.detachShader = (program, shader) => _detachShader(program ? program._ : 0, shader ? shader._ : 0);
+gl.detachShader = (program, shader) => _detachShader(enforceId(program), enforceId(shader));
 
 
 const _framebufferRenderbuffer = gl.framebufferRenderbuffer;
 gl.framebufferRenderbuffer = (
 	target, attachment, renderbuffertarget, renderbuffer
 ) => _framebufferRenderbuffer(
-	target, attachment, renderbuffertarget, renderbuffer ? renderbuffer._ : 0
+	target, attachment, renderbuffertarget, enforceId(renderbuffer)
 );
 
 
@@ -334,89 +341,89 @@ const _framebufferTexture2D = gl.framebufferTexture2D;
 gl.framebufferTexture2D = (
 	target, attachment, textarget, texture, level
 ) => _framebufferTexture2D(
-	target, attachment, textarget, texture ? texture._ : 0, level
+	target, attachment, textarget, enforceId(texture), level
 );
 
 
 const _getActiveAttrib = gl.getActiveAttrib;
 gl.getActiveAttrib = (program, index) => new gl.WebGLActiveInfo(
-	_getActiveAttrib(program ? program._ : 0, index)
+	_getActiveAttrib(enforceId(program), index)
 );
 
 
 const _getActiveUniform = gl.getActiveUniform;
 gl.getActiveUniform = (program, index) => new gl.WebGLActiveInfo(
-	_getActiveUniform(program ? program._ : 0, index)
+	_getActiveUniform(enforceId(program), index)
 );
 
 
 const _getAttachedShaders = gl.getAttachedShaders;
-gl.getAttachedShaders = program => _getAttachedShaders(program ? program._ : 0);
+gl.getAttachedShaders = program => _getAttachedShaders(enforceId(program));
 
 
 const _getAttribLocation = gl.getAttribLocation;
-gl.getAttribLocation = (program, name) => _getAttribLocation(program ? program._ : 0, name);
+gl.getAttribLocation = (program, name) => _getAttribLocation(enforceId(program), name);
 
 
 const _getProgramParameter = gl.getProgramParameter;
-gl.getProgramParameter = (program, pname) => _getProgramParameter(program ? program._ : 0, pname);
+gl.getProgramParameter = (program, pname) => _getProgramParameter(enforceId(program), pname);
 
 const _getProgramInfoLog = gl.getProgramInfoLog;
-gl.getProgramInfoLog = program => _getProgramInfoLog(program ? program._ : 0);
+gl.getProgramInfoLog = program => _getProgramInfoLog(enforceId(program));
 
 
 const _getShaderParameter = gl.getShaderParameter;
-gl.getShaderParameter = (shader, pname) => _getShaderParameter(shader ? shader._ : 0, pname);
+gl.getShaderParameter = (shader, pname) => _getShaderParameter(enforceId(shader), pname);
 
 
 const _getShaderInfoLog = gl.getShaderInfoLog;
-gl.getShaderInfoLog = shader => _getShaderInfoLog(shader ? shader._ : 0);
+gl.getShaderInfoLog = shader => _getShaderInfoLog(enforceId(shader));
 
 
 const _getShaderSource = gl.getShaderSource;
-gl.getShaderSource = shader => _getShaderSource(shader ? shader._ : 0);
+gl.getShaderSource = shader => _getShaderSource(enforceId(shader));
 
 
 const _getUniform = gl.getUniform;
-gl.getUniform = (program, location) => _getUniform(program ? program._ : 0, location ? location._ : 0);
+gl.getUniform = (program, location) => _getUniform(enforceId(program), enforceId(location));
 
 
 const _getUniformLocation = gl.getUniformLocation;
 gl.getUniformLocation = (program, name) => new gl.WebGLUniformLocation(
-	_getUniformLocation(program ? program._ : 0, name)
+	_getUniformLocation(enforceId(program), name)
 );
 
 
 const _isBuffer = gl.isBuffer;
-gl.isBuffer = buffer => _isBuffer(buffer ? buffer._ : 0);
+gl.isBuffer = buffer => _isBuffer(enforceId(buffer));
 
 
 const _isFramebuffer = gl.isFramebuffer;
-gl.isFramebuffer = framebuffer => _isFramebuffer(framebuffer ? framebuffer._ : 0);
+gl.isFramebuffer = framebuffer => _isFramebuffer(enforceId(framebuffer));
 
 
 const _isProgram = gl.isProgram;
-gl.isProgram = program => _isProgram(program ? program._ : 0);
+gl.isProgram = program => _isProgram(enforceId(program));
 
 
 const _isRenderbuffer = gl.isRenderbuffer;
-gl.isRenderbuffer = renderbuffer => _isRenderbuffer(renderbuffer ? renderbuffer._ : 0);
+gl.isRenderbuffer = renderbuffer => _isRenderbuffer(enforceId(renderbuffer));
 
 
 const _isShader = gl.isShader;
-gl.isShader = shader => _isShader(shader ? shader._ : 0);
+gl.isShader = shader => _isShader(enforceId(shader));
 
 
 const _isTexture = gl.isTexture;
-gl.isTexture = texture => _isTexture(texture ? texture._ : 0);
+gl.isTexture = texture => _isTexture(enforceId(texture));
 
 
 const _linkProgram = gl.linkProgram;
-gl.linkProgram = program => _linkProgram(program ? program._ : 0);
+gl.linkProgram = program => _linkProgram(enforceId(program));
 
 
 const _shaderSource = gl.shaderSource;
-gl.shaderSource = (shader, source) => _shaderSource(shader ? shader._ : 0, source);
+gl.shaderSource = (shader, source) => _shaderSource(enforceId(shader), source);
 
 
 const _texImage2D = gl.texImage2D;
@@ -444,147 +451,132 @@ gl.texImage2D = function (
 
 
 const _uniform1f = gl.uniform1f;
-gl.uniform1f = (location, x) => _uniform1f(location ? location._ : 0, x);
+gl.uniform1f = (location, x) => _uniform1f(enforceId(location), x);
 
 
 const _uniform1fv = gl.uniform1fv;
 gl.uniform1fv = (location, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _uniform1fv(location ? location._ : 0, v);
+	return _uniform1fv(enforceId(location), enforceF32(v));
 };
 
 
 const _pixelStorei = gl.pixelStorei;
 gl.pixelStorei = (pname, param) =>_pixelStorei(
-	pname, typeof param === 'boolean' ? (param ? 1 : 0) : param
+	pname, enforceBool(param)
 );
 
 
 const _uniform1i = gl.uniform1i;
 gl.uniform1i = (location, x) => _uniform1i(
-	location ? location._ : 0, typeof x === 'boolean' ? (x ? 1 : 0) : x
+	enforceId(location), enforceBool(x)
 );
 
 
 const _uniform1iv = gl.uniform1iv;
 gl.uniform1iv = (location, v) => {
-	v = v instanceof Array ? new Int32Array(v) : v;
-	return _uniform1iv(location ? location._ : 0, v);
+	return _uniform1iv(enforceId(location), enforceF32(v));
 };
 
 
 const _uniform2f = gl.uniform2f;
-gl.uniform2f = (location, x, y) => _uniform2f(location ? location._ : 0, x, y);
+gl.uniform2f = (location, x, y) => _uniform2f(enforceId(location), x, y);
 
 
 const _uniform2fv = gl.uniform2fv;
 gl.uniform2fv = (location, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _uniform2fv(location ? location._ : 0, v);
+	return _uniform2fv(enforceId(location), enforceF32(v));
 };
 
 
 const _uniform2i = gl.uniform2i;
-gl.uniform2i = (location, x, y) => _uniform2i(location ? location._ : 0, x, y);
+gl.uniform2i = (location, x, y) => _uniform2i(enforceId(location), x, y);
 
 
 const _uniform2iv = gl.uniform2iv;
 gl.uniform2iv = (location, v) => {
-	v = v instanceof Array ? new Int32Array(v) : v;
-	return _uniform2iv(location ? location._ : 0, v);
+	return _uniform2iv(enforceId(location), enforceF32(v));
 };
 
 
 const _uniform3f = gl.uniform3f;
-gl.uniform3f = (location, x, y, z) => _uniform3f(location ? location._ : 0, x, y, z);
+gl.uniform3f = (location, x, y, z) => _uniform3f(enforceId(location), x, y, z);
 
 
 
 const _uniform3fv = gl.uniform3fv;
 gl.uniform3fv = (location, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _uniform3fv(location ? location._ : 0, v);
+	return _uniform3fv(enforceId(location), enforceF32(v));
 };
 
 
 const _uniform3i = gl.uniform3i;
-gl.uniform3i = (location, x, y, z) => _uniform3i(location ? location._ : 0, x, y, z);
+gl.uniform3i = (location, x, y, z) => _uniform3i(enforceId(location), x, y, z);
 
 
 const _uniform3iv = gl.uniform3iv;
 gl.uniform3iv = (location, v) => {
-	v = v instanceof Array ? new Int32Array(v) : v;
-	return _uniform3iv(location ? location._ : 0, v);
+	return _uniform3iv(enforceId(location), enforceF32(v));
 };
 
 const _uniform4f = gl.uniform4f;
-gl.uniform4f = (location, x, y, z, w) => _uniform4f(location ? location._ : 0, x, y, z, w);
+gl.uniform4f = (location, x, y, z, w) => _uniform4f(enforceId(location), x, y, z, w);
 
 
 const _uniform4fv = gl.uniform4fv;
 gl.uniform4fv = (location, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _uniform4fv(location ? location._ : 0, v);
+	return _uniform4fv(enforceId(location), enforceF32(v));
 };
 
 const _uniform4i = gl.uniform4i;
-gl.uniform4i = (location, x, y, z, w) => _uniform4i(location ? location._ : 0, x, y, z, w);
+gl.uniform4i = (location, x, y, z, w) => _uniform4i(enforceId(location), x, y, z, w);
 
 
 const _uniform4iv = gl.uniform4iv;
 gl.uniform4iv = (location, v) => {
-	v = v instanceof Array ? new Int32Array(v) : v;
-	return _uniform4iv(location ? location._ : 0, v);
+	return _uniform4iv(enforceId(location), enforceF32(v));
 };
 
 const _uniformMatrix2fv = gl.uniformMatrix2fv;
 gl.uniformMatrix2fv = (location, transpose, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _uniformMatrix2fv(location ? location._ : 0, transpose, v);
+	return _uniformMatrix2fv(enforceId(location), transpose, enforceF32(v));
 };
 
 const _uniformMatrix3fv = gl.uniformMatrix3fv;
 gl.uniformMatrix3fv = (location, transpose, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _uniformMatrix3fv(location ? location._ : 0, transpose, v);
+	return _uniformMatrix3fv(enforceId(location), transpose, enforceF32(v));
 };
 
 const _uniformMatrix4fv = gl.uniformMatrix4fv;
 gl.uniformMatrix4fv = (location, transpose, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _uniformMatrix4fv(location ? location._ : 0, transpose, v);
+	return _uniformMatrix4fv(enforceId(location), transpose, enforceF32(v));
 };
 
 const _useProgram = gl.useProgram;
-gl.useProgram = program => _useProgram(program ? program._ : 0);
+gl.useProgram = program => _useProgram(enforceId(program));
 
 
 const _validateProgram = gl.validateProgram;
-gl.validateProgram = program => _validateProgram(program ? program._ : 0);
+gl.validateProgram = program => _validateProgram(enforceId(program));
 
 
 const _vertexAttrib1fv = gl.vertexAttrib1fv;
 gl.vertexAttrib1fv = (indx, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _vertexAttrib1fv(indx, v);
+	return _vertexAttrib1fv(indx, enforceF32(v));
 };
 
 const _vertexAttrib2fv = gl.vertexAttrib2fv;
 gl.vertexAttrib2fv = (indx, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _vertexAttrib2fv(indx, v);
+	return _vertexAttrib2fv(indx, enforceF32(v));
 };
 
 const _vertexAttrib3fv = gl.vertexAttrib3fv;
 gl.vertexAttrib3fv = (indx, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _vertexAttrib3fv(indx, v);
+	return _vertexAttrib3fv(indx, enforceF32(v));
 };
 
 const _vertexAttrib4fv = gl.vertexAttrib4fv;
 gl.vertexAttrib4fv = (indx, v) => {
-	v = v instanceof Array ? new Float32Array(v) : v;
-	return _vertexAttrib4fv(indx, v);
+	return _vertexAttrib4fv(indx, enforceF32(v));
 };
 
 const _viewport = gl.viewport;
