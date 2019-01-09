@@ -35,7 +35,7 @@ module.exports = gl;
 
 
 const extensions = {
-	ANGLE_instanced_arrays: {
+	'ANGLE_instanced_arrays': {
 		VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE : 0x88FE,
 		drawArraysInstancedANGLE() {},
 		drawElementsInstancedANGLE() {},
