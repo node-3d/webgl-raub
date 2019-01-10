@@ -74,7 +74,7 @@ NAN_METHOD(bindFrameBuffer) {
 }
 
 
-NAN_METHOD(bindFramebuffer2) {
+NAN_METHOD(bindFramebuffer) {
 	
 	REQ_INT32_ARG(0, target);
 	LET_INT32_ARG(1, buffer);
