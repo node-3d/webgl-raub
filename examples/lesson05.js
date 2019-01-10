@@ -14,9 +14,11 @@ const document = new Document();
 const canvas = document.createElement('canvas');
 const frame = document.requestAnimationFrame;
 
+let gl;
+
 document.title = 'Lesson05';
 document.on('resize', evt => {
-	gl.viewportWidth  = evt.width;
+	gl.viewportWidth = evt.width;
 	gl.viewportHeight = evt.height;
 });
 
@@ -48,15 +50,13 @@ const shaders = {
 };
 
 
-let gl;
-
 function initGL(canvas) {
 	
 	try {
 		
 		gl = canvas.getContext('webgl');
 		
-		gl.viewportWidth  = canvas.width;
+		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
 		
 	} catch (e) {
@@ -76,7 +76,7 @@ function getShader(gl, id) {
 	gl.shaderSource(shader, shaders[id]);
 	gl.compileShader(shader);
 	
-	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+	if ( ! gl.getShaderParameter(shader, gl.COMPILE_STATUS) ) {
 		console.error(gl.getShaderInfoLog(shader));
 		return null;
 	}
@@ -91,7 +91,7 @@ let shaderProgram;
 function initShaders() {
 	
 	const fragmentShader = getShader(gl, 'fs');
-	const vertexShader   = getShader(gl, 'vs');
+	const vertexShader = getShader(gl, 'vs');
 	
 	shaderProgram = gl.createProgram();
 	gl.attachShader(shaderProgram, vertexShader);
@@ -136,8 +136,8 @@ function initTexture() {
 	neheTexture = gl.createTexture();
 	neheTexture.image = new Image();
 	neheTexture.image.onload = function () {
-		console.log("Loaded image: "+neheTexture.image.src);
-		console.log("size: "+neheTexture.image.width+"x"+neheTexture.image.height);
+		console.log(`Loaded image: ${neheTexture.image.src}`);
+		console.log(`size: ${neheTexture.image.width}x${neheTexture.image.height}`);
 		handleLoadedTexture(neheTexture);
 	};
 
@@ -148,8 +148,6 @@ function initTexture() {
 
 let mvMatrix = mat4.create();
 let pMatrix  = mat4.create();
-
-const mvMatrixStack = [];
 
 function setMatrixUniforms() {
 	
@@ -179,40 +177,40 @@ function initBuffers() {
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 	const vertices = [
 		// Front face
-		-1.0, -1.0,  1.0,
-		1.0, -1.0,  1.0,
-		1.0,  1.0,  1.0,
-		-1.0,  1.0,  1.0,
+		-1.0, -1.0, 1.0,
+		1.0, -1.0, 1.0,
+		1.0, 1.0, 1.0,
+		-1.0, 1.0, 1.0,
 		
 		// Back face
 		-1.0, -1.0, -1.0,
-		-1.0,  1.0, -1.0,
-		1.0,  1.0, -1.0,
+		-1.0, 1.0, -1.0,
+		1.0, 1.0, -1.0,
 		1.0, -1.0, -1.0,
 		
 		// Top face
-		-1.0,  1.0, -1.0,
-		-1.0,  1.0,  1.0,
-		1.0,  1.0,  1.0,
-		1.0,  1.0, -1.0,
+		-1.0, 1.0, -1.0,
+		-1.0, 1.0, 1.0,
+		1.0, 1.0, 1.0,
+		1.0, 1.0, -1.0,
 		
 		// Bottom face
 		-1.0, -1.0, -1.0,
 		1.0, -1.0, -1.0,
-		1.0, -1.0,  1.0,
-		-1.0, -1.0,  1.0,
+		1.0, -1.0, 1.0,
+		-1.0, -1.0, 1.0,
 		
 		// Right face
 		1.0, -1.0, -1.0,
-		1.0,  1.0, -1.0,
-		1.0,  1.0,  1.0,
-		1.0, -1.0,  1.0,
+		1.0, 1.0, -1.0,
+		1.0, 1.0, 1.0,
+		1.0, -1.0, 1.0,
 		
 		// Left face
 		-1.0, -1.0, -1.0,
-		-1.0, -1.0,  1.0,
-		-1.0,  1.0,  1.0,
-		-1.0,  1.0, -1.0,
+		-1.0, -1.0, 1.0,
+		-1.0, 1.0, 1.0,
+		-1.0, 1.0, -1.0,
 	];
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 	cubeVertexPositionBuffer.itemSize = 3;
@@ -266,12 +264,12 @@ function initBuffers() {
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 	
 	const cubeVertexIndices = [
-		0, 1, 2,      0, 2, 3,    // Front face
-		4, 5, 6,      4, 6, 7,    // Back face
-		8, 9, 10,     8, 10, 11,  // Top face
-		12, 13, 14,   12, 14, 15, // Bottom face
-		16, 17, 18,   16, 18, 19, // Right face
-		20, 21, 22,   20, 22, 23  // Left face
+		0, 1, 2, 0, 2, 3, // Front face
+		4, 5, 6, 4, 6, 7, // Back face
+		8, 9, 10, 8, 10, 11, // Top face
+		12, 13, 14, 12, 14, 15, // Bottom face
+		16, 17, 18, 16, 18, 19, // Right face
+		20, 21, 22, 20, 22, 23 // Left face
 	];
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 	cubeVertexIndexBuffer.itemSize = 1;
@@ -300,10 +298,24 @@ function drawScene() {
 	mat4.rotate(mvMatrix, degToRad(zRot), [0, 0, 1]);
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-	gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(
+		shaderProgram.vertexPositionAttribute,
+		cubeVertexPositionBuffer.itemSize,
+		gl.FLOAT,
+		false,
+		0,
+		0
+	);
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-	gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+	gl.vertexAttribPointer(
+		shaderProgram.textureCoordAttribute,
+		cubeVertexTextureCoordBuffer.itemSize,
+		gl.FLOAT,
+		false,
+		0,
+		0
+	);
 	
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, neheTexture);
