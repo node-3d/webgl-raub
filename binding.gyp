@@ -12,6 +12,8 @@
 			'target_name': 'webgl',
 			'sources': [
 				'cpp/bindings.cpp',
+				'cpp/objects.cpp',
+				'cpp/uniforms.cpp',
 				'cpp/webgl.cpp',
 			],
 			'include_dirs': [
