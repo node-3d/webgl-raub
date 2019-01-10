@@ -26,8 +26,6 @@ extern "C" {
 
 void initialize(V8_VAR_OBJ target) {
 	
-	atexit(webgl::deinit);
-	
 	JS_GL_SET_METHOD(init);
 	
 	JS_GL_SET_METHOD(uniform1f);
