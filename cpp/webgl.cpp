@@ -1594,6 +1594,54 @@ NAN_METHOD(getAttachedShaders) {
 }
 
 
+#define CASES_BOOL case GL_BLEND: \
+	case GL_CULL_FACE: \
+	case GL_DEPTH_TEST: \
+	case GL_DEPTH_WRITEMASK: \
+	case GL_DITHER: \
+	case GL_POLYGON_OFFSET_FILL: \
+	case GL_SAMPLE_COVERAGE_INVERT: \
+	case GL_SCISSOR_TEST: \
+	case GL_STENCIL_TEST: \
+	case 0x9240 /* UNPACK_FLIP_Y_WEBGL */: \
+	case 0x9241 /* UNPACK_PREMULTIPLY_ALPHA_WEBGL*/:
+
+#define CASES_FLOAT case GL_DEPTH_CLEAR_VALUE: \
+	case GL_LINE_WIDTH: \
+	case GL_POLYGON_OFFSET_FACTOR: \
+	case GL_POLYGON_OFFSET_UNITS: \
+	case GL_SAMPLE_COVERAGE_VALUE:
+
+#define CASES_STRING case GL_RENDERER: \
+	case GL_SHADING_LANGUAGE_VERSION: \
+	case GL_VENDOR: \
+	case GL_VERSION: \
+	case GL_EXTENSIONS: \
+
+#define CASES_INT2 case GL_MAX_VIEWPORT_DIMS:
+
+#define CASES_INT4 case GL_SCISSOR_BOX: \
+	case GL_VIEWPORT:
+
+#define CASES_FLOAT2 case GL_ALIASED_LINE_WIDTH_RANGE: \
+	case GL_ALIASED_POINT_SIZE_RANGE: \
+	case GL_DEPTH_RANGE:
+
+#define CASES_FLOAT4 case GL_BLEND_COLOR: \
+	case GL_COLOR_CLEAR_VALUE:
+
+#define CASES_BOOL4 case GL_COLOR_WRITEMASK:
+
+#define CASES_INT case GL_ARRAY_BUFFER_BINDING: \
+	case GL_CURRENT_PROGRAM: \
+	case GL_ELEMENT_ARRAY_BUFFER_BINDING: \
+	case GL_FRAMEBUFFER_BINDING: \
+	case GL_RENDERBUFFER_BINDING: \
+	case GL_TEXTURE_BINDING_2D: \
+	case GL_TEXTURE_BINDING_CUBE_MAP:
+
+
+
 NAN_METHOD(getParameter) {
 	
 	REQ_INT32_ARG(0, name);
@@ -1606,38 +1654,17 @@ NAN_METHOD(getParameter) {
 	
 	switch(name) {
 	
-	// returns a boolean
-	case GL_BLEND:
-	case GL_CULL_FACE:
-	case GL_DEPTH_TEST:
-	case GL_DEPTH_WRITEMASK:
-	case GL_DITHER:
-	case GL_POLYGON_OFFSET_FILL:
-	case GL_SAMPLE_COVERAGE_INVERT:
-	case GL_SCISSOR_TEST:
-	case GL_STENCIL_TEST:
-	case 0x9240 /* UNPACK_FLIP_Y_WEBGL */:
-	case 0x9241 /* UNPACK_PREMULTIPLY_ALPHA_WEBGL*/:
+	CASES_BOOL
 		glGetBooleanv(name, bParams);
 		RET_VALUE(JS_BOOL(bParams[0] != 0));
 		break;
 	
-	// returns a float
-	case GL_DEPTH_CLEAR_VALUE:
-	case GL_LINE_WIDTH:
-	case GL_POLYGON_OFFSET_FACTOR:
-	case GL_POLYGON_OFFSET_UNITS:
-	case GL_SAMPLE_COVERAGE_VALUE:
+	CASES_FLOAT
 		glGetFloatv(name, fParams);
 		RET_VALUE(JS_NUM(fParams[0]));
 		break;
 	
-	// returns a string
-	case GL_RENDERER:
-	case GL_SHADING_LANGUAGE_VERSION:
-	case GL_VENDOR:
-	case GL_VERSION:
-	case GL_EXTENSIONS:
+	CASES_STRING
 		cParams = reinterpret_cast<const char*>(glGetString(name));
 		if (cParams != NULL) {
 			RET_VALUE(JS_STR(cParams));
@@ -1647,8 +1674,7 @@ NAN_METHOD(getParameter) {
 		
 		break;
 	
-	// returns a int32[2]
-	case GL_MAX_VIEWPORT_DIMS:
+	CASES_INT2
 		glGetIntegerv(name, iParams);
 		arr = Nan::New<Array>(2);
 		arr->Set(0, JS_INT(iParams[0]));
@@ -1656,10 +1682,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	
-	// returns a int32[4]
-	case GL_SCISSOR_BOX:
-	case GL_VIEWPORT:
+	CASES_INT4
 		glGetIntegerv(name, iParams);
 		arr = Nan::New<Array>(4);
 		arr->Set(0, JS_INT(iParams[0]));
@@ -1669,10 +1692,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	// returns a float[2]
-	case GL_ALIASED_LINE_WIDTH_RANGE:
-	case GL_ALIASED_POINT_SIZE_RANGE:
-	case GL_DEPTH_RANGE:
+	CASES_FLOAT2
 		glGetFloatv(name, fParams);
 		arr = Nan::New<Array>(2);
 		arr->Set(0, JS_NUM(fParams[0]));
@@ -1680,9 +1700,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	// returns a float[4]
-	case GL_BLEND_COLOR:
-	case GL_COLOR_CLEAR_VALUE:
+	CASES_FLOAT4
 		glGetFloatv(name, fParams);
 		arr = Nan::New<Array>(4);
 		arr->Set(0, JS_NUM(fParams[0]));
@@ -1692,8 +1710,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	// returns a boolean[4]
-	case GL_COLOR_WRITEMASK:
+	CASES_BOOL4
 		glGetBooleanv(name, bParams);
 		arr = Nan::New<Array>(4);
 		arr->Set(0, JS_BOOL(bParams[0] != 0));
@@ -1703,14 +1720,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	// returns an int
-	case GL_ARRAY_BUFFER_BINDING:
-	case GL_CURRENT_PROGRAM:
-	case GL_ELEMENT_ARRAY_BUFFER_BINDING:
-	case GL_FRAMEBUFFER_BINDING:
-	case GL_RENDERBUFFER_BINDING:
-	case GL_TEXTURE_BINDING_2D:
-	case GL_TEXTURE_BINDING_CUBE_MAP:
+	CASES_INT
 		glGetIntegerv(name, iParams);
 		RET_VALUE(JS_INT(iParams[0]));
 		break;
