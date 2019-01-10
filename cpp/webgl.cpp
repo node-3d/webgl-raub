@@ -508,6 +508,13 @@ NAN_METHOD(frontFace) {
 }
 
 
+#define CASES_SHADER_PARAM_BOOL case GL_DELETE_STATUS: \
+	case GL_COMPILE_STATUS:
+
+#define CASES_SHADER_PARAM_NUMBER case GL_SHADER_TYPE: \
+	case GL_INFO_LOG_LENGTH: \
+	case GL_SHADER_SOURCE_LENGTH:
+
 NAN_METHOD(getShaderParameter) {
 	
 	REQ_INT32_ARG(0, shader);
@@ -517,19 +524,12 @@ NAN_METHOD(getShaderParameter) {
 	
 	switch (pname) {
 	
-	case GL_DELETE_STATUS:
-	case GL_COMPILE_STATUS:
+	CASES_SHADER_PARAM_BOOL
 		glGetShaderiv(shader, pname, &value);
 		RET_VALUE(JS_BOOL(static_cast<bool>(value != 0)));
 		break;
 	
-	case GL_SHADER_TYPE:
-		glGetShaderiv(shader, pname, &value);
-		RET_VALUE(JS_NUM(static_cast<double>(value)));
-		break;
-	
-	case GL_INFO_LOG_LENGTH:
-	case GL_SHADER_SOURCE_LENGTH:
+	CASES_SHADER_PARAM_NUMBER
 		glGetShaderiv(shader, pname, &value);
 		RET_VALUE(JS_NUM(static_cast<double>(value)));
 		break;
@@ -585,6 +585,15 @@ NAN_METHOD(linkProgram) {
 }
 
 
+#define CASES_PROGRAM_PARAM_BOOL case GL_DELETE_STATUS: \
+	case GL_LINK_STATUS: \
+	case GL_VALIDATE_STATUS:
+
+#define CASES_PROGRAM_PARAM_NUMBER case GL_ATTACHED_SHADERS: \
+	case GL_ACTIVE_ATTRIBUTES: \
+	case GL_ACTIVE_UNIFORMS: \
+	case GL_INFO_LOG_LENGTH:
+
 NAN_METHOD(getProgramParameter) {
 	
 	REQ_INT32_ARG(0, program);
@@ -593,18 +602,13 @@ NAN_METHOD(getProgramParameter) {
 	int value = 0;
 	
 	switch (name) {
-		
-	case GL_DELETE_STATUS:
-	case GL_LINK_STATUS:
-	case GL_VALIDATE_STATUS:
+	
+	CASES_PROGRAM_PARAM_BOOL
 		glGetProgramiv(program, name, &value);
 		RET_VALUE(JS_BOOL(static_cast<bool>(value != 0)));
 		break;
 	
-	case GL_ATTACHED_SHADERS:
-	case GL_ACTIVE_ATTRIBUTES:
-	case GL_ACTIVE_UNIFORMS:
-	case GL_INFO_LOG_LENGTH:
+	CASES_PROGRAM_PARAM_NUMBER
 		glGetProgramiv(program, name, &value);
 		RET_VALUE(JS_NUM(static_cast<double>(value)));
 		break;
@@ -1594,7 +1598,7 @@ NAN_METHOD(getAttachedShaders) {
 }
 
 
-#define CASES_BOOL case GL_BLEND: \
+#define CASES_PARAM_BOOL case GL_BLEND: \
 	case GL_CULL_FACE: \
 	case GL_DEPTH_TEST: \
 	case GL_DEPTH_WRITEMASK: \
@@ -1606,33 +1610,33 @@ NAN_METHOD(getAttachedShaders) {
 	case 0x9240 /* UNPACK_FLIP_Y_WEBGL */: \
 	case 0x9241 /* UNPACK_PREMULTIPLY_ALPHA_WEBGL*/:
 
-#define CASES_FLOAT case GL_DEPTH_CLEAR_VALUE: \
+#define CASES_PARAM_FLOAT case GL_DEPTH_CLEAR_VALUE: \
 	case GL_LINE_WIDTH: \
 	case GL_POLYGON_OFFSET_FACTOR: \
 	case GL_POLYGON_OFFSET_UNITS: \
 	case GL_SAMPLE_COVERAGE_VALUE:
 
-#define CASES_STRING case GL_RENDERER: \
+#define CASES_PARAM_STRING case GL_RENDERER: \
 	case GL_SHADING_LANGUAGE_VERSION: \
 	case GL_VENDOR: \
 	case GL_VERSION: \
 	case GL_EXTENSIONS: \
 
-#define CASES_INT2 case GL_MAX_VIEWPORT_DIMS:
+#define CASES_PARAM_INT2 case GL_MAX_VIEWPORT_DIMS:
 
-#define CASES_INT4 case GL_SCISSOR_BOX: \
+#define CASES_PARAM_INT4 case GL_SCISSOR_BOX: \
 	case GL_VIEWPORT:
 
-#define CASES_FLOAT2 case GL_ALIASED_LINE_WIDTH_RANGE: \
+#define CASES_PARAM_FLOAT2 case GL_ALIASED_LINE_WIDTH_RANGE: \
 	case GL_ALIASED_POINT_SIZE_RANGE: \
 	case GL_DEPTH_RANGE:
 
-#define CASES_FLOAT4 case GL_BLEND_COLOR: \
+#define CASES_PARAM_FLOAT4 case GL_BLEND_COLOR: \
 	case GL_COLOR_CLEAR_VALUE:
 
-#define CASES_BOOL4 case GL_COLOR_WRITEMASK:
+#define CASES_PARAM_BOOL4 case GL_COLOR_WRITEMASK:
 
-#define CASES_INT case GL_ARRAY_BUFFER_BINDING: \
+#define CASES_PARAM_INT case GL_ARRAY_BUFFER_BINDING: \
 	case GL_CURRENT_PROGRAM: \
 	case GL_ELEMENT_ARRAY_BUFFER_BINDING: \
 	case GL_FRAMEBUFFER_BINDING: \
@@ -1654,17 +1658,17 @@ NAN_METHOD(getParameter) {
 	
 	switch(name) {
 	
-	CASES_BOOL
+	CASES_PARAM_BOOL
 		glGetBooleanv(name, bParams);
 		RET_VALUE(JS_BOOL(bParams[0] != 0));
 		break;
 	
-	CASES_FLOAT
+	CASES_PARAM_FLOAT
 		glGetFloatv(name, fParams);
 		RET_VALUE(JS_NUM(fParams[0]));
 		break;
 	
-	CASES_STRING
+	CASES_PARAM_STRING
 		cParams = reinterpret_cast<const char*>(glGetString(name));
 		if (cParams != NULL) {
 			RET_VALUE(JS_STR(cParams));
@@ -1674,7 +1678,7 @@ NAN_METHOD(getParameter) {
 		
 		break;
 	
-	CASES_INT2
+	CASES_PARAM_INT2
 		glGetIntegerv(name, iParams);
 		arr = Nan::New<Array>(2);
 		arr->Set(0, JS_INT(iParams[0]));
@@ -1682,7 +1686,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	CASES_INT4
+	CASES_PARAM_INT4
 		glGetIntegerv(name, iParams);
 		arr = Nan::New<Array>(4);
 		arr->Set(0, JS_INT(iParams[0]));
@@ -1692,7 +1696,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	CASES_FLOAT2
+	CASES_PARAM_FLOAT2
 		glGetFloatv(name, fParams);
 		arr = Nan::New<Array>(2);
 		arr->Set(0, JS_NUM(fParams[0]));
@@ -1700,7 +1704,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	CASES_FLOAT4
+	CASES_PARAM_FLOAT4
 		glGetFloatv(name, fParams);
 		arr = Nan::New<Array>(4);
 		arr->Set(0, JS_NUM(fParams[0]));
@@ -1710,7 +1714,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	CASES_BOOL4
+	CASES_PARAM_BOOL4
 		glGetBooleanv(name, bParams);
 		arr = Nan::New<Array>(4);
 		arr->Set(0, JS_BOOL(bParams[0] != 0));
@@ -1720,7 +1724,7 @@ NAN_METHOD(getParameter) {
 		RET_VALUE(arr);
 		break;
 	
-	CASES_INT
+	CASES_PARAM_INT
 		glGetIntegerv(name, iParams);
 		RET_VALUE(JS_INT(iParams[0]));
 		break;
@@ -1811,6 +1815,17 @@ NAN_METHOD(getUniform) {
 }
 
 
+#define CASES_VERTEX_ATTR_BOOL case GL_VERTEX_ATTRIB_ARRAY_ENABLED: \
+	case GL_VERTEX_ATTRIB_ARRAY_NORMALIZED:
+
+#define CASES_VERTEX_ATTR_INT case GL_VERTEX_ATTRIB_ARRAY_SIZE: \
+	case GL_VERTEX_ATTRIB_ARRAY_STRIDE: \
+	case GL_VERTEX_ATTRIB_ARRAY_TYPE: \
+	case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
+
+#define CASES_VERTEX_ATTR_FLOAT4 case GL_CURRENT_VERTEX_ATTRIB:
+
+
 NAN_METHOD(getVertexAttrib) {
 	
 	REQ_INT32_ARG(0, index);
@@ -1821,26 +1836,18 @@ NAN_METHOD(getVertexAttrib) {
 	Local<Array> arr;
 	
 	switch (pname) {
-		
-	case GL_VERTEX_ATTRIB_ARRAY_ENABLED:
-	case GL_VERTEX_ATTRIB_ARRAY_NORMALIZED:
+	
+	CASES_VERTEX_ATTR_BOOL
 		glGetVertexAttribiv(index, pname, &value);
 		RET_VALUE(JS_BOOL(value != 0));
 		break;
 	
-	case GL_VERTEX_ATTRIB_ARRAY_SIZE:
-	case GL_VERTEX_ATTRIB_ARRAY_STRIDE:
-	case GL_VERTEX_ATTRIB_ARRAY_TYPE:
+	CASES_VERTEX_ATTR_INT
 		glGetVertexAttribiv(index, pname, &value);
 		RET_VALUE(JS_INT(value));
 		break;
 	
-	case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
-		glGetVertexAttribiv(index, pname, &value);
-		RET_VALUE(JS_INT(value));
-		break;
-	
-	case GL_CURRENT_VERTEX_ATTRIB:
+	CASES_VERTEX_ATTR_FLOAT4
 		glGetVertexAttribfv(index, pname, vextex_attribs);
 		arr = Nan::New<Array>(4);
 		arr->Set(0, JS_NUM(vextex_attribs[0]));
@@ -1940,6 +1947,13 @@ void unregisterGLObj(GLuint obj) {
 	
 }
 
+#define CASES_OBJECT_TYPE_PROGRAM case GLOBJECT_TYPE_PROGRAM:
+#define CASES_OBJECT_TYPE_BUFFER case GLOBJECT_TYPE_BUFFER:
+#define CASES_OBJECT_TYPE_FRAMEBUFFER case GLOBJECT_TYPE_FRAMEBUFFER:
+#define CASES_OBJECT_TYPE_RENDERBUFFER case GLOBJECT_TYPE_RENDERBUFFER:
+#define CASES_OBJECT_TYPE_SHADER case GLOBJECT_TYPE_SHADER:
+#define CASES_OBJECT_TYPE_TEXTURE case GLOBJECT_TYPE_TEXTURE:
+
 void deinit() {
 	
 	atExit = true;
@@ -1953,34 +1967,34 @@ void deinit() {
 		GLuint obj = globj->obj;
 		
 		switch(globj->type) {
-			
-		case GLOBJECT_TYPE_PROGRAM:
+		
+		CASES_OBJECT_TYPE_PROGRAM
 			glDeleteProgram(obj);
 			break;
-			
-		case GLOBJECT_TYPE_BUFFER:
+		
+		CASES_OBJECT_TYPE_BUFFER
 			glDeleteBuffers(1, &obj);
 			break;
-			
-		case GLOBJECT_TYPE_FRAMEBUFFER:
+		
+		CASES_OBJECT_TYPE_FRAMEBUFFER
 			glDeleteFramebuffers(1, &obj);
 			break;
-			
-		case GLOBJECT_TYPE_RENDERBUFFER:
+		
+		CASES_OBJECT_TYPE_RENDERBUFFER
 			glDeleteRenderbuffers(1, &obj);
 			break;
-			
-		case GLOBJECT_TYPE_SHADER:
+		
+		CASES_OBJECT_TYPE_SHADER
 			glDeleteShader(obj);
 			break;
-			
-		case GLOBJECT_TYPE_TEXTURE:
+		
+		CASES_OBJECT_TYPE_TEXTURE
 			glDeleteTextures(1, &obj);
 			break;
-			
+		
 		default:
 			break;
-			
+		
 		}
 		
 		delete globj;
