@@ -132,16 +132,6 @@ NAN_METHOD(attachShader) {
 }
 
 
-NAN_METHOD(detachShader) {
-	
-	REQ_UINT32_ARG(0, program);
-	REQ_UINT32_ARG(1, shader);
-	
-	glDetachShader(program, shader);
-	
-}
-
-
 NAN_METHOD(getShaderSource) {
 	
 	REQ_INT32_ARG(0, shader);
