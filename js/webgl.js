@@ -9,7 +9,7 @@ gl.WebGLRenderingContext = function WebGLRenderingContext(_) { this._ = _; };
 gl.WebGLProgram = function WebGLProgram(_) { this._ = _; };
 gl.WebGLShader = function WebGLShader(_) { this._ = _; };
 gl.WebGLBuffer = function WebGLBuffer(_) { this._ = _; };
-gl.WebGLVertexArrayObject = function WebGLVertexArrayObject(_) { this._ = _; };
+gl.WebGLVertexArray = function WebGLVertexArray(_) { this._ = _; };
 gl.WebGLFramebuffer = function WebGLFramebuffer(_) { this._ = _; };
 gl.WebGLRenderbuffer = function WebGLRenderbuffer(_) { this._ = _; };
 gl.WebGLTexture = function WebGLTexture(_) { this._ = _; };

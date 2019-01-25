@@ -182,12 +182,17 @@ function handleKeys() {
 }
 
 
+let vao;
+
 let cubeVertexPositionBuffer;
 let cubeVertexNormalBuffer;
 let cubeVerticesColorBuffer;
 let cubeVertexIndexBuffer;
 
 function initBuffers() {
+	
+	vao = gl.createVertexArray();
+	gl.bindVertexArray(vao);
 	
 	const vertices = [
 		// Front face
@@ -241,6 +246,12 @@ function initBuffers() {
 		0,
 		0
 	);
+	console.log('cube.js1', shaderProgram.vertexPositionAttribute,
+		cubeVertexPositionBuffer.itemSize,
+		gl.FLOAT,
+		false,
+		0,
+		0);
 	
 	const vertexNormals = [
 		// Front face
@@ -312,6 +323,7 @@ function initBuffers() {
 		new Float32Array(generatedColors),
 		gl.STATIC_DRAW
 	);
+	console.log('cube.js', '2', shaderProgram.vertexColorAttribute, 4, gl.FLOAT, false, 0, 0);
 	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 4, gl.FLOAT, false, 0, 0);
 	
 	const cubeVertexIndices = [
@@ -334,10 +346,14 @@ function initBuffers() {
 		console.error("initBuffers():", error);
 	}
 	
+	gl.bindVertexArray(null);
+	
 }
 
 
 function drawScene() {
+	// console.log('cube.js', 'VAO', vao);
+	gl.bindVertexArray(null);
 	
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -348,30 +364,42 @@ function drawScene() {
 	mat4.rotate(mvMatrix, degToRad(xRot), [1, 0, 0]);
 	mat4.rotate(mvMatrix, degToRad(yRot), [0, 1, 0]);
 	
-	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
+	// gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
+	// gl.vertexAttribPointer(
+	// 	shaderProgram.vertexPositionAttribute,
+	// 	cubeVertexPositionBuffer.itemSize,
+	// 	gl.FLOAT,
+	// 	false,
+	// 	0,
+	// 	0
+	// );
 	
-	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-	gl.enable(gl.BLEND);
-	gl.disable(gl.DEPTH_TEST);
+	// gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+	// gl.enable(gl.BLEND);
+	// gl.disable(gl.DEPTH_TEST);
 	
 	// gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesColorBuffer);
+	// gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 4, gl.FLOAT, false, 0, 0);
 	
-	gl.enable(gl.CULL_FACE);
+	// gl.enable(gl.CULL_FACE);
 	
-	gl.cullFace(gl.FRONT);
+	// gl.cullFace(gl.FRONT);
 	
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+	// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 	
 	setMatrixUniforms();
 	
-	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	// gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 	
-	gl.cullFace(gl.BACK);
-	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	// gl.cullFace(gl.BACK);
+	gl.drawArrays(gl.TRIANGLES, 0, cubeVertexPositionBuffer.numItems);
+	// gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 	
 	// cleanup GL state
-	gl.bindBuffer(gl.ARRAY_BUFFER, null);
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+	// gl.bindBuffer(gl.ARRAY_BUFFER, null);
+	// gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+	
+	gl.bindVertexArray(null);
 	
 }
 
