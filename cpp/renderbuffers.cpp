@@ -10,11 +10,6 @@ using namespace v8;
 using namespace std;
 
 
-#ifdef _WIN32
-	#define	strcasestr(s, t) strstr(strupr(s), strupr(t))
-#endif
-
-
 namespace webgl {
 
 
@@ -56,18 +51,6 @@ NAN_METHOD(bindRenderbuffer) {
 }
 
 
-NAN_METHOD(renderbufferStorage) {
-	
-	REQ_INT32_ARG(0, target);
-	REQ_INT32_ARG(1, internalformat);
-	REQ_UINT32_ARG(2, width);
-	REQ_UINT32_ARG(3, height);
-	
-	glRenderbufferStorage(target, internalformat, width, height);
-	
-}
-
-
 NAN_METHOD(getRenderbufferParameter) {
 	
 	REQ_INT32_ARG(0, target);
@@ -77,6 +60,18 @@ NAN_METHOD(getRenderbufferParameter) {
 	glGetRenderbufferParameteriv(target, name, &value);
 	
 	RET_VALUE(JS_INT(value));
+	
+}
+
+
+NAN_METHOD(renderbufferStorage) {
+	
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, internalformat);
+	REQ_UINT32_ARG(2, width);
+	REQ_UINT32_ARG(3, height);
+	
+	glRenderbufferStorage(target, internalformat, width, height);
 	
 }
 

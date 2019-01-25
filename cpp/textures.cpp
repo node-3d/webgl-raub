@@ -41,80 +41,12 @@ NAN_METHOD(isTexture) {
 }
 
 
-NAN_METHOD(generateMipmap) {
-	
-	REQ_INT32_ARG(0, target);
-	
-	glGenerateMipmap(target);
-	
-}
-
-
 NAN_METHOD(bindTexture) {
 	
 	REQ_INT32_ARG(0, target);
 	LET_INT32_ARG(1, texture);
 	
 	glBindTexture(target, texture);
-	
-}
-
-
-NAN_METHOD(texImage2D) {
-	
-	REQ_INT32_ARG(0, target);
-	REQ_INT32_ARG(1, level);
-	REQ_INT32_ARG(2, internalformat);
-	REQ_INT32_ARG(3, width);
-	REQ_INT32_ARG(4, height);
-	REQ_INT32_ARG(5, border);
-	REQ_INT32_ARG(6, format);
-	REQ_INT32_ARG(7, type);
-	
-	if (info.Length() <= 8 || info[8]->IsNullOrUndefined()) {
-		glTexImage2D(target, level, internalformat, width, height, border, format, type, nullptr);
-		return;
-	}
-	
-	REQ_OBJ_ARG(8, image);
-	
-	void *pixels = getData(image);
-	glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
-	
-}
-
-
-NAN_METHOD(texParameteri) {
-	
-	REQ_INT32_ARG(0, target);
-	REQ_INT32_ARG(1, name);
-	REQ_INT32_ARG(2, param);
-	
-	glTexParameteri(target, name, param);
-	
-}
-
-
-NAN_METHOD(texParameterf) {
-	
-	REQ_INT32_ARG(0, target);
-	REQ_INT32_ARG(1, name);
-	REQ_FLOAT_ARG(2, param);
-	
-	glTexParameterf(target, name, param);
-	
-}
-
-
-NAN_METHOD(framebufferTexture2D) {
-	
-	REQ_INT32_ARG(0, target);
-	REQ_INT32_ARG(1, attachment);
-	REQ_INT32_ARG(2, textarget);
-	REQ_INT32_ARG(3, texture);
-	REQ_INT32_ARG(4, level);
-	
-	glFramebufferTexture2D(target, attachment, textarget, texture, level);
 	
 }
 
@@ -160,6 +92,74 @@ NAN_METHOD(copyTexSubImage2D) {
 }
 
 
+NAN_METHOD(generateMipmap) {
+	
+	REQ_INT32_ARG(0, target);
+	
+	glGenerateMipmap(target);
+	
+}
+
+
+NAN_METHOD(getTexParameter) {
+	
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, name);
+	
+	GLint param_value = 0;
+	glGetTexParameteriv(target, name, &param_value);
+	
+	RET_VALUE(Nan::New<Number>(param_value));
+	
+}
+
+
+NAN_METHOD(texImage2D) {
+	
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, level);
+	REQ_INT32_ARG(2, internalformat);
+	REQ_INT32_ARG(3, width);
+	REQ_INT32_ARG(4, height);
+	REQ_INT32_ARG(5, border);
+	REQ_INT32_ARG(6, format);
+	REQ_INT32_ARG(7, type);
+	
+	if (info.Length() <= 8 || info[8]->IsNullOrUndefined()) {
+		glTexImage2D(target, level, internalformat, width, height, border, format, type, nullptr);
+		return;
+	}
+	
+	REQ_OBJ_ARG(8, image);
+	
+	void *pixels = getData(image);
+	glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+	
+}
+
+
+NAN_METHOD(texParameterf) {
+	
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, name);
+	REQ_FLOAT_ARG(2, param);
+	
+	glTexParameterf(target, name, param);
+	
+}
+
+
+NAN_METHOD(texParameteri) {
+	
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, name);
+	REQ_INT32_ARG(2, param);
+	
+	glTexParameteri(target, name, param);
+	
+}
+
+
 NAN_METHOD(texSubImage2D) {
 	
 	REQ_INT32_ARG(0, target);
@@ -180,19 +180,6 @@ NAN_METHOD(texSubImage2D) {
 	
 	void *pixels = getData(image);
 	glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
-	
-}
-
-
-NAN_METHOD(getTexParameter) {
-	
-	REQ_INT32_ARG(0, target);
-	REQ_INT32_ARG(1, name);
-	
-	GLint param_value = 0;
-	glGetTexParameteriv(target, name, &param_value);
-	
-	RET_VALUE(Nan::New<Number>(param_value));
 	
 }
 

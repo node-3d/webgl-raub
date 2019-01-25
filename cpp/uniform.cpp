@@ -10,12 +10,61 @@ using namespace v8;
 using namespace std;
 
 
-#ifdef _WIN32
-	#define	strcasestr(s, t) strstr(strupr(s), strupr(t))
-#endif
-
-
 namespace webgl {
+
+
+NAN_METHOD(getActiveUniform) {
+	
+	REQ_INT32_ARG(0, program);
+	REQ_INT32_ARG(1, index);
+	
+	char name[1024];
+	GLsizei length = 0;
+	GLenum type;
+	GLsizei size;
+	glGetActiveUniform(program, index, 1024, &length, &size, &type, name);
+	
+	Local<Array> activeInfo = Nan::New<Array>(3);
+	activeInfo->Set(JS_STR("size"), JS_INT(size));
+	activeInfo->Set(JS_STR("type"), JS_INT(static_cast<int>(type)));
+	activeInfo->Set(JS_STR("name"), JS_STR(name));
+	
+	RET_VALUE(activeInfo);
+	
+}
+
+
+NAN_METHOD(getUniform) {
+	
+	REQ_INT32_ARG(0, program);
+	REQ_INT32_ARG(1, location);
+	
+	if (location < 0) {
+		RET_UNDEFINED;
+	}
+	
+	float data[16]; // worst case scenario is 16 floats
+	glGetUniformfv(program, location, data);
+	
+	Local<Array> arr = Nan::New<Array>(16);
+	for (int i = 0; i < 16; i++) {
+		arr->Set(i, JS_NUM(data[i]));
+	}
+	
+	RET_VALUE(arr);
+	
+}
+
+
+NAN_METHOD(getUniformLocation) {
+	
+	REQ_INT32_ARG(0, program);
+	REQ_UTF8_ARG(1, name);
+	
+	RET_VALUE(JS_INT(glGetUniformLocation(program, *name)));
+	
+}
+
 
 NAN_METHOD(uniform1f) {
 	
@@ -272,59 +321,6 @@ NAN_METHOD(uniformMatrix4fv) {
 		glUniformMatrix4fv(location, count / 16, transpose, data);
 		RET_UNDEFINED;
 	}
-	
-}
-
-
-NAN_METHOD(getUniformLocation) {
-	
-	REQ_INT32_ARG(0, program);
-	REQ_UTF8_ARG(1, name);
-	
-	RET_VALUE(JS_INT(glGetUniformLocation(program, *name)));
-	
-}
-
-
-NAN_METHOD(getActiveUniform) {
-	
-	REQ_INT32_ARG(0, program);
-	REQ_INT32_ARG(1, index);
-	
-	char name[1024];
-	GLsizei length = 0;
-	GLenum type;
-	GLsizei size;
-	glGetActiveUniform(program, index, 1024, &length, &size, &type, name);
-	
-	Local<Array> activeInfo = Nan::New<Array>(3);
-	activeInfo->Set(JS_STR("size"), JS_INT(size));
-	activeInfo->Set(JS_STR("type"), JS_INT(static_cast<int>(type)));
-	activeInfo->Set(JS_STR("name"), JS_STR(name));
-	
-	RET_VALUE(activeInfo);
-	
-}
-
-
-NAN_METHOD(getUniform) {
-	
-	REQ_INT32_ARG(0, program);
-	REQ_INT32_ARG(1, location);
-	
-	if (location < 0) {
-		RET_UNDEFINED;
-	}
-	
-	float data[16]; // worst case scenario is 16 floats
-	glGetUniformfv(program, location, data);
-	
-	Local<Array> arr = Nan::New<Array>(16);
-	for (int i = 0; i < 16; i++) {
-		arr->Set(i, JS_NUM(data[i]));
-	}
-	
-	RET_VALUE(arr);
 	
 }
 

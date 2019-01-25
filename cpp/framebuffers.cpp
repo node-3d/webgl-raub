@@ -10,11 +10,6 @@ using namespace v8;
 using namespace std;
 
 
-#ifdef _WIN32
-	#define	strcasestr(s, t) strstr(strupr(s), strupr(t))
-#endif
-
-
 namespace webgl {
 
 
@@ -46,6 +41,25 @@ NAN_METHOD(isFramebuffer) {
 }
 
 
+NAN_METHOD(bindFramebuffer) {
+	
+	REQ_INT32_ARG(0, target);
+	LET_INT32_ARG(1, buffer);
+	
+	glBindFramebuffer(target, buffer);
+	
+}
+
+
+NAN_METHOD(bindFrameBuffer) {
+	
+	REQ_UINT32_ARG(0, fbo);
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	
+}
+
+
 NAN_METHOD(blitFrameBuffer) {
 	
 	REQ_UINT32_ARG(0, fbo1);
@@ -65,21 +79,11 @@ NAN_METHOD(blitFrameBuffer) {
 }
 
 
-NAN_METHOD(bindFrameBuffer) {
-	
-	REQ_UINT32_ARG(0, fbo);
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	
-}
-
-
-NAN_METHOD(bindFramebuffer) {
+NAN_METHOD(checkFramebufferStatus) {
 	
 	REQ_INT32_ARG(0, target);
-	LET_INT32_ARG(1, buffer);
 	
-	glBindFramebuffer(target, buffer);
+	RET_VALUE(JS_INT(static_cast<int>(glCheckFramebufferStatus(target))));
 	
 }
 
@@ -95,6 +99,20 @@ NAN_METHOD(framebufferRenderbuffer) {
 	
 }
 
+
+NAN_METHOD(framebufferTexture2D) {
+	
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, attachment);
+	REQ_INT32_ARG(2, textarget);
+	REQ_INT32_ARG(3, texture);
+	REQ_INT32_ARG(4, level);
+	
+	glFramebufferTexture2D(target, attachment, textarget, texture, level);
+	
+}
+
+
 NAN_METHOD(getFramebufferAttachmentParameter) {
 	
 	REQ_INT32_ARG(0, target);
@@ -105,15 +123,6 @@ NAN_METHOD(getFramebufferAttachmentParameter) {
 	glGetFramebufferAttachmentParameteriv(target, attachment, name, &params);
 	
 	RET_VALUE(JS_INT(params));
-	
-}
-
-
-NAN_METHOD(checkFramebufferStatus) {
-	
-	REQ_INT32_ARG(0, target);
-	
-	RET_VALUE(JS_INT(static_cast<int>(glCheckFramebufferStatus(target))));
 	
 }
 

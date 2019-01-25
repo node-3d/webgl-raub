@@ -6,9 +6,10 @@
 using namespace v8;
 
 
-PropertyAttribute constant_attributes = static_cast<PropertyAttribute>(ReadOnly | DontDelete);
+PropertyAttribute constant_attributes =
+	static_cast<PropertyAttribute>(ReadOnly | DontDelete);
 
-// Used to be a macro, hence the uppercase name.
+
 #define JS_GL_SET_CONSTANT(name, constant)                                    \
 	Nan::DefineOwnProperty(                                                   \
 		target,                                                               \
@@ -28,149 +29,192 @@ void initialize(V8_VAR_OBJ target) {
 	
 	JS_GL_SET_METHOD(init);
 	
-	JS_GL_SET_METHOD(uniform1f);
-	JS_GL_SET_METHOD(uniform2f);
-	JS_GL_SET_METHOD(uniform3f);
-	JS_GL_SET_METHOD(uniform4f);
-	JS_GL_SET_METHOD(uniform1i);
-	JS_GL_SET_METHOD(uniform2i);
-	JS_GL_SET_METHOD(uniform3i);
-	JS_GL_SET_METHOD(uniform4i);
-	JS_GL_SET_METHOD(uniform1fv);
-	JS_GL_SET_METHOD(uniform2fv);
-	JS_GL_SET_METHOD(uniform3fv);
-	JS_GL_SET_METHOD(uniform4fv);
-	JS_GL_SET_METHOD(uniform1iv);
-	JS_GL_SET_METHOD(uniform2iv);
-	JS_GL_SET_METHOD(uniform3iv);
-	JS_GL_SET_METHOD(uniform4iv);
-	JS_GL_SET_METHOD(pixelStorei);
+	
+	// Attrib
+	
 	JS_GL_SET_METHOD(bindAttribLocation);
-	JS_GL_SET_METHOD(bindFrameBuffer);
-	JS_GL_SET_METHOD(blitFrameBuffer);
-	JS_GL_SET_METHOD(getRenderTarget);
-	JS_GL_SET_METHOD(getError);
-	JS_GL_SET_METHOD(drawArrays);
-	JS_GL_SET_METHOD(uniformMatrix2fv);
-	JS_GL_SET_METHOD(uniformMatrix3fv);
-	JS_GL_SET_METHOD(uniformMatrix4fv);
-	
-	JS_GL_SET_METHOD(generateMipmap);
-	
+	JS_GL_SET_METHOD(disableVertexAttribArray);
+	JS_GL_SET_METHOD(enableVertexAttribArray);
+	JS_GL_SET_METHOD(getActiveAttrib);
 	JS_GL_SET_METHOD(getAttribLocation);
-	JS_GL_SET_METHOD(depthFunc);
-	JS_GL_SET_METHOD(viewport);
-	JS_GL_SET_METHOD(createShader);
-	JS_GL_SET_METHOD(shaderSource);
-	JS_GL_SET_METHOD(compileShader);
-	JS_GL_SET_METHOD(getShaderParameter);
-	JS_GL_SET_METHOD(getShaderInfoLog);
-	JS_GL_SET_METHOD(createProgram);
-	JS_GL_SET_METHOD(attachShader);
-	JS_GL_SET_METHOD(linkProgram);
-	JS_GL_SET_METHOD(getProgramParameter);
-	JS_GL_SET_METHOD(getUniformLocation);
-	JS_GL_SET_METHOD(clearColor);
-	JS_GL_SET_METHOD(clearDepth);
+	JS_GL_SET_METHOD(getVertexAttrib);
+	JS_GL_SET_METHOD(getVertexAttribOffset);
+	JS_GL_SET_METHOD(vertexAttrib1f);
+	JS_GL_SET_METHOD(vertexAttrib1fv);
+	JS_GL_SET_METHOD(vertexAttrib2f);
+	JS_GL_SET_METHOD(vertexAttrib2fv);
+	JS_GL_SET_METHOD(vertexAttrib3f);
+	JS_GL_SET_METHOD(vertexAttrib3fv);
+	JS_GL_SET_METHOD(vertexAttrib4f);
+	JS_GL_SET_METHOD(vertexAttrib4fv);
+	JS_GL_SET_METHOD(vertexAttribPointer);
 	
-	JS_GL_SET_METHOD(disable);
-	JS_GL_SET_METHOD(createTexture);
-	JS_GL_SET_METHOD(bindTexture);
-	JS_GL_SET_METHOD(texImage2D);
-	JS_GL_SET_METHOD(texParameteri);
-	JS_GL_SET_METHOD(texParameterf);
-	JS_GL_SET_METHOD(clear);
-	JS_GL_SET_METHOD(useProgram);
-	JS_GL_SET_METHOD(createFramebuffer);
-	JS_GL_SET_METHOD(bindFramebuffer);
-	JS_GL_SET_METHOD(framebufferTexture2D);
+	
+	// Blend
+	
+	JS_GL_SET_METHOD(blendColor);
+	JS_GL_SET_METHOD(blendEquation);
+	JS_GL_SET_METHOD(blendEquationSeparate);
+	JS_GL_SET_METHOD(blendFunc);
+	JS_GL_SET_METHOD(blendFuncSeparate);
+	
+	
+	// VBO
+	
 	JS_GL_SET_METHOD(createBuffer);
+	JS_GL_SET_METHOD(deleteBuffer);
+	JS_GL_SET_METHOD(isBuffer);
 	JS_GL_SET_METHOD(bindBuffer);
 	JS_GL_SET_METHOD(bufferData);
 	JS_GL_SET_METHOD(bufferSubData);
-	JS_GL_SET_METHOD(enable);
-	JS_GL_SET_METHOD(blendEquation);
-	JS_GL_SET_METHOD(blendFunc);
-	JS_GL_SET_METHOD(enableVertexAttribArray);
-	JS_GL_SET_METHOD(vertexAttribPointer);
-	JS_GL_SET_METHOD(activeTexture);
-	JS_GL_SET_METHOD(drawElements);
-	JS_GL_SET_METHOD(flush);
-	JS_GL_SET_METHOD(finish);
+	JS_GL_SET_METHOD(getBufferParameter);
 	
-	JS_GL_SET_METHOD(vertexAttrib1f);
-	JS_GL_SET_METHOD(vertexAttrib2f);
-	JS_GL_SET_METHOD(vertexAttrib3f);
-	JS_GL_SET_METHOD(vertexAttrib4f);
-	JS_GL_SET_METHOD(vertexAttrib1fv);
-	JS_GL_SET_METHOD(vertexAttrib2fv);
-	JS_GL_SET_METHOD(vertexAttrib3fv);
-	JS_GL_SET_METHOD(vertexAttrib4fv);
 	
-	JS_GL_SET_METHOD(blendColor);
-	JS_GL_SET_METHOD(blendEquationSeparate);
-	JS_GL_SET_METHOD(blendFuncSeparate);
+	// Framebuffer
+	
+	JS_GL_SET_METHOD(createFramebuffer);
+	JS_GL_SET_METHOD(deleteFramebuffer);
+	JS_GL_SET_METHOD(isFramebuffer);
+	JS_GL_SET_METHOD(bindFramebuffer);
+	JS_GL_SET_METHOD(bindFrameBuffer);
+	JS_GL_SET_METHOD(blitFrameBuffer);
+	JS_GL_SET_METHOD(checkFramebufferStatus);
+	JS_GL_SET_METHOD(framebufferRenderbuffer);
+	JS_GL_SET_METHOD(framebufferTexture2D);
+	JS_GL_SET_METHOD(getFramebufferAttachmentParameter);
+	
+	
+	// Program
+	
+	JS_GL_SET_METHOD(createProgram);
+	JS_GL_SET_METHOD(deleteProgram);
+	JS_GL_SET_METHOD(isProgram);
+	JS_GL_SET_METHOD(getProgramInfoLog);
+	JS_GL_SET_METHOD(getProgramParameter);
+	JS_GL_SET_METHOD(linkProgram);
+	JS_GL_SET_METHOD(useProgram);
+	JS_GL_SET_METHOD(validateProgram);
+	
+	
+	// Renderbuffer
+	
+	JS_GL_SET_METHOD(createRenderbuffer);
+	JS_GL_SET_METHOD(deleteRenderbuffer);
+	JS_GL_SET_METHOD(isRenderbuffer);
+	JS_GL_SET_METHOD(bindRenderbuffer);
+	JS_GL_SET_METHOD(getRenderbufferParameter);
+	JS_GL_SET_METHOD(renderbufferStorage);
+	
+	
+	// Shader
+	
+	
+	JS_GL_SET_METHOD(deleteShader);
+	JS_GL_SET_METHOD(createShader);
+	JS_GL_SET_METHOD(isShader);
+	JS_GL_SET_METHOD(attachShader);
+	JS_GL_SET_METHOD(compileShader);
+	JS_GL_SET_METHOD(detachShader);
+	JS_GL_SET_METHOD(getAttachedShaders);
+	JS_GL_SET_METHOD(getShaderInfoLog);
+	JS_GL_SET_METHOD(getShaderParameter);
+	JS_GL_SET_METHOD(getShaderSource);
+	JS_GL_SET_METHOD(shaderSource);
+	
+	
+	// Stencil
+	
 	JS_GL_SET_METHOD(clearStencil);
-	JS_GL_SET_METHOD(colorMask);
-	JS_GL_SET_METHOD(copyTexImage2D);
-	JS_GL_SET_METHOD(copyTexSubImage2D);
-	JS_GL_SET_METHOD(cullFace);
-	JS_GL_SET_METHOD(depthMask);
-	JS_GL_SET_METHOD(depthRange);
-	JS_GL_SET_METHOD(disableVertexAttribArray);
-	JS_GL_SET_METHOD(hint);
-	JS_GL_SET_METHOD(isEnabled);
-	JS_GL_SET_METHOD(lineWidth);
-	JS_GL_SET_METHOD(polygonOffset);
-	
-	JS_GL_SET_METHOD(scissor);
 	JS_GL_SET_METHOD(stencilFunc);
 	JS_GL_SET_METHOD(stencilFuncSeparate);
 	JS_GL_SET_METHOD(stencilMask);
 	JS_GL_SET_METHOD(stencilMaskSeparate);
 	JS_GL_SET_METHOD(stencilOp);
 	JS_GL_SET_METHOD(stencilOpSeparate);
-	JS_GL_SET_METHOD(bindRenderbuffer);
-	JS_GL_SET_METHOD(createRenderbuffer);
 	
-	JS_GL_SET_METHOD(deleteBuffer);
-	JS_GL_SET_METHOD(deleteFramebuffer);
-	JS_GL_SET_METHOD(deleteProgram);
-	JS_GL_SET_METHOD(deleteRenderbuffer);
-	JS_GL_SET_METHOD(deleteShader);
+	
+	// Texture
+	
+	JS_GL_SET_METHOD(createTexture);
 	JS_GL_SET_METHOD(deleteTexture);
-	JS_GL_SET_METHOD(detachShader);
-	JS_GL_SET_METHOD(framebufferRenderbuffer);
-	JS_GL_SET_METHOD(getVertexAttribOffset);
-	
-	JS_GL_SET_METHOD(isBuffer);
-	JS_GL_SET_METHOD(isFramebuffer);
-	JS_GL_SET_METHOD(isProgram);
-	JS_GL_SET_METHOD(isRenderbuffer);
-	JS_GL_SET_METHOD(isShader);
 	JS_GL_SET_METHOD(isTexture);
-	
-	JS_GL_SET_METHOD(renderbufferStorage);
-	JS_GL_SET_METHOD(getShaderSource);
-	JS_GL_SET_METHOD(validateProgram);
-	
-	JS_GL_SET_METHOD(texSubImage2D);
-	JS_GL_SET_METHOD(readPixels);
+	JS_GL_SET_METHOD(bindTexture);
+	JS_GL_SET_METHOD(activeTexture);
+	JS_GL_SET_METHOD(copyTexImage2D);
+	JS_GL_SET_METHOD(copyTexSubImage2D);
+	JS_GL_SET_METHOD(generateMipmap);
 	JS_GL_SET_METHOD(getTexParameter);
-	JS_GL_SET_METHOD(getActiveAttrib);
-	JS_GL_SET_METHOD(getActiveUniform);
-	JS_GL_SET_METHOD(getAttachedShaders);
-	JS_GL_SET_METHOD(getParameter);
-	JS_GL_SET_METHOD(getBufferParameter);
-	JS_GL_SET_METHOD(getFramebufferAttachmentParameter);
-	JS_GL_SET_METHOD(getProgramInfoLog);
-	JS_GL_SET_METHOD(getRenderbufferParameter);
-	JS_GL_SET_METHOD(getVertexAttrib);
-	JS_GL_SET_METHOD(getSupportedExtensions);
-	// JS_GL_SET_METHOD(getExtension);
-	JS_GL_SET_METHOD(checkFramebufferStatus);
+	JS_GL_SET_METHOD(texImage2D);
+	JS_GL_SET_METHOD(texParameterf);
+	JS_GL_SET_METHOD(texParameteri);
+	JS_GL_SET_METHOD(texSubImage2D);
 	
+	
+	// Uniform
+	
+	JS_GL_SET_METHOD(getActiveUniform);
+	JS_GL_SET_METHOD(getUniform);
+	JS_GL_SET_METHOD(getUniformLocation);
+	JS_GL_SET_METHOD(uniform1f);
+	JS_GL_SET_METHOD(uniform1fv);
+	JS_GL_SET_METHOD(uniform1i);
+	JS_GL_SET_METHOD(uniform1iv);
+	JS_GL_SET_METHOD(uniform2f);
+	JS_GL_SET_METHOD(uniform2fv);
+	JS_GL_SET_METHOD(uniform2i);
+	JS_GL_SET_METHOD(uniform2iv);
+	JS_GL_SET_METHOD(uniform3f);
+	JS_GL_SET_METHOD(uniform3fv);
+	JS_GL_SET_METHOD(uniform3i);
+	JS_GL_SET_METHOD(uniform3iv);
+	JS_GL_SET_METHOD(uniform4f);
+	JS_GL_SET_METHOD(uniform4fv);
+	JS_GL_SET_METHOD(uniform4i);
+	JS_GL_SET_METHOD(uniform4iv);
+	JS_GL_SET_METHOD(uniformMatrix2fv);
+	JS_GL_SET_METHOD(uniformMatrix3fv);
+	JS_GL_SET_METHOD(uniformMatrix4fv);
+	
+	
+	// VAO
+	
+	JS_GL_SET_METHOD(createVertexArray);
+	JS_GL_SET_METHOD(deleteVertexArray);
+	JS_GL_SET_METHOD(isVertexArray);
+	JS_GL_SET_METHOD(bindVertexArray);
+	
+	
+	// Misc OpenGL Functions
+	
+	JS_GL_SET_METHOD(clear);
+	JS_GL_SET_METHOD(clearColor);
+	JS_GL_SET_METHOD(clearDepth);
+	JS_GL_SET_METHOD(colorMask);
+	JS_GL_SET_METHOD(cullFace);
+	JS_GL_SET_METHOD(depthFunc);
+	JS_GL_SET_METHOD(depthMask);
+	JS_GL_SET_METHOD(depthRange);
+	JS_GL_SET_METHOD(disable);
+	JS_GL_SET_METHOD(drawArrays);
+	JS_GL_SET_METHOD(drawElements);
+	JS_GL_SET_METHOD(enable);
+	JS_GL_SET_METHOD(finish);
+	JS_GL_SET_METHOD(flush);
 	JS_GL_SET_METHOD(frontFace);
+	JS_GL_SET_METHOD(getError);
+	JS_GL_SET_METHOD(getParameter);
+	JS_GL_SET_METHOD(getRenderTarget);
+	JS_GL_SET_METHOD(getSupportedExtensions);
+	JS_GL_SET_METHOD(hint);
+	JS_GL_SET_METHOD(isEnabled);
+	JS_GL_SET_METHOD(lineWidth);
+	JS_GL_SET_METHOD(pixelStorei);
+	JS_GL_SET_METHOD(polygonOffset);
+	JS_GL_SET_METHOD(readPixels);
+	JS_GL_SET_METHOD(sampleCoverage);
+	JS_GL_SET_METHOD(scissor);
+	JS_GL_SET_METHOD(viewport);
+	
 	
 	// OpenGL ES 2.1 constants
 	
@@ -611,6 +655,8 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_CONSTANT(STENCIL_ATTACHMENT);
 	
 	JS_GL_CONSTANT(DEPTH_STENCIL_ATTACHMENT);
+	
+	JS_GL_CONSTANT(VERTEX_ARRAY_BINDING);
 	
 	
 	JS_GL_CONSTANT(NONE);

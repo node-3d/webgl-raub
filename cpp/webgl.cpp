@@ -10,17 +10,7 @@ using namespace v8;
 using namespace std;
 
 
-#ifdef _WIN32
-	#define	strcasestr(s, t) strstr(strupr(s), strupr(t))
-#endif
-
-
 namespace webgl {
-
-// A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.
-static GLuint ToGLuint(const void* ptr) {
-	return static_cast<GLuint>(reinterpret_cast<size_t>(ptr));
-}
 
 
 NAN_METHOD(init) {
@@ -36,121 +26,11 @@ NAN_METHOD(init) {
 }
 
 
-NAN_METHOD(pixelStorei) {
+NAN_METHOD(clear) {
 	
-	REQ_INT32_ARG(0, name);
-	REQ_INT32_ARG(1, param);
+	REQ_INT32_ARG(0, target);
 	
-	glPixelStorei(name, param);
-	
-}
-
-
-NAN_METHOD(getRenderTarget) {
-	
-	REQ_UINT32_ARG(0, width);
-	REQ_UINT32_ARG(1, height);
-	REQ_UINT32_ARG(2, samples);
-	
-	GLuint fbo;
-	glGenFramebuffers(1, &fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	
-	GLuint renderBuffer;
-	glGenRenderbuffers(1, &renderBuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-	
-	if (samples > 1) {
-		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT, width, height);
-	} else {
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-	}
-	
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,	renderBuffer);
-	
-	GLuint tex;
-	glGenTextures(1, &tex);
-	
-	if (samples > 1) {
-		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex);
-		// glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MAX_LEVEL, 0);
-		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGBA8, width, height, true);
-		// glFramebufferTexture2DMultisampleEXT(
-		// 	GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0, samples
-		// );
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex, 0);
-	} else {
-		glBindTexture(GL_TEXTURE_2D, tex);
-		// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
-	}
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	
-	GLenum framebufferStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-	
-	if (framebufferStatus == GL_FRAMEBUFFER_COMPLETE) {
-		
-		V8_VAR_ARR result = Nan::New<Array>(2);
-		result->Set(0, JS_NUM(fbo));
-		result->Set(1, JS_NUM(tex));
-		
-		RET_VALUE(result);
-		
-	} else {
-		RET_VALUE(Null(Isolate::GetCurrent()));
-	}
-	
-}
-
-
-NAN_METHOD(getError) {
-	
-	RET_VALUE(Nan::New<Integer>(glGetError()));
-	
-}
-
-
-NAN_METHOD(drawArrays) {
-	
-	REQ_INT32_ARG(0, mode);
-	REQ_INT32_ARG(1, first);
-	REQ_INT32_ARG(2, count);
-	
-	glDrawArrays(mode, first, count);
-	
-}
-
-
-NAN_METHOD(depthFunc) {
-	
-	REQ_INT32_ARG(0, id);
-	
-	glDepthFunc(id);
-	
-}
-
-
-NAN_METHOD(viewport) {
-	
-	REQ_INT32_ARG(0, x);
-	REQ_INT32_ARG(1, y);
-	REQ_INT32_ARG(2, w);
-	REQ_INT32_ARG(3, h);
-	
-	glViewport(x, y, w, h);
-	
-}
-
-
-NAN_METHOD(frontFace) {
-	
-	REQ_INT32_ARG(0, id);
-	
-	glFrontFace(id);
+	glClear(target);
 	
 }
 
@@ -171,61 +51,6 @@ NAN_METHOD(clearDepth) {
 	
 	REQ_FLOAT_ARG(0, depth);
 	glClearDepth(depth);
-	
-}
-
-
-NAN_METHOD(disable) {
-	
-	REQ_INT32_ARG(0, id);
-	
-	glDisable(id);
-	
-}
-
-
-NAN_METHOD(enable) {
-	
-	REQ_INT32_ARG(0, id);
-	
-	glEnable(id);
-	
-}
-
-
-NAN_METHOD(clear) {
-	
-	REQ_INT32_ARG(0, target);
-	
-	glClear(target);
-	
-}
-
-
-NAN_METHOD(drawElements) {
-	
-	REQ_INT32_ARG(0, mode);
-	REQ_INT32_ARG(1, count);
-	REQ_INT32_ARG(2, type);
-	REQ_OFFS_ARG(3, ptr);
-	
-	GLvoid *indices = reinterpret_cast<GLvoid*>(ptr);
-	
-	glDrawElements(mode, count, type, indices);
-	
-}
-
-
-NAN_METHOD(flush) {
-	
-	glFlush();
-	
-}
-
-
-NAN_METHOD(finish) {
-	
-	glFinish();
 	
 }
 
@@ -251,6 +76,15 @@ NAN_METHOD(cullFace) {
 }
 
 
+NAN_METHOD(depthFunc) {
+	
+	REQ_INT32_ARG(0, id);
+	
+	glDepthFunc(id);
+	
+}
+
+
 NAN_METHOD(depthMask) {
 	
 	LET_BOOL_ARG(0, flag);
@@ -270,80 +104,75 @@ NAN_METHOD(depthRange) {
 }
 
 
-NAN_METHOD(hint) {
+NAN_METHOD(disable) {
 	
-	REQ_INT32_ARG(0, target);
-	REQ_INT32_ARG(1, mode);
+	REQ_INT32_ARG(0, id);
 	
-	glHint(target, mode);
-	
-}
-
-
-NAN_METHOD(isEnabled) {
-	
-	REQ_INT32_ARG(0, cap);
-	
-	bool ret = glIsEnabled(cap) != 0;
-	
-	RET_VALUE(Nan::New<Boolean>(ret));
+	glDisable(id);
 	
 }
 
 
-NAN_METHOD(lineWidth) {
+NAN_METHOD(drawArrays) {
 	
-	REQ_FLOAT_ARG(0, width);
+	REQ_INT32_ARG(0, mode);
+	REQ_INT32_ARG(1, first);
+	REQ_INT32_ARG(2, count);
 	
-	glLineWidth(width);
-	
-}
-
-
-NAN_METHOD(polygonOffset) {
-	
-	REQ_FLOAT_ARG(0, factor);
-	REQ_FLOAT_ARG(1, units);
-	
-	glPolygonOffset(factor, units);
+	glDrawArrays(mode, first, count);
 	
 }
 
 
-NAN_METHOD(sampleCoverage) {
+NAN_METHOD(drawElements) {
 	
-	REQ_FLOAT_ARG(0, value);
-	LET_BOOL_ARG(1, invert);
+	REQ_INT32_ARG(0, mode);
+	REQ_INT32_ARG(1, count);
+	REQ_INT32_ARG(2, type);
+	REQ_OFFS_ARG(3, ptr);
 	
-	glSampleCoverage(value, invert);
+	GLvoid *indices = reinterpret_cast<GLvoid*>(ptr);
 	
-}
-
-
-NAN_METHOD(scissor) {
-	
-	REQ_INT32_ARG(0, x);
-	REQ_INT32_ARG(1, y);
-	REQ_INT32_ARG(2, width);
-	REQ_INT32_ARG(3, height);
-	
-	glScissor(x, y, width, height);
+	glDrawElements(mode, count, type, indices);
 	
 }
 
 
-NAN_METHOD(readPixels) {
+NAN_METHOD(enable) {
 	
-	REQ_INT32_ARG(0, x);
-	REQ_INT32_ARG(1, y);
-	REQ_INT32_ARG(2, width);
-	REQ_INT32_ARG(3, height);
-	REQ_INT32_ARG(4, format);
-	REQ_INT32_ARG(5, type);
-	REQ_OBJ_ARG(6, image);
+	REQ_INT32_ARG(0, id);
 	
-	void *pixels = getData(image);
-	glReadPixels(x, y, width, height, format, type, pixels);
+	glEnable(id);
+	
+}
+
+
+NAN_METHOD(finish) {
+	
+	glFinish();
+	
+}
+
+
+NAN_METHOD(flush) {
+	
+	glFlush();
+	
+}
+
+
+NAN_METHOD(frontFace) {
+	
+	REQ_INT32_ARG(0, id);
+	
+	glFrontFace(id);
+	
+}
+
+
+NAN_METHOD(getError) {
+	
+	RET_VALUE(Nan::New<Integer>(glGetError()));
 	
 }
 
@@ -490,11 +319,172 @@ NAN_METHOD(getParameter) {
 }
 
 
+NAN_METHOD(getRenderTarget) {
+	
+	REQ_UINT32_ARG(0, width);
+	REQ_UINT32_ARG(1, height);
+	REQ_UINT32_ARG(2, samples);
+	
+	GLuint fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	
+	GLuint renderBuffer;
+	glGenRenderbuffers(1, &renderBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+	
+	if (samples > 1) {
+		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT, width, height);
+	} else {
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+	}
+	
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,	renderBuffer);
+	
+	GLuint tex;
+	glGenTextures(1, &tex);
+	
+	if (samples > 1) {
+		glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, tex);
+		// glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D_MULTISAMPLE, GL_TEXTURE_MAX_LEVEL, 0);
+		glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGBA8, width, height, true);
+		// glFramebufferTexture2DMultisampleEXT(
+		// 	GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0, samples
+		// );
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, tex, 0);
+	} else {
+		glBindTexture(GL_TEXTURE_2D, tex);
+		// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+	}
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
+	GLenum framebufferStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	
+	if (framebufferStatus == GL_FRAMEBUFFER_COMPLETE) {
+		
+		V8_VAR_ARR result = Nan::New<Array>(2);
+		result->Set(0, JS_NUM(fbo));
+		result->Set(1, JS_NUM(tex));
+		
+		RET_VALUE(result);
+		
+	} else {
+		RET_VALUE(Null(Isolate::GetCurrent()));
+	}
+	
+}
+
+
 NAN_METHOD(getSupportedExtensions) {
 	
 	const char *extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
 	
 	RET_VALUE(JS_STR(extensions));
+	
+}
+
+
+NAN_METHOD(hint) {
+	
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, mode);
+	
+	glHint(target, mode);
+	
+}
+
+
+NAN_METHOD(isEnabled) {
+	
+	REQ_INT32_ARG(0, cap);
+	
+	bool ret = glIsEnabled(cap) != 0;
+	
+	RET_VALUE(Nan::New<Boolean>(ret));
+	
+}
+
+
+NAN_METHOD(lineWidth) {
+	
+	REQ_FLOAT_ARG(0, width);
+	
+	glLineWidth(width);
+	
+}
+
+
+NAN_METHOD(pixelStorei) {
+	
+	REQ_INT32_ARG(0, name);
+	REQ_INT32_ARG(1, param);
+	
+	glPixelStorei(name, param);
+	
+}
+
+
+NAN_METHOD(polygonOffset) {
+	
+	REQ_FLOAT_ARG(0, factor);
+	REQ_FLOAT_ARG(1, units);
+	
+	glPolygonOffset(factor, units);
+	
+}
+
+
+NAN_METHOD(readPixels) {
+	
+	REQ_INT32_ARG(0, x);
+	REQ_INT32_ARG(1, y);
+	REQ_INT32_ARG(2, width);
+	REQ_INT32_ARG(3, height);
+	REQ_INT32_ARG(4, format);
+	REQ_INT32_ARG(5, type);
+	REQ_OBJ_ARG(6, image);
+	
+	void *pixels = getData(image);
+	glReadPixels(x, y, width, height, format, type, pixels);
+	
+}
+
+
+NAN_METHOD(sampleCoverage) {
+	
+	REQ_FLOAT_ARG(0, value);
+	LET_BOOL_ARG(1, invert);
+	
+	glSampleCoverage(value, invert);
+	
+}
+
+
+NAN_METHOD(scissor) {
+	
+	REQ_INT32_ARG(0, x);
+	REQ_INT32_ARG(1, y);
+	REQ_INT32_ARG(2, width);
+	REQ_INT32_ARG(3, height);
+	
+	glScissor(x, y, width, height);
+	
+}
+
+
+NAN_METHOD(viewport) {
+	
+	REQ_INT32_ARG(0, x);
+	REQ_INT32_ARG(1, y);
+	REQ_INT32_ARG(2, w);
+	REQ_INT32_ARG(3, h);
+	
+	glViewport(x, y, w, h);
 	
 }
 

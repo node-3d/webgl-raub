@@ -10,17 +10,7 @@ using namespace v8;
 using namespace std;
 
 
-#ifdef _WIN32
-	#define	strcasestr(s, t) strstr(strupr(s), strupr(t))
-#endif
-
-
 namespace webgl {
-
-// A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.
-static GLuint ToGLuint(const void* ptr) {
-	return static_cast<GLuint>(reinterpret_cast<size_t>(ptr));
-}
 
 
 NAN_METHOD(clearStencil) {

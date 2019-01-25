@@ -10,31 +10,7 @@ using namespace v8;
 using namespace std;
 
 
-#ifdef _WIN32
-	#define	strcasestr(s, t) strstr(strupr(s), strupr(t))
-#endif
-
-
 namespace webgl {
-
-
-NAN_METHOD(blendEquation) {
-	
-	REQ_INT32_ARG(0, mode);
-	
-	glBlendEquation(mode);
-	
-}
-
-
-NAN_METHOD(blendFunc) {
-	
-	REQ_INT32_ARG(0, sfactor);
-	REQ_INT32_ARG(1, dfactor);
-	
-	glBlendFunc(sfactor, dfactor);
-	
-}
 
 
 NAN_METHOD(blendColor) {
@@ -49,12 +25,31 @@ NAN_METHOD(blendColor) {
 }
 
 
+NAN_METHOD(blendEquation) {
+	
+	REQ_INT32_ARG(0, mode);
+	
+	glBlendEquation(mode);
+	
+}
+
+
 NAN_METHOD(blendEquationSeparate) {
 	
 	REQ_INT32_ARG(0, modeRGB);
 	REQ_INT32_ARG(1, modeAlpha);
 	
 	glBlendEquationSeparate(modeRGB, modeAlpha);
+	
+}
+
+
+NAN_METHOD(blendFunc) {
+	
+	REQ_INT32_ARG(0, sfactor);
+	REQ_INT32_ARG(1, dfactor);
+	
+	glBlendFunc(sfactor, dfactor);
 	
 }
 

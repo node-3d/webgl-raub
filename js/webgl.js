@@ -223,7 +223,7 @@ const extensions = {
 
 const _getSupportedExtensions = gl.getSupportedExtensions;
 gl.getSupportedExtensions = () => {
-	gl._realExtensions = _getSupportedExtensions();
+	gl._realExtensions = _getSupportedExtensions().split(' ');
 	return Object.keys(extensions);
 };
 

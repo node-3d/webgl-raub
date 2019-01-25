@@ -10,17 +10,7 @@ using namespace v8;
 using namespace std;
 
 
-#ifdef _WIN32
-	#define	strcasestr(s, t) strstr(strupr(s), strupr(t))
-#endif
-
-
 namespace webgl {
-
-// A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.
-static GLuint ToGLuint(const void* ptr) {
-	return static_cast<GLuint>(reinterpret_cast<size_t>(ptr));
-}
 
 
 NAN_METHOD(createProgram) {
@@ -50,11 +40,15 @@ NAN_METHOD(isProgram) {
 }
 
 
-NAN_METHOD(linkProgram) {
+NAN_METHOD(getProgramInfoLog) {
 	
-	REQ_INT32_ARG(0, id);
+	REQ_INT32_ARG(0, program);
 	
-	glLinkProgram(id);
+	int Len = 1024;
+	char Error[1024];
+	glGetProgramInfoLog(program, 1024, &Len, Error);
+	
+	RET_VALUE(JS_STR(Error));
 	
 }
 
@@ -95,6 +89,15 @@ NAN_METHOD(getProgramParameter) {
 }
 
 
+NAN_METHOD(linkProgram) {
+	
+	REQ_INT32_ARG(0, id);
+	
+	glLinkProgram(id);
+	
+}
+
+
 NAN_METHOD(useProgram) {
 	
 	REQ_INT32_ARG(0, id);
@@ -109,19 +112,6 @@ NAN_METHOD(validateProgram) {
 	REQ_INT32_ARG(0, program);
 	
 	glValidateProgram(program);
-	
-}
-
-
-NAN_METHOD(getProgramInfoLog) {
-	
-	REQ_INT32_ARG(0, program);
-	
-	int Len = 1024;
-	char Error[1024];
-	glGetProgramInfoLog(program, 1024, &Len, Error);
-	
-	RET_VALUE(JS_STR(Error));
 	
 }
 

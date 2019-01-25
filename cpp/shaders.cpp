@@ -33,6 +33,34 @@ NAN_METHOD(deleteShader) {
 }
 
 
+NAN_METHOD(isShader) {
+	
+	REQ_UINT32_ARG(0, shader);
+	
+	RET_VALUE(JS_BOOL(glIsShader(shader) != 0));
+	
+}
+
+
+NAN_METHOD(attachShader) {
+	
+	REQ_INT32_ARG(0, program);
+	REQ_INT32_ARG(1, shader);
+	
+	glAttachShader(program, shader);
+	
+}
+
+
+NAN_METHOD(compileShader) {
+	
+	REQ_INT32_ARG(0, id);
+	
+	glCompileShader(id);
+	
+}
+
+
 NAN_METHOD(detachShader) {
 	
 	REQ_UINT32_ARG(0, program);
@@ -43,34 +71,33 @@ NAN_METHOD(detachShader) {
 }
 
 
-NAN_METHOD(isShader) {
+NAN_METHOD(getAttachedShaders) {
 	
-	REQ_UINT32_ARG(0, shader);
+	REQ_INT32_ARG(0, program);
 	
-	RET_VALUE(JS_BOOL(glIsShader(shader) != 0));
+	GLuint shaders[1024];
+	GLsizei count;
+	glGetAttachedShaders(program, 1024, &count, shaders);
 	
-}
-
-
-NAN_METHOD(shaderSource) {
+	Local<Array> shadersArr = Nan::New<Array>(count);
+	for (int i = 0; i < count; i++) {
+		shadersArr->Set(i, JS_INT(static_cast<int>(shaders[i])));
+	}
 	
-	REQ_INT32_ARG(0, id);
-	REQ_UTF8_ARG(1, code);
-	
-	const char* codes[1];
-	codes[0] = *code;
-	GLint length = code.length();
-	
-	glShaderSource(id, 1, codes, &length);
+	RET_VALUE(shadersArr);
 	
 }
 
 
-NAN_METHOD(compileShader) {
+NAN_METHOD(getShaderInfoLog) {
 	
 	REQ_INT32_ARG(0, id);
 	
-	glCompileShader(id);
+	int Len = 1024;
+	char Error[1024];
+	glGetShaderInfoLog(id, 1024, &Len, Error);
+	
+	RET_VALUE(JS_STR(Error));
 	
 }
 
@@ -109,29 +136,6 @@ NAN_METHOD(getShaderParameter) {
 }
 
 
-NAN_METHOD(getShaderInfoLog) {
-	
-	REQ_INT32_ARG(0, id);
-	
-	int Len = 1024;
-	char Error[1024];
-	glGetShaderInfoLog(id, 1024, &Len, Error);
-	
-	RET_VALUE(JS_STR(Error));
-	
-}
-
-
-NAN_METHOD(attachShader) {
-	
-	REQ_INT32_ARG(0, program);
-	REQ_INT32_ARG(1, shader);
-	
-	glAttachShader(program, shader);
-	
-}
-
-
 NAN_METHOD(getShaderSource) {
 	
 	REQ_INT32_ARG(0, shader);
@@ -149,20 +153,16 @@ NAN_METHOD(getShaderSource) {
 }
 
 
-NAN_METHOD(getAttachedShaders) {
+NAN_METHOD(shaderSource) {
 	
-	REQ_INT32_ARG(0, program);
+	REQ_INT32_ARG(0, id);
+	REQ_UTF8_ARG(1, code);
 	
-	GLuint shaders[1024];
-	GLsizei count;
-	glGetAttachedShaders(program, 1024, &count, shaders);
+	const char* codes[1];
+	codes[0] = *code;
+	GLint length = code.length();
 	
-	Local<Array> shadersArr = Nan::New<Array>(count);
-	for (int i = 0; i < count; i++) {
-		shadersArr->Set(i, JS_INT(static_cast<int>(shaders[i])));
-	}
-	
-	RET_VALUE(shadersArr);
+	glShaderSource(id, 1, codes, &length);
 	
 }
 
