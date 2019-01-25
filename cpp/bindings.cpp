@@ -70,7 +70,7 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(getBufferParameter);
 	
 	
-	// Framebuffer
+	// FBO
 	
 	JS_GL_SET_METHOD(createFramebuffer);
 	JS_GL_SET_METHOD(deleteFramebuffer);
@@ -96,7 +96,7 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(validateProgram);
 	
 	
-	// Renderbuffer
+	// RBO
 	
 	JS_GL_SET_METHOD(createRenderbuffer);
 	JS_GL_SET_METHOD(deleteRenderbuffer);

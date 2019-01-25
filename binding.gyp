@@ -11,18 +11,19 @@
 		{
 			'target_name': 'webgl',
 			'sources': [
-				'cpp/bindings.cpp',
-				'cpp/webgl.cpp',
 				'cpp/attrib.cpp',
-				'cpp/uniform.cpp',
+				'cpp/bindings.cpp',
 				'cpp/blend.cpp',
-				'cpp/stencil.cpp',
 				'cpp/buffers.cpp',
 				'cpp/framebuffers.cpp',
 				'cpp/programs.cpp',
 				'cpp/renderbuffers.cpp',
 				'cpp/shaders.cpp',
+				'cpp/stencil.cpp',
 				'cpp/textures.cpp',
+				'cpp/uniform.cpp',
+				'cpp/vertexarrays.cpp',
+				'cpp/webgl.cpp',
 			],
 			'include_dirs': [
 				'<!@(node -e "require(\'addon-tools-raub\').include()")',

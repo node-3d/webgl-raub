@@ -66,7 +66,7 @@ namespace webgl {
 	NAN_METHOD(getBufferParameter);
 	
 	
-	// Framebuffer
+	// FBO
 	
 	NAN_METHOD(createFramebuffer);
 	NAN_METHOD(deleteFramebuffer);
@@ -92,7 +92,7 @@ namespace webgl {
 	NAN_METHOD(validateProgram);
 	
 	
-	// Renderbuffer
+	// RBO
 	
 	NAN_METHOD(createRenderbuffer);
 	NAN_METHOD(deleteRenderbuffer);
