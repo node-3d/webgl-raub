@@ -355,7 +355,7 @@ const _isVertexArray = gl.isVertexArray;
 gl.isVertexArray = buffer => _isVertexArray(enforceId(buffer));
 
 const _bindVertexArray = gl.bindVertexArray;
-gl.bindVertexArray = (target, buffer) => _bindVertexArray(target, enforceId(buffer));
+gl.bindVertexArray = (buffer) => _bindVertexArray(enforceId(buffer));
 
 
 // Misc OpenGL Functions
