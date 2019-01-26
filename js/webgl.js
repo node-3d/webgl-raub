@@ -349,13 +349,13 @@ const _createVertexArray = gl.createVertexArray;
 gl.createVertexArray = () => new gl.WebGLVertexArray(_createVertexArray());
 
 const _deleteVertexArray = gl.deleteVertexArray;
-gl.deleteVertexArray = buffer => _deleteVertexArray(enforceId(buffer));
+gl.deleteVertexArray = vao => _deleteVertexArray(enforceId(vao));
 
 const _isVertexArray = gl.isVertexArray;
-gl.isVertexArray = buffer => _isVertexArray(enforceId(buffer));
+gl.isVertexArray = vao => _isVertexArray(enforceId(vao));
 
 const _bindVertexArray = gl.bindVertexArray;
-gl.bindVertexArray = (buffer) => _bindVertexArray(enforceId(buffer));
+gl.bindVertexArray = vao => _bindVertexArray(enforceId(vao));
 
 
 // Misc OpenGL Functions

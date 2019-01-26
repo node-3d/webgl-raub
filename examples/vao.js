@@ -180,7 +180,6 @@ function handleKeys() {
 
 
 let cubeVertexPositionBuffer;
-let cubeVertexNormalBuffer;
 let cubeVerticesColorBuffer;
 let cubeVertexIndexBuffer;
 let vao;
