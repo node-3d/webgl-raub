@@ -11,6 +11,9 @@ Document.setWebgl(webgl);
 const document = new Document();
 const frame    = document.requestAnimationFrame;
 
+const ext = webgl.getExtension('OES_vertex_array_object');
+
+
 let xRot   = 0;
 let xSpeed = 5;
 let yRot   = 0;
@@ -111,10 +114,7 @@ function initShaders() {
 	gl.useProgram(shaderProgram);
 	
 	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'aVertexPosition');
-	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-	
 	shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, 'aVertexColor');
-	gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
 	
 	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, 'uPMatrix');
 	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
@@ -183,11 +183,14 @@ function handleKeys() {
 
 
 let cubeVertexPositionBuffer;
-let cubeVertexNormalBuffer;
 let cubeVerticesColorBuffer;
 let cubeVertexIndexBuffer;
+let vao;
 
 function initBuffers() {
+	
+	vao = ext.createVertexArrayOES();
+	ext.bindVertexArrayOES(vao);
 	
 	const vertices = [
 		// Front face
@@ -233,6 +236,7 @@ function initBuffers() {
 	cubeVertexPositionBuffer.itemSize = 3;
 	cubeVertexPositionBuffer.numItems = 24;
 	
+	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 	gl.vertexAttribPointer(
 		shaderProgram.vertexPositionAttribute,
 		cubeVertexPositionBuffer.itemSize,
@@ -241,50 +245,6 @@ function initBuffers() {
 		0,
 		0
 	);
-	
-	const vertexNormals = [
-		// Front face
-		0.0, 0.0, 1.0,
-		0.0, 0.0, 1.0,
-		0.0, 0.0, 1.0,
-		0.0, 0.0, 1.0,
-		
-		// Back face
-		0.0, 0.0, -1.0,
-		0.0, 0.0, -1.0,
-		0.0, 0.0, -1.0,
-		0.0, 0.0, -1.0,
-		
-		// Top face
-		0.0, 1.0, 0.0,
-		0.0, 1.0, 0.0,
-		0.0, 1.0, 0.0,
-		0.0, 1.0, 0.0,
-		
-		// Bottom face
-		0.0, -1.0, 0.0,
-		0.0, -1.0, 0.0,
-		0.0, -1.0, 0.0,
-		0.0, -1.0, 0.0,
-		
-		// Right face
-		1.0, 0.0, 0.0,
-		1.0, 0.0, 0.0,
-		1.0, 0.0, 0.0,
-		1.0, 0.0, 0.0,
-		
-		// Left face
-		-1.0, 0.0, 0.0,
-		-1.0, 0.0, 0.0,
-		-1.0, 0.0, 0.0,
-		-1.0, 0.0, 0.0
-	];
-	
-	cubeVertexNormalBuffer = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
-	cubeVertexNormalBuffer.itemSize = 3;
-	cubeVertexNormalBuffer.numItems = 24;
 	
 	const colors = [
 		[ 1.0, 1.0, 1.0, 0.5 ], // Front face: white
@@ -312,6 +272,7 @@ function initBuffers() {
 		new Float32Array(generatedColors),
 		gl.STATIC_DRAW
 	);
+	gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
 	gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, 4, gl.FLOAT, false, 0, 0);
 	
 	const cubeVertexIndices = [
@@ -329,7 +290,9 @@ function initBuffers() {
 	cubeVertexIndexBuffer.itemSize = 1;
 	cubeVertexIndexBuffer.numItems = 36;
 	
+	ext.bindVertexArrayOES(null);
 	gl.bindBuffer(gl.ARRAY_BUFFER, null);
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 	
 	const error = gl.getError();
 	if (error) {
@@ -354,20 +317,17 @@ function drawScene() {
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	gl.enable(gl.BLEND);
 	gl.disable(gl.DEPTH_TEST);
-	
 	gl.enable(gl.CULL_FACE);
 	gl.cullFace(gl.FRONT);
 	
-	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
+	ext.bindVertexArrayOES(vao);
 	
 	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 	gl.cullFace(gl.BACK);
 	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 	
 	// cleanup GL state
-	gl.bindBuffer(gl.ARRAY_BUFFER, null);
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+	ext.bindVertexArrayOES(null);
 	
 }
 
