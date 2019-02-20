@@ -1,7 +1,7 @@
 {
 	"author": "Luis Blanco <luisblanco1337@gmail.com>",
 	"name": "webgl-raub",
-	"version": "1.2.0",
+	"version": "1.3.0",
 	"description": "WebGL for Node.js",
 	"license": "MIT",
 	"main": "index.js",
@@ -34,6 +34,6 @@
 	},
 	"dependencies": {
 		"addon-tools-raub": "4.2.0",
-		"deps-opengl-raub": "2.2.0"
+		"deps-opengl-raub": "2.3.0"
 	}
 }
