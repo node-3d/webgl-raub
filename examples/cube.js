@@ -354,7 +354,7 @@ function drawScene() {
 	gl.enable(gl.BLEND);
 	gl.disable(gl.DEPTH_TEST);
 	
-	// gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesColorBuffer);
+	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVerticesColorBuffer);
 	
 	gl.enable(gl.CULL_FACE);
 	
