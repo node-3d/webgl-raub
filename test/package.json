@@ -8,7 +8,7 @@
 		"start": "mocha"
 	},
 	"dependencies": {
-		"webgl-raub": "https://github.com/node-3d/webgl-raub.git",
+		"webgl-raub": "1.3.0",
 		"chai": "^4.2.0",
 		"mocha": "^5.2.0",
 		"sinon": "^7.1.1"
