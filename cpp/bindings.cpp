@@ -184,6 +184,13 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(bindVertexArray);
 	
 	
+	// Instances
+	
+	JS_GL_SET_METHOD(drawArraysInstanced);
+	JS_GL_SET_METHOD(drawElementsInstanced);
+	JS_GL_SET_METHOD(vertexAttribDivisor);
+	
+	
 	// Misc OpenGL Functions
 	
 	JS_GL_SET_METHOD(clear);

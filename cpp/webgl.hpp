@@ -180,6 +180,13 @@ namespace webgl {
 	NAN_METHOD(bindVertexArray);
 	
 	
+	// Instances
+	
+	NAN_METHOD(drawArraysInstanced);
+	NAN_METHOD(drawElementsInstanced);
+	NAN_METHOD(vertexAttribDivisor);
+	
+	
 	// Misc OpenGL Functions
 	
 	NAN_METHOD(clear);

@@ -378,9 +378,9 @@ gl.viewport = (x, y, width, height) => _viewport(x, y, width, height);
 const extensions = {
 	'ANGLE_instanced_arrays': {
 		'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' : 0x88FE,
-		drawArraysInstancedANGLE() {},
-		drawElementsInstancedANGLE() {},
-		vertexAttribDivisorANGLE() {},
+		drawArraysInstancedANGLE: gl.drawArraysInstanced,
+		drawElementsInstancedANGLE: gl.drawElementsInstanced,
+		vertexAttribDivisorANGLE: gl.vertexAttribDivisor,
 	},
 	'EXT_blend_minmax': {
 		'MIN_EXT' : 0x8007,
