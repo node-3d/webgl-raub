@@ -62,8 +62,12 @@ namespace webgl {
 	NAN_METHOD(deleteBuffer);
 	NAN_METHOD(isBuffer);
 	NAN_METHOD(bindBuffer);
+	NAN_METHOD(bindBufferBase);
+	NAN_METHOD(bindBufferRange);
 	NAN_METHOD(bufferData);
 	NAN_METHOD(bufferSubData);
+	NAN_METHOD(copyBufferSubData);
+	NAN_METHOD(getBufferSubData);
 	NAN_METHOD(getBufferParameter);
 	
 	
@@ -187,6 +191,18 @@ namespace webgl {
 	NAN_METHOD(drawElementsInstanced);
 	NAN_METHOD(vertexAttribDivisor);
 	
+
+	// Transform feedback
+	NAN_METHOD(createTransformFeedback);
+	NAN_METHOD(deleteTransformFeedback);
+	NAN_METHOD(isTransformFeedback);
+	NAN_METHOD(bindTransformFeedback);
+	NAN_METHOD(beginTransformFeedback);
+	NAN_METHOD(endTransformFeedback);
+	NAN_METHOD(pauseTransformFeedback);
+	NAN_METHOD(resumeTransformFeedback);
+	NAN_METHOD(transformFeedbackVaryings);
+	NAN_METHOD(getTransformFeedbackVarying);
 	
 	// Misc OpenGL Functions
 	

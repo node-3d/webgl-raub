@@ -66,8 +66,12 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(deleteBuffer);
 	JS_GL_SET_METHOD(isBuffer);
 	JS_GL_SET_METHOD(bindBuffer);
+	JS_GL_SET_METHOD(bindBufferBase);
+	JS_GL_SET_METHOD(bindBufferRange);
 	JS_GL_SET_METHOD(bufferData);
 	JS_GL_SET_METHOD(bufferSubData);
+	JS_GL_SET_METHOD(copyBufferSubData);
+	JS_GL_SET_METHOD(getBufferSubData);
 	JS_GL_SET_METHOD(getBufferParameter);
 	
 	

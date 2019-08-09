@@ -51,6 +51,30 @@ NAN_METHOD(bindBuffer) {
 }
 
 
+NAN_METHOD(bindBufferBase) {
+	
+	REQ_INT32_ARG(0, target);
+	REQ_UINT32_ARG(1, index);
+	REQ_UINT32_ARG(2, buffer);
+	
+	glBindBufferBase(target, index, buffer);
+
+}
+
+
+NAN_METHOD(bindBufferRange) {
+	
+	REQ_INT32_ARG(0, target);
+	REQ_UINT32_ARG(1, index);
+	REQ_UINT32_ARG(2, buffer);
+	REQ_INT32_ARG(3, offset);
+	REQ_INT32_ARG(4, size);
+
+	glBindBufferRange(target, index, buffer, offset, size);
+
+}
+
+
 NAN_METHOD(bufferData) {
 	
 	REQ_INT32_ARG(0, target);
@@ -83,14 +107,46 @@ NAN_METHOD(bufferSubData) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, offset);
-	REQ_ARRV_ARG(2, arr);
+	REQ_TYPED_ARRAY_ARG(2, arr, TypedArray);
 	
-	int element_size = 1;
-	int size = arr->ByteLength() * element_size;
-	void *data = arr->Buffer()->GetContents().Data();
-	
+	int size = arr->ByteLength();
+	int byteOffset = arr->ByteOffset();
+	void* data = getArrayData<unsigned char>(arr);
+
 	glBufferSubData(target, offset, size, data);
 	
+}
+
+
+NAN_METHOD(copyBufferSubData) {
+
+	REQ_INT32_ARG(0, readTarget);
+	REQ_INT32_ARG(1, writeTarget);
+	REQ_INT32_ARG(2, readOffset);
+	REQ_INT32_ARG(3, writeOffset);
+	REQ_INT32_ARG(4, size);
+
+	glCopyBufferSubData(readTarget, writeTarget, readOffset, writeOffset, size);
+}
+
+
+NAN_METHOD(getBufferSubData) {
+
+	REQ_INT32_ARG(0, readTarget);
+	REQ_INT32_ARG(1, srcByteOffset);
+	REQ_TYPED_ARRAY_ARG(2, dst, TypedArray);
+	LET_UINT32_ARG(3, dstOffset);
+	LET_UINT32_ARG(4, length);
+
+	int BPE = dst->ByteLength() / dst->Length();
+	int size = std::min((unsigned int) dst->ByteLength(), length * BPE);
+
+	// dstOffset = dstOffset * BPE + dst->ByteOffset();
+
+	void* data = getArrayData<unsigned char>(dst) + (dstOffset * BPE);
+
+	glGetBufferSubData(readTarget, srcByteOffset, size, data);
+
 }
 
 

@@ -101,6 +101,12 @@ gl.isBuffer = buffer => _isBuffer(enforceId(buffer));
 const _bindBuffer = gl.bindBuffer;
 gl.bindBuffer = (target, buffer) => _bindBuffer(target, enforceId(buffer));
 
+const _bindBufferBase = gl.bindBufferBase;
+gl.bindBufferBase = (target, index, buffer) => _bindBufferBase(target, index, enforceId(buffer));
+
+const _bindBufferRange = gl.bindBufferRange;
+gl.bindBufferRange = (target, index, buffer, offset, size) => _bindBufferRange(target, index, enforceId(buffer), offset, size);
+
 
 // FBO
 
