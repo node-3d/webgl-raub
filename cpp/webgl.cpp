@@ -15,6 +15,9 @@ namespace webgl {
 
 NAN_METHOD(init) {
 	
+	#ifdef __APPLE__
+	glewExperimental = GL_TRUE;
+	#endif
 	GLenum err = glewInit();
 	
 	if (GLEW_OK != err) {
@@ -381,11 +384,15 @@ NAN_METHOD(getRenderTarget) {
 
 
 NAN_METHOD(getSupportedExtensions) {
-	
-	const char *extensions = reinterpret_cast<const char*>(glGetString(GL_EXTENSIONS));
-	
-	RET_VALUE(JS_STR(extensions));
-	
+
+	const uint8_t *extensions = glGetString(GL_EXTENSIONS);
+
+	if (extensions != NULL) {
+		RET_VALUE(JS_STR(reinterpret_cast<const char*>(extensions)));
+	} else {
+		RET_VALUE(JS_STR(""));
+	}
+
 }
 
 
