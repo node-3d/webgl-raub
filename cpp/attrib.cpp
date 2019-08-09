@@ -247,4 +247,18 @@ NAN_METHOD(vertexAttribPointer) {
 }
 
 
+NAN_METHOD(vertexAttribIPointer) {
+	
+	REQ_UINT32_ARG(0, indx);
+	REQ_INT32_ARG(1, size);
+	REQ_INT32_ARG(2, type);
+	REQ_UINT32_ARG(3, stride);
+	REQ_INT32_ARG(4, ptr);
+
+	GLvoid *vertices = reinterpret_cast<GLvoid*>(ptr);
+
+	glVertexAttribIPointer(indx, size, type, stride, vertices);
+}
+
+
 } // namespace webgl

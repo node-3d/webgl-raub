@@ -44,6 +44,7 @@ namespace webgl {
 	NAN_METHOD(vertexAttrib4f);
 	NAN_METHOD(vertexAttrib4fv);
 	NAN_METHOD(vertexAttribPointer);
+	NAN_METHOD(vertexAttribIPointer);
 	
 	
 	// Blend

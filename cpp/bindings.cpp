@@ -48,6 +48,7 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(vertexAttrib4f);
 	JS_GL_SET_METHOD(vertexAttrib4fv);
 	JS_GL_SET_METHOD(vertexAttribPointer);
+	JS_GL_SET_METHOD(vertexAttribIPointer);
 	
 	
 	// Blend
