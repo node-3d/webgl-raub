@@ -20,7 +20,7 @@ gl.WebGLActiveInfo = function WebGLActiveInfo(_) {
 	this.type = _.type;
 	this.name = _.name;
 };
-gl.WebGLTransformFeedback = function(_) { this._ = _; };
+gl.WebGLTransformFeedback = function (_) { this._ = _; };
 
 
 // Global scope constructors for browser-style libs
@@ -105,7 +105,8 @@ const _bindBufferBase = gl.bindBufferBase;
 gl.bindBufferBase = (target, index, buffer) => _bindBufferBase(target, index, enforceId(buffer));
 
 const _bindBufferRange = gl.bindBufferRange;
-gl.bindBufferRange = (target, index, buffer, offset, size) => _bindBufferRange(target, index, enforceId(buffer), offset, size);
+gl.bindBufferRange = (target, index, buffer, offset, size) =>
+	_bindBufferRange(target, index, enforceId(buffer), offset, size);
 
 
 // FBO
@@ -373,16 +374,18 @@ const _createTransformFeedback = gl.createTransformFeedback;
 gl.createTransformFeedback = () => new gl.WebGLTransformFeedback(_createTransformFeedback());
 
 const _deleteTransformFeedback = gl.deleteTransformFeedback;
-gl.deleteTransformFeedback = (transformFeedback) => _deleteTransformFeedback(enforceId(transformFeedback));
+gl.deleteTransformFeedback = transformFeedback => _deleteTransformFeedback(enforceId(transformFeedback));
 
 const _isTransformFeedback = gl.isTransformFeedback;
-gl.isTransformFeedback = (transformFeedback) => _isTransformFeedback(enforceId(transformFeedback));
+gl.isTransformFeedback = transformFeedback => _isTransformFeedback(enforceId(transformFeedback));
 
 const _bindTransformFeedback = gl.bindTransformFeedback;
-gl.bindTransformFeedback = (target, transformFeedback) => _bindTransformFeedback(target, enforceId(transformFeedback));
+gl.bindTransformFeedback = (target, transformFeedback) =>
+	_bindTransformFeedback(target, enforceId(transformFeedback));
 
 const _transformFeedbackVaryings = gl.transformFeedbackVaryings;
-gl.transformFeedbackVaryings = (program, varyings, mode) => _transformFeedbackVaryings(enforceId(program), varyings, mode);
+gl.transformFeedbackVaryings = (program, varyings, mode) =>
+	_transformFeedbackVaryings(enforceId(program), varyings, mode);
 
 const _getTransformFeedbackVarying = gl.getTransformFeedbackVarying;
 gl.getTransformFeedbackVarying = (program, location) => new gl.WebGLActiveInfo(

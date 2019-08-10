@@ -97,13 +97,10 @@ NAN_METHOD(getTransformFeedbackVarying) {
 	GLsizei len;
 	GLenum type;
 	GLsizei size;
-	GLsizei bufSize;
 
-	glGetProgramiv(program, GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH, &bufSize);
+	char name[1024];
 
-	char name[bufSize];
-
-	glGetTransformFeedbackVarying(program, index, bufSize, &len, &size, &type, name);
+	glGetTransformFeedbackVarying(program, index, 1024, &len, &size, &type, name);
 
 	Local<Array> activeInfo = Nan::New<Array>(3);
 	activeInfo->Set(JS_STR("size"), JS_INT(size));

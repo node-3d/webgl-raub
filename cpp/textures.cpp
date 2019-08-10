@@ -132,7 +132,8 @@ NAN_METHOD(texImage2D) {
 		// was called with GL_PIXEL_UNPACK_BUFFER prior to glTexImage2D
 		REQ_OFFS_ARG(8, offset);
 		// From https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glBindBuffer.xhtml:
-		// "The pointer parameter is interpreted as an offset within the buffer object measured in basic machine units."
+		// "The pointer parameter is interpreted as an offset within the buffer object measured in
+		//  basic machine units."
 		glTexImage2D(target, level, internalformat,
 					 width, height, border, format, type,
 					 reinterpret_cast<void *>(offset));

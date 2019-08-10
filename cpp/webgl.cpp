@@ -15,9 +15,8 @@ namespace webgl {
 
 NAN_METHOD(init) {
 	
-	#ifdef __APPLE__
 	glewExperimental = GL_TRUE;
-	#endif
+
 	GLenum err = glewInit();
 	
 	if (GLEW_OK != err) {

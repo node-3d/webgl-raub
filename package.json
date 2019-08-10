@@ -5,6 +5,10 @@
 	"description": "WebGL for Node.js",
 	"license": "MIT",
 	"main": "index.js",
+	"scripts": {
+		"build": "node-gyp rebuild",
+		"build:dev": "node-gyp rebuild --debug"
+	},
 	"keywords": [
 		"addon",
 		"webgl",
