@@ -48,6 +48,7 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(vertexAttrib4f);
 	JS_GL_SET_METHOD(vertexAttrib4fv);
 	JS_GL_SET_METHOD(vertexAttribPointer);
+	JS_GL_SET_METHOD(vertexAttribIPointer);
 	
 	
 	// Blend
@@ -65,8 +66,12 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(deleteBuffer);
 	JS_GL_SET_METHOD(isBuffer);
 	JS_GL_SET_METHOD(bindBuffer);
+	JS_GL_SET_METHOD(bindBufferBase);
+	JS_GL_SET_METHOD(bindBufferRange);
 	JS_GL_SET_METHOD(bufferData);
 	JS_GL_SET_METHOD(bufferSubData);
+	JS_GL_SET_METHOD(copyBufferSubData);
+	JS_GL_SET_METHOD(getBufferSubData);
 	JS_GL_SET_METHOD(getBufferParameter);
 	
 	
@@ -182,6 +187,26 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_SET_METHOD(deleteVertexArray);
 	JS_GL_SET_METHOD(isVertexArray);
 	JS_GL_SET_METHOD(bindVertexArray);
+	
+	
+	// Instances
+	
+	JS_GL_SET_METHOD(drawArraysInstanced);
+	JS_GL_SET_METHOD(drawElementsInstanced);
+	JS_GL_SET_METHOD(vertexAttribDivisor);
+	
+
+	// Transform feedback
+	JS_GL_SET_METHOD(createTransformFeedback);
+	JS_GL_SET_METHOD(deleteTransformFeedback);
+	JS_GL_SET_METHOD(isTransformFeedback);
+	JS_GL_SET_METHOD(bindTransformFeedback);
+	JS_GL_SET_METHOD(beginTransformFeedback);
+	JS_GL_SET_METHOD(endTransformFeedback);
+	JS_GL_SET_METHOD(pauseTransformFeedback);
+	JS_GL_SET_METHOD(resumeTransformFeedback);
+	JS_GL_SET_METHOD(transformFeedbackVaryings);
+	JS_GL_SET_METHOD(getTransformFeedbackVarying);
 	
 	
 	// Misc OpenGL Functions
@@ -674,6 +699,25 @@ void initialize(V8_VAR_OBJ target) {
 	JS_GL_CONSTANT(MAX_RENDERBUFFER_SIZE);
 	
 	JS_GL_CONSTANT(INVALID_FRAMEBUFFER_OPERATION);
+
+	// Transform feedback
+
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_BUFFER_MODE);
+	JS_GL_CONSTANT(MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_VARYINGS);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_BUFFER_START);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_BUFFER_SIZE);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN);
+	JS_GL_CONSTANT(MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS);
+	JS_GL_CONSTANT(MAX_TRANSFORM_FEEDBACK_SEPARATE_ATTRIBS);
+	JS_GL_CONSTANT(INTERLEAVED_ATTRIBS);
+	JS_GL_CONSTANT(SEPARATE_ATTRIBS);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_BUFFER);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_BUFFER_BINDING);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_PAUSED);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_ACTIVE);
+	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_BINDING);
 	
 	/* WebGL-specific enums */
 	JS_GL_SET_CONSTANT("UNPACK_FLIP_Y_WEBGL", 0x9240);

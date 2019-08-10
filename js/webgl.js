@@ -20,6 +20,8 @@ gl.WebGLActiveInfo = function WebGLActiveInfo(_) {
 	this.type = _.type;
 	this.name = _.name;
 };
+gl.WebGLTransformFeedback = function (_) { this._ = _; };
+
 
 // Global scope constructors for browser-style libs
 
@@ -33,6 +35,7 @@ global.WebGLRenderbuffer = gl.WebGLRenderbuffer;
 global.WebGLTexture = gl.WebGLTexture;
 global.WebGLUniformLocation = gl.WebGLUniformLocation;
 global.WebGLActiveInfo = gl.WebGLActiveInfo;
+global.WebGLTransformFeedback = gl.WebGLTransformFeedback;
 
 
 module.exports = gl;
@@ -97,6 +100,13 @@ gl.isBuffer = buffer => _isBuffer(enforceId(buffer));
 
 const _bindBuffer = gl.bindBuffer;
 gl.bindBuffer = (target, buffer) => _bindBuffer(target, enforceId(buffer));
+
+const _bindBufferBase = gl.bindBufferBase;
+gl.bindBufferBase = (target, index, buffer) => _bindBufferBase(target, index, enforceId(buffer));
+
+const _bindBufferRange = gl.bindBufferRange;
+gl.bindBufferRange = (target, index, buffer, offset, size) =>
+	_bindBufferRange(target, index, enforceId(buffer), offset, size);
 
 
 // FBO
@@ -358,6 +368,30 @@ const _bindVertexArray = gl.bindVertexArray;
 gl.bindVertexArray = vao => _bindVertexArray(enforceId(vao));
 
 
+// Transform feedback
+
+const _createTransformFeedback = gl.createTransformFeedback;
+gl.createTransformFeedback = () => new gl.WebGLTransformFeedback(_createTransformFeedback());
+
+const _deleteTransformFeedback = gl.deleteTransformFeedback;
+gl.deleteTransformFeedback = transformFeedback => _deleteTransformFeedback(enforceId(transformFeedback));
+
+const _isTransformFeedback = gl.isTransformFeedback;
+gl.isTransformFeedback = transformFeedback => _isTransformFeedback(enforceId(transformFeedback));
+
+const _bindTransformFeedback = gl.bindTransformFeedback;
+gl.bindTransformFeedback = (target, transformFeedback) =>
+	_bindTransformFeedback(target, enforceId(transformFeedback));
+
+const _transformFeedbackVaryings = gl.transformFeedbackVaryings;
+gl.transformFeedbackVaryings = (program, varyings, mode) =>
+	_transformFeedbackVaryings(enforceId(program), varyings, mode);
+
+const _getTransformFeedbackVarying = gl.getTransformFeedbackVarying;
+gl.getTransformFeedbackVarying = (program, location) => new gl.WebGLActiveInfo(
+	_getTransformFeedbackVarying(enforceId(program), location)
+);
+
 // Misc OpenGL Functions
 
 const _getParameter = gl.getParameter;
@@ -378,9 +412,9 @@ gl.viewport = (x, y, width, height) => _viewport(x, y, width, height);
 const extensions = {
 	'ANGLE_instanced_arrays': {
 		'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' : 0x88FE,
-		drawArraysInstancedANGLE() {},
-		drawElementsInstancedANGLE() {},
-		vertexAttribDivisorANGLE() {},
+		drawArraysInstancedANGLE: gl.drawArraysInstanced,
+		drawElementsInstancedANGLE: gl.drawElementsInstanced,
+		vertexAttribDivisorANGLE: gl.vertexAttribDivisor,
 	},
 	'EXT_blend_minmax': {
 		'MIN_EXT' : 0x8007,

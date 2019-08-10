@@ -57,10 +57,14 @@ NAN_METHOD(getProgramInfoLog) {
 	case GL_LINK_STATUS: \
 	case GL_VALIDATE_STATUS:
 
+#define CASES_PROGRAM_PARAM_ENUM case GL_TRANSFORM_FEEDBACK_BUFFER_MODE:
+
 #define CASES_PROGRAM_PARAM_NUMBER case GL_ATTACHED_SHADERS: \
 	case GL_ACTIVE_ATTRIBUTES: \
 	case GL_ACTIVE_UNIFORMS: \
-	case GL_INFO_LOG_LENGTH:
+	case GL_ACTIVE_UNIFORM_BLOCKS: \
+	case GL_INFO_LOG_LENGTH: \
+	case GL_TRANSFORM_FEEDBACK_VARYINGS:
 
 NAN_METHOD(getProgramParameter) {
 	
@@ -75,7 +79,12 @@ NAN_METHOD(getProgramParameter) {
 		glGetProgramiv(program, name, &value);
 		RET_VALUE(JS_BOOL(static_cast<bool>(value != 0)));
 		break;
-	
+
+	CASES_PROGRAM_PARAM_ENUM
+		glGetProgramiv(program, name, &value);
+		RET_VALUE(JS_NUM(value));
+		break;
+
 	CASES_PROGRAM_PARAM_NUMBER
 		glGetProgramiv(program, name, &value);
 		RET_VALUE(JS_NUM(static_cast<double>(value)));

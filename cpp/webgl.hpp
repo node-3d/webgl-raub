@@ -16,6 +16,24 @@
 #endif
 
 
+#define REQ_ARRAY_ARG(I, VAR)                                                 \
+	REQ_OBJ_ARG(I, _obj_##VAR);                                               \
+  	if ( ! _obj_##VAR->IsArray() ) {                                          \
+  	  	return Nan::ThrowTypeError("Argument " #I " must be an array");       \
+  	}                                                                         \
+  	V8_VAR_ARR VAR = V8_VAR_ARR::Cast(_obj_##VAR)
+
+
+#define REQ_TYPED_ARRAY_ARG(I, VAR)                                              \
+	REQ_OBJ_ARG(I, _obj_##VAR);                                                  \
+  	if ( ! _obj_##VAR->IsArrayBufferView() ) {                                   \
+  	  	return Nan::ThrowTypeError("Argument " #I " must be an array buffer");   \
+  	}                                                                            \
+	v8::Local<v8::Object> obj = Nan::To<v8::Object>(_obj_##VAR).ToLocalChecked();\
+	v8::Local<v8::TypedArray> VAR = obj.As<TypedArray>();
+
+
+
 namespace webgl {
 	
 	// A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.
@@ -44,6 +62,7 @@ namespace webgl {
 	NAN_METHOD(vertexAttrib4f);
 	NAN_METHOD(vertexAttrib4fv);
 	NAN_METHOD(vertexAttribPointer);
+	NAN_METHOD(vertexAttribIPointer);
 	
 	
 	// Blend
@@ -61,8 +80,12 @@ namespace webgl {
 	NAN_METHOD(deleteBuffer);
 	NAN_METHOD(isBuffer);
 	NAN_METHOD(bindBuffer);
+	NAN_METHOD(bindBufferBase);
+	NAN_METHOD(bindBufferRange);
 	NAN_METHOD(bufferData);
 	NAN_METHOD(bufferSubData);
+	NAN_METHOD(copyBufferSubData);
+	NAN_METHOD(getBufferSubData);
 	NAN_METHOD(getBufferParameter);
 	
 	
@@ -179,6 +202,25 @@ namespace webgl {
 	NAN_METHOD(isVertexArray);
 	NAN_METHOD(bindVertexArray);
 	
+	
+	// Instances
+	
+	NAN_METHOD(drawArraysInstanced);
+	NAN_METHOD(drawElementsInstanced);
+	NAN_METHOD(vertexAttribDivisor);
+	
+
+	// Transform feedback
+	NAN_METHOD(createTransformFeedback);
+	NAN_METHOD(deleteTransformFeedback);
+	NAN_METHOD(isTransformFeedback);
+	NAN_METHOD(bindTransformFeedback);
+	NAN_METHOD(beginTransformFeedback);
+	NAN_METHOD(endTransformFeedback);
+	NAN_METHOD(pauseTransformFeedback);
+	NAN_METHOD(resumeTransformFeedback);
+	NAN_METHOD(transformFeedbackVaryings);
+	NAN_METHOD(getTransformFeedbackVarying);
 	
 	// Misc OpenGL Functions
 	

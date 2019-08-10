@@ -5,10 +5,11 @@
 	"main": "mocha",
 	"scripts": {
 		"test": "mocha",
-		"start": "mocha"
+		"start": "mocha",
+		"preinstall": "cd ../ && npm i"
 	},
 	"dependencies": {
-		"webgl-raub": "https://github.com/node-3d/webgl-raub.git",
+		"webgl-raub": "file:../",
 		"chai": "^4.2.0",
 		"mocha": "^5.2.0",
 		"sinon": "^7.1.1"

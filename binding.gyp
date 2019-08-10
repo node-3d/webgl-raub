@@ -16,11 +16,13 @@
 				'cpp/blend.cpp',
 				'cpp/buffers.cpp',
 				'cpp/framebuffers.cpp',
+				'cpp/instances.cpp',
 				'cpp/programs.cpp',
 				'cpp/renderbuffers.cpp',
 				'cpp/shaders.cpp',
 				'cpp/stencil.cpp',
 				'cpp/textures.cpp',
+				'cpp/transformfeedback.cpp',
 				'cpp/uniform.cpp',
 				'cpp/vertexarrays.cpp',
 				'cpp/webgl.cpp',
@@ -49,6 +51,9 @@
 							'-Wl,-rpath,<(opengl_bin)',
 							'<(opengl_bin)/glew.dylib'
 						],
+						'defines': [
+							'__APPLE__'
+						]
 					}
 				],
 				[
