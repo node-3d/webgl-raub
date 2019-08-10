@@ -1,97 +1,90 @@
-#include <cstring>
-#include <vector>
-
-#include <node_buffer.h>
-
 #include "webgl.hpp"
 
-using namespace node;
-using namespace v8;
+
 using namespace std;
 
 
 namespace webgl {
 
 
-NAN_METHOD(createBuffer) {
-	
+JS_METHOD(createBuffer) { NAPI_ENV;
 	GLuint buffer;
 	glGenBuffers(1, &buffer);
-	
-	RET_VALUE(Nan::New<Number>(buffer));
-	
+	RET_NUM(buffer);
 }
 
 
-NAN_METHOD(deleteBuffer) {
+JS_METHOD(deleteBuffer) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, buffer);
 	
 	glDeleteBuffers(1, reinterpret_cast<GLuint*>(&buffer));
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(isBuffer) {
+JS_METHOD(isBuffer) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, buffer);
 	
-	RET_VALUE(Nan::New<Boolean>(glIsBuffer(buffer) != 0));
+	RET_BOOL(glIsBuffer(buffer) != 0);
 	
 }
 
 
-NAN_METHOD(bindBuffer) {
+JS_METHOD(bindBuffer) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, buffer);
 	
 	glBindBuffer(target, buffer);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(bindBufferBase) {
+JS_METHOD(bindBufferBase) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, index);
 	REQ_UINT32_ARG(2, buffer);
 	
 	glBindBufferBase(target, index, buffer);
-
+	RET_UNDEFINED;
+	
 }
 
 
-NAN_METHOD(bindBufferRange) {
+JS_METHOD(bindBufferRange) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, index);
 	REQ_UINT32_ARG(2, buffer);
 	REQ_INT32_ARG(3, offset);
 	REQ_INT32_ARG(4, size);
-
+	
 	glBindBufferRange(target, index, buffer, offset, size);
-
+	RET_UNDEFINED;
+	
 }
 
 
-NAN_METHOD(bufferData) {
+JS_METHOD(bufferData) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, target);
 	
-	if (info[1]->IsObject()) {
+	if (info[1].IsObject()) {
 		
-		REQ_ARRV_ARG(1, obj);
+		REQ_TYPED_ARRAY_ARG(1, arr);
 		REQ_INT32_ARG(2, usage);
 		
-		int element_size = 1;
-		Local<ArrayBufferView> arr = Local<ArrayBufferView>::Cast(obj);
-		int size = arr->ByteLength()* element_size;
-		void* data = arr->Buffer()->GetContents().Data();
+		int size;
+		void* data = getArrayData(env, arr, size);
 		
 		glBufferData(target, size, data, usage);
 		
-	} else if (info[1]->IsNumber()) {
+	} else if (info[1].IsNumber()) {
 		
 		REQ_UINT32_ARG(1, size);
 		REQ_INT32_ARG(2, usage);
@@ -100,54 +93,61 @@ NAN_METHOD(bufferData) {
 		
 	}
 	
+	RET_UNDEFINED;
+	
 }
 
 
-NAN_METHOD(bufferSubData) {
+JS_METHOD(bufferSubData) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, offset);
 	REQ_TYPED_ARRAY_ARG(2, arr);
 	
-	int size = arr->ByteLength();
-	void* data = getArrayData<unsigned char>(arr);
-
+	int size = arr.ByteLength();
+	void* data = getArrayData<unsigned char>(env, arr);
+	
 	glBufferSubData(target, offset, size, data);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(copyBufferSubData) {
+JS_METHOD(copyBufferSubData) { NAPI_ENV;
 
 	REQ_INT32_ARG(0, readTarget);
 	REQ_INT32_ARG(1, writeTarget);
 	REQ_INT32_ARG(2, readOffset);
 	REQ_INT32_ARG(3, writeOffset);
 	REQ_INT32_ARG(4, size);
-
+	
 	glCopyBufferSubData(readTarget, writeTarget, readOffset, writeOffset, size);
+	RET_UNDEFINED;
+	
 }
 
 
-NAN_METHOD(getBufferSubData) {
+JS_METHOD(getBufferSubData) { NAPI_ENV;
 
 	REQ_INT32_ARG(0, readTarget);
 	REQ_INT32_ARG(1, sourceByteOffset);
 	REQ_TYPED_ARRAY_ARG(2, dest);
 	LET_OFFS_ARG(3, destByteOffset);
 	LET_OFFS_ARG(4, length);
-
-	size_t bytesPerElement = dest->ByteLength() / dest->Length();
-	size_t size = std::min(dest->ByteLength(), length * bytesPerElement);
-
-	void* data = getArrayData<unsigned char>(dest) + (destByteOffset * bytesPerElement);
-
+	
+	size_t bytesPerElement = dest.ByteLength() / dest.Length();
+	size_t size = std::min(dest.ByteLength(), length * bytesPerElement);
+	size_t offset = destByteOffset * bytesPerElement;
+	
+	void* data = getArrayData<unsigned char>(env, dest) + offset;
+	
 	glGetBufferSubData(readTarget, sourceByteOffset, size, data);
-
+	RET_UNDEFINED;
+	
 }
 
 
-NAN_METHOD(getBufferParameter) {
+JS_METHOD(getBufferParameter) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
@@ -155,7 +155,7 @@ NAN_METHOD(getBufferParameter) {
 	GLint params;
 	glGetBufferParameteriv(target, name, &params);
 	
-	RET_VALUE(JS_INT(params));
+	RET_NUM(params);
 	
 }
 

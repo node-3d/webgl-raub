@@ -1,28 +1,61 @@
 language: node_js
-
 node_js:
-  - "10.13.0"
+  - "10.16.1"
+
+install:
+  - cd test
+  - npm ci
 
 
 matrix:
   include:
-  - name: "Linux"
-    os: linux
-    dist: xenial
-    sudo: false
-    before_install:
-      - export DISPLAY=:99
-      - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
-  - name: "MacOS"
-    os: osx
-    script:
-      - echo OK.
-  - name: "Windows"
-    os: windows
-    script:
-      - echo OK.
+    - name: "Linux Test"
+      os: linux
+      if: NOT commit_message =~ /^:hammer:/
+      dist: xenial
+      sudo: false
+      before_install:
+        - export DISPLAY=:99
+        - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x24"
+    - name: "OSX Test"
+      os: osx
+      if: NOT commit_message =~ /^:hammer:/
+      script:
+        - echo OK.
+    - name: "Linux Build"
+      os: linux
+      dist: xenial
+      sudo: false
+      if: commit_message =~ /^:hammer:/
+      env:
+        - ISBUILD=true
+        - SYSNAME=Linux
+      install:
+        - cd src
+      script:
+        - npm ci
+    - name: "OSX Build"
+      os: osx
+      if: commit_message =~ /^:hammer:/
+      env:
+        - ISBUILD=true
+        - SYSNAME=OSX
+      install:
+        - cd src
+      script:
+        - npm ci
 
 
-install:
-  - cd test
-  - npm i
+deploy:
+  on:
+    all_branches: true
+    condition: $ISBUILD = true
+  provider: releases
+  name: "Binary for $SYSNAME"
+  body: $TRAVIS_COMMIT_MESSAGE
+  api_key: $GITHUB_TOKEN
+  skip_cleanup: true
+  overwrite: true
+  draft: true
+  file:
+    - "build/Release/webgl.node"

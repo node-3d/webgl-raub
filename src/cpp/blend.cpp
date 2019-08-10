@@ -1,19 +1,13 @@
-#include <cstring>
-#include <vector>
-
-#include <node_buffer.h>
-
 #include "webgl.hpp"
 
-using namespace node;
-using namespace v8;
+
 using namespace std;
 
 
 namespace webgl {
 
 
-NAN_METHOD(blendColor) {
+JS_METHOD(blendColor) { NAPI_ENV;
 	
 	REQ_FLOAT_ARG(0, red);
 	REQ_FLOAT_ARG(1, green);
@@ -21,40 +15,44 @@ NAN_METHOD(blendColor) {
 	REQ_FLOAT_ARG(3, alpha);
 	
 	glBlendColor(red, green, blue, alpha);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(blendEquation) {
+JS_METHOD(blendEquation) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, mode);
 	
 	glBlendEquation(mode);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(blendEquationSeparate) {
+JS_METHOD(blendEquationSeparate) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, modeRGB);
 	REQ_INT32_ARG(1, modeAlpha);
 	
 	glBlendEquationSeparate(modeRGB, modeAlpha);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(blendFunc) {
+JS_METHOD(blendFunc) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, sfactor);
 	REQ_INT32_ARG(1, dfactor);
 	
 	glBlendFunc(sfactor, dfactor);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(blendFuncSeparate) {
+JS_METHOD(blendFuncSeparate) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, srcRGB);
 	REQ_INT32_ARG(1, dstRGB);
@@ -62,6 +60,7 @@ NAN_METHOD(blendFuncSeparate) {
 	REQ_INT32_ARG(3, dstAlpha);
 	
 	glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+	RET_UNDEFINED;
 	
 }
 

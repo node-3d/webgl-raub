@@ -12,14 +12,13 @@ This is a part of [Node3D](https://github.com/node-3d) project.
 
 **Node.js** addon with **WebGL** bindings.
 
+> Note: this **addon uses N-API**, and therefore is ABI-compatible across different
+Node.js versions. Addon binaries are precompiled and **there is no compilation**
+step during the `npm i` command.
+
 ![Example](examples/screenshot.jpg)
 
 [WebGLRenderingContext docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext)
-
-> Note: for `npm i` to succeed, compilation tools must be in place on your system.
-For Windows, use **ADMIN PRIVELEGED** command line:
-`npm i -g windows-build-tools`.
-Also **Windows** needs **vcredist 2013** to be installed.
 
 
 ## Usage

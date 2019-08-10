@@ -1,39 +1,35 @@
-#include <cstring>
-#include <vector>
-
-#include <node_buffer.h>
-
 #include "webgl.hpp"
 
-using namespace node;
-using namespace v8;
+
 using namespace std;
 
 
 namespace webgl {
 
 
-NAN_METHOD(clearStencil) {
+JS_METHOD(clearStencil) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, s);
 	
 	glClearStencil(s);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(stencilFunc) {
+JS_METHOD(stencilFunc) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, func);
 	REQ_INT32_ARG(1, ref);
 	REQ_INT32_ARG(2, mask);
 	
 	glStencilFunc(func, ref, mask);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(stencilFuncSeparate) {
+JS_METHOD(stencilFuncSeparate) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, face);
 	REQ_INT32_ARG(1, func);
@@ -41,41 +37,45 @@ NAN_METHOD(stencilFuncSeparate) {
 	REQ_INT32_ARG(3, mask);
 	
 	glStencilFuncSeparate(face, func, ref, mask);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(stencilMask) {
+JS_METHOD(stencilMask) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, mask);
 	
 	glStencilMask(mask);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(stencilMaskSeparate) {
+JS_METHOD(stencilMaskSeparate) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, face);
 	REQ_UINT32_ARG(1, mask);
 	
 	glStencilMaskSeparate(face, mask);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(stencilOp) {
+JS_METHOD(stencilOp) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, fail);
 	REQ_INT32_ARG(1, zfail);
 	REQ_INT32_ARG(2, zpass);
 	
 	glStencilOp(fail, zfail, zpass);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(stencilOpSeparate) {
+JS_METHOD(stencilOpSeparate) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, face);
 	REQ_INT32_ARG(1, fail);
@@ -83,6 +83,7 @@ NAN_METHOD(stencilOpSeparate) {
 	REQ_INT32_ARG(2, zpass);
 	
 	glStencilOpSeparate(face, fail, zfail, zpass);
+	RET_UNDEFINED;
 	
 }
 

@@ -2,9 +2,9 @@
 
 require('deps-opengl-raub');
 
-const { binPath } = require('addon-tools-raub');
+const { bin } = require('addon-tools-raub');
 
-const core = require(`./${binPath}/webgl`);
+const core = require(`./${bin}/webgl`);
 
 
 module.exports = core;

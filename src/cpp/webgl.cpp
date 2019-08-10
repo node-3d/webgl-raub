@@ -1,22 +1,19 @@
 #include <cstring>
 #include <vector>
 
-#include <node_buffer.h>
-
 #include "webgl.hpp"
 
-using namespace node;
-using namespace v8;
+
 using namespace std;
 
 
 namespace webgl {
 
 
-NAN_METHOD(init) {
+JS_METHOD(init) { NAPI_ENV;
 	
 	glewExperimental = GL_TRUE;
-
+	
 	GLenum err = glewInit();
 	
 	if (GLEW_OK != err) {
@@ -28,16 +25,17 @@ NAN_METHOD(init) {
 }
 
 
-NAN_METHOD(clear) {
+JS_METHOD(clear) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, target);
 	
 	glClear(target);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(clearColor) {
+JS_METHOD(clearColor) { NAPI_ENV;
 	
 	REQ_FLOAT_ARG(0, red);
 	REQ_FLOAT_ARG(1, green);
@@ -45,19 +43,21 @@ NAN_METHOD(clearColor) {
 	REQ_FLOAT_ARG(3, alpha);
 	
 	glClearColor(red, green, blue, alpha);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(clearDepth) {
+JS_METHOD(clearDepth) { NAPI_ENV;
 	
 	REQ_FLOAT_ARG(0, depth);
 	glClearDepth(depth);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(colorMask) {
+JS_METHOD(colorMask) { NAPI_ENV;
 	
 	LET_BOOL_ARG(0, red);
 	LET_BOOL_ARG(1, green);
@@ -65,68 +65,75 @@ NAN_METHOD(colorMask) {
 	LET_BOOL_ARG(3, alpha);
 	
 	glColorMask(red, green, blue, alpha);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(cullFace) {
+JS_METHOD(cullFace) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, mode);
 	
 	glCullFace(mode);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(depthFunc) {
+JS_METHOD(depthFunc) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
 	
 	glDepthFunc(id);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(depthMask) {
+JS_METHOD(depthMask) { NAPI_ENV;
 	
 	LET_BOOL_ARG(0, flag);
 	
 	glDepthMask(flag);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(depthRange) {
+JS_METHOD(depthRange) { NAPI_ENV;
 	
 	REQ_FLOAT_ARG(0, zNear);
 	REQ_FLOAT_ARG(1, zFar);
 	
 	glDepthRangef(zNear, zFar);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(disable) {
+JS_METHOD(disable) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
 	
 	glDisable(id);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(drawArrays) {
+JS_METHOD(drawArrays) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, first);
 	REQ_INT32_ARG(2, count);
 	
 	glDrawArrays(mode, first, count);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(drawElements) {
+JS_METHOD(drawElements) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, count);
@@ -136,45 +143,51 @@ NAN_METHOD(drawElements) {
 	GLvoid *indices = reinterpret_cast<GLvoid*>(ptr);
 	
 	glDrawElements(mode, count, type, indices);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(enable) {
+JS_METHOD(enable) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
 	
 	glEnable(id);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(finish) {
+JS_METHOD(finish) { NAPI_ENV;
 	
 	glFinish();
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(flush) {
+JS_METHOD(flush) { NAPI_ENV;
 	
 	glFlush();
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(frontFace) {
+JS_METHOD(frontFace) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
 	
 	glFrontFace(id);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(getError) {
+JS_METHOD(getError) { NAPI_ENV;
 	
-	RET_VALUE(Nan::New<Integer>(glGetError()));
+	RET_NUM(glGetError());
+	RET_UNDEFINED;
 	
 }
 
@@ -227,7 +240,7 @@ NAN_METHOD(getError) {
 
 
 
-NAN_METHOD(getParameter) {
+JS_METHOD(getParameter) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, name);
 	
@@ -235,85 +248,80 @@ NAN_METHOD(getParameter) {
 	const char *cParams;
 	GLint iParams[4];
 	GLfloat fParams[4];
-	Local<Array> arr;
+	Napi::Array arr = Napi::Array::New(env);
 	
 	switch(name) {
 	
 	CASES_PARAM_BOOL
 		glGetBooleanv(name, bParams);
-		RET_VALUE(JS_BOOL(bParams[0] != 0));
+		RET_BOOL(bParams[0] != 0);
 		break;
 	
 	CASES_PARAM_FLOAT
 		glGetFloatv(name, fParams);
-		RET_VALUE(JS_NUM(fParams[0]));
+		RET_NUM(fParams[0]);
 		break;
 	
 	CASES_PARAM_STRING
 		cParams = reinterpret_cast<const char*>(glGetString(name));
 		if (cParams != NULL) {
-			RET_VALUE(JS_STR(cParams));
+			RET_STR(cParams);
 		} else {
 			RET_UNDEFINED;
 		}
-		
 		break;
 	
 	CASES_PARAM_INT2
 		glGetIntegerv(name, iParams);
-		arr = Nan::New<Array>(2);
-		arr->Set(0, JS_INT(iParams[0]));
-		arr->Set(1, JS_INT(iParams[1]));
+		arr = Napi::Array::New(env);
+		arr.Set(0, JS_NUM(iParams[0]));
+		arr.Set(1, JS_NUM(iParams[1]));
 		RET_VALUE(arr);
 		break;
 	
 	CASES_PARAM_INT4
 		glGetIntegerv(name, iParams);
-		arr = Nan::New<Array>(4);
-		arr->Set(0, JS_INT(iParams[0]));
-		arr->Set(1, JS_INT(iParams[1]));
-		arr->Set(2, JS_INT(iParams[2]));
-		arr->Set(3, JS_INT(iParams[3]));
+		arr.Set(0, JS_NUM(iParams[0]));
+		arr.Set(1, JS_NUM(iParams[1]));
+		arr.Set(2, JS_NUM(iParams[2]));
+		arr.Set(3, JS_NUM(iParams[3]));
 		RET_VALUE(arr);
 		break;
 	
 	CASES_PARAM_FLOAT2
 		glGetFloatv(name, fParams);
-		arr = Nan::New<Array>(2);
-		arr->Set(0, JS_NUM(fParams[0]));
-		arr->Set(1, JS_NUM(fParams[1]));
+		arr.Set(0, JS_NUM(fParams[0]));
+		arr.Set(1, JS_NUM(fParams[1]));
 		RET_VALUE(arr);
 		break;
 	
 	CASES_PARAM_FLOAT4
 		glGetFloatv(name, fParams);
-		arr = Nan::New<Array>(4);
-		arr->Set(0, JS_NUM(fParams[0]));
-		arr->Set(1, JS_NUM(fParams[1]));
-		arr->Set(2, JS_NUM(fParams[2]));
-		arr->Set(3, JS_NUM(fParams[3]));
+		arr.Set(0, JS_NUM(fParams[0]));
+		arr.Set(1, JS_NUM(fParams[1]));
+		arr.Set(2, JS_NUM(fParams[2]));
+		arr.Set(3, JS_NUM(fParams[3]));
 		RET_VALUE(arr);
 		break;
 	
 	CASES_PARAM_BOOL4
 		glGetBooleanv(name, bParams);
-		arr = Nan::New<Array>(4);
-		arr->Set(0, JS_BOOL(bParams[0] != 0));
-		arr->Set(1, JS_BOOL(bParams[1] != 0));
-		arr->Set(2, JS_BOOL(bParams[2] != 0));
-		arr->Set(3, JS_BOOL(bParams[3] != 0));
+		arr.Set(0, JS_BOOL(bParams[0] != 0));
+		arr.Set(1, JS_BOOL(bParams[1] != 0));
+		arr.Set(2, JS_BOOL(bParams[2] != 0));
+		arr.Set(3, JS_BOOL(bParams[3] != 0));
 		RET_VALUE(arr);
 		break;
 	
 	CASES_PARAM_INT
 		glGetIntegerv(name, iParams);
-		RET_VALUE(JS_INT(iParams[0]));
+		RET_NUM(iParams[0]);
 		break;
 	
 	// returns an int
 	default:
 		glGetIntegerv(name, iParams);
-		RET_VALUE(JS_INT(iParams[0]));
+		RET_NUM(iParams[0]);
 		break;
 	
 	}
@@ -321,7 +329,7 @@ NAN_METHOD(getParameter) {
 }
 
 
-NAN_METHOD(getRenderTarget) {
+JS_METHOD(getRenderTarget) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, width);
 	REQ_UINT32_ARG(1, height);
@@ -369,83 +377,87 @@ NAN_METHOD(getRenderTarget) {
 	
 	if (framebufferStatus == GL_FRAMEBUFFER_COMPLETE) {
 		
-		V8_VAR_ARR result = Nan::New<Array>(2);
-		result->Set(0, JS_NUM(fbo));
-		result->Set(1, JS_NUM(tex));
+		Napi::Array result = Napi::Array::New(env);
+		result.Set(0, JS_NUM(fbo));
+		result.Set(1, JS_NUM(tex));
 		
 		RET_VALUE(result);
 		
 	} else {
-		RET_VALUE(Null(Isolate::GetCurrent()));
+		RET_NULL;
 	}
 	
 }
 
 
-NAN_METHOD(getSupportedExtensions) {
-
-	const uint8_t *extensions = glGetString(GL_EXTENSIONS);
-
+JS_METHOD(getSupportedExtensions) { NAPI_ENV;
+	
+	const char *extensions = glGetString(GL_EXTENSIONS);
+	
 	if (extensions != NULL) {
-		RET_VALUE(JS_STR(reinterpret_cast<const char*>(extensions)));
+		RET_STR(extensions);
 	} else {
-		RET_VALUE(JS_STR(""));
+		RET_STR("");
 	}
-
+	
 }
 
 
-NAN_METHOD(hint) {
+JS_METHOD(hint) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, mode);
 	
 	glHint(target, mode);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(isEnabled) {
+JS_METHOD(isEnabled) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, cap);
 	
 	bool ret = glIsEnabled(cap) != 0;
 	
-	RET_VALUE(Nan::New<Boolean>(ret));
+	RET_BOOL(ret);
 	
 }
 
 
-NAN_METHOD(lineWidth) {
+JS_METHOD(lineWidth) { NAPI_ENV;
 	
 	REQ_FLOAT_ARG(0, width);
 	
 	glLineWidth(width);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(pixelStorei) {
+JS_METHOD(pixelStorei) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, name);
 	REQ_INT32_ARG(1, param);
 	
 	glPixelStorei(name, param);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(polygonOffset) {
+JS_METHOD(polygonOffset) { NAPI_ENV;
 	
 	REQ_FLOAT_ARG(0, factor);
 	REQ_FLOAT_ARG(1, units);
 	
 	glPolygonOffset(factor, units);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(readPixels) {
+JS_METHOD(readPixels) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
@@ -457,21 +469,23 @@ NAN_METHOD(readPixels) {
 	
 	void *pixels = getData(image);
 	glReadPixels(x, y, width, height, format, type, pixels);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(sampleCoverage) {
+JS_METHOD(sampleCoverage) { NAPI_ENV;
 	
 	REQ_FLOAT_ARG(0, value);
 	LET_BOOL_ARG(1, invert);
 	
 	glSampleCoverage(value, invert);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(scissor) {
+JS_METHOD(scissor) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
@@ -479,11 +493,12 @@ NAN_METHOD(scissor) {
 	REQ_INT32_ARG(3, height);
 	
 	glScissor(x, y, width, height);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(viewport) {
+JS_METHOD(viewport) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
@@ -491,6 +506,7 @@ NAN_METHOD(viewport) {
 	REQ_INT32_ARG(3, h);
 	
 	glViewport(x, y, w, h);
+	RET_UNDEFINED;
 	
 }
 

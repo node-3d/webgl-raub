@@ -1,19 +1,13 @@
-#include <cstring>
-#include <vector>
-
-#include <node_buffer.h>
-
 #include "webgl.hpp"
 
-using namespace node;
-using namespace v8;
+
 using namespace std;
 
 
 namespace webgl {
 
 
-NAN_METHOD(getActiveUniform) {
+JS_METHOD(getActiveUniform) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, index);
@@ -24,17 +18,17 @@ NAN_METHOD(getActiveUniform) {
 	GLsizei size;
 	glGetActiveUniform(program, index, 1024, &length, &size, &type, name);
 	
-	Local<Array> activeInfo = Nan::New<Array>(3);
-	activeInfo->Set(JS_STR("size"), JS_INT(size));
-	activeInfo->Set(JS_STR("type"), JS_INT(static_cast<int>(type)));
-	activeInfo->Set(JS_STR("name"), JS_STR(name));
+	Napi::Array activeInfo = Napi::Array::New(env);
+	activeInfo.Set("size", JS_NUM(size));
+	activeInfo.Set("type", JS_NUM(static_cast<int>(type)));
+	activeInfo.Set("name", JS_STR(name));
 	
 	RET_VALUE(activeInfo);
 	
 }
 
 
-NAN_METHOD(getUniform) {
+JS_METHOD(getUniform) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, location);
@@ -46,9 +40,9 @@ NAN_METHOD(getUniform) {
 	float data[16]; // worst case scenario is 16 floats
 	glGetUniformfv(program, location, data);
 	
-	Local<Array> arr = Nan::New<Array>(16);
+	Napi::Array arr = Napi::Array::New(env);
 	for (int i = 0; i < 16; i++) {
-		arr->Set(i, JS_NUM(data[i]));
+		arr.Set(i, JS_NUM(data[i]));
 	}
 	
 	RET_VALUE(arr);
@@ -56,38 +50,41 @@ NAN_METHOD(getUniform) {
 }
 
 
-NAN_METHOD(getUniformLocation) {
+JS_METHOD(getUniformLocation) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, program);
-	REQ_UTF8_ARG(1, name);
+	REQ_STR_ARG(1, name);
 	
-	RET_VALUE(JS_INT(glGetUniformLocation(program, *name)));
+	RET_VALUE(JS_NUM(glGetUniformLocation(program, *name)));
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform1f) {
+JS_METHOD(uniform1f) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	
 	glUniform1f(location, x);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform2f) {
+JS_METHOD(uniform2f) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
 	
 	glUniform2f(location, x, y);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform3f) {
+JS_METHOD(uniform3f) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -95,11 +92,12 @@ NAN_METHOD(uniform3f) {
 	REQ_FLOAT_ARG(3, z);
 	
 	glUniform3f(location, x, y, z);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform4f) {
+JS_METHOD(uniform4f) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
@@ -108,32 +106,35 @@ NAN_METHOD(uniform4f) {
 	REQ_FLOAT_ARG(4, w);
 	
 	glUniform4f(location, x, y, z, w);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform1i) {
+JS_METHOD(uniform1i) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_INT32_ARG(1, x);
 	
 	glUniform1i(location, x);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform2i) {
+JS_METHOD(uniform2i) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_INT32_ARG(1, x);
 	REQ_INT32_ARG(2, y);
 	
 	glUniform2i(location, x, y);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform3i) {
+JS_METHOD(uniform3i) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_INT32_ARG(1, x);
@@ -141,11 +142,12 @@ NAN_METHOD(uniform3i) {
 	REQ_INT32_ARG(3, z);
 	
 	glUniform3i(location, x, y, z);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform4i) {
+JS_METHOD(uniform4i) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_INT32_ARG(1, x);
@@ -154,11 +156,12 @@ NAN_METHOD(uniform4i) {
 	REQ_INT32_ARG(4, w);
 	
 	glUniform4i(location, x, y, z, w);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform1fv) {
+JS_METHOD(uniform1fv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
@@ -167,11 +170,12 @@ NAN_METHOD(uniform1fv) {
 	GLfloat *ptr = getArrayData<GLfloat>(abv, &num);
 	
 	glUniform1fv(location, num, ptr);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform2fv) {
+JS_METHOD(uniform2fv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
@@ -181,11 +185,12 @@ NAN_METHOD(uniform2fv) {
 	num /= 2;
 	
 	glUniform2fv(location, num, ptr);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform3fv) {
+JS_METHOD(uniform3fv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
@@ -195,11 +200,12 @@ NAN_METHOD(uniform3fv) {
 	num /= 3;
 	
 	glUniform3fv(location, num, ptr);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform4fv) {
+JS_METHOD(uniform4fv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
@@ -209,11 +215,12 @@ NAN_METHOD(uniform4fv) {
 	num /= 4;
 	
 	glUniform4fv(location, num, ptr);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform1iv) {
+JS_METHOD(uniform1iv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
@@ -222,11 +229,12 @@ NAN_METHOD(uniform1iv) {
 	GLint *ptr = getArrayData<GLint>(abv, &num);
 	
 	glUniform1iv(location, num, ptr);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform2iv) {
+JS_METHOD(uniform2iv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
@@ -236,11 +244,12 @@ NAN_METHOD(uniform2iv) {
 	num /= 2;
 	
 	glUniform2iv(location, num, ptr);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform3iv) {
+JS_METHOD(uniform3iv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
@@ -250,11 +259,12 @@ NAN_METHOD(uniform3iv) {
 	num /= 3;
 	
 	glUniform3iv(location, num, ptr);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniform4iv) {
+JS_METHOD(uniform4iv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
@@ -264,11 +274,12 @@ NAN_METHOD(uniform4iv) {
 	num /= 4;
 	
 	glUniform4iv(location, num, ptr);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(uniformMatrix2fv) {
+JS_METHOD(uniformMatrix2fv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	LET_BOOL_ARG(1, transpose);
@@ -287,7 +298,7 @@ NAN_METHOD(uniformMatrix2fv) {
 }
 
 
-NAN_METHOD(uniformMatrix3fv) {
+JS_METHOD(uniformMatrix3fv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	LET_BOOL_ARG(1, transpose);
@@ -306,7 +317,7 @@ NAN_METHOD(uniformMatrix3fv) {
 }
 
 
-NAN_METHOD(uniformMatrix4fv) {
+JS_METHOD(uniformMatrix4fv) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, location);
 	LET_BOOL_ARG(1, transpose);
@@ -319,8 +330,9 @@ NAN_METHOD(uniformMatrix4fv) {
 		Nan::ThrowError("Not enough data for UniformMatrix4fv");
 	} else {
 		glUniformMatrix4fv(location, count / 16, transpose, data);
-		RET_UNDEFINED;
 	}
+	
+	RET_UNDEFINED;
 	
 }
 

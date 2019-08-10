@@ -5,13 +5,11 @@
 	"main": "mocha",
 	"scripts": {
 		"test": "mocha",
-		"start": "mocha",
-		"preinstall": "cd ../ && npm i"
+		"postinstall": "cd .. && npm ci"
 	},
 	"dependencies": {
-		"webgl-raub": "file:../",
-		"chai": "^4.2.0",
-		"mocha": "^5.2.0",
-		"sinon": "^7.1.1"
+		"chai": "4.2.0",
+		"mocha": "6.2.0",
+		"sinon": "7.3.2"
 	}
 }

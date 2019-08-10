@@ -1,46 +1,39 @@
-#include <cstring>
-#include <vector>
-
-#include <node_buffer.h>
-
 #include "webgl.hpp"
 
-using namespace node;
-using namespace v8;
+
 using namespace std;
 
 
 namespace webgl {
 
 
-NAN_METHOD(createProgram) {
-	
+JS_METHOD(createProgram) { NAPI_ENV;
 	GLuint program = glCreateProgram();
-	
-	RET_VALUE(Nan::New<Number>(program));
-	
+	RET_NUM(program);
 }
 
 
-NAN_METHOD(deleteProgram) {
+JS_METHOD(deleteProgram) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, program);
 	
 	glDeleteProgram(program);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(isProgram) {
+JS_METHOD(isProgram) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, program);
 	
-	RET_VALUE(JS_BOOL(glIsProgram(program) != 0));
+	RET_BOOL(glIsProgram(program) != 0);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(getProgramInfoLog) {
+JS_METHOD(getProgramInfoLog) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, program);
 	
@@ -48,7 +41,7 @@ NAN_METHOD(getProgramInfoLog) {
 	char Error[1024];
 	glGetProgramInfoLog(program, 1024, &Len, Error);
 	
-	RET_VALUE(JS_STR(Error));
+	RET_STR(Error);
 	
 }
 
@@ -66,7 +59,7 @@ NAN_METHOD(getProgramInfoLog) {
 	case GL_INFO_LOG_LENGTH: \
 	case GL_TRANSFORM_FEEDBACK_VARYINGS:
 
-NAN_METHOD(getProgramParameter) {
+JS_METHOD(getProgramParameter) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, name);
@@ -77,50 +70,53 @@ NAN_METHOD(getProgramParameter) {
 	
 	CASES_PROGRAM_PARAM_BOOL
 		glGetProgramiv(program, name, &value);
-		RET_VALUE(JS_BOOL(static_cast<bool>(value != 0)));
+		RET_BOOL(value != 0);
 		break;
-
+	
 	CASES_PROGRAM_PARAM_ENUM
 		glGetProgramiv(program, name, &value);
-		RET_VALUE(JS_NUM(value));
+		RET_NUM(value);
 		break;
-
+	
 	CASES_PROGRAM_PARAM_NUMBER
 		glGetProgramiv(program, name, &value);
-		RET_VALUE(JS_NUM(static_cast<double>(value)));
+		RET_NUM(value);
 		break;
 	
 	default:
 		Nan::ThrowTypeError("GetProgramParameter: Invalid Enum");
-	
+		RET_NULL;
 	}
 	
 }
 
 
-NAN_METHOD(linkProgram) {
+JS_METHOD(linkProgram) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
 	
 	glLinkProgram(id);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(useProgram) {
+JS_METHOD(useProgram) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
 	
 	glUseProgram(id);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(validateProgram) {
+JS_METHOD(validateProgram) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, program);
 	
 	glValidateProgram(program);
+	RET_UNDEFINED;
 	
 }
 

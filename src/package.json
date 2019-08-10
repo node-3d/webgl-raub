@@ -1,0 +1,12 @@
+{
+	"name": "build",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"build:dev": "node-gyp rebuild --debug"
+	},
+	"dependencies": {
+		"addon-tools-raub": "https://github.com/node-3d/addon-tools-raub",
+		"deps-opengl-raub": "https://github.com/node-3d/deps-opengl-raub"
+	}
+}

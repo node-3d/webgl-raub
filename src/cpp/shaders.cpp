@@ -1,77 +1,75 @@
-#include <cstring>
-#include <vector>
-
-#include <node_buffer.h>
-
 #include "webgl.hpp"
 
-using namespace node;
-using namespace v8;
+
 using namespace std;
 
 
 namespace webgl {
 
 
-NAN_METHOD(createShader) {
+JS_METHOD(createShader) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
 	
 	GLuint shader = glCreateShader(id);
 	
-	RET_VALUE(Nan::New<Number>(shader));
+	RET_NUM(shader);
 	
 }
 
 
-NAN_METHOD(deleteShader) {
+JS_METHOD(deleteShader) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, shader);
 	
 	glDeleteShader(shader);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(isShader) {
+JS_METHOD(isShader) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, shader);
 	
-	RET_VALUE(JS_BOOL(glIsShader(shader) != 0));
+	RET_BOOL(glIsShader(shader) != 0);
 	
 }
 
 
-NAN_METHOD(attachShader) {
+JS_METHOD(attachShader) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, shader);
 	
 	glAttachShader(program, shader);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(compileShader) {
+JS_METHOD(compileShader) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
 	
 	glCompileShader(id);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(detachShader) {
+JS_METHOD(detachShader) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, program);
 	REQ_UINT32_ARG(1, shader);
 	
 	glDetachShader(program, shader);
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(getAttachedShaders) {
+JS_METHOD(getAttachedShaders) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, program);
 	
@@ -79,9 +77,9 @@ NAN_METHOD(getAttachedShaders) {
 	GLsizei count;
 	glGetAttachedShaders(program, 1024, &count, shaders);
 	
-	Local<Array> shadersArr = Nan::New<Array>(count);
+	Napi::Array shadersArr = Napi::Array::New(env);
 	for (int i = 0; i < count; i++) {
-		shadersArr->Set(i, JS_INT(static_cast<int>(shaders[i])));
+		shadersArr.Set(i, JS_NUM(static_cast<int>(shaders[i])));
 	}
 	
 	RET_VALUE(shadersArr);
@@ -89,15 +87,15 @@ NAN_METHOD(getAttachedShaders) {
 }
 
 
-NAN_METHOD(getShaderInfoLog) {
+JS_METHOD(getShaderInfoLog) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
 	
-	int Len = 1024;
-	char Error[1024];
-	glGetShaderInfoLog(id, 1024, &Len, Error);
+	int len = 1024;
+	char error[1024];
+	glGetShaderInfoLog(id, 1024, &len, error);
 	
-	RET_VALUE(JS_STR(Error));
+	RET_STR(error);
 	
 }
 
@@ -109,7 +107,7 @@ NAN_METHOD(getShaderInfoLog) {
 	case GL_INFO_LOG_LENGTH: \
 	case GL_SHADER_SOURCE_LENGTH:
 
-NAN_METHOD(getShaderParameter) {
+JS_METHOD(getShaderParameter) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, shader);
 	REQ_INT32_ARG(1, pname);
@@ -120,23 +118,23 @@ NAN_METHOD(getShaderParameter) {
 	
 	CASES_SHADER_PARAM_BOOL
 		glGetShaderiv(shader, pname, &value);
-		RET_VALUE(JS_BOOL(static_cast<bool>(value != 0)));
+		RET_BOOL(value != 0);
 		break;
 	
 	CASES_SHADER_PARAM_NUMBER
 		glGetShaderiv(shader, pname, &value);
-		RET_VALUE(JS_NUM(static_cast<double>(value)));
+		RET_NUM(value);
 		break;
 	
 	default:
 		Nan::ThrowTypeError("GetShaderParameter: Invalid Enum");
-	
+		RET_NULL;
 	}
 	
 }
 
 
-NAN_METHOD(getShaderSource) {
+JS_METHOD(getShaderSource) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, shader);
 	
@@ -145,7 +143,7 @@ NAN_METHOD(getShaderSource) {
 	GLchar *source = new GLchar[len];
 	glGetShaderSource(shader, len, NULL, source);
 	
-	Local<String> str = JS_STR(source);
+	Napi::String str = JS_STR(source);
 	delete [] source;
 	
 	RET_VALUE(str);
@@ -153,16 +151,17 @@ NAN_METHOD(getShaderSource) {
 }
 
 
-NAN_METHOD(shaderSource) {
+JS_METHOD(shaderSource) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
-	REQ_UTF8_ARG(1, code);
+	REQ_STR_ARG(1, code);
 	
 	const char* codes[1];
 	codes[0] = *code;
 	GLint length = code.length();
 	
 	glShaderSource(id, 1, codes, &length);
+	RET_UNDEFINED;
 	
 }
 

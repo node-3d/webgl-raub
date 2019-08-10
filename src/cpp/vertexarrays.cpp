@@ -1,51 +1,50 @@
 #include <cstring>
 #include <vector>
 
-#include <node_buffer.h>
-
 #include "webgl.hpp"
 
-using namespace node;
-using namespace v8;
+
 using namespace std;
 
 
 namespace webgl {
 
 
-NAN_METHOD(createVertexArray) {
+JS_METHOD(createVertexArray) { NAPI_ENV;
 	
 	GLuint vertexarray;
 	glGenVertexArrays(1, &vertexarray);
 	
-	RET_VALUE(Nan::New<Number>(vertexarray));
+	RET_NUM(vertexarray);
 	
 }
 
 
-NAN_METHOD(deleteVertexArray) {
+JS_METHOD(deleteVertexArray) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, vertexarray);
 	
 	glDeleteVertexArrays(1, reinterpret_cast<GLuint*>(&vertexarray));
+	RET_UNDEFINED;
 	
 }
 
 
-NAN_METHOD(isVertexArray) {
+JS_METHOD(isVertexArray) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, vertexarray);
 	
-	RET_VALUE(Nan::New<Boolean>(glIsVertexArray(vertexarray) != 0));
+	RET_BOOL(glIsVertexArray(vertexarray) != 0);
 	
 }
 
 
-NAN_METHOD(bindVertexArray) {
+JS_METHOD(bindVertexArray) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, vertexarray);
 	
 	glBindVertexArray(vertexarray);
+	RET_UNDEFINED;
 	
 }
 
