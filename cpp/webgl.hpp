@@ -16,6 +16,14 @@
 #endif
 
 
+#define REQ_ARRAY_ARG(I, VAR)                                                 \
+	REQ_OBJ_ARG(I, _obj_##VAR);                                               \
+  	if ( ! _obj_##VAR->IsArray() ) {                                          \
+  	  	return Nan::ThrowTypeError("Argument " #I " must be an array");       \
+  	}                                                                         \
+  	V8_VAR_ARR VAR = V8_VAR_ARR::Cast(_obj_##VAR)
+
+
 #define REQ_TYPED_ARRAY_ARG(I, VAR)                                              \
 	REQ_OBJ_ARG(I, _obj_##VAR);                                                  \
   	if ( ! _obj_##VAR->IsArrayBufferView() ) {                                   \
