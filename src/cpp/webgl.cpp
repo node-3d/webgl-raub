@@ -274,42 +274,42 @@ JS_METHOD(getParameter) { NAPI_ENV;
 	CASES_PARAM_INT2
 		glGetIntegerv(name, iParams);
 		arr = Napi::Array::New(env);
-		arr.Set(0, JS_NUM(iParams[0]));
-		arr.Set(1, JS_NUM(iParams[1]));
+		arr.Set(0U, JS_NUM(iParams[0]));
+		arr.Set(1U, JS_NUM(iParams[1]));
 		RET_VALUE(arr);
 		break;
 	
 	CASES_PARAM_INT4
 		glGetIntegerv(name, iParams);
-		arr.Set(0, JS_NUM(iParams[0]));
-		arr.Set(1, JS_NUM(iParams[1]));
-		arr.Set(2, JS_NUM(iParams[2]));
-		arr.Set(3, JS_NUM(iParams[3]));
+		arr.Set(0U, JS_NUM(iParams[0]));
+		arr.Set(1U, JS_NUM(iParams[1]));
+		arr.Set(2U, JS_NUM(iParams[2]));
+		arr.Set(3U, JS_NUM(iParams[3]));
 		RET_VALUE(arr);
 		break;
 	
 	CASES_PARAM_FLOAT2
 		glGetFloatv(name, fParams);
-		arr.Set(0, JS_NUM(fParams[0]));
-		arr.Set(1, JS_NUM(fParams[1]));
+		arr.Set(0U, JS_NUM(fParams[0]));
+		arr.Set(1U, JS_NUM(fParams[1]));
 		RET_VALUE(arr);
 		break;
 	
 	CASES_PARAM_FLOAT4
 		glGetFloatv(name, fParams);
-		arr.Set(0, JS_NUM(fParams[0]));
-		arr.Set(1, JS_NUM(fParams[1]));
-		arr.Set(2, JS_NUM(fParams[2]));
-		arr.Set(3, JS_NUM(fParams[3]));
+		arr.Set(0U, JS_NUM(fParams[0]));
+		arr.Set(1U, JS_NUM(fParams[1]));
+		arr.Set(2U, JS_NUM(fParams[2]));
+		arr.Set(3U, JS_NUM(fParams[3]));
 		RET_VALUE(arr);
 		break;
 	
 	CASES_PARAM_BOOL4
 		glGetBooleanv(name, bParams);
-		arr.Set(0, JS_BOOL(bParams[0] != 0));
-		arr.Set(1, JS_BOOL(bParams[1] != 0));
-		arr.Set(2, JS_BOOL(bParams[2] != 0));
-		arr.Set(3, JS_BOOL(bParams[3] != 0));
+		arr.Set(0U, JS_BOOL(bParams[0] != 0));
+		arr.Set(1U, JS_BOOL(bParams[1] != 0));
+		arr.Set(2U, JS_BOOL(bParams[2] != 0));
+		arr.Set(3U, JS_BOOL(bParams[3] != 0));
 		RET_VALUE(arr);
 		break;
 	
@@ -378,8 +378,8 @@ JS_METHOD(getRenderTarget) { NAPI_ENV;
 	if (framebufferStatus == GL_FRAMEBUFFER_COMPLETE) {
 		
 		Napi::Array result = Napi::Array::New(env);
-		result.Set(0, JS_NUM(fbo));
-		result.Set(1, JS_NUM(tex));
+		result.Set(0U, JS_NUM(fbo));
+		result.Set(1U, JS_NUM(tex));
 		
 		RET_VALUE(result);
 		
@@ -392,7 +392,7 @@ JS_METHOD(getRenderTarget) { NAPI_ENV;
 
 JS_METHOD(getSupportedExtensions) { NAPI_ENV;
 	
-	const char *extensions = glGetString(GL_EXTENSIONS);
+	const char *extensions = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
 	
 	if (extensions != NULL) {
 		RET_STR(extensions);
@@ -467,7 +467,7 @@ JS_METHOD(readPixels) { NAPI_ENV;
 	REQ_INT32_ARG(5, type);
 	REQ_OBJ_ARG(6, image);
 	
-	void *pixels = getData(image);
+	void *pixels = getData(env, image);
 	glReadPixels(x, y, width, height, format, type, pixels);
 	RET_UNDEFINED;
 	

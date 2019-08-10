@@ -289,11 +289,12 @@ JS_METHOD(uniformMatrix2fv) { NAPI_ENV;
 	GLfloat* data = getArrayData<GLfloat>(abv, &count);
 	
 	if (count < 4) {
-		Nan::ThrowError("Not enough data for UniformMatrix2fv");
+		JS_THROW("Not enough data for UniformMatrix2fv");
 	} else {
 		glUniformMatrix2fv(location, count / 4, transpose, data);
-		RET_UNDEFINED;
 	}
+	
+	RET_UNDEFINED;
 	
 }
 
@@ -308,11 +309,12 @@ JS_METHOD(uniformMatrix3fv) { NAPI_ENV;
 	GLfloat* data = getArrayData<GLfloat>(abv, &count);
 	
 	if (count < 9) {
-		Nan::ThrowError("Not enough data for UniformMatrix3fv");
+		JS_THROW("Not enough data for UniformMatrix3fv");
 	} else {
 		glUniformMatrix3fv(location, count / 9, transpose, data);
-		RET_UNDEFINED;
 	}
+	
+	RET_UNDEFINED;
 	
 }
 
@@ -327,7 +329,8 @@ JS_METHOD(uniformMatrix4fv) { NAPI_ENV;
 	GLfloat* data = getArrayData<GLfloat>(abv, &count);
 	
 	if (count < 16) {
-		Nan::ThrowError("Not enough data for UniformMatrix4fv");
+		JS_THROW("Not enough data for UniformMatrix4fv");
+		RET_UNDEFINED;
 	} else {
 		glUniformMatrix4fv(location, count / 16, transpose, data);
 	}
