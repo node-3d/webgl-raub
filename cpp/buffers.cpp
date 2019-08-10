@@ -107,10 +107,9 @@ NAN_METHOD(bufferSubData) {
 	
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, offset);
-	REQ_TYPED_ARRAY_ARG(2, arr, TypedArray);
+	REQ_TYPED_ARRAY_ARG(2, arr);
 	
 	int size = arr->ByteLength();
-	int byteOffset = arr->ByteOffset();
 	void* data = getArrayData<unsigned char>(arr);
 
 	glBufferSubData(target, offset, size, data);
@@ -133,19 +132,17 @@ NAN_METHOD(copyBufferSubData) {
 NAN_METHOD(getBufferSubData) {
 
 	REQ_INT32_ARG(0, readTarget);
-	REQ_INT32_ARG(1, srcByteOffset);
-	REQ_TYPED_ARRAY_ARG(2, dst, TypedArray);
-	LET_UINT32_ARG(3, dstOffset);
-	LET_UINT32_ARG(4, length);
+	REQ_INT32_ARG(1, sourceByteOffset);
+	REQ_TYPED_ARRAY_ARG(2, dest);
+	LET_OFFS_ARG(3, destByteOffset);
+	LET_OFFS_ARG(4, length);
 
-	int BPE = dst->ByteLength() / dst->Length();
-	int size = std::min((unsigned int) dst->ByteLength(), length * BPE);
+	size_t bytesPerElement = dest->ByteLength() / dest->Length();
+	size_t size = std::min(dest->ByteLength(), length * bytesPerElement);
 
-	// dstOffset = dstOffset * BPE + dst->ByteOffset();
+	void* data = getArrayData<unsigned char>(dest) + (destByteOffset * bytesPerElement);
 
-	void* data = getArrayData<unsigned char>(dst) + (dstOffset * BPE);
-
-	glGetBufferSubData(readTarget, srcByteOffset, size, data);
+	glGetBufferSubData(readTarget, sourceByteOffset, size, data);
 
 }
 

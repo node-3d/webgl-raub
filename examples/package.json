@@ -4,8 +4,8 @@
 	"private": true,
 	"main": "lesson05.js",
 	"dependencies": {
-		"glfw-raub": "https://github.com/node-3d/glfw-raub.git",
-		"image-raub": "https://github.com/node-3d/image-raub.git",
-		"webgl-raub": "1.3.0"
+		"glfw-raub": "3.1.3",
+		"image-raub": "2.1.0",
+		"webgl-raub": "file:../"
 	}
 }

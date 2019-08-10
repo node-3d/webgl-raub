@@ -82,7 +82,7 @@ NAN_METHOD(getProgramParameter) {
 
 	CASES_PROGRAM_PARAM_ENUM
 		glGetProgramiv(program, name, &value);
-		RET_VALUE(JS_NUM(static_cast<int>(value)));
+		RET_VALUE(JS_NUM(value));
 		break;
 
 	CASES_PROGRAM_PARAM_NUMBER

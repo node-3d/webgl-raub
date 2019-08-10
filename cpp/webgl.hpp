@@ -16,6 +16,16 @@
 #endif
 
 
+#define REQ_TYPED_ARRAY_ARG(I, VAR)                                              \
+	REQ_OBJ_ARG(I, _obj_##VAR);                                                  \
+  	if ( ! _obj_##VAR->IsArrayBufferView() ) {                                   \
+  	  	return Nan::ThrowTypeError("Argument " #I " must be an array buffer");   \
+  	}                                                                            \
+	v8::Local<v8::Object> obj = Nan::To<v8::Object>(_obj_##VAR).ToLocalChecked();\
+	v8::Local<v8::TypedArray> VAR = obj.As<TypedArray>();
+
+
+
 namespace webgl {
 	
 	// A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.

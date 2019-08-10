@@ -237,9 +237,9 @@ NAN_METHOD(vertexAttribPointer) {
 	REQ_INT32_ARG(2, type);
 	LET_BOOL_ARG(3, normalized);
 	REQ_INT32_ARG(4, stride);
-	REQ_OFFS_ARG(5, ptr);
+	REQ_OFFS_ARG(5, offset);
 	
-	GLvoid *vertices = reinterpret_cast<GLvoid*>(ptr);
+	GLvoid *vertices = reinterpret_cast<GLvoid*>(offset);
 	
 	// printf("VertexAttribPointer %d %d %d %d %d %d\n", indx, size, type, normalized, stride, offset);
 	glVertexAttribPointer(indx, size, type, normalized, stride, vertices);
@@ -253,9 +253,9 @@ NAN_METHOD(vertexAttribIPointer) {
 	REQ_INT32_ARG(1, size);
 	REQ_INT32_ARG(2, type);
 	REQ_UINT32_ARG(3, stride);
-	REQ_INT32_ARG(4, ptr);
+	REQ_OFFS_ARG(4, offset);
 
-	GLvoid *vertices = reinterpret_cast<GLvoid*>(ptr);
+	GLvoid *vertices = reinterpret_cast<GLvoid*>(offset);
 
 	glVertexAttribIPointer(indx, size, type, stride, vertices);
 }
