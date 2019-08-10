@@ -5,7 +5,8 @@
 	"main": "mocha",
 	"scripts": {
 		"test": "mocha",
-		"start": "mocha"
+		"start": "mocha",
+		"preinstall": "cd ../ && npm i"
 	},
 	"dependencies": {
 		"webgl-raub": "file:../",
