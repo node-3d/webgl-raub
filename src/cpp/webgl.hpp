@@ -7,28 +7,6 @@
 #include <GL/glew.h>
 
 
-#ifdef _WIN32
-	#define	strcasestr(s, t) strstr(strupr(s), strupr(t))
-#endif
-
-
-#define REQ_ARRAY_ARG(I, VAR)                                                 \
-	REQ_OBJ_ARG(I, _obj_##VAR);                                               \
-	if ( ! _obj_##VAR.IsArray() ) {                                          \
-		JS_THROW("Argument " #I " must  be of type `Array`");                 \
-	}                                                                         \
-	Napi::Array VAR = _obj_##VAR.As<Napi::Array>();
-
-
-#define REQ_TYPED_ARRAY_ARG(I, VAR)                                           \
-	REQ_OBJ_ARG(I, _obj_##VAR);                                               \
-	if ( ! _obj_##VAR.IsTypedArray() ) {                                     \
-		JS_THROW("Argument " #I " must be of type `TypedArray`");             \
-	}                                                                         \
-	Napi::TypedArray VAR = _obj_##VAR.As<Napi::TypedArray>();
-
-
-
 namespace webgl {
 	
 	// A 32-bit and 64-bit compatible way of converting a pointer to a GLuint.
