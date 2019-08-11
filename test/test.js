@@ -2,7 +2,9 @@
 
 const { expect } = require('chai');
 
-const webgl = require('webgl-raub');
+const webgl = require('..');
+
+
 const constants = [
 	'DEPTH_BUFFER_BIT','STENCIL_BUFFER_BIT','COLOR_BUFFER_BIT','FALSE','TRUE',
 	'POINTS','LINES','LINE_LOOP','LINE_STRIP','TRIANGLES','TRIANGLE_STRIP',
