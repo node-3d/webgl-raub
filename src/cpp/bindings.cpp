@@ -9,7 +9,7 @@
 
 #define JS_GL_SET_METHOD(name)                                                \
 	exports.DefineProperty(                                                   \
-		Napi::PropertyDescriptor::Function(env, exports, #name, glfw::name)   \
+		Napi::PropertyDescriptor::Function(env, exports, #name, webgl::name)   \
 	);
 
 

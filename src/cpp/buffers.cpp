@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "webgl.hpp"
 
 
@@ -76,11 +78,11 @@ JS_METHOD(bufferData) { NAPI_ENV;
 	
 	if (info[1].IsObject()) {
 		
-		REQ_TYPED_ARRAY_ARG(1, arr);
+		REQ_OBJ_ARG(1, arr);
 		REQ_INT32_ARG(2, usage);
 		
 		int size;
-		void* data = getArrayData(env, arr, size);
+		void* data = getArrayData<uint8_t>(env, arr, &size);
 		
 		glBufferData(target, size, data, usage);
 		
@@ -105,7 +107,7 @@ JS_METHOD(bufferSubData) { NAPI_ENV;
 	REQ_TYPED_ARRAY_ARG(2, arr);
 	
 	int size = arr.ByteLength();
-	void* data = getArrayData<unsigned char>(env, arr);
+	void* data = getArrayData<uint8_t>(env, arr);
 	
 	glBufferSubData(target, offset, size, data);
 	RET_UNDEFINED;
@@ -135,11 +137,11 @@ JS_METHOD(getBufferSubData) { NAPI_ENV;
 	LET_OFFS_ARG(3, destByteOffset);
 	LET_OFFS_ARG(4, length);
 	
-	size_t bytesPerElement = dest.ByteLength() / dest.Length();
-	size_t size = std::min(dest.ByteLength(), length * bytesPerElement);
-	size_t offset = destByteOffset * bytesPerElement;
+	size_t elementSize = dest.ElementSize();
+	size_t size = std::min(dest.ByteLength(), length * elementSize);
+	size_t offset = destByteOffset * elementSize;
 	
-	void* data = getArrayData<unsigned char>(env, dest) + offset;
+	void* data = getArrayData<uint8_t>(env, dest) + offset;
 	
 	glGetBufferSubData(readTarget, sourceByteOffset, size, data);
 	RET_UNDEFINED;

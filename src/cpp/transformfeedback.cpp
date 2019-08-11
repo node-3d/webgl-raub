@@ -82,7 +82,7 @@ JS_METHOD(transformFeedbackVaryings) { NAPI_ENV;
 	REQ_ARRAY_ARG(1, jsVaryings);
 	REQ_INT32_ARG(2, bufferMode);
 	
-	std::vector<char*> cppVaryings;
+	std::vector<const char*> cppVaryings;
 	
 	uint32_t count = jsVaryings.Length();
 	

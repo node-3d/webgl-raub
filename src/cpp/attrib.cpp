@@ -13,7 +13,7 @@ JS_METHOD(bindAttribLocation) { NAPI_ENV;
 	REQ_INT32_ARG(1, index);
 	REQ_STR_ARG(2, name);
 	
-	glBindAttribLocation(program, index, *name);
+	glBindAttribLocation(program, index, name.c_str());
 	RET_UNDEFINED;
 	
 }
@@ -65,7 +65,7 @@ JS_METHOD(getAttribLocation) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	REQ_STR_ARG(1, name);
 	
-	RET_NUM(glGetAttribLocation(program, *name));
+	RET_NUM(glGetAttribLocation(program, name.c_str()));
 	
 }
 
@@ -88,7 +88,7 @@ JS_METHOD(getVertexAttrib) { NAPI_ENV;
 	
 	GLint value = 0;
 	float vextex_attribs[4];
-	Napi::Array arr;
+	Napi::Array arr = Napi::Array::New(env);
 	
 	switch (pname) {
 	
@@ -99,21 +99,21 @@ JS_METHOD(getVertexAttrib) { NAPI_ENV;
 	
 	CASES_VERTEX_ATTR_INT
 		glGetVertexAttribiv(index, pname, &value);
-		RET_INT(value);
+		RET_NUM(value);
 		break;
 	
 	CASES_VERTEX_ATTR_FLOAT4
 		glGetVertexAttribfv(index, pname, vextex_attribs);
-		arr = Napi::Array::New(env);
-		arr.Set(0, JS_NUM(vextex_attribs[0]));
-		arr.Set(1, JS_NUM(vextex_attribs[1]));
-		arr.Set(2, JS_NUM(vextex_attribs[2]));
-		arr.Set(3, JS_NUM(vextex_attribs[3]));
+		arr.Set(0U, JS_NUM(vextex_attribs[0]));
+		arr.Set(1U, JS_NUM(vextex_attribs[1]));
+		arr.Set(2U, JS_NUM(vextex_attribs[2]));
+		arr.Set(3U, JS_NUM(vextex_attribs[3]));
 		RET_VALUE(arr);
 		break;
 	
 	default:
-		Nan::ThrowError("GetVertexAttrib: Invalid Enum");
+		JS_THROW("GetVertexAttrib: Invalid Enum");
+		RET_UNDEFINED;
 	
 	}
 	
@@ -128,7 +128,7 @@ JS_METHOD(getVertexAttribOffset) { NAPI_ENV;
 	void *ret = NULL;
 	glGetVertexAttribPointerv(index, name, &ret);
 	
-	RET_INT(ToGLuint(ret));
+	RET_NUM(ToGLuint(ret));
 	
 }
 
@@ -149,7 +149,7 @@ JS_METHOD(vertexAttrib1fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLfloat *data = getArrayData<GLfloat>(abv);
+	GLfloat *data = getArrayData<GLfloat>(env, abv);
 	
 	glVertexAttrib1fv(location, data);
 	RET_UNDEFINED;
@@ -174,7 +174,7 @@ JS_METHOD(vertexAttrib2fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLfloat *data = getArrayData<GLfloat>(abv);
+	GLfloat *data = getArrayData<GLfloat>(env, abv);
 	
 	glVertexAttrib2fv(location, data);
 	RET_UNDEFINED;
@@ -200,7 +200,7 @@ JS_METHOD(vertexAttrib3fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLfloat *data = getArrayData<GLfloat>(abv);
+	GLfloat *data = getArrayData<GLfloat>(env, abv);
 	
 	glVertexAttrib3fv(location, data);
 	RET_UNDEFINED;
@@ -227,7 +227,7 @@ JS_METHOD(vertexAttrib4fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLfloat *data = getArrayData<GLfloat>(abv);
+	GLfloat *data = getArrayData<GLfloat>(env, abv);
 	
 	glVertexAttrib4fv(location, data);
 	RET_UNDEFINED;

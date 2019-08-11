@@ -84,7 +84,7 @@ JS_METHOD(getProgramParameter) { NAPI_ENV;
 		break;
 	
 	default:
-		Nan::ThrowTypeError("GetProgramParameter: Invalid Enum");
+		JS_THROW("GetProgramParameter: Invalid Enum");
 		RET_NULL;
 	}
 	

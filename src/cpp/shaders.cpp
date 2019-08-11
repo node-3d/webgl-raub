@@ -127,7 +127,7 @@ JS_METHOD(getShaderParameter) { NAPI_ENV;
 		break;
 	
 	default:
-		Nan::ThrowTypeError("GetShaderParameter: Invalid Enum");
+		JS_THROW("GetShaderParameter: Invalid Enum");
 		RET_NULL;
 	}
 	
@@ -156,11 +156,10 @@ JS_METHOD(shaderSource) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	REQ_STR_ARG(1, code);
 	
-	const char* codes[1];
-	codes[0] = *code;
-	GLint length = code.length();
+	const char *strings = code.c_str();
+	GLint lengths = code.length();
 	
-	glShaderSource(id, 1, codes, &length);
+	glShaderSource(id, 1, &strings, &lengths);
 	RET_UNDEFINED;
 	
 }

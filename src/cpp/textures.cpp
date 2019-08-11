@@ -163,7 +163,7 @@ JS_METHOD(texImage2D) { NAPI_ENV;
 		
 		REQ_OBJ_ARG(8, image);
 		
-		void *ptr = getData(image);
+		void *ptr = getData(env, image);
 		glTexImage2D(
 			target,
 			level,
@@ -177,6 +177,8 @@ JS_METHOD(texImage2D) { NAPI_ENV;
 		);
 		
 	}
+	
+	RET_UNDEFINED;
 	
 }
 
@@ -216,7 +218,7 @@ JS_METHOD(texSubImage2D) { NAPI_ENV;
 	REQ_INT32_ARG(6, format);
 	REQ_INT32_ARG(7, type);
 	
-	if (info.Length() <= 8 || info[8].IsNullOrUndefined()) {
+	if (info.Length() <= 8 || IS_ARG_EMPTY(8)) {
 		
 		glTexSubImage2D(
 			target,
@@ -234,7 +236,7 @@ JS_METHOD(texSubImage2D) { NAPI_ENV;
 		
 		REQ_OBJ_ARG(8, image);
 		
-		void *pixels = getData(image);
+		void *pixels = getData(env, image);
 		glTexSubImage2D(
 			target,
 			level,

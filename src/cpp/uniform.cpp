@@ -55,8 +55,7 @@ JS_METHOD(getUniformLocation) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	REQ_STR_ARG(1, name);
 	
-	RET_VALUE(JS_NUM(glGetUniformLocation(program, *name)));
-	RET_UNDEFINED;
+	RET_NUM(glGetUniformLocation(program, name.c_str()));
 	
 }
 
@@ -166,8 +165,8 @@ JS_METHOD(uniform1fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	int num = 0;
-	GLfloat *ptr = getArrayData<GLfloat>(abv, &num);
+	int num;
+	GLfloat *ptr = getArrayData<GLfloat>(env, abv, &num);
 	
 	glUniform1fv(location, num, ptr);
 	RET_UNDEFINED;
@@ -180,8 +179,8 @@ JS_METHOD(uniform2fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	int num = 0;
-	GLfloat *ptr = getArrayData<GLfloat>(abv, &num);
+	int num;
+	GLfloat *ptr = getArrayData<GLfloat>(env, abv, &num);
 	num /= 2;
 	
 	glUniform2fv(location, num, ptr);
@@ -195,8 +194,8 @@ JS_METHOD(uniform3fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	int num = 0;
-	GLfloat *ptr = getArrayData<GLfloat>(abv, &num);
+	int num;
+	GLfloat *ptr = getArrayData<GLfloat>(env, abv, &num);
 	num /= 3;
 	
 	glUniform3fv(location, num, ptr);
@@ -210,8 +209,8 @@ JS_METHOD(uniform4fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	int num = 0;
-	GLfloat *ptr = getArrayData<GLfloat>(abv, &num);
+	int num;
+	GLfloat *ptr = getArrayData<GLfloat>(env, abv, &num);
 	num /= 4;
 	
 	glUniform4fv(location, num, ptr);
@@ -225,8 +224,8 @@ JS_METHOD(uniform1iv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	int num = 0;
-	GLint *ptr = getArrayData<GLint>(abv, &num);
+	int num;
+	GLint *ptr = getArrayData<GLint>(env, abv, &num);
 	
 	glUniform1iv(location, num, ptr);
 	RET_UNDEFINED;
@@ -239,8 +238,8 @@ JS_METHOD(uniform2iv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	int num = 0;
-	GLint *ptr = getArrayData<GLint>(abv, &num);
+	int num;
+	GLint *ptr = getArrayData<GLint>(env, abv, &num);
 	num /= 2;
 	
 	glUniform2iv(location, num, ptr);
@@ -254,8 +253,8 @@ JS_METHOD(uniform3iv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	int num = 0;
-	GLint *ptr = getArrayData<GLint>(abv, &num);
+	int num;
+	GLint *ptr = getArrayData<GLint>(env, abv, &num);
 	num /= 3;
 	
 	glUniform3iv(location, num, ptr);
@@ -269,8 +268,8 @@ JS_METHOD(uniform4iv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
-	int num = 0;
-	GLint *ptr = getArrayData<GLint>(abv, &num);
+	int num;
+	GLint *ptr = getArrayData<GLint>(env, abv, &num);
 	num /= 4;
 	
 	glUniform4iv(location, num, ptr);
@@ -286,7 +285,7 @@ JS_METHOD(uniformMatrix2fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(abv, &count);
+	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
 	
 	if (count < 4) {
 		JS_THROW("Not enough data for UniformMatrix2fv");
@@ -306,7 +305,7 @@ JS_METHOD(uniformMatrix3fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(abv, &count);
+	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
 	
 	if (count < 9) {
 		JS_THROW("Not enough data for UniformMatrix3fv");
@@ -326,7 +325,7 @@ JS_METHOD(uniformMatrix4fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(abv, &count);
+	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
 	
 	if (count < 16) {
 		JS_THROW("Not enough data for UniformMatrix4fv");
