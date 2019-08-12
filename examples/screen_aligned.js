@@ -53,7 +53,7 @@ function getShader(gl, id) {
 	
 	var shader;
 	
-	if ( ! shaders.hasOwnProperty(id) ) {
+	if ( ! shaders.id ) {
 		return null;
 	}
 	var str = shaders[id];
