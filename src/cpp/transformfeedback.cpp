@@ -83,7 +83,7 @@ JS_METHOD(transformFeedbackVaryings) { NAPI_ENV;
 	REQ_INT32_ARG(2, bufferMode);
 	
 	uint32_t count = jsVaryings.Length();
-	std::string *cppVaryings = new std::string [count];
+	std::string *cppVaryings = new std::string[count];
 	const char **varyings = new const char* [count];
 	
 	for (uint32_t i = 0; i < count; i++) {
