@@ -27,8 +27,8 @@
 		"README.md"
 	],
 	"engines": {
-		"node": ">=10.16.1",
-		"npm": ">=6.9.0"
+		"node": ">=12.13.0",
+		"npm": ">=6.12.0"
 	},
 	"config": {
 		"install": "v2.0.0"
@@ -42,6 +42,7 @@
 	},
 	"dependencies": {
 		"addon-tools-raub": "https://github.com/node-3d/addon-tools-raub",
-		"deps-opengl-raub": "https://github.com/node-3d/deps-opengl-raub"
+		"deps-opengl-raub": "https://github.com/node-3d/deps-opengl-raub",
+		"segfault-raub": "https://github.com/node-3d/segfault-raub.git"
 	}
 }

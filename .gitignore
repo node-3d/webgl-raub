@@ -3,10 +3,11 @@
 .lock-wscript
 .DS_Store
 .project
-.DS_Store
+.vscode
 .eslintrc
 node_modules/
 src/build/
 src/node_modules/
+examples/node_modules/
 bin-*/
 *.log

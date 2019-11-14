@@ -29,7 +29,6 @@
 			'<!@(node -p "require(\'addon-tools-raub\').include")',
 			'<(gl_include)',
 		],
-		'defines': ['NAPI_DISABLE_CPP_EXCEPTIONS'],
 		'library_dirs': ['<(gl_bin)'],
 		'conditions': [
 			[

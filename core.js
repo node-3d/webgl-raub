@@ -1,5 +1,7 @@
 'use strict';
 
+require('segfault-raub');
+
 require('deps-opengl-raub');
 
 const { bin } = require('addon-tools-raub');
