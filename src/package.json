@@ -3,10 +3,10 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"build:dev": "node-gyp rebuild --debug"
+		"build": "node-gyp rebuild && node -e \"require('addon-tools-raub/cpbin')('webgl')\""
 	},
 	"dependencies": {
-		"addon-tools-raub": "https://github.com/node-3d/addon-tools-raub",
-		"deps-opengl-raub": "https://github.com/node-3d/deps-opengl-raub"
+		"addon-tools-raub": "5.0.0",
+		"deps-opengl-raub": "3.0.0"
 	}
 }
