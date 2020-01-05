@@ -58,10 +58,11 @@ function initGL(canvas) {
 		
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
+		console.log(gl.drawingBufferWidth, gl.drawingBufferHeight);
 		
 	} catch (e) {
 		
-		console.error("Could not initialise WebGL, sorry :-(");
+		console.error('Could not initialise WebGL, sorry :-(');
 		process.exit(-1);
 		
 	}
@@ -111,12 +112,12 @@ function initShaders() {
 	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'aVertexPosition');
 	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 	
-	shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+	shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, 'aTextureCoord');
 	gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 	
 	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, 'uPMatrix');
 	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
-	shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+	shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, 'uSampler');
 	
 }
 
@@ -156,7 +157,7 @@ function setMatrixUniforms() {
 	
 	const error = gl.getError();
 	if (error) {
-		console.error("setMatrixUniforms():", gl.viewportWidth, gl.viewportHeight, error);
+		console.error('setMatrixUniforms():', gl.viewportWidth, gl.viewportHeight, error);
 	}
 	
 }

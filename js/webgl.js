@@ -406,6 +406,13 @@ const _viewport = gl.viewport;
 gl.viewport = (x, y, width, height) => _viewport(x, y, width, height);
 
 
+Object.defineProperty(
+	gl, 'drawingBufferWidth', { get: () => gl.getParameter(gl.VIEWPORT)[2] }
+);
+Object.defineProperty(
+	gl, 'drawingBufferHeight', { get: () => gl.getParameter(gl.VIEWPORT)[3] }
+);
+
 ////////////////////////////////////////////////////////////////////////////////
 
 
