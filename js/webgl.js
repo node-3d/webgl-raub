@@ -214,8 +214,19 @@ gl.getShaderParameter = (shader, pname) => _getShaderParameter(enforceId(shader)
 const _getShaderSource = gl.getShaderSource;
 gl.getShaderSource = shader => _getShaderSource(enforceId(shader));
 
-const _shaderSource = gl.shaderSource;
-gl.shaderSource = (shader, source) => _shaderSource(enforceId(shader), source);
+gl._shaderSource = gl.shaderSource;
+gl.shaderSource = (shaderId, code) => gl._shaderSource(
+	enforceId(shaderId),
+	code.replace(
+		/^\s*?(#version|precision).*?$/gm, ''
+	).replace(
+		/^/, '#version 120\n'
+	).replace(
+		/gl_FragDepthEXT/g, 'gl_FragDepth'
+	).replace(
+		'#extension GL_EXT_frag_depth : enable', ''
+	)
+);
 
 
 // Texture
