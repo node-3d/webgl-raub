@@ -218,7 +218,7 @@ gl._shaderSource = gl.shaderSource;
 gl.shaderSource = (shaderId, code) => gl._shaderSource(
 	enforceId(shaderId),
 	code.replace(
-		/^\s*?(#version|precision).*?$/gm, ''
+		/^\s*?(#version|precision).*?($|;)/gm, ''
 	).replace(
 		/^/, '#version 120\n'
 	).replace(
