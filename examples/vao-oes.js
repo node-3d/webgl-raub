@@ -8,7 +8,7 @@ const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
 
 Document.setWebgl(webgl);
-const document = new Document();
+const document = new Document({ osxCore: true });
 const frame    = document.requestAnimationFrame;
 
 const ext = webgl.getExtension('OES_vertex_array_object');
@@ -65,7 +65,7 @@ function initGL(canvas) {
 		
 	} catch (e) {
 		
-		console.error("Could not initialise WebGL, sorry :-(");
+		console.error('Could not initialise WebGL, sorry :-(');
 		console.error(e);
 		process.exit(-1);
 		
@@ -133,7 +133,7 @@ function setMatrixUniforms() {
 	
 	const error = gl.getError();
 	if (error) {
-		console.error("setMatrixUniforms():", gl.viewportWidth, gl.viewportHeight, error);
+		console.error('setMatrixUniforms():', gl.viewportWidth, gl.viewportHeight, error);
 	}
 	
 }
@@ -296,7 +296,7 @@ function initBuffers() {
 	
 	const error = gl.getError();
 	if (error) {
-		console.error("initBuffers():", error);
+		console.error('initBuffers():', error);
 	}
 	
 }
@@ -379,4 +379,3 @@ function start() {
 }
 
 start();
-

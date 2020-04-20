@@ -58,6 +58,14 @@ const canvas = document.createElement('canvas'); // === doc
 const gl = canvas.getContext('webgl'); // === webgl
 ```
 
+> OSX Note: some features may depend on OpenGL profile being used. Core profile
+is necessary for VAO and other OpenGL 3.2+ features. Depending on your windowing
+backend, set the OpenGL profile of your preference.
+In case [glfw-raub](https://github.com/raub/node-glfw) is used,
+the profile can be set through the `Window`/`Document`
+[constructor](https://github.com/node-3d/glfw-raub#class-window) or with
+`glfw.windowHint` calls.
+
 
 ---
 

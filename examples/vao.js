@@ -8,7 +8,7 @@ const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
 
 Document.setWebgl(webgl);
-const document = new Document();
+const document = new Document({ osxCore: true });
 const frame    = document.requestAnimationFrame;
 
 let xRot   = 0;
@@ -52,22 +52,15 @@ const shaders = {
 
 
 function initGL(canvas) {
-	
 	try {
-		
 		gl = canvas.getContext('webgl');
-		
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
-		
 	} catch (e) {
-		
-		console.error("Could not initialise WebGL, sorry :-(");
+		console.error('Could not initialise WebGL, sorry :-(');
 		console.error(e);
 		process.exit(-1);
-		
 	}
-	
 }
 
 
@@ -130,7 +123,7 @@ function setMatrixUniforms() {
 	
 	const error = gl.getError();
 	if (error) {
-		console.error("setMatrixUniforms():", gl.viewportWidth, gl.viewportHeight, error);
+		console.error('setMatrixUniforms():', gl.viewportWidth, gl.viewportHeight, error);
 	}
 	
 }
@@ -293,7 +286,7 @@ function initBuffers() {
 	
 	const error = gl.getError();
 	if (error) {
-		console.error("initBuffers():", error);
+		console.error('initBuffers():', error);
 	}
 	
 }
@@ -376,4 +369,3 @@ function start() {
 }
 
 start();
-
