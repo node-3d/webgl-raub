@@ -7,7 +7,7 @@
 		"postinstall": "cd .. && npm ci"
 	},
 	"dependencies": {
-		"glfw-raub": "4.2.0",
-		"image-raub": "3.1.0"
+		"glfw-raub": "4.4.0",
+		"image-raub": "3.1.2"
 	}
 }
