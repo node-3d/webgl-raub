@@ -20,30 +20,30 @@ step during the `npm i` command.
 
 ![Example](examples/screenshot.jpg)
 
-[WebGLRenderingContext docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext)
+This module **does not provide** a window control system, and it
+**can not set up an OpenGL context** on its own. This API simply maps the
+native OpenGL function calls to their JS counterpart.
+
+**TL;DR**: see [3d-core-raub](https://github.com/node-3d/3d-core-raub)
+for a quick start in a fully sufficient environment.
 
 
 ## Usage
-
-> Note: see [3d-core-raub](https://github.com/node-3d/3d-core-raub)
-for a quick start in a fully sufficient environment.
 
 ```js
 const webgl = require('webgl-raub');
 ```
 
-Here `webgl` is what contains all the **WebGL** api - `WebGLRenderingContext`.
-However a window is required to exercise your **GL** skills on. There is
-[a nice implementation](https://github.com/raub/node-glfw) for that,
-though different ones are quite possible.
-
-As soon as you create and set up a window, simply follow the
+Here `webgl` contains all the **WebGL** API, like a `WebGLRenderingContext` instance would.
+See
 [WebGLRenderingContext docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext).
 
-> Note: if you are planning to use browser **WebGL** libs, be aware of their browser-affinity.
-You would have to provide several additional interfaces to mimic the browser.
-There is [node-glfw](https://github.com/raub/node-glfw) module, which exports the
-`Document` class. It can be used the following way:
+To use browser **WebGL** libs, like [three.js](https://threejs.org/),
+several additional interfaces must also be provided to mimic the browser.
+
+There is [node-glfw](https://github.com/raub/node-glfw) module, which solves both
+window handling and additional browser-like interfaces. It is also bundled into
+the [3d-core-raub](https://github.com/node-3d/3d-core-raub) module, for that matter.
 
 ```
 const webgl = require('webgl-raub');
@@ -78,4 +78,4 @@ implementation of **WebGL**.
 
 You can try to use **three.js** your own way, but there is
 a far better option: [node-3d-core](https://github.com/raub/node-3d-core),
-which gets you two more steps ahead for free.
+which gets you two steps ahead for free.
