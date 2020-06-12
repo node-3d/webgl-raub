@@ -82,9 +82,14 @@ JS_METHOD(bufferData) { NAPI_ENV;
 		REQ_INT32_ARG(2, usage);
 		
 		int size;
-		void* data = getArrayData<uint8_t>(env, arr, &size);
+		uint8_t* data = getArrayData<uint8_t>(env, arr, &size);
 		
-		glBufferData(target, size, data, usage);
+		// WebGL2:
+		// void gl.bufferData(target, ArrayBufferView srcData, usage, srcOffset, length);
+		LET_INT32_ARG(3, srcOffset);
+		USE_INT32_ARG(4, length, size);
+		
+		glBufferData(target, length, data + srcOffset, usage);
 		
 	} else if (info[1].IsNumber()) {
 		
