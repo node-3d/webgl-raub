@@ -57,5 +57,7 @@ deploy:
   skip_cleanup: true
   overwrite: true
   draft: true
+  prerelease: false
+  tag_name: "$SYSNAME"
   file:
     - "build/Release/webgl.node"

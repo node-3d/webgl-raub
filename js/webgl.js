@@ -225,6 +225,8 @@ gl.shaderSource = (shaderId, code) => gl._shaderSource(
 		/gl_FragDepthEXT/g, 'gl_FragDepth'
 	).replace(
 		'#extension GL_EXT_frag_depth : enable', ''
+	).replace(
+		/\bhighp\s+/g, ''
 	)
 );
 
