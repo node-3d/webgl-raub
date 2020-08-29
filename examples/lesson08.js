@@ -23,47 +23,44 @@ document.on('resize', function (evt) {
 
 
 var shaders = {
-    "shader-fs" :
-      [
-       "#ifdef GL_ES",
-       "  precision mediump float;",
-       "#endif",
-       "varying vec2 vTextureCoord;",
-       "varying vec3 vLightWeighting;",
-       "uniform float uAlpha;",
-       "uniform sampler2D uSampler;",
-       "void main(void) {",
-       "    vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));",
-       "    gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a * uAlpha);",
-       "}"
-       ].join("\n"),
-
-       "shader-vs" :
-         [
-          "attribute vec3 aVertexPosition;",
-          "attribute vec3 aVertexNormal;",
-          "attribute vec2 aTextureCoord;",
-          "uniform mat4 uMVMatrix;",
-          "uniform mat4 uPMatrix;",
-          "uniform mat3 uNMatrix;",
-          "uniform vec3 uAmbientColor;",
-          "uniform vec3 uLightingDirection;",
-          "uniform vec3 uDirectionalColor;",
-          "uniform bool uUseLighting;",
-          "varying vec2 vTextureCoord;",
-          "varying vec3 vLightWeighting;",
-          "void main(void) {",
-          "    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);",
-          "    vTextureCoord = aTextureCoord;",
-          "    if (!uUseLighting) {",
-          "        vLightWeighting = vec3(1.0, 1.0, 1.0);",
-          "    } else {",
-          "        vec3 transformedNormal = uNMatrix * aVertexNormal;",
-          "        float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);",
-          "        vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;",
-          "    }",
-          "}"
-          ].join("\n")
+	'shader-fs': [
+		'#ifdef GL_ES',
+		'  precision mediump float;',
+		'#endif',
+		'varying vec2 vTextureCoord;',
+		'varying vec3 vLightWeighting;',
+		'uniform float uAlpha;',
+		'uniform sampler2D uSampler;',
+		'void main(void) {',
+		'	vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',
+		'	gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a * uAlpha);',
+		'}'
+	].join('\n'),
+	'shader-vs': [
+		'attribute vec3 aVertexPosition;',
+		'attribute vec3 aVertexNormal;',
+		'attribute vec2 aTextureCoord;',
+		'uniform mat4 uMVMatrix;',
+		'uniform mat4 uPMatrix;',
+		'uniform mat3 uNMatrix;',
+		'uniform vec3 uAmbientColor;',
+		'uniform vec3 uLightingDirection;',
+		'uniform vec3 uDirectionalColor;',
+		'uniform bool uUseLighting;',
+		'varying vec2 vTextureCoord;',
+		'varying vec3 vLightWeighting;',
+		'void main(void) {',
+		'	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);',
+		'	vTextureCoord = aTextureCoord;',
+		'	if (!uUseLighting) {',
+		'		vLightWeighting = vec3(1.0, 1.0, 1.0);',
+		'	} else {',
+		'		vec3 transformedNormal = uNMatrix * aVertexNormal;',
+		'		float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);',
+		'		vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;',
+		'	}',
+		'}'
+	].join('\n')
 };
 
 
@@ -77,7 +74,7 @@ function initGL(canvas) {
 function getShader(gl, id) {
 	var shader;
 	
-	if ( ! shaders.id ) {
+	if ( ! shaders[id] ) {
 		return null;
 	}
 	var str = shaders[id];
@@ -94,8 +91,8 @@ function getShader(gl, id) {
 	gl.compileShader(shader);
 	
 	if ( ! gl.getShaderParameter(shader, gl.COMPILE_STATUS) ) {
-	console.log(gl.getShaderInfoLog(shader));
-	return null;
+		console.log(gl.getShaderInfoLog(shader));
+		return null;
 	}
 	
 	return shader;
@@ -106,8 +103,8 @@ var shaderProgram;
 
 function initShaders() {
 	
-	var fragmentShader = getShader(gl, "shader-fs");
-	var vertexShader = getShader(gl, "shader-vs");
+	var fragmentShader = getShader(gl, 'shader-fs');
+	var vertexShader = getShader(gl, 'shader-vs');
 	
 	shaderProgram = gl.createProgram();
 	gl.attachShader(shaderProgram, vertexShader);
@@ -115,32 +112,36 @@ function initShaders() {
 	gl.linkProgram(shaderProgram);
 	
 	if ( ! gl.getProgramParameter(shaderProgram, gl.LINK_STATUS) ) {
-		console.log('Could not initialise shaders');
+		console.error(
+			`Could not initialise shaders. Error: ${
+				gl.getProgramInfoLog(shaderProgram)
+			}`
+		);
 	}
 	
 	gl.useProgram(shaderProgram);
 	
-	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'aVertexPosition');
 	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 	
-	shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal");
+	shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, 'aVertexNormal');
 	gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute);
 	
-	shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+	shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, 'aTextureCoord');
 	gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 	
-	shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
+	shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, 'aVertexColor');
 	gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
 	
-	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-	shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
-	shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-	shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, "uUseLighting");
-	shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-	shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightingDirection");
-	shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
-	shaderProgram.alphaUniform = gl.getUniformLocation(shaderProgram, "uAlpha");
+	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, 'uPMatrix');
+	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
+	shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, 'uNMatrix');
+	shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, 'uSampler');
+	shaderProgram.useLightingUniform = gl.getUniformLocation(shaderProgram, 'uUseLighting');
+	shaderProgram.ambientColorUniform = gl.getUniformLocation(shaderProgram, 'uAmbientColor');
+	shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, 'uLightingDirection');
+	shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, 'uDirectionalColor');
+	shaderProgram.alphaUniform = gl.getUniformLocation(shaderProgram, 'uAlpha');
 	
 }
 
