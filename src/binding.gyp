@@ -38,7 +38,7 @@
 						"-Wl,-rpath,'$$ORIGIN'",
 						"-Wl,-rpath,'$$ORIGIN/../node_modules/deps-opengl-raub/<(bin)'",
 						"-Wl,-rpath,'$$ORIGIN/../../deps-opengl-raub/<(bin)'",
-						'<(gl_bin)/libGLEW.so.2.0',
+						'<(gl_bin)/libGLEW.so.2.1',
 						'<(gl_bin)/libGL.so',
 						'<(gl_bin)/libXrandr.so',
 					],

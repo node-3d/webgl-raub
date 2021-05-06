@@ -1,0 +1,36 @@
+name: Build OSX
+
+on:
+  workflow_dispatch
+
+jobs:
+  Build:
+    if: contains('["raub"]', github.actor)
+    runs-on: macos-10.15
+
+    steps:
+
+      - name: Fetch Repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: Install Modules
+        run: npm ci
+
+      - name: Run Build
+        run: npm run build
+
+      - name: Store Binaries
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          draft: true
+          tag_name: linux-${{ github.run }}-${{ github.sha }}
+          name: OSX
+          body: OSX binaries at ${{ github.sha }}
+          files: src/build/Release/webgl.node

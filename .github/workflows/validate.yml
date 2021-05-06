@@ -1,0 +1,35 @@
+name: Validate
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  Validate:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Fetch Repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: Install Modules
+        run: npm ci
+
+      - name: Run Lint
+        run: npm run eslint
+
+      - name: Run Unit Tests
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: npm run test-ci

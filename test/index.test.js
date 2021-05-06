@@ -1,7 +1,5 @@
 'use strict';
 
-const { expect } = require('chai');
-
 const webgl = require('..');
 
 
@@ -138,18 +136,18 @@ const methods = [
 describe('WebGL', () => {
 	
 	it('exports an object', () => {
-		expect(webgl).to.be.an('object');
+		expect(typeof webgl).toBe('object');
 	});
 	
 	constants.forEach(constant => {
 		it(`#${constant} constant exposed`, () => {
-			expect(webgl).to.have.property(constant);
+			expect(webgl).toHaveProperty(constant);
 		});
 	});
 	
 	methods.forEach(method => {
 		it(`#${method}() method exposed`, () => {
-			expect(webgl).to.respondTo(method);
+			expect(typeof webgl[method]).toBe('function');
 		});
 	});
 	

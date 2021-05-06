@@ -1,7 +1,7 @@
 {
 	"author": "Luis Blanco <luisblanco1337@gmail.com>",
 	"name": "webgl-raub",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "WebGL for Node.js",
 	"license": "MIT",
 	"main": "index.js",
@@ -21,28 +21,38 @@
 		"js",
 		"core.js",
 		"index.js",
+		"index.d.ts",
 		"install.js",
 		"LICENSE",
 		"package.json",
 		"README.md"
 	],
 	"engines": {
-		"node": ">=12.13.0",
-		"npm": ">=6.12.0"
-	},
-	"config": {
-		"install": "v2.1.0"
+		"node": ">=14.16.0",
+		"npm": ">=6.14.1"
 	},
 	"scripts": {
-		"postinstall": "node install"
+		"postinstall": "node install",
+		"eslint": "eslint .",
+		"build": "cd src && node-gyp rebuild && cd ..",
+		"test": "jest --coverage=false --watch",
+		"test-ci": "jest --coverage=false --verbose",
+		"test-coverage": "rm -rf doc/jest && jest --coverage --silent"
 	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/node-3d/webgl-raub.git"
 	},
 	"dependencies": {
-		"addon-tools-raub": "5.2.x",
-		"deps-opengl-raub": "3.0.x",
-		"segfault-raub": "1.1.x"
+		"addon-tools-raub": "5.3.x",
+		"deps-opengl-raub": "4.0.x",
+		"segfault-raub": "1.2.x"
+	},
+	"devDependencies": {
+		"eslint": "7.23.0",
+		"eslint-plugin-jest": "24.3.3",
+		"eslint-plugin-node": "11.1.0",
+		"jest": "26.6.3",
+		"typescript": "4.2.4"
 	}
 }

@@ -3,11 +3,11 @@
 This is a part of [Node3D](https://github.com/node-3d) project.
 
 [![NPM](https://nodei.co/npm/webgl-raub.png?compact=true)](https://www.npmjs.com/package/webgl-raub)
-
-[![Build Status](https://api.travis-ci.com/node-3d/webgl-raub.svg?branch=master)](https://travis-ci.com/node-3d/webgl-raub)
 [![CodeFactor](https://www.codefactor.io/repository/github/node-3d/webgl-raub/badge)](https://www.codefactor.io/repository/github/node-3d/webgl-raub)
 
-> npm i webgl-raub
+```
+npm i webgl-raub
+```
 
 
 ## Synopsis

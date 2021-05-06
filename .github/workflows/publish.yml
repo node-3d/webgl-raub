@@ -1,0 +1,48 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Release name'
+        required: true
+        default: 'Minor Update'
+      text:
+        description: 'Patch notes'
+        required: true
+        default: Fixed minor issues.
+
+jobs:
+  Publish:
+    if: contains('["raub"]', github.actor)
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Fetch Repository
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.16.0
+
+      - name: Get Npm Version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: Publish
+        run: |
+          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+          npm publish --ignore-scripts
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.package-version.outputs.current-version}}
+          release_name: ${{ github.event.inputs.name }}
+          body: ${{ github.event.inputs.text }}

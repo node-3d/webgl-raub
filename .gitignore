@@ -4,7 +4,6 @@
 .DS_Store
 .project
 .vscode
-.eslintrc
 node_modules/
 src/build/
 src/node_modules/
