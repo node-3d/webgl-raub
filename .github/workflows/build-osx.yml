@@ -30,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           draft: true
-          tag_name: linux-${{ github.run }}-${{ github.sha }}
+          tag_name: osx-${{ github.run }}-${{ github.sha }}
           name: OSX
           body: OSX binaries at ${{ github.sha }}
           files: src/build/Release/webgl.node
