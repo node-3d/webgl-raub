@@ -18,28 +18,28 @@ document.title = 'Screen-aligned texture';
 const requestAnimFrame = document.requestAnimationFrame;
 
 var shaders = {
-	"shader-fs" : [
-		"#ifdef GL_ES",
-		"  precision mediump float;",
-		"#endif",
-		"varying vec2 vTextureCoord;",
-		"uniform sampler2D uSampler;",
-		"void main(void) {",
-		"    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));",
-		"}"
-	].join("\n"),
+	'shader-fs' : [
+		'#ifdef GL_ES',
+		'  precision mediump float;',
+		'#endif',
+		'varying vec2 vTextureCoord;',
+		'uniform sampler2D uSampler;',
+		'void main(void) {',
+		'    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));',
+		'}'
+	].join('\n'),
 	
-	"shader-vs" : [
-		"attribute vec3 aVertexPosition;",
-		"attribute vec2 aTextureCoord;",
-		"uniform mat4 uMVMatrix;",
-		"uniform mat4 uPMatrix;",
-		"varying vec2 vTextureCoord;",
-		"void main(void) {",
-		"    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);",
-		"    vTextureCoord = aTextureCoord;",
-		"}"
-	].join("\n")
+	'shader-vs' : [
+		'attribute vec3 aVertexPosition;',
+		'attribute vec2 aTextureCoord;',
+		'uniform mat4 uMVMatrix;',
+		'uniform mat4 uPMatrix;',
+		'varying vec2 vTextureCoord;',
+		'void main(void) {',
+		'    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);',
+		'    vTextureCoord = aTextureCoord;',
+		'}'
+	].join('\n')
 };
 
 function initGL(canvas) {
@@ -83,8 +83,8 @@ var shaderProgram;
 
 function initShaders() {
 	
-	var fragmentShader = getShader(gl, "shader-fs");
-	var vertexShader = getShader(gl, "shader-vs");
+	var fragmentShader = getShader(gl, 'shader-fs');
+	var vertexShader = getShader(gl, 'shader-vs');
 	
 	shaderProgram = gl.createProgram();
 	gl.attachShader(shaderProgram, vertexShader);
@@ -97,15 +97,15 @@ function initShaders() {
 	
 	gl.useProgram(shaderProgram);
 	
-	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+	shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'aVertexPosition');
 	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 	
-	shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+	shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, 'aTextureCoord');
 	gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
 	
-	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
-	shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, 'uPMatrix');
+	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
+	shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, 'uSampler');
 	
 }
 
@@ -130,7 +130,7 @@ function initTexture() {
 		console.log(`size: ${lena.image.width}x${lena.image.height}`);
 		handleLoadedTexture(lena);
 	};
-	lena.image.src = __dirname + "/img/glass.gif";
+	lena.image.src = __dirname + '/img/glass.gif';
 }
 
 
@@ -233,10 +233,10 @@ function tick() {
 function webGLStart() {
 	
 	initGL(canvas);
-	document.on("resize", function () {
+	document.on('resize', function () {
 	// console.log("resize "+canvas.width+" x "+canvas.height);
-	gl.viewportWidth = canvas.width;
-	gl.viewportHeight = canvas.height;
+		gl.viewportWidth = canvas.width;
+		gl.viewportHeight = canvas.height;
 	});
 	initShaders();
 	initBuffers();

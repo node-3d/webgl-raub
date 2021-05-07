@@ -59,7 +59,7 @@ function initGL(canvas) {
 		
 	} catch (e) {
 		
-		console.error("Could not initialise WebGL, sorry :-(");
+		console.error('Could not initialise WebGL, sorry :-(');
 		process.exit(-1);
 		
 	}
@@ -128,7 +128,7 @@ function setMatrixUniforms() {
 	
 	const error = gl.getError();
 	if (error) {
-		console.error("setMatrixUniforms():", gl.viewportWidth, gl.viewportHeight, error);
+		console.error('setMatrixUniforms():', gl.viewportWidth, gl.viewportHeight, error);
 	}
 	
 }
