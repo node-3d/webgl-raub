@@ -47,16 +47,6 @@ JS_METHOD(bindFramebuffer) { NAPI_ENV;
 }
 
 
-JS_METHOD(bindFramebuffer) { NAPI_ENV;
-	
-	REQ_UINT32_ARG(0, fbo);
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	RET_UNDEFINED;
-	
-}
-
-
 JS_METHOD(blitFramebuffer) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, srcX0);
