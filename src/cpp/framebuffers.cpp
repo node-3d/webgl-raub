@@ -47,7 +47,7 @@ JS_METHOD(bindFramebuffer) { NAPI_ENV;
 }
 
 
-JS_METHOD(bindFrameBuffer) { NAPI_ENV;
+JS_METHOD(bindFramebuffer) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, fbo);
 	
@@ -57,7 +57,7 @@ JS_METHOD(bindFrameBuffer) { NAPI_ENV;
 }
 
 
-JS_METHOD(blitFrameBuffer) { NAPI_ENV;
+JS_METHOD(blitFramebuffer) { NAPI_ENV;
 	
 	REQ_UINT32_ARG(0, srcX0);
 	REQ_UINT32_ARG(1, srcY0);

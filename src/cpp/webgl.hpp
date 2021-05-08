@@ -68,8 +68,8 @@ namespace webgl {
 	JS_METHOD(deleteFramebuffer);
 	JS_METHOD(isFramebuffer);
 	JS_METHOD(bindFramebuffer);
-	JS_METHOD(bindFrameBuffer);
-	JS_METHOD(blitFrameBuffer);
+	JS_METHOD(bindFramebuffer);
+	JS_METHOD(blitFramebuffer);
 	JS_METHOD(checkFramebufferStatus);
 	JS_METHOD(framebufferRenderbuffer);
 	JS_METHOD(framebufferTexture2D);

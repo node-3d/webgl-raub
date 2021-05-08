@@ -129,7 +129,7 @@ declare module "webgl-raub" {
 		const deleteFramebuffer: (frameBuffer: WebGLFramebuffer) => void;
 		const isFramebuffer: (frameBuffer: WebGLFramebuffer) => boolean;
 		const bindFramebuffer: (target: number, buffer?: WebGLFramebuffer) => void;
-		const blitFrameBuffer: (
+		const blitFramebuffer: (
 			srcX0: number,
 			srcY0: number,
 			srcX1: number,

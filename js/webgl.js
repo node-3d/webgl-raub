@@ -256,9 +256,9 @@ gl.texImage2D = (...args) => {
 	
 	if (args.length === 6) {
 		// width is now format, height is now type, and border is now pixels
-		pixels = border;
-		type = height;
-		format = width;
+		const pixels = border;
+		const type = height;
+		const format = width;
 		return _texImage2D(
 			target, level, internalformat, pixels.width, pixels.height, 0, format, type, pixels
 		);
