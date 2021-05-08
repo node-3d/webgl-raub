@@ -44,7 +44,7 @@ const enforceF32 = v => v instanceof Array ? new Float32Array(v) : v;
 
 const enforceId = x => x ? x._ : 0;
 
-const enforceBool = x => typeof x === 'boolean' ? (x ? 1 : 0) : x;
+const unfoldBool = x => typeof x === 'boolean' ? (x ? 1 : 0) : x;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -65,6 +65,11 @@ gl.getActiveAttrib = (program, index) => new gl.WebGLActiveInfo(
 const _getAttribLocation = gl.getAttribLocation;
 gl.getAttribLocation = (program, name) => _getAttribLocation(enforceId(program), name);
 
+
+const _vertexAttribPointer = gl.vertexAttribPointer;
+gl.vertexAttribPointer = (indx, size, type, normalized, stride, offset) => {
+	return _vertexAttribPointer(indx, size, type, !!normalized, stride, offset);
+};
 
 const _vertexAttrib1fv = gl.vertexAttrib1fv;
 gl.vertexAttrib1fv = (indx, v) => {
@@ -294,7 +299,7 @@ gl.uniform1fv = (location, v) => {
 
 const _uniform1i = gl.uniform1i;
 gl.uniform1i = (location, x) => _uniform1i(
-	enforceId(location), enforceBool(x)
+	enforceId(location), unfoldBool(x)
 );
 
 const _uniform1iv = gl.uniform1iv;
@@ -352,17 +357,17 @@ gl.uniform4iv = (location, v) => {
 
 const _uniformMatrix2fv = gl.uniformMatrix2fv;
 gl.uniformMatrix2fv = (location, transpose, v) => {
-	return _uniformMatrix2fv(enforceId(location), transpose, enforceF32(v));
+	return _uniformMatrix2fv(enforceId(location), !!transpose, enforceF32(v));
 };
 
 const _uniformMatrix3fv = gl.uniformMatrix3fv;
 gl.uniformMatrix3fv = (location, transpose, v) => {
-	return _uniformMatrix3fv(enforceId(location), transpose, enforceF32(v));
+	return _uniformMatrix3fv(enforceId(location), !!transpose, enforceF32(v));
 };
 
 const _uniformMatrix4fv = gl.uniformMatrix4fv;
 gl.uniformMatrix4fv = (location, transpose, v) => {
-	return _uniformMatrix4fv(enforceId(location), transpose, enforceF32(v));
+	return _uniformMatrix4fv(enforceId(location), !!transpose, enforceF32(v));
 };
 
 
@@ -417,8 +422,17 @@ gl.getParameter = pname => {
 
 const _pixelStorei = gl.pixelStorei;
 gl.pixelStorei = (pname, param) =>_pixelStorei(
-	pname, enforceBool(param)
+	pname, unfoldBool(param)
 );
+
+const _colorMask = gl.colorMask;
+gl.colorMask = (red, green, blue, alpha) =>_colorMask(!!red, !!green, !!blue, !!alpha);
+
+const _depthMask = gl.depthMask;
+gl.depthMask = flag =>_depthMask(!!flag);
+
+const _sampleCoverage = gl.sampleCoverage;
+gl.sampleCoverage = (value, invert) =>_sampleCoverage(value, !!invert);
 
 
 Object.defineProperty(

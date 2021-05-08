@@ -102,6 +102,8 @@ declare module "webgl-raub" {
 			target: number,
 			value: number | number[] | Float32Array,
 			usage: number,
+			srcOffset?: number,
+			length?: number,
 		) => void;
 		const bufferSubData: (
 			target: number,
@@ -119,14 +121,14 @@ declare module "webgl-raub" {
 			readTarget: number,
 			sourceByteOffset: number,
 			dest: Float32Array,
-			destByteOffset: number,
-			length: number,
+			destByteOffset?: number,
+			length?: number,
 		) => void;
 		const getBufferParameter: (target: number, name: number) => number;
 		const createFramebuffer: () => WebGLFramebuffer;
 		const deleteFramebuffer: (frameBuffer: WebGLFramebuffer) => void;
 		const isFramebuffer: (frameBuffer: WebGLFramebuffer) => boolean;
-		const bindFramebuffer: (target: number, buffer: WebGLFramebuffer) => void;
+		const bindFramebuffer: (target: number, buffer?: WebGLFramebuffer) => void;
 		const blitFrameBuffer: (
 			srcX0: number,
 			srcY0: number,
@@ -169,7 +171,7 @@ declare module "webgl-raub" {
 		const createRenderbuffer: () => WebGLRenderbuffer;
 		const deleteRenderbuffer: (renderBuffer: WebGLRenderbuffer) => void;
 		const isRenderbuffer: (renderBuffer: WebGLRenderbuffer) => boolean;
-		const bindRenderbuffer: (target: number, renderBuffer: WebGLRenderbuffer) => void;
+		const bindRenderbuffer: (target: number, renderBuffer?: WebGLRenderbuffer) => void;
 		const getRenderbufferParameter: (target: number, name: number) => number;
 		const renderbufferStorage: (
 			target: number,
@@ -216,7 +218,7 @@ declare module "webgl-raub" {
 		const createTexture: () => WebGLTexture;
 		const deleteTexture: (texture: WebGLTexture) => void;
 		const isTexture: (texture: WebGLTexture) => boolean;
-		const bindTexture: (target: WebGLTexture, texture: number) => void;
+		const bindTexture: (target: number, texture?: WebGLTexture) => void;
 		const activeTexture: (textureUnit: number) => void;
 		const copyTexImage2D: (
 			target: number,
