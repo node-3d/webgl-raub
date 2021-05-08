@@ -189,7 +189,6 @@ JS_METHOD(frontFace) { NAPI_ENV;
 JS_METHOD(getError) { NAPI_ENV;
 	
 	RET_NUM(glGetError());
-	RET_UNDEFINED;
 	
 }
 
@@ -418,9 +417,9 @@ JS_METHOD(hint) { NAPI_ENV;
 
 JS_METHOD(isEnabled) { NAPI_ENV;
 	
-	REQ_INT32_ARG(0, cap);
+	REQ_INT32_ARG(0, capability);
 	
-	bool ret = glIsEnabled(cap) != 0;
+	bool ret = glIsEnabled(capability) != 0;
 	
 	RET_BOOL(ret);
 	

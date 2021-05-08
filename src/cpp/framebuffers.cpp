@@ -59,19 +59,19 @@ JS_METHOD(bindFrameBuffer) { NAPI_ENV;
 
 JS_METHOD(blitFrameBuffer) { NAPI_ENV;
 	
-	REQ_UINT32_ARG(0, fbo1);
-	REQ_UINT32_ARG(1, fbo2);
-	REQ_UINT32_ARG(2, sw);
-	REQ_UINT32_ARG(3, sh);
-	REQ_UINT32_ARG(4, dw);
-	REQ_UINT32_ARG(5, dh);
+	REQ_UINT32_ARG(0, srcX0);
+	REQ_UINT32_ARG(1, srcY0);
+	REQ_UINT32_ARG(2, srcX1);
+	REQ_UINT32_ARG(3, srcY1);
+	REQ_UINT32_ARG(4, dstX0);
+	REQ_UINT32_ARG(5, dstY0);
+	REQ_UINT32_ARG(6, dstX1);
+	REQ_UINT32_ARG(7, dstY1);
+	REQ_UINT32_ARG(8, mask);
+	REQ_UINT32_ARG(9, filter);
 	
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo1);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo2);
+	glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
 	
-	glBlitFramebuffer(0, 0, sw, sh, 0, 0, dw, dh, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-	
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	RET_UNDEFINED;
 	
 }

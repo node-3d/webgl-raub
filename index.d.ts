@@ -7,22 +7,58 @@ declare module "webgl-raub" {
 			name: string;
 		}>;
 		
+		type TResourceId = number;
+		
+		type TSize = Readonly<{ width: number; height: number }>;
+		
+		type TImage = TSize & Readonly<{
+			data: Buffer;
+			noflip?: boolean;
+		}>;
+		
+		type TShaderArray = number[] | Float32Array;
+		
+		class TGLObject {
+			constructor(_: TResourceId);
+			_: TResourceId;
+		};
+		
+		class TGLActiveInfo {
+			constructor(_: TActiveInfo);
+			_: TActiveInfo;
+			size: number;
+			type: number;
+			name: string;
+		};
+		
+		class WebGLRenderingContext extends TGLObject {};
+		class WebGLProgram extends TGLObject {};
+		class WebGLShader extends TGLObject {};
+		class WebGLBuffer extends TGLObject {};
+		class WebGLVertexArray extends TGLObject {};
+		class WebGLFramebuffer extends TGLObject {};
+		class WebGLRenderbuffer extends TGLObject {};
+		class WebGLTexture extends TGLObject {};
+		class WebGLUniformLocation extends TGLObject {};
+		class WebGLActiveInfo extends TGLActiveInfo {};
+		class WebGLTransformFeedback extends TGLObject {};
+		
 		const init: () => void;
-		const bindAttribLocation: (program: number, index: number, name: string) => void;
+		const bindAttribLocation: (program: WebGLProgram, index: number, name: string) => void;
 		const disableVertexAttribArray: (index: number) => void;
 		const enableVertexAttribArray: (id: number) => void;
-		const getActiveAttrib: (program: number, index: number) => TActiveInfo;
-		const getAttribLocation: (program: number, name: string) => number;
+		const getActiveAttrib: (program: WebGLProgram, index: number) => TActiveInfo;
+		const getAttribLocation: (program: WebGLProgram, name: string) => number;
 		const getVertexAttrib: (index: number, name: number) => (boolean | number | number[]);
 		const getVertexAttribOffset: (index: number, name: number) => number;
 		const vertexAttrib1f: (location: number, x: number) => void;
-		const vertexAttrib1fv: (location: number, v: number[] | Float32Array) => void;
+		const vertexAttrib1fv: (location: number, v: TShaderArray) => void;
 		const vertexAttrib2f: (location: number, x: number, y: number) => void;
-		const vertexAttrib2fv: (location: number, v: number[] | Float32Array) => void;
+		const vertexAttrib2fv: (location: number, v: TShaderArray) => void;
 		const vertexAttrib3f: (location: number, x: number, y: number, z: number) => void;
-		const vertexAttrib3fv: (location: number, v: number[] | Float32Array) => void;
+		const vertexAttrib3fv: (location: number, v: TShaderArray) => void;
 		const vertexAttrib4f: (location: number, x: number, y: number, z: number, w: number) => void;
-		const vertexAttrib4fv: (location: number, v: number[] | Float32Array) => void;
+		const vertexAttrib4fv: (location: number, v: TShaderArray) => void;
 		const vertexAttribPointer: (index: number, name: number) => number;
 		const vertexAttribIPointer: (
 			indx: number,
@@ -46,19 +82,19 @@ declare module "webgl-raub" {
 			srcAlpha: number,
 			dstAlpha: number,
 		) => void;
-		const createBuffer: () => number;
-		const deleteBuffer: (buffer: number) => void;
-		const isBuffer: (buffer: number) => boolean;
-		const bindBuffer: (target: number, buffer: number) => void;
+		const createBuffer: () => WebGLBuffer;
+		const deleteBuffer: (buffer: WebGLBuffer) => void;
+		const isBuffer: (buffer: WebGLBuffer) => boolean;
+		const bindBuffer: (target: number, buffer: WebGLBuffer) => void;
 		const bindBufferBase: (
 			target: number,
 			index: number,
-			buffer: number,
+			buffer: WebGLBuffer,
 		) => void;
 		const bindBufferRange: (
 			target: number,
 			index: number,
-			buffer: number,
+			buffer: WebGLBuffer,
 			offset: number,
 			size: number,
 		) => void;
@@ -67,132 +103,302 @@ declare module "webgl-raub" {
 			value: number | number[] | Float32Array,
 			usage: number,
 		) => void;
-		const bufferSubData: () => void;
-		const copyBufferSubData: () => void;
-		const getBufferSubData: () => void;
-		const getBufferParameter: () => void;
-		const createFramebuffer: () => void;
-		const deleteFramebuffer: () => void;
-		const isFramebuffer: () => void;
-		const bindFramebuffer: () => void;
-		const bindFrameBuffer: () => void;
-		const blitFrameBuffer: () => void;
-		const checkFramebufferStatus: () => void;
-		const framebufferRenderbuffer: () => void;
-		const framebufferTexture2D: () => void;
-		const getFramebufferAttachmentParameter: () => void;
-		const createProgram: () => void;
-		const deleteProgram: () => void;
-		const isProgram: () => void;
-		const getProgramInfoLog: () => void;
-		const getProgramParameter: () => void;
-		const linkProgram: () => void;
-		const useProgram: () => void;
-		const validateProgram: () => void;
-		const createRenderbuffer: () => void;
-		const deleteRenderbuffer: () => void;
-		const isRenderbuffer: () => void;
-		const bindRenderbuffer: () => void;
-		const getRenderbufferParameter: () => void;
-		const renderbufferStorage: () => void;
-		const deleteShader: () => void;
-		const createShader: () => void;
-		const isShader: () => void;
-		const attachShader: () => void;
-		const compileShader: () => void;
-		const detachShader: () => void;
-		const getAttachedShaders: () => void;
-		const getShaderInfoLog: () => void;
-		const getShaderParameter: () => void;
-		const getShaderSource: () => void;
-		const shaderSource: () => void;
-		const clearStencil: () => void;
-		const stencilFunc: () => void;
-		const stencilFuncSeparate: () => void;
-		const stencilMask: () => void;
-		const stencilMaskSeparate: () => void;
-		const stencilOp: () => void;
-		const stencilOpSeparate: () => void;
-		const createTexture: () => void;
-		const deleteTexture: () => void;
-		const isTexture: () => void;
-		const bindTexture: () => void;
-		const activeTexture: () => void;
-		const copyTexImage2D: () => void;
-		const copyTexSubImage2D: () => void;
-		const generateMipmap: () => void;
-		const getTexParameter: () => void;
-		const texImage2D: () => void;
-		const texParameterf: () => void;
-		const texParameteri: () => void;
-		const texSubImage2D: () => void;
-		const getActiveUniform: () => void;
-		const getUniform: () => void;
-		const getUniformLocation: () => void;
-		const uniform1f: () => void;
-		const uniform1fv: () => void;
-		const uniform1i: () => void;
-		const uniform1iv: () => void;
-		const uniform2f: () => void;
-		const uniform2fv: () => void;
-		const uniform2i: () => void;
-		const uniform2iv: () => void;
-		const uniform3f: () => void;
-		const uniform3fv: () => void;
-		const uniform3i: () => void;
-		const uniform3iv: () => void;
-		const uniform4f: () => void;
-		const uniform4fv: () => void;
-		const uniform4i: () => void;
-		const uniform4iv: () => void;
-		const uniformMatrix2fv: () => void;
-		const uniformMatrix3fv: () => void;
-		const uniformMatrix4fv: () => void;
-		const createVertexArray: () => void;
-		const deleteVertexArray: () => void;
-		const isVertexArray: () => void;
-		const bindVertexArray: () => void;
-		const drawArraysInstanced: () => void;
-		const drawElementsInstanced: () => void;
-		const vertexAttribDivisor: () => void;
-		const createTransformFeedback: () => void;
-		const deleteTransformFeedback: () => void;
-		const isTransformFeedback: () => void;
-		const bindTransformFeedback: () => void;
-		const beginTransformFeedback: () => void;
+		const bufferSubData: (
+			target: number,
+			offset: number,
+			arr: Float32Array,
+		) => void;
+		const copyBufferSubData: (
+			readTarget: number,
+			writeTarget: number,
+			readOffset: number,
+			writeOffset: number,
+			size: number,
+		) => void;
+		const getBufferSubData: (
+			readTarget: number,
+			sourceByteOffset: number,
+			dest: Float32Array,
+			destByteOffset: number,
+			length: number,
+		) => void;
+		const getBufferParameter: (target: number, name: number) => number;
+		const createFramebuffer: () => WebGLFramebuffer;
+		const deleteFramebuffer: (frameBuffer: WebGLFramebuffer) => void;
+		const isFramebuffer: (frameBuffer: WebGLFramebuffer) => boolean;
+		const bindFramebuffer: (target: number, buffer: WebGLFramebuffer) => void;
+		const blitFrameBuffer: (
+			srcX0: number,
+			srcY0: number,
+			srcX1: number,
+			srcY1: number,
+			dstX0: number,
+			dstY0: number,
+			dstX1: number,
+			dstY1: number,
+			mask: number,
+			filter: number,
+		) => void;
+		const checkFramebufferStatus: (target: number) => number;
+		const framebufferRenderbuffer: (
+			target: number,
+			attachment: number,
+			renderbuffertarget: number,
+			renderbuffer: WebGLRenderbuffer,
+		) => void;
+		const framebufferTexture2D: (
+			target: number,
+			attachment: number,
+			textarget: number,
+			texture: WebGLTexture,
+			level: number,
+		) => void;
+		const getFramebufferAttachmentParameter: (
+			target: number,
+			attachment: number,
+			name: number,
+		) => number;
+		const createProgram: () => WebGLProgram;
+		const deleteProgram: (program: WebGLProgram) => void;
+		const isProgram: (program: WebGLProgram) => boolean;
+		const getProgramInfoLog: (program: WebGLProgram) => string;
+		const getProgramParameter: (program: WebGLProgram, name: number) => (boolean | number);
+		const linkProgram: (program: WebGLProgram) => void;
+		const useProgram: (program: WebGLProgram) => void;
+		const validateProgram: (program: WebGLProgram) => void;
+		const createRenderbuffer: () => WebGLRenderbuffer;
+		const deleteRenderbuffer: (renderBuffer: WebGLRenderbuffer) => void;
+		const isRenderbuffer: (renderBuffer: WebGLRenderbuffer) => boolean;
+		const bindRenderbuffer: (target: number, renderBuffer: WebGLRenderbuffer) => void;
+		const getRenderbufferParameter: (target: number, name: number) => number;
+		const renderbufferStorage: (
+			target: number,
+			internalformat: number,
+			width: number,
+			height: number,
+		) => void;
+		const createShader: () => WebGLShader;
+		const deleteShader: (shader: WebGLShader) => void;
+		const isShader: (shader: WebGLShader) => boolean;
+		const attachShader: (program: WebGLProgram, shader: WebGLShader) => void;
+		const compileShader: (shader: WebGLShader) => void;
+		const detachShader: (program: WebGLProgram, shader: WebGLShader) => void;
+		const getAttachedShaders: (program: WebGLProgram) => (number[]);
+		const getShaderInfoLog: (shader: WebGLShader) => string;
+		const getShaderParameter: (shader: WebGLShader, pname: number) => (number | boolean);
+		const getShaderSource: (shader: WebGLShader) => string;
+		const shaderSource: (shader: WebGLShader, code: string) => void;
+		const clearStencil: (index: number) => void;
+		const stencilFunc: (
+			func: number,
+			ref: number,
+			mask: number,
+		) => void;
+		const stencilFuncSeparate: (
+			face: number,
+			func: number,
+			ref: number,
+			mask: number,
+		) => void;
+		const stencilMask: (mask: number) => void;
+		const stencilMaskSeparate: (face: number, mask: number) => void;
+		const stencilOp: (
+			fail: number,
+			zfail: number,
+			zpass: number,
+		) => void;
+		const stencilOpSeparate: (
+			face: number,
+			fail: number,
+			zfail: number,
+			zpass: number,
+		) => void;
+		const createTexture: () => WebGLTexture;
+		const deleteTexture: (texture: WebGLTexture) => void;
+		const isTexture: (texture: WebGLTexture) => boolean;
+		const bindTexture: (target: WebGLTexture, texture: number) => void;
+		const activeTexture: (textureUnit: number) => void;
+		const copyTexImage2D: (
+			target: number,
+			level: number,
+			internalformat: number,
+			x: number,
+			y: number,
+			width: number,
+			height: number,
+			border: number,
+		) => void;
+		const copyTexSubImage2D: (
+			target: number,
+			level: number,
+			xoffset: number,
+			yoffset: number,
+			x: number,
+			y: number,
+			width: number,
+			height: number,
+		) => void;
+		const generateMipmap: (target: number) => void;
+		const getTexParameter: (target: number, name: number) => number;
+		const texImage2D: (
+			target: number,
+			level: number,
+			internalformat: number,
+			width: number,
+			height: number,
+			border: number,
+			format: number,
+			type: number,
+			ptr?: TImage | number,
+		) => void;
+		const texParameterf: (
+			target: number,
+			name: number,
+			param: number,
+		) => void;
+		const texParameteri: (
+			target: number,
+			name: number,
+			param: number,
+		) => void;
+		const texSubImage2D: (
+			target: number,
+			level: number,
+			xoffset: number,
+			yoffset: number,
+			width: number,
+			height: number,
+			format: number,
+			type: number,
+			image?: TImage,
+		) => void;
+		const getActiveUniform: (program: WebGLProgram, index: number) => TActiveInfo;
+		const getUniform: (program: WebGLProgram, location: WebGLUniformLocation) => (undefined | number[]);
+		const getUniformLocation: (program: WebGLProgram, name: string) => number;
+		const uniform1f: (location: WebGLUniformLocation, x: number) => void;
+		const uniform1fv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+		const uniform1i: (location: WebGLUniformLocation, x: number) => void;
+		const uniform1iv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+		const uniform2f: (location: WebGLUniformLocation, x: number, y: number) => void;
+		const uniform2fv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+		const uniform2i: (location: WebGLUniformLocation, x: number, y: number) => void;
+		const uniform2iv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+		const uniform3f: (location: WebGLUniformLocation, x: number, y: number, z: number) => void;
+		const uniform3fv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+		const uniform3i: (location: WebGLUniformLocation, x: number, y: number, z: number) => void;
+		const uniform3iv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+		const uniform4f: (location: WebGLUniformLocation, x: number, y: number, z: number, w: number) => void;
+		const uniform4fv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+		const uniform4i: (location: WebGLUniformLocation, x: number, y: number, z: number, w: number) => void;
+		const uniform4iv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+		const uniformMatrix2fv: (location: WebGLUniformLocation, transpose: boolean, values: TShaderArray) => void;
+		const uniformMatrix3fv: (location: WebGLUniformLocation, transpose: boolean, values: TShaderArray) => void;
+		const uniformMatrix4fv: (location: WebGLUniformLocation, transpose: boolean, values: TShaderArray) => void;
+		const createVertexArray: () => WebGLVertexArray;
+		const deleteVertexArray: (vertexArray: WebGLVertexArray) => void;
+		const isVertexArray: (vertexArray: WebGLVertexArray) => boolean;
+		const bindVertexArray: (vertexarray: WebGLVertexArray) => void;
+		const drawArraysInstanced: (
+			mode: number,
+			first: number,
+			count: number,
+			primcount: number,
+		) => void;
+		const drawElementsInstanced: (
+			mode: number,
+			count: number,
+			type: number,
+			ptr: number,
+			primcount: number,
+		) => void;
+		const vertexAttribDivisor: (index: number, divisor: number) => void;
+		const createTransformFeedback: () => WebGLTransformFeedback;
+		const deleteTransformFeedback: (transformFeedback: WebGLTransformFeedback) => void;
+		const isTransformFeedback: (transformFeedback: WebGLTransformFeedback) => boolean;
+		const bindTransformFeedback: (target: number, transformFeedback: WebGLTransformFeedback) => void;
+		const beginTransformFeedback: (mode: number) => void;
 		const endTransformFeedback: () => void;
 		const pauseTransformFeedback: () => void;
 		const resumeTransformFeedback: () => void;
-		const transformFeedbackVaryings: () => void;
-		const getTransformFeedbackVarying: () => void;
-		const clear: () => void;
-		const clearColor: () => void;
-		const clearDepth: () => void;
-		const colorMask: () => void;
-		const cullFace: () => void;
-		const depthFunc: () => void;
-		const depthMask: () => void;
-		const depthRange: () => void;
-		const disable: () => void;
-		const drawArrays: () => void;
-		const drawElements: () => void;
-		const enable: () => void;
+		const transformFeedbackVaryings: (
+			program: WebGLProgram,
+			jsVaryings: string[],
+			bufferMode: number,
+		) => void;
+		const getTransformFeedbackVarying: (program: WebGLProgram, index: number) => TActiveInfo;
+		const clear: (target: number) => void;
+		const clearColor: (
+			red: number,
+			green: number,
+			blue: number,
+			alpha: number,
+		) => void;
+		const clearDepth: (depth: number) => void;
+		const colorMask: (
+			red: boolean,
+			green: boolean,
+			blue: boolean,
+			alpha: boolean,
+		) => void;
+		const cullFace: (mode: number) => void;
+		const depthFunc: (id: number) => void;
+		const depthMask: (flag: boolean) => void;
+		const depthRange: (zNear: number, zFar: number) => void;
+		const disable: (id: number) => void;
+		const drawArrays: (
+			mode: number,
+			first: number,
+			count: number,
+		) => void;
+		const drawElements: (
+			mode: number,
+			count: number,
+			type: number,
+			ptr: number,
+		) => void;
+		const enable: (id: number) => void;
 		const finish: () => void;
 		const flush: () => void;
-		const frontFace: () => void;
-		const getError: () => void;
-		const getParameter: () => void;
-		const getRenderTarget: () => void;
-		const getSupportedExtensions: () => void;
-		const hint: () => void;
-		const isEnabled: () => void;
-		const lineWidth: () => void;
-		const pixelStorei: () => void;
-		const polygonOffset: () => void;
-		const readPixels: () => void;
-		const sampleCoverage: () => void;
-		const scissor: () => void;
-		const viewport: () => void;
+		const frontFace: (id: number) => void;
+		const getError: () => number;
+		const getParameter: (name: number) => (number | boolean | number[] | string | boolean[]);
+		const getRenderTarget: (
+			width: number,
+			height: number,
+			samples: number,
+		) => (number[] | null);
+		const getSupportedExtensions: () => (string[]);
+		const getExtension: (name: string) => unknown;
+		const hint: (target: number, mode: number) => void;
+		const isEnabled: (capability: number) => boolean;
+		const lineWidth: (width: number) => void;
+		const pixelStorei: (name: number, param: number) => void;
+		const polygonOffset: (factor: number, units: number) => void;
+		const readPixels: (
+			x: number,
+			y: number,
+			width: number,
+			height: number,
+			format: number,
+			type: number,
+			image: TImage,
+		) => void;
+		const sampleCoverage: (value: number, invert: boolean) => void;
+		const scissor: (
+			x: number,
+			y: number,
+			width: number,
+			height: number,
+		) => void;
+		const viewport: (
+			x: number,
+			y: number,
+			w: number,
+			h: number,
+		) => void;
+		
+		const drawingBufferWidth: number;
+		const drawingBufferHeight: number;
 		
 		const DEPTH_BUFFER_BIT: number;
 		const STENCIL_BUFFER_BIT: number;

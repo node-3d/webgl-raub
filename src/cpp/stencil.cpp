@@ -9,9 +9,9 @@ namespace webgl {
 
 JS_METHOD(clearStencil) { NAPI_ENV;
 	
-	REQ_INT32_ARG(0, s);
+	REQ_INT32_ARG(0, index);
 	
-	glClearStencil(s);
+	glClearStencil(index);
 	RET_UNDEFINED;
 	
 }

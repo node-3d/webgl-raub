@@ -73,7 +73,6 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(createFramebuffer);
 	JS_GL_SET_METHOD(deleteFramebuffer);
 	JS_GL_SET_METHOD(isFramebuffer);
-	JS_GL_SET_METHOD(bindFramebuffer);
 	JS_GL_SET_METHOD(bindFrameBuffer);
 	JS_GL_SET_METHOD(blitFrameBuffer);
 	JS_GL_SET_METHOD(checkFramebufferStatus);

@@ -33,7 +33,6 @@ JS_METHOD(isTransformFeedback) { NAPI_ENV;
 	REQ_UINT32_ARG(0, transformFeedback);
 	
 	RET_VALUE(JS_BOOL(glIsTransformFeedback(transformFeedback) != 0));
-	RET_UNDEFINED;
 	
 }
 

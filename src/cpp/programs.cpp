@@ -28,7 +28,6 @@ JS_METHOD(isProgram) { NAPI_ENV;
 	REQ_UINT32_ARG(0, program);
 	
 	RET_BOOL(glIsProgram(program) != 0);
-	RET_UNDEFINED;
 	
 }
 
@@ -93,9 +92,9 @@ JS_METHOD(getProgramParameter) { NAPI_ENV;
 
 JS_METHOD(linkProgram) { NAPI_ENV;
 	
-	REQ_INT32_ARG(0, id);
+	REQ_INT32_ARG(0, program);
 	
-	glLinkProgram(id);
+	glLinkProgram(program);
 	RET_UNDEFINED;
 	
 }
@@ -103,9 +102,9 @@ JS_METHOD(linkProgram) { NAPI_ENV;
 
 JS_METHOD(useProgram) { NAPI_ENV;
 	
-	REQ_INT32_ARG(0, id);
+	REQ_INT32_ARG(0, program);
 	
-	glUseProgram(id);
+	glUseProgram(program);
 	RET_UNDEFINED;
 	
 }

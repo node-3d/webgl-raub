@@ -50,9 +50,9 @@ JS_METHOD(attachShader) { NAPI_ENV;
 
 JS_METHOD(compileShader) { NAPI_ENV;
 	
-	REQ_INT32_ARG(0, id);
+	REQ_INT32_ARG(0, shader);
 	
-	glCompileShader(id);
+	glCompileShader(shader);
 	RET_UNDEFINED;
 	
 }
@@ -89,11 +89,11 @@ JS_METHOD(getAttachedShaders) { NAPI_ENV;
 
 JS_METHOD(getShaderInfoLog) { NAPI_ENV;
 	
-	REQ_INT32_ARG(0, id);
+	REQ_INT32_ARG(0, shader);
 	
 	int len = 1024;
 	char error[1024];
-	glGetShaderInfoLog(id, 1024, &len, error);
+	glGetShaderInfoLog(shader, 1024, &len, error);
 	
 	RET_STR(error);
 	
@@ -153,13 +153,13 @@ JS_METHOD(getShaderSource) { NAPI_ENV;
 
 JS_METHOD(shaderSource) { NAPI_ENV;
 	
-	REQ_INT32_ARG(0, id);
+	REQ_INT32_ARG(0, shader);
 	REQ_STR_ARG(1, code);
 	
 	const char *strings = code.c_str();
 	GLint lengths = code.length();
 	
-	glShaderSource(id, 1, &strings, &lengths);
+	glShaderSource(shader, 1, &strings, &lengths);
 	RET_UNDEFINED;
 	
 }

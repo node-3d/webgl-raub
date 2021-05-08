@@ -246,9 +246,9 @@ const _bindTexture = gl.bindTexture;
 gl.bindTexture = (target, texture) => _bindTexture(target, enforceId(texture));
 
 const _texImage2D = gl.texImage2D;
-gl.texImage2D = function (
+gl.texImage2D = (
 	target, level, internalformat, width, height, border, format, type, pixels
-) {
+) => {
 	
 	if (arguments.length === 6) {
 		// width is now format, height is now type, and border is now pixels
@@ -408,15 +408,17 @@ gl.getTransformFeedbackVarying = (program, location) => new gl.WebGLActiveInfo(
 // Misc OpenGL Functions
 
 const _getParameter = gl.getParameter;
-gl.getParameter = pname => pname === gl.VERSION ? 'WebGL 1.0' : _getParameter(pname);
+gl.getParameter = pname => {
+	if (pname === gl.VERSION) {
+		return 'WebGL 1.0';
+	}
+	return _getParameter(pname);
+};
 
 const _pixelStorei = gl.pixelStorei;
 gl.pixelStorei = (pname, param) =>_pixelStorei(
 	pname, enforceBool(param)
 );
-
-const _viewport = gl.viewport;
-gl.viewport = (x, y, width, height) => _viewport(x, y, width, height);
 
 
 Object.defineProperty(

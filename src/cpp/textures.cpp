@@ -49,9 +49,9 @@ JS_METHOD(bindTexture) { NAPI_ENV;
 
 JS_METHOD(activeTexture) { NAPI_ENV;
 	
-	REQ_INT32_ARG(0, id);
+	REQ_INT32_ARG(0, texture);
 	
-	glActiveTexture(id);
+	glActiveTexture(texture);
 	RET_UNDEFINED;
 	
 }
