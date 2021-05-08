@@ -251,11 +251,10 @@ const _bindTexture = gl.bindTexture;
 gl.bindTexture = (target, texture) => _bindTexture(target, enforceId(texture));
 
 const _texImage2D = gl.texImage2D;
-gl.texImage2D = (
-	target, level, internalformat, width, height, border, format, type, pixels
-) => {
+gl.texImage2D = (...args) => {
+	const [target, level, internalformat, width, height, border, format, type, pixels] = args;
 	
-	if (arguments.length === 6) {
+	if (args.length === 6) {
 		// width is now format, height is now type, and border is now pixels
 		pixels = border;
 		type = height;
@@ -265,12 +264,11 @@ gl.texImage2D = (
 		);
 	}
 	
-	if (arguments.length === 9) {
+	if (args.length === 9) {
 		return _texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 	}
 	
 	throw new TypeError('Function texImage2D() takes 6 or 9 arguments.');
-	
 };
 
 
