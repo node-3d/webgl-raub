@@ -21,7 +21,7 @@ declare module "webgl-raub" {
 		class TGLObject {
 			constructor(_: TResourceId);
 			_: TResourceId;
-		};
+		}
 		
 		class TGLActiveInfo {
 			constructor(_: TActiveInfo);
@@ -29,19 +29,19 @@ declare module "webgl-raub" {
 			size: number;
 			type: number;
 			name: string;
-		};
+		}
 		
-		class WebGLRenderingContext extends TGLObject {};
-		class WebGLProgram extends TGLObject {};
-		class WebGLShader extends TGLObject {};
-		class WebGLBuffer extends TGLObject {};
-		class WebGLVertexArray extends TGLObject {};
-		class WebGLFramebuffer extends TGLObject {};
-		class WebGLRenderbuffer extends TGLObject {};
-		class WebGLTexture extends TGLObject {};
-		class WebGLUniformLocation extends TGLObject {};
-		class WebGLActiveInfo extends TGLActiveInfo {};
-		class WebGLTransformFeedback extends TGLObject {};
+		class WebGLRenderingContext extends TGLObject {}
+		class WebGLProgram extends TGLObject {}
+		class WebGLShader extends TGLObject {}
+		class WebGLBuffer extends TGLObject {}
+		class WebGLVertexArray extends TGLObject {}
+		class WebGLFramebuffer extends TGLObject {}
+		class WebGLRenderbuffer extends TGLObject {}
+		class WebGLTexture extends TGLObject {}
+		class WebGLUniformLocation extends TGLObject {}
+		class WebGLActiveInfo extends TGLActiveInfo {}
+		class WebGLTransformFeedback extends TGLObject {}
 		
 		const init: () => void;
 		const bindAttribLocation: (program: WebGLProgram, index: number, name: string) => void;
