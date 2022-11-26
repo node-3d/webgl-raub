@@ -433,15 +433,15 @@ if (!gl.__isInited) {
 	const _sampleCoverage = gl.sampleCoverage;
 	gl.sampleCoverage = (value, invert) =>_sampleCoverage(value, !!invert);
 
-	if (!gl.drawingBufferWidth) {
+	if (gl.drawingBufferWidth === undefined) {
 		Object.defineProperty(
-			gl, 'drawingBufferWidth', { get: () => gl.getParameter(gl.VIEWPORT)[2] }
+			gl, 'drawingBufferWidth', { get: () => gl.getParameter(gl.VIEWPORT)[2] },
 		);
 	}
 
-	if (!gl.drawingBufferHeight) {
+	if (gl.drawingBufferHeight === undefined) {
 		Object.defineProperty(
-			gl, 'drawingBufferHeight', { get: () => gl.getParameter(gl.VIEWPORT)[3] }
+			gl, 'drawingBufferHeight', { get: () => gl.getParameter(gl.VIEWPORT)[3] },
 		);
 	}
 
