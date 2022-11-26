@@ -20,12 +20,15 @@ jobs:
     steps:
 
       - name: Fetch Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Install Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
-          node-version: 14.16.0
+          node-version: 16.17.0
+          cache: 'npm'
 
       - name: Get Npm Version
         id: package-version
@@ -43,6 +46,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.package-version.outputs.current-version}}
+          tag_name: ${{ steps.package-version.outputs.current-version }}
           release_name: ${{ github.event.inputs.name }}
           body: ${{ github.event.inputs.text }}

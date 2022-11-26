@@ -12,17 +12,17 @@ Document.setWebgl(webgl);
 const document = new Document();
 const canvas = document.createElement('canvas');
 const frame = document.requestAnimationFrame;
-var gl;
+let gl;
 
 
 document.title = 'Lesson08';
-document.on('resize', function (evt) {
+document.on('resize', (evt) => {
 	gl.viewportWidth = evt.width;
 	gl.viewportHeight = evt.height;
 });
 
 
-var shaders = {
+const shaders = {
 	'shader-fs': [
 		'#ifdef GL_ES',
 		'  precision mediump float;',
@@ -64,20 +64,20 @@ var shaders = {
 };
 
 
-function initGL(canvas) {
+const initContext = (canvas) => {
 	gl = canvas.getContext('webgl');
 	gl.viewportWidth = canvas.width;
 	gl.viewportHeight = canvas.height;
-}
+};
 
 
-function getShader(gl, id) {
-	var shader;
+const getShader = (gl, id) => {
+	let shader;
 	
-	if ( ! shaders[id] ) {
+	if (!shaders[id]) {
 		return null;
 	}
-	var str = shaders[id];
+	const str = shaders[id];
 	
 	if (id.match(/-fs/)) {
 		shader = gl.createShader(gl.FRAGMENT_SHADER);
@@ -90,28 +90,27 @@ function getShader(gl, id) {
 	gl.shaderSource(shader, str);
 	gl.compileShader(shader);
 	
-	if ( ! gl.getShaderParameter(shader, gl.COMPILE_STATUS) ) {
+	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
 		console.log(gl.getShaderInfoLog(shader));
 		return null;
 	}
 	
 	return shader;
-}
+};
 
-var shaderProgram;
+let shaderProgram;
 
 
-function initShaders() {
-	
-	var fragmentShader = getShader(gl, 'shader-fs');
-	var vertexShader = getShader(gl, 'shader-vs');
+const initShaders = () => {
+	const fragmentShader = getShader(gl, 'shader-fs');
+	const vertexShader = getShader(gl, 'shader-vs');
 	
 	shaderProgram = gl.createProgram();
 	gl.attachShader(shaderProgram, vertexShader);
 	gl.attachShader(shaderProgram, fragmentShader);
 	gl.linkProgram(shaderProgram);
 	
-	if ( ! gl.getProgramParameter(shaderProgram, gl.LINK_STATUS) ) {
+	if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
 		console.error(
 			`Could not initialise shaders. Error: ${
 				gl.getProgramInfoLog(shaderProgram)
@@ -142,12 +141,10 @@ function initShaders() {
 	shaderProgram.lightingDirectionUniform = gl.getUniformLocation(shaderProgram, 'uLightingDirection');
 	shaderProgram.directionalColorUniform = gl.getUniformLocation(shaderProgram, 'uDirectionalColor');
 	shaderProgram.alphaUniform = gl.getUniformLocation(shaderProgram, 'uAlpha');
-	
-}
+};
 
 
-function handleLoadedTexture(texture) {
-	
+const handleLoadedTexture = (texture) => {
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 	
 	gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -157,66 +154,63 @@ function handleLoadedTexture(texture) {
 	gl.generateMipmap(gl.TEXTURE_2D);
 	
 	gl.bindTexture(gl.TEXTURE_2D, null);
-	
-}
+};
 
 
-var glassTexture;
+let glassTexture;
 
-function initTexture() {
+const initTexture = () => {
 	glassTexture = gl.createTexture();
 	glassTexture.image = new Image();
-	glassTexture.image.onload = function () {
+	glassTexture.image.onload = () => {
 		handleLoadedTexture(glassTexture);
 	};
 	glassTexture.image.src = __dirname + '/img/glass.gif';
-}
+};
 
 
-var mvMatrix = mat4.create();
-var pMatrix = mat4.create();
+let mvMatrix = mat4.create();
+let pMatrix = mat4.create();
 
 
-function setMatrixUniforms() {
+const setMatrixUniforms = () => {
 	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
 	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
-	var normalMatrix = mat3.create();
+	const normalMatrix = mat3.create();
 	mat4.toInverseMat3(mvMatrix, normalMatrix);
 	mat3.transpose(normalMatrix);
 	gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, false, normalMatrix);
-}
+};
 
 
-function degToRad(degrees) {
-	return degrees * Math.PI / 180;
-}
+const degToRad = (degrees) => degrees * Math.PI / 180;
 
 
 
-var xRot = 0;
-var xSpeed = 5;
+let xRot = 0;
+let xSpeed = 5;
 
-var yRot = 0;
-var ySpeed = -5;
+let yRot = 0;
+let ySpeed = -5;
 
-var z = -5.0;
+let z = -5.0;
 
 
-var currentlyPressedKeys = {};
+const currentlyPressedKeys = {};
 
-document.on('keydown', function (evt) {
+document.on('keydown', evt => {
 	// console.log("[KEYDOWN] keyCode: "+evt.keyCode+" which: "+evt.which);
 	currentlyPressedKeys[evt.keyCode] = true;
 	handleKeys();
 });
 
-document.on('keyup', function (evt) {
+document.on('keyup', evt => {
 	// console.log("[KEYUP] keyCode: "+evt.keyCode);
 	currentlyPressedKeys[evt.keyCode] = false;
 });
 
 
-function handleKeys() {
+const handleKeys = () => {
 	if (currentlyPressedKeys[221]) {
 		// ]
 		z -= 0.5;
@@ -242,14 +236,14 @@ function handleKeys() {
 		xSpeed += 1;
 	}
 	//console.log("speed: "+xSpeed+" "+ySpeed+" "+z);
-}
+};
 
 
-var cubeVertexPositionBuffer;
-var cubeVertexNormalBuffer;
-var cubeVertexTextureCoordBuffer;
-var cubeVertexIndexBuffer;
-function initBuffers() {
+let cubeVertexPositionBuffer;
+let cubeVertexNormalBuffer;
+let cubeVertexTextureCoordBuffer;
+let cubeVertexIndexBuffer;
+const initBuffers = () => {
 	cubeVertexPositionBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 	const vertices = [
@@ -295,7 +289,7 @@ function initBuffers() {
 	
 	cubeVertexNormalBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexNormalBuffer);
-	var vertexNormals = [
+	let vertexNormals = [
 		// Front face
 		0.0, 0.0, 1.0,
 		0.0, 0.0, 1.0,
@@ -338,7 +332,7 @@ function initBuffers() {
 	
 	cubeVertexTextureCoordBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
-	var textureCoords = [
+	let textureCoords = [
 		// Front face
 		0.0, 0.0,
 		1.0, 0.0,
@@ -382,7 +376,7 @@ function initBuffers() {
 	
 	cubeVertexIndexBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
-	var cubeVertexIndices = [
+	let cubeVertexIndices = [
 		0, 1, 2, 0, 2, 3, // Front face
 		4, 5, 6, 4, 6, 7, // Back face
 		8, 9, 10, 8, 10, 11, // Top face
@@ -393,12 +387,10 @@ function initBuffers() {
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
 	cubeVertexIndexBuffer.itemSize = 1;
 	cubeVertexIndexBuffer.numItems = 36;
-	
-}
+};
 
 
-function drawScene() {
-	
+const drawScene = () => {
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
@@ -445,7 +437,7 @@ function drawScene() {
 	gl.bindTexture(gl.TEXTURE_2D, glassTexture);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
 	
-	var blending = 0.5; //document.getElementById("blending").checked;
+	const blending = 0.5; //document.getElementById("blending").checked;
 	if (blending > 0) {
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 		gl.enable(gl.BLEND);
@@ -459,18 +451,18 @@ function drawScene() {
 		gl.enable(gl.DEPTH_TEST);
 	}
 	
-	var lighting = false; //document.getElementById("lighting").checked;
-	let ambientR = 0.2;
-	let ambientG = 0.2;
-	let ambientB = 0.2;
+	const lighting = false; //document.getElementById("lighting").checked;
+	const ambientR = 0.2;
+	const ambientG = 0.2;
+	const ambientB = 0.2;
 	
-	let lightDirectionX = -0.25;
-	let lightDirectionY = -0.25;
-	let lightDirectionZ = -1;
+	const lightDirectionX = -0.25;
+	const lightDirectionY = -0.25;
+	const lightDirectionZ = -1;
 	
-	let directionalR = 0.8;
-	let directionalG = 0.8;
-	let directionalB = 0.8;
+	const directionalR = 0.8;
+	const directionalG = 0.8;
+	const directionalB = 0.8;
 	
 	gl.uniform1i(shaderProgram.useLightingUniform, lighting);
 	if (lighting) {
@@ -481,12 +473,12 @@ function drawScene() {
 			parseFloat(ambientB /*document.getElementById("ambientB").value*/)
 		);
 		
-		var lightingDirection = [
+		const lightingDirection = [
 			parseFloat(lightDirectionX /*document.getElementById("lightDirectionX").value*/),
 			parseFloat(lightDirectionY /*document.getElementById("lightDirectionY").value*/),
 			parseFloat(lightDirectionZ /*document.getElementById("lightDirectionZ").value*/)
 		];
-		var adjustedLD = vec3.create();
+		const adjustedLD = vec3.create();
 		vec3.normalize(lightingDirection, adjustedLD);
 		vec3.scale(adjustedLD, -1);
 		gl.uniform3fv(shaderProgram.lightingDirectionUniform, adjustedLD);
@@ -502,38 +494,38 @@ function drawScene() {
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 	setMatrixUniforms();
 	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-}
+};
 
 
-var lastTime = 0;
+let lastTime = 0;
 
 
-function animate() {
-	var timeNow = new Date().getTime();
+const animate = () => {
+	let timeNow = new Date().getTime();
 	if (lastTime != 0) {
-		var elapsed = timeNow - lastTime;
+		let elapsed = timeNow - lastTime;
 		xRot += (xSpeed * elapsed) / 1000.0;
 		yRot += (ySpeed * elapsed) / 1000.0;
 	}
 	lastTime = timeNow;
-}
+};
 
 
-function tick() {
+const tick = () => {
 	drawScene();
 	animate();
 	frame(tick);
-}
+};
 
 
-function webGLStart() {
-	initGL(canvas);
+const start = () => {
+	initContext(canvas);
 	initShaders();
 	initBuffers();
 	initTexture();
 	gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	gl.enable(gl.DEPTH_TEST);
 	tick();
-}
+};
 
-webGLStart();
+start();

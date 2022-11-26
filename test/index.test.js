@@ -134,7 +134,6 @@ const methods = [
 
 
 describe('WebGL', () => {
-	
 	it('exports an object', () => {
 		expect(typeof webgl).toBe('object');
 	});
@@ -150,5 +149,4 @@ describe('WebGL', () => {
 			expect(typeof webgl[method]).toBe('function');
 		});
 	});
-	
 });

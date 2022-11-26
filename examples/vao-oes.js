@@ -9,16 +9,16 @@ const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
 Document.setWebgl(webgl);
 const document = new Document({ osxCore: true });
-const frame    = document.requestAnimationFrame;
+const frame = document.requestAnimationFrame;
 
 const ext = webgl.getExtension('OES_vertex_array_object');
 
 
-let xRot   = 0;
+let xRot = 0;
 let xSpeed = 5;
-let yRot   = 0;
+let yRot = 0;
 let ySpeed = -5;
-let z      = -5;
+let z = -5;
 let gl;
 
 document.on('resize', evt => {
@@ -28,7 +28,6 @@ document.on('resize', evt => {
 
 
 const shaders = {
-	
 	vs: `
 		attribute vec3 aVertexPosition;
 		attribute vec4 aVertexColor;
@@ -40,7 +39,6 @@ const shaders = {
 			vColor = aVertexColor;
 		}
 	`,
-	
 	fs : `
 		#ifdef GL_ES
 			precision mediump float;
@@ -50,32 +48,24 @@ const shaders = {
 			gl_FragColor = vColor;
 		}
 	`,
-	
 };
 
 
-function initGL(canvas) {
-	
+const initContext = (canvas) => {
 	try {
-		
 		gl = canvas.getContext('webgl');
 		
 		gl.viewportWidth = canvas.width;
 		gl.viewportHeight = canvas.height;
-		
 	} catch (e) {
-		
 		console.error('Could not initialise WebGL, sorry :-(');
 		console.error(e);
 		process.exit(-1);
-		
 	}
-	
-}
+};
 
 
-function getShader(gl, id) {
-	
+const getShader = (gl, id) => {
 	const shader = gl.createShader(id === 'vs' ? gl.VERTEX_SHADER : gl.FRAGMENT_SHADER);
 	
 	gl.shaderSource(shader, shaders[id]);
@@ -87,16 +77,14 @@ function getShader(gl, id) {
 	}
 	
 	return shader;
-	
-}
+};
 
 
 let shaderProgram;
 
-function initShaders() {
-	
+const initShaders = () => {
 	const fragmentShader = getShader(gl, 'fs');
-	const vertexShader   = getShader(gl, 'vs');
+	const vertexShader = getShader(gl, 'vs');
 	
 	shaderProgram = gl.createProgram();
 	gl.attachShader(shaderProgram, vertexShader);
@@ -118,16 +106,14 @@ function initShaders() {
 	
 	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, 'uPMatrix');
 	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
-	
-}
+};
 
 
 let mvMatrix = mat4.create();
 let pMatrix  = mat4.create();
 
 
-function setMatrixUniforms() {
-	
+const setMatrixUniforms = () => {
 	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
 	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 	
@@ -135,13 +121,10 @@ function setMatrixUniforms() {
 	if (error) {
 		console.error('setMatrixUniforms():', gl.viewportWidth, gl.viewportHeight, error);
 	}
-	
-}
+};
 
 
-function degToRad(degrees) {
-	return degrees * Math.PI / 180;
-}
+const degToRad = (degrees) => degrees * Math.PI / 180;
 
 
 const currentlyPressedKeys = {};
@@ -157,8 +140,7 @@ document.on('keyup', evt => {
 });
 
 
-function handleKeys() {
-	
+const handleKeys = () => {
 	if (currentlyPressedKeys[219]) { // ]
 		z -= 0.05;
 	}
@@ -177,9 +159,7 @@ function handleKeys() {
 	if (currentlyPressedKeys[40]) { // Down cursor key
 		xSpeed += 1;
 	}
-	//console.log("speed: "+xSpeed+" "+ySpeed+" "+z);
-	
-}
+};
 
 
 let cubeVertexPositionBuffer;
@@ -187,8 +167,7 @@ let cubeVerticesColorBuffer;
 let cubeVertexIndexBuffer;
 let vao;
 
-function initBuffers() {
-	
+const initBuffers = () => {
 	vao = ext.createVertexArrayOES();
 	ext.bindVertexArrayOES(vao);
 	
@@ -298,12 +277,10 @@ function initBuffers() {
 	if (error) {
 		console.error('initBuffers():', error);
 	}
-	
-}
+};
 
 
-function drawScene() {
-	
+const drawScene = () => {
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
@@ -328,46 +305,38 @@ function drawScene() {
 	
 	// cleanup GL state
 	ext.bindVertexArrayOES(null);
-	
-}
+};
 
 
 let lastTime = 0;
 // let fps = 0;
 
-function animate(timeNow) {
-	
+const animate = (timeNow) => {
 	if (lastTime) {
-		
 		const elapsed = timeNow - lastTime;
 		// fps = Math.round(1000 / elapsed);
 		
 		xRot += (xSpeed * elapsed) / 1000.0;
 		yRot += (ySpeed * elapsed) / 1000.0;
-		
 	}
 	
 	lastTime = timeNow;
-	
-}
+};
 
 
-function tick(timeNow) {
-	
+const tick = (timeNow) => {
 	drawScene();
 	animate(timeNow);
 	
 	gl.finish(); // for timing
 	frame(tick, 0);
-	
-}
+};
 
 
-function start() {
-	
+const start = () => {
 	const canvas = document.createElement('canvas');
 	
-	initGL(canvas);
+	initContext(canvas);
 	initShaders();
 	initBuffers();
 	
@@ -375,7 +344,6 @@ function start() {
 	gl.enable(gl.DEPTH_TEST);
 	
 	tick(Date.now());
-	
-}
+};
 
 start();

@@ -7,6 +7,5 @@
 node_modules/
 src/build/
 src/node_modules/
-examples/node_modules/
 bin-*/
 *.log

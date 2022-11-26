@@ -22,7 +22,6 @@ document.on('resize', evt => {
 });
 
 const shaders = {
-	
 	vs: `
 		attribute vec3 aVertexPosition;
 		attribute vec4 aVertexColor;
@@ -34,7 +33,6 @@ const shaders = {
 			vColor = aVertexColor;
 		}
 	`,
-	
 	fs : `
 		#ifdef GL_ES
 			precision mediump float;
@@ -44,12 +42,10 @@ const shaders = {
 			gl_FragColor = vColor;
 		}
 	`,
-	
 };
 
 
-function initGL(canvas) {
-	
+const initContext = (canvas) => {
 	try {
 		
 		gl = canvas.getContext('webgl');
@@ -63,12 +59,10 @@ function initGL(canvas) {
 		process.exit(-1);
 		
 	}
-	
-}
+};
 
 
-function getShader(gl, id) {
-	
+const getShader = (gl, id) => {
 	const shader = gl.createShader(id === 'vs' ? gl.VERTEX_SHADER : gl.FRAGMENT_SHADER);
 	
 	gl.shaderSource(shader, shaders[id]);
@@ -80,14 +74,12 @@ function getShader(gl, id) {
 	}
 	
 	return shader;
-	
-}
+};
 
 
 let shaderProgram;
 
-function initShaders() {
-	
+const initShaders = () => {
 	const fragmentShader = getShader(gl, 'fs');
 	const vertexShader = getShader(gl, 'vs');
 	
@@ -114,15 +106,13 @@ function initShaders() {
 	
 	shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, 'uPMatrix');
 	shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
-	
-}
+};
 
 
 let mvMatrix = mat4.create();
 let pMatrix = mat4.create();
 
-function setMatrixUniforms() {
-	
+const setMatrixUniforms = () => {
 	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
 	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
 	
@@ -130,8 +120,7 @@ function setMatrixUniforms() {
 	if (error) {
 		console.error('setMatrixUniforms():', gl.viewportWidth, gl.viewportHeight, error);
 	}
-	
-}
+};
 
 
 let triangleVertexPositionBuffer;
@@ -139,8 +128,7 @@ let triangleVertexColorBuffer;
 let squareVertexPositionBuffer;
 let squareVertexColorBuffer;
 
-function initBuffers() {
-	
+const initBuffers = () => {
 	triangleVertexPositionBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
 	const vertices = [
@@ -189,12 +177,10 @@ function initBuffers() {
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors2), gl.STATIC_DRAW);
 	squareVertexColorBuffer.itemSize = 4;
 	squareVertexColorBuffer.numItems = 4;
-	
-}
+};
 
 
-function drawScene() {
-	
+const drawScene = () => {
 	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
@@ -251,13 +237,11 @@ function drawScene() {
 	gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
 	
 	frame(drawScene);
-	
-}
+};
 
 
-function start() {
-	
-	initGL(canvas);
+const start = () => {
+	initContext(canvas);
 	initShaders();
 	initBuffers();
 	
@@ -265,7 +249,6 @@ function start() {
 	gl.enable(gl.DEPTH_TEST);
 	
 	drawScene();
-	
-}
+};
 
 start();
