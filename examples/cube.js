@@ -48,7 +48,7 @@ const shaders = {
 };
 
 
-const initContext = (canvas) => {
+const initContext = canvas => {
 	try {
 		gl = canvas.getContext('webgl');
 		gl.viewportWidth = canvas.width;
@@ -120,12 +120,12 @@ const setMatrixUniforms = () => {
 	if (error) {
 		console.error('setMatrixUniforms():', gl.viewportWidth, gl.viewportHeight, error);
 	}
-}
+};
 
 
-const degToRad = (degrees) => {
+const degToRad = degrees => {
 	return degrees * Math.PI / 180;
-}
+};
 
 
 const currentlyPressedKeys = {};
@@ -160,7 +160,7 @@ const handleKeys = () => {
 	if (currentlyPressedKeys[40]) { // Down cursor key
 		xSpeed += 1;
 	}
-}
+};
 
 
 let cubeVertexPositionBuffer;
@@ -346,13 +346,13 @@ const drawScene = () => {
 	// cleanup GL state
 	gl.bindBuffer(gl.ARRAY_BUFFER, null);
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-}
+};
 
 
 let lastTime = 0;
 // let fps = 0;
 
-const animate = (timeNow) => {
+const animate = timeNow => {
 	if (lastTime) {
 		
 		const elapsed = timeNow - lastTime;
@@ -364,16 +364,16 @@ const animate = (timeNow) => {
 	}
 	
 	lastTime = timeNow;
-}
+};
 
 
-const tick = (timeNow) => {
+const tick = timeNow => {
 	drawScene();
 	animate(timeNow);
 	
 	gl.finish(); // for timing
 	frame(tick, 0);
-}
+};
 
 
 const start = () => {
@@ -387,7 +387,7 @@ const start = () => {
 	gl.enable(gl.DEPTH_TEST);
 	
 	tick(Date.now());
-}
+};
 
 start();
 
