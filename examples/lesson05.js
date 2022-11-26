@@ -10,6 +10,7 @@ const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
 Document.setWebgl(webgl);
 const document = new Document();
+webgl.canvas = document;
 
 const canvas = document.createElement('canvas');
 const frame = document.requestAnimationFrame;
@@ -17,10 +18,6 @@ const frame = document.requestAnimationFrame;
 let gl;
 
 document.title = 'Lesson05';
-document.on('resize', evt => {
-	gl.viewportWidth = evt.width;
-	gl.viewportHeight = evt.height;
-});
 
 const shaders = {
 	vs: `
@@ -50,10 +47,6 @@ const shaders = {
 const initContext = canvas => {
 	try {
 		gl = canvas.getContext('webgl');
-		
-		gl.viewportWidth = canvas.width;
-		gl.viewportHeight = canvas.height;
-		console.log(gl.drawingBufferWidth, gl.drawingBufferHeight);
 	} catch (e) {
 		console.error('Could not initialise WebGL, sorry :-(');
 		process.exit(-1);
@@ -143,7 +136,7 @@ const setMatrixUniforms = () => {
 	
 	const error = gl.getError();
 	if (error) {
-		console.error('setMatrixUniforms():', gl.viewportWidth, gl.viewportHeight, error);
+		console.error('setMatrixUniforms():', gl.drawingBufferWidth, gl.drawingBufferHeight, error);
 	}
 };
 
@@ -265,10 +258,10 @@ let yRot = 0;
 let zRot = 0;
 
 const drawScene = () => {
-	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+	gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-	mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+	mat4.perspective(45, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 100.0, pMatrix);
 	
 	mat4.identity(mvMatrix);
 	

@@ -10,6 +10,7 @@ const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
 Document.setWebgl(webgl);
 const document = new Document();
+webgl.canvas = document;
 
 const canvas = document.createElement('canvas');
 let gl;
@@ -42,9 +43,12 @@ let shaders = {
 };
 
 const initContext = canvas => {
-	gl = canvas.getContext('webgl');
-	gl.viewportWidth = canvas.width;
-	gl.viewportHeight = canvas.height;
+	try {
+		gl = canvas.getContext('webgl');
+	} catch (e) {
+		console.error('Could not initialise WebGL, sorry :-(');
+		process.exit(-1);
+	}
 };
 
 
@@ -181,7 +185,7 @@ const initBuffers = () => {
 
 
 const drawScene = () => {
-	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+	gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 	mat4.ortho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, pMatrix);
@@ -226,10 +230,6 @@ const tick = () => {
 
 const start = () => {
 	initContext(canvas);
-	document.on('resize', () => {
-		gl.viewportWidth = canvas.width;
-		gl.viewportHeight = canvas.height;
-	});
 	initShaders();
 	initBuffers();
 	initTexture();

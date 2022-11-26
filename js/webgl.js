@@ -23,7 +23,7 @@ if (!gl.__isInited) {
 		this.type = _.type;
 		this.name = _.name;
 	};
-	gl.WebGLTransformFeedback = function (_) { this._ = _; };
+	gl.WebGLTransformFeedback = function WebGLTransformFeedback(_) { this._ = _; };
 
 
 	// Global scope constructors for browser-style libs
@@ -435,13 +435,13 @@ if (!gl.__isInited) {
 
 	if (gl.drawingBufferWidth === undefined) {
 		Object.defineProperty(
-			gl, 'drawingBufferWidth', { get: () => gl.getParameter(gl.VIEWPORT)[2] },
+			gl, 'drawingBufferWidth', { get: () => (gl.canvas ? gl.canvas.width : 800) },
 		);
 	}
 
 	if (gl.drawingBufferHeight === undefined) {
 		Object.defineProperty(
-			gl, 'drawingBufferHeight', { get: () => gl.getParameter(gl.VIEWPORT)[3] },
+			gl, 'drawingBufferHeight', { get: () => (gl.canvas ? gl.canvas.height : 600) },
 		);
 	}
 

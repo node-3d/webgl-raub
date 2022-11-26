@@ -10,16 +10,13 @@ const { mat4, mat3, vec3 } = require('./libs/glMatrix-0.9.5.min');
 
 Document.setWebgl(webgl);
 const document = new Document();
+webgl.canvas = document;
+
 const canvas = document.createElement('canvas');
 const frame = document.requestAnimationFrame;
 let gl;
 
-
 document.title = 'Lesson08';
-document.on('resize', evt => {
-	gl.viewportWidth = evt.width;
-	gl.viewportHeight = evt.height;
-});
 
 
 const shaders = {
@@ -65,9 +62,12 @@ const shaders = {
 
 
 const initContext = canvas => {
-	gl = canvas.getContext('webgl');
-	gl.viewportWidth = canvas.width;
-	gl.viewportHeight = canvas.height;
+	try {
+		gl = canvas.getContext('webgl');
+	} catch (e) {
+		console.error('Could not initialise WebGL, sorry :-(');
+		process.exit(-1);
+	}
 };
 
 
@@ -391,10 +391,10 @@ const initBuffers = () => {
 
 
 const drawScene = () => {
-	gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+	gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
-	mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
+	mat4.perspective(45, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 100.0, pMatrix);
 	
 	mat4.identity(mvMatrix);
 	
