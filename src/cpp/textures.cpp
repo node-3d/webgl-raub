@@ -207,19 +207,51 @@ JS_METHOD(texParameteri) { NAPI_ENV;
 }
 
 
-JS_METHOD(texSubImage2D) { NAPI_ENV;
+JS_METHOD(texStorage2D) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, levels);
+	REQ_INT32_ARG(2, format);
+	REQ_INT32_ARG(3, width);
+	REQ_INT32_ARG(4, height);
 	
+	glTexStorage2D(target, levels, format, width, height);
+	RET_UNDEFINED;
+}
+
+
+JS_METHOD(texSubImage2D) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
 	REQ_INT32_ARG(2, xoffset);
 	REQ_INT32_ARG(3, yoffset);
+	
+	if (info.Length() == 7 || IS_ARG_EMPTY(8)) {
+		REQ_INT32_ARG(4, format);
+		REQ_INT32_ARG(5, type);
+		REQ_OBJ_ARG(6, image);
+		
+		void *pixels = getData(env, image);
+		
+		glTexSubImage2D(
+			target,
+			level,
+			xoffset,
+			yoffset,
+			0,
+			0,
+			format,
+			type,
+			nullptr
+		);
+		RET_UNDEFINED;
+	}
+	
 	REQ_INT32_ARG(4, width);
 	REQ_INT32_ARG(5, height);
 	REQ_INT32_ARG(6, format);
 	REQ_INT32_ARG(7, type);
 	
 	if (info.Length() <= 8 || IS_ARG_EMPTY(8)) {
-		
 		glTexSubImage2D(
 			target,
 			level,
@@ -231,11 +263,8 @@ JS_METHOD(texSubImage2D) { NAPI_ENV;
 			type,
 			nullptr
 		);
-		
 	} else {
-		
 		REQ_OBJ_ARG(8, image);
-		
 		void *pixels = getData(env, image);
 		glTexSubImage2D(
 			target,
@@ -248,11 +277,9 @@ JS_METHOD(texSubImage2D) { NAPI_ENV;
 			type,
 			pixels
 		);
-		
 	}
 	
 	RET_UNDEFINED;
-	
 }
 
 

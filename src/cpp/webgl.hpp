@@ -139,6 +139,7 @@ namespace webgl {
 	JS_METHOD(texParameterf);
 	JS_METHOD(texParameteri);
 	JS_METHOD(texSubImage2D);
+	JS_METHOD(texStorage2D);
 	
 	
 	// Uniform
@@ -207,6 +208,7 @@ namespace webgl {
 	JS_METHOD(disable);
 	JS_METHOD(drawArrays);
 	JS_METHOD(drawElements);
+	JS_METHOD(drawBuffers);
 	JS_METHOD(enable);
 	JS_METHOD(finish);
 	JS_METHOD(flush);

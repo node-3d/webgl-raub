@@ -276,6 +276,13 @@ declare module "webgl-raub" {
 			type: number,
 			image?: TImage,
 		) => void;
+		texStorage2D: (
+			target: number,
+			levels: number,
+			internalformat: number,
+			width: number,
+			height: number,
+		) => void;
 		getActiveUniform: (program: WebGLProgram, index: number) => TActiveInfo;
 		getUniform: (program: WebGLProgram, location: WebGLUniformLocation) => (undefined | number[]);
 		getUniformLocation: (program: WebGLProgram, name: string) => WebGLUniformLocation;
@@ -360,6 +367,7 @@ declare module "webgl-raub" {
 			type: number,
 			ptr: number,
 		) => void;
+		drawBuffers: (buffers: number[]) => void;
 		enable: (id: number) => void;
 		finish: () => void;
 		flush: () => void;

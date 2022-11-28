@@ -632,6 +632,7 @@ if (!gl.__isInited) {
 			'DRAW_BUFFER15_WEBGL' : 0x8834,
 			'MAX_COLOR_ATTACHMENTS_WEBGL' : 0x8CDF,
 			'MAX_DRAW_BUFFERS_WEBGL' : 0x8824,
+			drawBuffersWEBGL: gl.drawBuffers,
 		},
 		'WEBGL_lose_context': {
 			loseContext() {},

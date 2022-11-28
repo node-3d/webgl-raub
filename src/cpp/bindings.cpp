@@ -145,6 +145,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(texParameterf);
 	JS_GL_SET_METHOD(texParameteri);
 	JS_GL_SET_METHOD(texSubImage2D);
+	JS_GL_SET_METHOD(texStorage2D);
 	
 	
 	// Uniform
@@ -214,6 +215,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(disable);
 	JS_GL_SET_METHOD(drawArrays);
 	JS_GL_SET_METHOD(drawElements);
+	JS_GL_SET_METHOD(drawBuffers);
 	JS_GL_SET_METHOD(enable);
 	JS_GL_SET_METHOD(finish);
 	JS_GL_SET_METHOD(flush);
@@ -728,8 +730,11 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_CONSTANT(PIXEL_PACK_BUFFER_BINDING, 0x88ED);
 	JS_GL_SET_CONSTANT(PIXEL_UNPACK_BUFFER_BINDING, 0x88EF);
 	
-	return exports;
+	// WebGL 2
+	JS_GL_CONSTANT(MAX_SAMPLES);
+	JS_GL_CONSTANT(MAX_UNIFORM_BUFFER_BINDINGS);
 	
+	return exports;
 }
 
 

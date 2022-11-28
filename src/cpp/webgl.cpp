@@ -150,6 +150,21 @@ JS_METHOD(drawElements) { NAPI_ENV;
 }
 
 
+JS_METHOD(drawBuffers) { NAPI_ENV;
+	REQ_ARRAY_ARG(0, jsBuffers);
+	
+	uint32_t count = jsBuffers.Length();
+	GLenum *cppBuffers = new GLenum[count];
+	
+	for (uint32_t i = 0; i < count; i++) {
+		cppBuffers[i] = jsBuffers.Get(i).As<Napi::Number>().Uint32Value();
+	}
+	
+	glDrawBuffers(count, cppBuffers);
+	RET_UNDEFINED;
+}
+
+
 JS_METHOD(enable) { NAPI_ENV;
 	
 	REQ_INT32_ARG(0, id);
