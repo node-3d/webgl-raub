@@ -214,7 +214,7 @@ DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 			0,
 			format,
 			type,
-			nullptr
+			pixels
 		);
 		RET_UNDEFINED;
 	}
