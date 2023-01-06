@@ -68,6 +68,10 @@ jobs:
         with:
           run: npm run test-ci
 
+      - name: Copy Windows opengl32.dll
+        if: matrix.os == 'windows-2022'
+        run: node test/copy-windows
+
       - name: Run Unit Tests
         if: matrix.os != 'ubuntu-20.04'
         run: npm run test-ci
