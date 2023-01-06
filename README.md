@@ -2,23 +2,14 @@
 
 This is a part of [Node3D](https://github.com/node-3d) project.
 
-[![NPM](https://nodei.co/npm/webgl-raub.png?compact=true)](https://www.npmjs.com/package/webgl-raub)
+[![NPM](https://badge.fury.io/js/webgl-raub.svg)](https://badge.fury.io/js/webgl-raub)
 [![CodeFactor](https://www.codefactor.io/repository/github/node-3d/webgl-raub/badge)](https://www.codefactor.io/repository/github/node-3d/webgl-raub)
 
 ```
 npm i webgl-raub
 ```
 
-
-## Synopsis
-
 **Node.js** addon with **WebGL** bindings.
-
-> Note: this **addon uses N-API**, and therefore is ABI-compatible across different
-Node.js versions. Addon binaries are precompiled and **there is no compilation**
-step during the `npm i` command.
-
-![Example](examples/screenshot.jpg)
 
 This module **does not provide** a window control system, and it
 **can not set up an OpenGL context** on its own. This API simply maps the
@@ -26,6 +17,12 @@ native OpenGL function calls to their JS counterpart.
 
 **TL;DR**: see [3d-core-raub](https://github.com/node-3d/3d-core-raub)
 for a quick start in a fully sufficient environment.
+
+![Example](examples/screenshot.jpg)
+
+> Note: this **addon uses N-API**, and therefore is ABI-compatible across different
+Node.js versions. Addon binaries are precompiled and **there is no compilation**
+step during the `npm i` command.
 
 
 ## Usage

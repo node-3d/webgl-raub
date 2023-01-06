@@ -138,13 +138,13 @@ describe('WebGL', () => {
 		expect(typeof webgl).toBe('object');
 	});
 	
-	constants.forEach(constant => {
+	constants.forEach((constant) => {
 		it(`#${constant} constant exposed`, () => {
 			expect(webgl).toHaveProperty(constant);
 		});
 	});
 	
-	methods.forEach(method => {
+	methods.forEach((method) => {
 		it(`#${method}() method exposed`, () => {
 			expect(typeof webgl[method]).toBe('function');
 		});

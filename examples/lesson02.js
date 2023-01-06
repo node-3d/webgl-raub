@@ -42,7 +42,7 @@ const shaders = {
 };
 
 
-const initContext = canvas => {
+const initContext = (canvas) => {
 	try {
 		gl = canvas.getContext('webgl');
 	} catch (e) {

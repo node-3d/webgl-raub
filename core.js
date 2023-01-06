@@ -4,9 +4,9 @@ require('segfault-raub');
 
 require('deps-opengl-raub');
 
-const { bin } = require('addon-tools-raub');
+const { getBin } = require('addon-tools-raub');
 
-const core = require(`./${bin}/webgl`);
+const core = require(`./${getBin()}/webgl`);
 
 
 module.exports = core;

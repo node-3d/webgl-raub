@@ -1,54 +1,42 @@
 #include "webgl.hpp"
 
 
-using namespace std;
-
-
 namespace webgl {
 
 
-JS_METHOD(createFramebuffer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(createFramebuffer) { NAPI_ENV;
 	GLuint buffer;
 	glGenFramebuffers(1, &buffer);
 	
 	RET_NUM(buffer);
-	
 }
 
 
-JS_METHOD(deleteFramebuffer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(deleteFramebuffer) { NAPI_ENV;
 	REQ_UINT32_ARG(0, buffer);
 	
 	glDeleteFramebuffers(1, reinterpret_cast<GLuint*>(&buffer));
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(isFramebuffer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(isFramebuffer) { NAPI_ENV;
 	REQ_UINT32_ARG(0, buffer);
 	
 	RET_BOOL(glIsFramebuffer(buffer) != 0);
-	
 }
 
 
-JS_METHOD(bindFramebuffer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(bindFramebuffer) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	LET_INT32_ARG(1, buffer);
 	
 	glBindFramebuffer(target, buffer);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(blitFramebuffer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(blitFramebuffer) { NAPI_ENV;
 	REQ_UINT32_ARG(0, srcX0);
 	REQ_UINT32_ARG(1, srcY0);
 	REQ_UINT32_ARG(2, srcX1);
@@ -63,21 +51,17 @@ JS_METHOD(blitFramebuffer) { NAPI_ENV;
 	glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
 	
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(checkFramebufferStatus) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(checkFramebufferStatus) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	
 	RET_NUM(glCheckFramebufferStatus(target));
-	
 }
 
 
-JS_METHOD(framebufferRenderbuffer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(framebufferRenderbuffer) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, attachment);
 	REQ_INT32_ARG(2, renderbuffertarget);
@@ -85,12 +69,10 @@ JS_METHOD(framebufferRenderbuffer) { NAPI_ENV;
 	
 	glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(framebufferTexture2D) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(framebufferTexture2D) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, attachment);
 	REQ_INT32_ARG(2, textarget);
@@ -99,12 +81,10 @@ JS_METHOD(framebufferTexture2D) { NAPI_ENV;
 	
 	glFramebufferTexture2D(target, attachment, textarget, texture, level);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(getFramebufferAttachmentParameter) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getFramebufferAttachmentParameter) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, attachment);
 	REQ_INT32_ARG(2, name);
@@ -113,7 +93,6 @@ JS_METHOD(getFramebufferAttachmentParameter) { NAPI_ENV;
 	glGetFramebufferAttachmentParameteriv(target, attachment, name, &params);
 	
 	RET_NUM(params);
-	
 }
 
 

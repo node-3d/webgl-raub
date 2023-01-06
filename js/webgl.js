@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 'use strict';
 
 const gl = require('../core');
@@ -41,11 +42,11 @@ if (!gl.__isInited) {
 	global.WebGLTransformFeedback = gl.WebGLTransformFeedback;
 
 
-	const enforceF32 = v => v instanceof Array ? new Float32Array(v) : v;
+	const enforceF32 = (v) => v instanceof Array ? new Float32Array(v) : v;
 
-	const enforceId = x => x ? x._ : 0;
+	const enforceId = (x) => x ? x._ : 0;
 
-	const unfoldBool = x => typeof x === 'boolean' ? (x ? 1 : 0) : x;
+	const unfoldBool = (x) => typeof x === 'boolean' ? (x ? 1 : 0) : x;
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -99,10 +100,10 @@ if (!gl.__isInited) {
 	gl.createBuffer = () => new gl.WebGLBuffer(_createBuffer());
 
 	const _deleteBuffer = gl.deleteBuffer;
-	gl.deleteBuffer = buffer => _deleteBuffer(enforceId(buffer));
+	gl.deleteBuffer = (buffer) => _deleteBuffer(enforceId(buffer));
 
 	const _isBuffer = gl.isBuffer;
-	gl.isBuffer = buffer => _isBuffer(enforceId(buffer));
+	gl.isBuffer = (buffer) => _isBuffer(enforceId(buffer));
 
 	const _bindBuffer = gl.bindBuffer;
 	gl.bindBuffer = (target, buffer) => _bindBuffer(target, enforceId(buffer));
@@ -121,10 +122,10 @@ if (!gl.__isInited) {
 	gl.createFramebuffer = () => new gl.WebGLFramebuffer(_createFramebuffer());
 
 	const _deleteFramebuffer = gl.deleteFramebuffer;
-	gl.deleteFramebuffer = framebuffer => _deleteFramebuffer(enforceId(framebuffer));
+	gl.deleteFramebuffer = (framebuffer) => _deleteFramebuffer(enforceId(framebuffer));
 
 	const _isFramebuffer = gl.isFramebuffer;
-	gl.isFramebuffer = framebuffer => _isFramebuffer(enforceId(framebuffer));
+	gl.isFramebuffer = (framebuffer) => _isFramebuffer(enforceId(framebuffer));
 
 	const _bindFramebuffer = gl.bindFramebuffer;
 	gl.bindFramebuffer = (target, framebuffer) => _bindFramebuffer(target, enforceId(framebuffer));
@@ -150,25 +151,25 @@ if (!gl.__isInited) {
 	gl.createProgram = () => new gl.WebGLProgram(_createProgram());
 
 	const _deleteProgram = gl.deleteProgram;
-	gl.deleteProgram = program => _deleteProgram(enforceId(program));
+	gl.deleteProgram = (program) => _deleteProgram(enforceId(program));
 
 	const _isProgram = gl.isProgram;
-	gl.isProgram = program => _isProgram(enforceId(program));
+	gl.isProgram = (program) => _isProgram(enforceId(program));
 
 	const _getProgramInfoLog = gl.getProgramInfoLog;
-	gl.getProgramInfoLog = program => _getProgramInfoLog(enforceId(program));
+	gl.getProgramInfoLog = (program) => _getProgramInfoLog(enforceId(program));
 
 	const _getProgramParameter = gl.getProgramParameter;
 	gl.getProgramParameter = (program, pname) => _getProgramParameter(enforceId(program), pname);
 
 	const _linkProgram = gl.linkProgram;
-	gl.linkProgram = program => _linkProgram(enforceId(program));
+	gl.linkProgram = (program) => _linkProgram(enforceId(program));
 
 	const _useProgram = gl.useProgram;
-	gl.useProgram = program => _useProgram(enforceId(program));
+	gl.useProgram = (program) => _useProgram(enforceId(program));
 
 	const _validateProgram = gl.validateProgram;
-	gl.validateProgram = program => _validateProgram(enforceId(program));
+	gl.validateProgram = (program) => _validateProgram(enforceId(program));
 
 
 	// RBO
@@ -177,10 +178,10 @@ if (!gl.__isInited) {
 	gl.createRenderbuffer = () => new gl.WebGLRenderbuffer(_createRenderbuffer());
 
 	const _deleteRenderbuffer = gl.deleteRenderbuffer;
-	gl.deleteRenderbuffer = renderbuffer => _deleteRenderbuffer(enforceId(renderbuffer));
+	gl.deleteRenderbuffer = (renderbuffer) => _deleteRenderbuffer(enforceId(renderbuffer));
 
 	const _isRenderbuffer = gl.isRenderbuffer;
-	gl.isRenderbuffer = renderbuffer => _isRenderbuffer(enforceId(renderbuffer));
+	gl.isRenderbuffer = (renderbuffer) => _isRenderbuffer(enforceId(renderbuffer));
 
 	const _bindRenderbuffer = gl.bindRenderbuffer;
 	gl.bindRenderbuffer = (target, renderbuffer) => _bindRenderbuffer(target, enforceId(renderbuffer));
@@ -189,13 +190,13 @@ if (!gl.__isInited) {
 	// Shader
 
 	const _createShader = gl.createShader;
-	gl.createShader = type => new gl.WebGLShader(_createShader(type));
+	gl.createShader = (type) => new gl.WebGLShader(_createShader(type));
 
 	const _deleteShader = gl.deleteShader;
-	gl.deleteShader = shader => _deleteShader(enforceId(shader));
+	gl.deleteShader = (shader) => _deleteShader(enforceId(shader));
 
 	const _isShader = gl.isShader;
-	gl.isShader = shader => _isShader(enforceId(shader));
+	gl.isShader = (shader) => _isShader(enforceId(shader));
 
 	const _attachShader = gl.attachShader;
 	gl.attachShader = (program, shader) => _attachShader(
@@ -203,22 +204,22 @@ if (!gl.__isInited) {
 	);
 
 	const _compileShader = gl.compileShader;
-	gl.compileShader = shader => _compileShader(enforceId(shader));
+	gl.compileShader = (shader) => _compileShader(enforceId(shader));
 
 	const _detachShader = gl.detachShader;
 	gl.detachShader = (program, shader) => _detachShader(enforceId(program), enforceId(shader));
 
 	const _getAttachedShaders = gl.getAttachedShaders;
-	gl.getAttachedShaders = program => _getAttachedShaders(enforceId(program));
+	gl.getAttachedShaders = (program) => _getAttachedShaders(enforceId(program));
 
 	const _getShaderInfoLog = gl.getShaderInfoLog;
-	gl.getShaderInfoLog = shader => _getShaderInfoLog(enforceId(shader));
+	gl.getShaderInfoLog = (shader) => _getShaderInfoLog(enforceId(shader));
 
 	const _getShaderParameter = gl.getShaderParameter;
 	gl.getShaderParameter = (shader, pname) => _getShaderParameter(enforceId(shader), pname);
 
 	const _getShaderSource = gl.getShaderSource;
-	gl.getShaderSource = shader => _getShaderSource(enforceId(shader));
+	gl.getShaderSource = (shader) => _getShaderSource(enforceId(shader));
 
 	gl._shaderSource = gl.shaderSource;
 	gl.shaderSource = (shaderId, code) => gl._shaderSource(
@@ -243,10 +244,10 @@ if (!gl.__isInited) {
 	gl.createTexture = () => new gl.WebGLTexture(_createTexture());
 
 	const _deleteTexture = gl.deleteTexture;
-	gl.deleteTexture = texture => _deleteTexture(enforceId(texture));
+	gl.deleteTexture = (texture) => _deleteTexture(enforceId(texture));
 
 	const _isTexture = gl.isTexture;
-	gl.isTexture = texture => _isTexture(enforceId(texture));
+	gl.isTexture = (texture) => _isTexture(enforceId(texture));
 
 	const _bindTexture = gl.bindTexture;
 	gl.bindTexture = (target, texture) => _bindTexture(target, enforceId(texture));
@@ -376,13 +377,13 @@ if (!gl.__isInited) {
 	gl.createVertexArray = () => new gl.WebGLVertexArray(_createVertexArray());
 
 	const _deleteVertexArray = gl.deleteVertexArray;
-	gl.deleteVertexArray = vao => _deleteVertexArray(enforceId(vao));
+	gl.deleteVertexArray = (vao) => _deleteVertexArray(enforceId(vao));
 
 	const _isVertexArray = gl.isVertexArray;
-	gl.isVertexArray = vao => _isVertexArray(enforceId(vao));
+	gl.isVertexArray = (vao) => _isVertexArray(enforceId(vao));
 
 	const _bindVertexArray = gl.bindVertexArray;
-	gl.bindVertexArray = vao => _bindVertexArray(enforceId(vao));
+	gl.bindVertexArray = (vao) => _bindVertexArray(enforceId(vao));
 
 
 	// Transform feedback
@@ -391,10 +392,12 @@ if (!gl.__isInited) {
 	gl.createTransformFeedback = () => new gl.WebGLTransformFeedback(_createTransformFeedback());
 
 	const _deleteTransformFeedback = gl.deleteTransformFeedback;
-	gl.deleteTransformFeedback = transformFeedback => _deleteTransformFeedback(enforceId(transformFeedback));
+	gl.deleteTransformFeedback = (transformFeedback) => _deleteTransformFeedback(
+		enforceId(transformFeedback)
+	);
 
 	const _isTransformFeedback = gl.isTransformFeedback;
-	gl.isTransformFeedback = transformFeedback => _isTransformFeedback(enforceId(transformFeedback));
+	gl.isTransformFeedback = (transformFeedback) => _isTransformFeedback(enforceId(transformFeedback));
 
 	const _bindTransformFeedback = gl.bindTransformFeedback;
 	gl.bindTransformFeedback = (target, transformFeedback) =>
@@ -412,7 +415,7 @@ if (!gl.__isInited) {
 	// Misc OpenGL Functions
 
 	const _getParameter = gl.getParameter;
-	gl.getParameter = pname => {
+	gl.getParameter = (pname) => {
 		if (pname === gl.VERSION) {
 			return 'WebGL 1.0';
 		}
@@ -428,7 +431,7 @@ if (!gl.__isInited) {
 	gl.colorMask = (red, green, blue, alpha) =>_colorMask(!!red, !!green, !!blue, !!alpha);
 
 	const _depthMask = gl.depthMask;
-	gl.depthMask = flag =>_depthMask(!!flag);
+	gl.depthMask = (flag) =>_depthMask(!!flag);
 
 	const _sampleCoverage = gl.sampleCoverage;
 	gl.sampleCoverage = (value, invert) =>_sampleCoverage(value, !!invert);
@@ -646,7 +649,7 @@ if (!gl.__isInited) {
 		return Object.keys(extensions);
 	};
 
-	gl.getExtension = name => {
+	gl.getExtension = (name) => {
 		return extensions[name];
 	};
 

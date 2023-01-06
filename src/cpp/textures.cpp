@@ -1,64 +1,50 @@
 #include "webgl.hpp"
 
 
-using namespace std;
-
-
 namespace webgl {
 
 
-JS_METHOD(createTexture) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(createTexture) { NAPI_ENV;
 	GLuint texture;
 	glGenTextures(1, &texture);
 	
 	RET_NUM(texture);
-	
 }
 
 
-JS_METHOD(deleteTexture) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(deleteTexture) { NAPI_ENV;
 	REQ_UINT32_ARG(0, texture);
 	
 	glDeleteTextures(1, reinterpret_cast<GLuint*>(&texture));
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(isTexture) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(isTexture) { NAPI_ENV;
 	REQ_UINT32_ARG(0, texture);
 	
 	RET_BOOL(glIsTexture(texture) != 0);
-	
 }
 
 
-JS_METHOD(bindTexture) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(bindTexture) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	LET_INT32_ARG(1, texture);
 	
 	glBindTexture(target, texture);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(activeTexture) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(activeTexture) { NAPI_ENV;
 	REQ_INT32_ARG(0, texture);
 	
 	glActiveTexture(texture);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(copyTexImage2D) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(copyTexImage2D) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
 	REQ_INT32_ARG(2, internalformat);
@@ -70,12 +56,10 @@ JS_METHOD(copyTexImage2D) { NAPI_ENV;
 	
 	glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(copyTexSubImage2D) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(copyTexSubImage2D) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
 	REQ_INT32_ARG(2, xoffset);
@@ -87,22 +71,18 @@ JS_METHOD(copyTexSubImage2D) { NAPI_ENV;
 	
 	glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(generateMipmap) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(generateMipmap) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	
 	glGenerateMipmap(target);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(getTexParameter) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getTexParameter) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
 	
@@ -110,12 +90,10 @@ JS_METHOD(getTexParameter) { NAPI_ENV;
 	glGetTexParameteriv(target, name, &param_value);
 	
 	RET_NUM(param_value);
-	
 }
 
 
-JS_METHOD(texImage2D) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(texImage2D) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
 	REQ_INT32_ARG(2, internalformat);
@@ -179,35 +157,30 @@ JS_METHOD(texImage2D) { NAPI_ENV;
 	}
 	
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(texParameterf) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(texParameterf) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
 	REQ_FLOAT_ARG(2, param);
 	
 	glTexParameterf(target, name, param);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(texParameteri) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(texParameteri) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
 	REQ_INT32_ARG(2, param);
 	
 	glTexParameteri(target, name, param);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(texStorage2D) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(texStorage2D) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, levels);
 	REQ_INT32_ARG(2, format);
@@ -219,7 +192,7 @@ JS_METHOD(texStorage2D) { NAPI_ENV;
 }
 
 
-JS_METHOD(texSubImage2D) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
 	REQ_INT32_ARG(2, xoffset);

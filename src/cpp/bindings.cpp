@@ -20,11 +20,9 @@
 
 
 Napi::Object initModule(Napi::Env env, Napi::Object exports) {
-	
 	JS_GL_SET_METHOD(init);
 	
 	// Attrib
-	
 	JS_GL_SET_METHOD(bindAttribLocation);
 	JS_GL_SET_METHOD(disableVertexAttribArray);
 	JS_GL_SET_METHOD(enableVertexAttribArray);
@@ -43,18 +41,14 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(vertexAttribPointer);
 	JS_GL_SET_METHOD(vertexAttribIPointer);
 	
-	
 	// Blend
-	
 	JS_GL_SET_METHOD(blendColor);
 	JS_GL_SET_METHOD(blendEquation);
 	JS_GL_SET_METHOD(blendEquationSeparate);
 	JS_GL_SET_METHOD(blendFunc);
 	JS_GL_SET_METHOD(blendFuncSeparate);
 	
-	
 	// VBO
-	
 	JS_GL_SET_METHOD(createBuffer);
 	JS_GL_SET_METHOD(deleteBuffer);
 	JS_GL_SET_METHOD(isBuffer);
@@ -67,9 +61,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(getBufferSubData);
 	JS_GL_SET_METHOD(getBufferParameter);
 	
-	
 	// FBO
-	
 	JS_GL_SET_METHOD(createFramebuffer);
 	JS_GL_SET_METHOD(deleteFramebuffer);
 	JS_GL_SET_METHOD(isFramebuffer);
@@ -80,9 +72,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(framebufferTexture2D);
 	JS_GL_SET_METHOD(getFramebufferAttachmentParameter);
 	
-	
 	// Program
-	
 	JS_GL_SET_METHOD(createProgram);
 	JS_GL_SET_METHOD(deleteProgram);
 	JS_GL_SET_METHOD(isProgram);
@@ -92,9 +82,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(useProgram);
 	JS_GL_SET_METHOD(validateProgram);
 	
-	
 	// RBO
-	
 	JS_GL_SET_METHOD(createRenderbuffer);
 	JS_GL_SET_METHOD(deleteRenderbuffer);
 	JS_GL_SET_METHOD(isRenderbuffer);
@@ -102,10 +90,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(getRenderbufferParameter);
 	JS_GL_SET_METHOD(renderbufferStorage);
 	
-	
 	// Shader
-	
-	
 	JS_GL_SET_METHOD(deleteShader);
 	JS_GL_SET_METHOD(createShader);
 	JS_GL_SET_METHOD(isShader);
@@ -118,9 +103,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(getShaderSource);
 	JS_GL_SET_METHOD(shaderSource);
 	
-	
 	// Stencil
-	
 	JS_GL_SET_METHOD(clearStencil);
 	JS_GL_SET_METHOD(stencilFunc);
 	JS_GL_SET_METHOD(stencilFuncSeparate);
@@ -129,9 +112,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(stencilOp);
 	JS_GL_SET_METHOD(stencilOpSeparate);
 	
-	
 	// Texture
-	
 	JS_GL_SET_METHOD(createTexture);
 	JS_GL_SET_METHOD(deleteTexture);
 	JS_GL_SET_METHOD(isTexture);
@@ -147,9 +128,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(texSubImage2D);
 	JS_GL_SET_METHOD(texStorage2D);
 	
-	
 	// Uniform
-	
 	JS_GL_SET_METHOD(getActiveUniform);
 	JS_GL_SET_METHOD(getUniform);
 	JS_GL_SET_METHOD(getUniformLocation);
@@ -173,22 +152,17 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(uniformMatrix3fv);
 	JS_GL_SET_METHOD(uniformMatrix4fv);
 	
-	
 	// VAO
-	
 	JS_GL_SET_METHOD(createVertexArray);
 	JS_GL_SET_METHOD(deleteVertexArray);
 	JS_GL_SET_METHOD(isVertexArray);
 	JS_GL_SET_METHOD(bindVertexArray);
 	
-	
 	// Instances
-	
 	JS_GL_SET_METHOD(drawArraysInstanced);
 	JS_GL_SET_METHOD(drawElementsInstanced);
 	JS_GL_SET_METHOD(vertexAttribDivisor);
 	
-
 	// Transform feedback
 	JS_GL_SET_METHOD(createTransformFeedback);
 	JS_GL_SET_METHOD(deleteTransformFeedback);
@@ -201,9 +175,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(transformFeedbackVaryings);
 	JS_GL_SET_METHOD(getTransformFeedbackVarying);
 	
-	
 	// Misc OpenGL Functions
-	
 	JS_GL_SET_METHOD(clear);
 	JS_GL_SET_METHOD(clearColor);
 	JS_GL_SET_METHOD(clearDepth);
@@ -237,16 +209,16 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	
 	// OpenGL ES 2.1 constants
 	
-	/* ClearBufferMask */
+	// ClearBufferMask
 	JS_GL_CONSTANT(DEPTH_BUFFER_BIT);
 	JS_GL_CONSTANT(STENCIL_BUFFER_BIT);
 	JS_GL_CONSTANT(COLOR_BUFFER_BIT);
 	
-	/* Boolean */
+	// Boolean
 	JS_GL_CONSTANT(FALSE);
 	JS_GL_CONSTANT(TRUE);
 	
-	/* BeginMode */
+	// BeginMode
 	JS_GL_CONSTANT(POINTS);
 	JS_GL_CONSTANT(LINES);
 	JS_GL_CONSTANT(LINE_LOOP);
@@ -265,7 +237,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	/*			GL_GEQUAL */
 	/*			GL_ALWAYS */
 	
-	/* BlendingFactorDest */
+	// BlendingFactorDest
 	JS_GL_CONSTANT(ZERO);
 	JS_GL_CONSTANT(ONE);
 	JS_GL_CONSTANT(SRC_COLOR);
@@ -286,17 +258,17 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	/*			GL_DST_ALPHA */
 	/*			GL_ONE_MINUS_DST_ALPHA */
 	
-	/* BlendEquationSeparate */
+	// BlendEquationSeparate
 	JS_GL_CONSTANT(FUNC_ADD);
 	JS_GL_CONSTANT(BLEND_EQUATION);
 	JS_GL_CONSTANT(BLEND_EQUATION_RGB);		/* same as BLEND_EQUATION */
 	JS_GL_CONSTANT(BLEND_EQUATION_ALPHA);
 	
-	/* BlendSubtract */
+	// BlendSubtract
 	JS_GL_CONSTANT(FUNC_SUBTRACT);
 	JS_GL_CONSTANT(FUNC_REVERSE_SUBTRACT);
 	
-	/* Separate Blend Functions */
+	// Separate Blend Functions
 	JS_GL_CONSTANT(BLEND_DST_RGB);
 	JS_GL_CONSTANT(BLEND_SRC_RGB);
 	JS_GL_CONSTANT(BLEND_DST_ALPHA);
@@ -307,7 +279,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(ONE_MINUS_CONSTANT_ALPHA);
 	JS_GL_CONSTANT(BLEND_COLOR);
 	
-	/* Buffer Objects */
+	// Buffer Objects
 	JS_GL_CONSTANT(ARRAY_BUFFER);
 	JS_GL_CONSTANT(ELEMENT_ARRAY_BUFFER);
 	JS_GL_CONSTANT(ARRAY_BUFFER_BINDING);
@@ -322,7 +294,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	
 	JS_GL_CONSTANT(CURRENT_VERTEX_ATTRIB);
 	
-	/* CullFaceMode */
+	// CullFaceMode
 	JS_GL_CONSTANT(FRONT);
 	JS_GL_CONSTANT(BACK);
 	JS_GL_CONSTANT(FRONT_AND_BACK);
@@ -337,7 +309,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	/*			GL_GEQUAL */
 	/*			GL_ALWAYS */
 	
-	/* EnableCap */
+	// EnableCap
 	JS_GL_CONSTANT(TEXTURE_2D);
 	JS_GL_CONSTANT(CULL_FACE);
 	JS_GL_CONSTANT(BLEND);
@@ -349,18 +321,18 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(SAMPLE_ALPHA_TO_COVERAGE);
 	JS_GL_CONSTANT(SAMPLE_COVERAGE);
 	
-	/* ErrorCode */
+	// ErrorCode
 	JS_GL_CONSTANT(NO_ERROR);
 	JS_GL_CONSTANT(INVALID_ENUM);
 	JS_GL_CONSTANT(INVALID_VALUE);
 	JS_GL_CONSTANT(INVALID_OPERATION);
 	JS_GL_CONSTANT(OUT_OF_MEMORY);
 	
-	/* FrontFaceDirection */
+	// FrontFaceDirection
 	JS_GL_CONSTANT(CW);
 	JS_GL_CONSTANT(CCW);
 	
-	/* GetPName */
+	// GetPName
 	JS_GL_CONSTANT(LINE_WIDTH);
 	JS_GL_CONSTANT(ALIASED_POINT_SIZE_RANGE);
 	JS_GL_CONSTANT(ALIASED_LINE_WIDTH_RANGE);
@@ -419,15 +391,15 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(NUM_COMPRESSED_TEXTURE_FORMATS);
 	JS_GL_CONSTANT(COMPRESSED_TEXTURE_FORMATS);
 	
-	/* HintMode */
+	// HintMode
 	JS_GL_CONSTANT(DONT_CARE);
 	JS_GL_CONSTANT(FASTEST);
 	JS_GL_CONSTANT(NICEST);
 	
-	/* HintTarget */
+	// HintTarget
 	JS_GL_CONSTANT(GENERATE_MIPMAP_HINT);
 	
-	/* DataType */
+	// DataType
 	JS_GL_CONSTANT(BYTE);
 	JS_GL_CONSTANT(UNSIGNED_BYTE);
 	JS_GL_CONSTANT(SHORT);
@@ -437,7 +409,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(FLOAT);
 	JS_GL_CONSTANT(FIXED);
 	
-	/* PixelFormat */
+	// PixelFormat
 	JS_GL_CONSTANT(DEPTH_COMPONENT);
 	JS_GL_CONSTANT(ALPHA);
 	JS_GL_CONSTANT(RGB);
@@ -445,13 +417,13 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(LUMINANCE);
 	JS_GL_CONSTANT(LUMINANCE_ALPHA);
 	
-	/* PixelType */
+	// PixelType
 	/*			GL_UNSIGNED_BYTE */
 	JS_GL_CONSTANT(UNSIGNED_SHORT_4_4_4_4);
 	JS_GL_CONSTANT(UNSIGNED_SHORT_5_5_5_1);
 	JS_GL_CONSTANT(UNSIGNED_SHORT_5_6_5);
 	
-	/* Shaders */
+	// Shaders
 	JS_GL_CONSTANT(FRAGMENT_SHADER);
 	JS_GL_CONSTANT(VERTEX_SHADER);
 	JS_GL_CONSTANT(MAX_VERTEX_ATTRIBS);
@@ -477,7 +449,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(SHADING_LANGUAGE_VERSION);
 	JS_GL_CONSTANT(CURRENT_PROGRAM);
 	
-	/* StencilFunction */
+	// StencilFunction
 	JS_GL_CONSTANT(NEVER);
 	JS_GL_CONSTANT(LESS);
 	JS_GL_CONSTANT(EQUAL);
@@ -487,7 +459,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(GEQUAL);
 	JS_GL_CONSTANT(ALWAYS);
 	
-	/* StencilOp */
+	// StencilOp
 	/*			GL_ZERO */
 	JS_GL_CONSTANT(KEEP);
 	JS_GL_CONSTANT(REPLACE);
@@ -497,21 +469,21 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(INCR_WRAP);
 	JS_GL_CONSTANT(DECR_WRAP);
 	
-//add missing const for point clouds, sprites:
+	//add missing const for point clouds, sprites:
 	JS_GL_CONSTANT(PROGRAM_POINT_SIZE);
 	JS_GL_CONSTANT(POINT_SPRITE);
 	
-	/* StringName */
+	// StringName
 	JS_GL_CONSTANT(VENDOR);
 	JS_GL_CONSTANT(RENDERER);
 	JS_GL_CONSTANT(VERSION);
 	JS_GL_CONSTANT(EXTENSIONS);
 	
-	/* TextureMagFilter */
+	// TextureMagFilter
 	JS_GL_CONSTANT(NEAREST);
 	JS_GL_CONSTANT(LINEAR);
 	
-	/* TextureMinFilter */
+	// TextureMinFilter
 	/*			GL_NEAREST */
 	/*			GL_LINEAR */
 	JS_GL_CONSTANT(NEAREST_MIPMAP_NEAREST);
@@ -519,13 +491,13 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(NEAREST_MIPMAP_LINEAR);
 	JS_GL_CONSTANT(LINEAR_MIPMAP_LINEAR);
 	
-	/* TextureParameterName */
+	// TextureParameterName
 	JS_GL_CONSTANT(TEXTURE_MAG_FILTER);
 	JS_GL_CONSTANT(TEXTURE_MIN_FILTER);
 	JS_GL_CONSTANT(TEXTURE_WRAP_S);
 	JS_GL_CONSTANT(TEXTURE_WRAP_T);
 	
-	/* TextureTarget */
+	// TextureTarget
 	/*			GL_TEXTURE_2D */
 	JS_GL_CONSTANT(TEXTURE);
 	
@@ -539,7 +511,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(TEXTURE_CUBE_MAP_NEGATIVE_Z);
 	JS_GL_CONSTANT(MAX_CUBE_MAP_TEXTURE_SIZE);
 	
-	/* TextureUnit */
+	// TextureUnit
 	JS_GL_CONSTANT(TEXTURE0);
 	JS_GL_CONSTANT(TEXTURE1);
 	JS_GL_CONSTANT(TEXTURE2);
@@ -574,14 +546,14 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(TEXTURE31);
 	JS_GL_CONSTANT(ACTIVE_TEXTURE);
 	
-	/* TextureWrapMode */
+	// TextureWrapMode
 	JS_GL_CONSTANT(CLAMP);
 	JS_GL_CONSTANT(CLAMP_TO_BORDER);
 	JS_GL_CONSTANT(CLAMP_TO_EDGE);
 	JS_GL_CONSTANT(MIRRORED_REPEAT);
 	JS_GL_CONSTANT(REPEAT);
 	
-	/* Uniform Types */
+	// Uniform Types
 	JS_GL_CONSTANT(FLOAT_VEC2);
 	JS_GL_CONSTANT(FLOAT_VEC3);
 	JS_GL_CONSTANT(FLOAT_VEC4);
@@ -598,7 +570,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(SAMPLER_2D);
 	JS_GL_CONSTANT(SAMPLER_CUBE);
 	
-	/* Vertex Arrays */
+	// Vertex Arrays
 	JS_GL_CONSTANT(VERTEX_ATTRIB_ARRAY_ENABLED);
 	JS_GL_CONSTANT(VERTEX_ATTRIB_ARRAY_SIZE);
 	JS_GL_CONSTANT(VERTEX_ATTRIB_ARRAY_STRIDE);
@@ -607,28 +579,21 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(VERTEX_ATTRIB_ARRAY_POINTER);
 	JS_GL_CONSTANT(VERTEX_ATTRIB_ARRAY_BUFFER_BINDING);
 	
-	/* Read Format */
-	
+	// Read Format
 	JS_GL_CONSTANT(IMPLEMENTATION_COLOR_READ_TYPE);
 	JS_GL_CONSTANT(IMPLEMENTATION_COLOR_READ_FORMAT);
 	
-	
-	/* Shader Source */
+	// Shader Source
 	JS_GL_CONSTANT(COMPILE_STATUS);
 	JS_GL_CONSTANT(INFO_LOG_LENGTH);
 	JS_GL_CONSTANT(SHADER_SOURCE_LENGTH);
-	
 	JS_GL_CONSTANT(SHADER_COMPILER);
 	
-	
-	/* Shader Binary */
-	
+	// Shader Binary
 	JS_GL_CONSTANT(SHADER_BINARY_FORMATS);
 	JS_GL_CONSTANT(NUM_SHADER_BINARY_FORMATS);
 	
-	
-	/* Shader Precision-Specified Types */
-	
+	// Shader Precision-Specified Types
 	JS_GL_CONSTANT(LOW_FLOAT);
 	JS_GL_CONSTANT(MEDIUM_FLOAT);
 	JS_GL_CONSTANT(HIGH_FLOAT);
@@ -637,7 +602,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(HIGH_INT);
 	
 	
-	/* Framebuffer Object. */
+	// Framebuffer Object.
 	JS_GL_CONSTANT(FRAMEBUFFER);
 	JS_GL_CONSTANT(RENDERBUFFER);
 	
@@ -652,7 +617,6 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	
 	JS_GL_CONSTANT(DEPTH_STENCIL);
 	JS_GL_CONSTANT(DEPTH24_STENCIL8);
-	
 	
 	JS_GL_CONSTANT(RENDERBUFFER_WIDTH);
 	JS_GL_CONSTANT(RENDERBUFFER_HEIGHT);
@@ -677,7 +641,6 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	
 	JS_GL_CONSTANT(VERTEX_ARRAY_BINDING);
 	
-	
 	JS_GL_CONSTANT(NONE);
 	
 	JS_GL_CONSTANT(FRAMEBUFFER_COMPLETE);
@@ -693,9 +656,8 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(MAX_RENDERBUFFER_SIZE);
 	
 	JS_GL_CONSTANT(INVALID_FRAMEBUFFER_OPERATION);
-
+	
 	// Transform feedback
-
 	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_BUFFER_MODE);
 	JS_GL_CONSTANT(MAX_TRANSFORM_FEEDBACK_SEPARATE_COMPONENTS);
 	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_VARYINGS);
@@ -713,7 +675,7 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_ACTIVE);
 	JS_GL_CONSTANT(TRANSFORM_FEEDBACK_BINDING);
 	
-	/* WebGL-specific enums */
+	// WebGL-specific enums
 	JS_GL_SET_CONSTANT(UNPACK_FLIP_Y_WEBGL, 0x9240);
 	JS_GL_SET_CONSTANT(UNPACK_PREMULTIPLY_ALPHA_WEBGL, 0x9241);
 	JS_GL_SET_CONSTANT(CONTEXT_LOST_WEBGL, 0x9242);

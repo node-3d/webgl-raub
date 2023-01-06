@@ -44,7 +44,7 @@ const shaders = {
 };
 
 
-const initContext = canvas => {
+const initContext = (canvas) => {
 	try {
 		gl = canvas.getContext('webgl');
 	} catch (e) {
@@ -102,7 +102,7 @@ const initShaders = () => {
 };
 
 
-const handleLoadedTexture = texture => {
+const handleLoadedTexture = (texture) => {
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
@@ -141,7 +141,7 @@ const setMatrixUniforms = () => {
 };
 
 
-const degToRad = degrees => degrees * Math.PI / 180;
+const degToRad = (degrees) => degrees * Math.PI / 180;
 
 
 let cubeVertexPositionBuffer;

@@ -1,14 +1,10 @@
 #include "webgl.hpp"
 
 
-using namespace std;
-
-
 namespace webgl {
 
 
-JS_METHOD(drawArraysInstanced) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(drawArraysInstanced) { NAPI_ENV;
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, first);
 	REQ_INT32_ARG(2, count);
@@ -16,12 +12,10 @@ JS_METHOD(drawArraysInstanced) { NAPI_ENV;
 	
 	glDrawArraysInstanced(mode, first, count, primcount);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(drawElementsInstanced) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(drawElementsInstanced) { NAPI_ENV;
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, count);
 	REQ_INT32_ARG(2, type);
@@ -32,18 +26,15 @@ JS_METHOD(drawElementsInstanced) { NAPI_ENV;
 	
 	glDrawElementsInstanced(mode, count, type, indices, primcount);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttribDivisor) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttribDivisor) { NAPI_ENV;
 	REQ_UINT32_ARG(0, index);
 	REQ_UINT32_ARG(1, divisor);
 	
 	glVertexAttribDivisor(index, divisor);
 	RET_UNDEFINED;
-	
 }
 
 

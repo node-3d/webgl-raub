@@ -3,63 +3,51 @@
 #include "webgl.hpp"
 
 
-using namespace std;
-
-
 namespace webgl {
 
 
-JS_METHOD(createBuffer) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(createBuffer) { NAPI_ENV;
 	GLuint buffer;
 	glGenBuffers(1, &buffer);
 	RET_NUM(buffer);
 }
 
 
-JS_METHOD(deleteBuffer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(deleteBuffer) { NAPI_ENV;
 	REQ_UINT32_ARG(0, buffer);
 	
 	glDeleteBuffers(1, reinterpret_cast<GLuint*>(&buffer));
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(isBuffer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(isBuffer) { NAPI_ENV;
 	REQ_UINT32_ARG(0, buffer);
 	
 	RET_BOOL(glIsBuffer(buffer) != 0);
-	
 }
 
 
-JS_METHOD(bindBuffer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(bindBuffer) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, buffer);
 	
 	glBindBuffer(target, buffer);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(bindBufferBase) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(bindBufferBase) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, index);
 	REQ_UINT32_ARG(2, buffer);
 	
 	glBindBufferBase(target, index, buffer);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(bindBufferRange) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(bindBufferRange) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, index);
 	REQ_UINT32_ARG(2, buffer);
@@ -68,12 +56,10 @@ JS_METHOD(bindBufferRange) { NAPI_ENV;
 	
 	glBindBufferRange(target, index, buffer, offset, size);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(bufferData) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(bufferData) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	
 	if (info[1].IsObject()) {
@@ -101,12 +87,10 @@ JS_METHOD(bufferData) { NAPI_ENV;
 	}
 	
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(bufferSubData) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(bufferSubData) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, offset);
 	REQ_TYPED_ARRAY_ARG(2, arr);
@@ -116,11 +100,10 @@ JS_METHOD(bufferSubData) { NAPI_ENV;
 	
 	glBufferSubData(target, offset, size, data);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(copyBufferSubData) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(copyBufferSubData) { NAPI_ENV;
 
 	REQ_INT32_ARG(0, readTarget);
 	REQ_INT32_ARG(1, writeTarget);
@@ -130,11 +113,10 @@ JS_METHOD(copyBufferSubData) { NAPI_ENV;
 	
 	glCopyBufferSubData(readTarget, writeTarget, readOffset, writeOffset, size);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(getBufferSubData) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(getBufferSubData) { NAPI_ENV;
 
 	REQ_INT32_ARG(0, readTarget);
 	REQ_INT32_ARG(1, sourceByteOffset);
@@ -150,12 +132,10 @@ JS_METHOD(getBufferSubData) { NAPI_ENV;
 	
 	glGetBufferSubData(readTarget, sourceByteOffset, size, data);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(getBufferParameter) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getBufferParameter) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, name);
 	
@@ -163,7 +143,6 @@ JS_METHOD(getBufferParameter) { NAPI_ENV;
 	glGetBufferParameteriv(target, name, &params);
 	
 	RET_NUM(params);
-	
 }
 
 

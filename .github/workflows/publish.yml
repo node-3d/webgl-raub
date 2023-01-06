@@ -1,16 +1,10 @@
-name: Publish
+name: Publish to NPM
+defaults:
+  run:
+    shell: bash
 
 on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Release name'
-        required: true
-        default: 'Minor Update'
-      text:
-        description: 'Patch notes'
-        required: true
-        default: Fixed minor issues.
+  workflow_dispatch
 
 jobs:
   Publish:
@@ -27,12 +21,12 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.17.0
+          node-version: 18.12.1
           cache: 'npm'
 
-      - name: Get Npm Version
+      - name: Get Package Version
         id: package-version
-        uses: martinbeentjes/npm-get-version-action@master
+        run: node -p "'version='+require('./package').version" >> $GITHUB_OUTPUT
 
       - name: Publish
         run: |
@@ -41,11 +35,12 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: GitHub Release
-        uses: actions/create-release@v1
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.package-version.outputs.current-version }}
-          release_name: ${{ github.event.inputs.name }}
-          body: ${{ github.event.inputs.text }}
+          draft: true
+          tag_name: ${{ steps.package-version.outputs.version }}
+          name: Release ${{ steps.package-version.outputs.version }}

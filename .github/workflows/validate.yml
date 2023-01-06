@@ -1,4 +1,7 @@
 name: Validate
+defaults:
+  run:
+    shell: bash
 
 on:
   push:
@@ -9,10 +12,34 @@ on:
       - master
 
 jobs:
-  Validate:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-20.04
+
+    steps:
+
+      - name: Fetch Repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.12.1
+          cache: 'npm'
+
+      - name: Install Modules
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run eslint
+
+  unit-tests:
+    name: Unit Tests
     strategy:
         matrix:
-          os: [ubuntu-20.04]
+          os: [ubuntu-20.04, windows-2022, macos-11, [self-hosted, linux, ARM64]]
 
     runs-on: ${{ matrix.os }}
 
@@ -26,16 +53,14 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16.17.0
+          node-version: 18.12.1
           cache: 'npm'
 
       - name: Install Modules
         run: npm ci
 
-      - name: Run Lint
-        run: npm run eslint
+      - name: Build Current Binary
+        run: npm run build-all
 
       - name: Run Unit Tests
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: npm run test-ci
+        run: npm run test-ci

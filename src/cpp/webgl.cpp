@@ -1,44 +1,36 @@
 #include <cstring>
 #include <vector>
+#include <iostream>
 
 #include "webgl.hpp"
-
-
-using namespace std;
 
 
 namespace webgl {
 
 
-JS_METHOD(init) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(init) { NAPI_ENV;
 	glewExperimental = GL_TRUE;
 	
 	GLenum err = glewInit();
 	
 	if (GLEW_OK != err) {
-		// Problem: glewInit failed, something is seriously wrong
-		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-		JS_THROW("Can't initialize GLEW");
+		std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
+		JS_THROW("Can't initialize GLEW.");
 	}
 	
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(clear) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(clear) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	
 	glClear(target);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(clearColor) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(clearColor) { NAPI_ENV;
 	REQ_FLOAT_ARG(0, red);
 	REQ_FLOAT_ARG(1, green);
 	REQ_FLOAT_ARG(2, blue);
@@ -46,21 +38,17 @@ JS_METHOD(clearColor) { NAPI_ENV;
 	
 	glClearColor(red, green, blue, alpha);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(clearDepth) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(clearDepth) { NAPI_ENV;
 	REQ_FLOAT_ARG(0, depth);
 	glClearDepth(depth);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(colorMask) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(colorMask) { NAPI_ENV;
 	LET_BOOL_ARG(0, red);
 	LET_BOOL_ARG(1, green);
 	LET_BOOL_ARG(2, blue);
@@ -68,75 +56,61 @@ JS_METHOD(colorMask) { NAPI_ENV;
 	
 	glColorMask(red, green, blue, alpha);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(cullFace) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(cullFace) { NAPI_ENV;
 	REQ_INT32_ARG(0, mode);
 	
 	glCullFace(mode);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(depthFunc) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(depthFunc) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	glDepthFunc(id);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(depthMask) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(depthMask) { NAPI_ENV;
 	LET_BOOL_ARG(0, flag);
 	
 	glDepthMask(flag);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(depthRange) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(depthRange) { NAPI_ENV;
 	REQ_FLOAT_ARG(0, zNear);
 	REQ_FLOAT_ARG(1, zFar);
 	
 	glDepthRangef(zNear, zFar);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(disable) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(disable) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	glDisable(id);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(drawArrays) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(drawArrays) { NAPI_ENV;
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, first);
 	REQ_INT32_ARG(2, count);
 	
 	glDrawArrays(mode, first, count);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(drawElements) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(drawElements) { NAPI_ENV;
 	REQ_INT32_ARG(0, mode);
 	REQ_INT32_ARG(1, count);
 	REQ_INT32_ARG(2, type);
@@ -146,11 +120,10 @@ JS_METHOD(drawElements) { NAPI_ENV;
 	
 	glDrawElements(mode, count, type, indices);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(drawBuffers) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(drawBuffers) { NAPI_ENV;
 	REQ_ARRAY_ARG(0, jsBuffers);
 	
 	uint32_t count = jsBuffers.Length();
@@ -165,46 +138,36 @@ JS_METHOD(drawBuffers) { NAPI_ENV;
 }
 
 
-JS_METHOD(enable) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(enable) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	glEnable(id);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(finish) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(finish) { NAPI_ENV;
 	glFinish();
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(flush) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(flush) { NAPI_ENV;
 	glFlush();
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(frontFace) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(frontFace) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	glFrontFace(id);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(getError) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getError) { NAPI_ENV;
 	RET_NUM(glGetError());
-	
 }
 
 
@@ -255,16 +218,14 @@ JS_METHOD(getError) { NAPI_ENV;
 	case GL_TEXTURE_BINDING_CUBE_MAP:
 
 
-
-JS_METHOD(getParameter) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 	REQ_INT32_ARG(0, name);
 	
 	GLboolean bParams[4];
 	const char *cParams;
 	GLint iParams[4];
 	GLfloat fParams[4];
-	Napi::Array arr = Napi::Array::New(env);
+	Napi::Array arr = JS_ARRAY;
 	
 	switch(name) {
 	
@@ -289,7 +250,7 @@ JS_METHOD(getParameter) { NAPI_ENV;
 	
 	CASES_PARAM_INT2
 		glGetIntegerv(name, iParams);
-		arr = Napi::Array::New(env);
+		arr = JS_ARRAY;
 		arr.Set(0U, JS_NUM(iParams[0]));
 		arr.Set(1U, JS_NUM(iParams[1]));
 		RET_VALUE(arr);
@@ -345,8 +306,7 @@ JS_METHOD(getParameter) { NAPI_ENV;
 }
 
 
-JS_METHOD(getRenderTarget) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getRenderTarget) { NAPI_ENV;
 	REQ_UINT32_ARG(0, width);
 	REQ_UINT32_ARG(1, height);
 	REQ_UINT32_ARG(2, samples);
@@ -393,7 +353,7 @@ JS_METHOD(getRenderTarget) { NAPI_ENV;
 	
 	if (framebufferStatus == GL_FRAMEBUFFER_COMPLETE) {
 		
-		Napi::Array result = Napi::Array::New(env);
+		Napi::Array result = JS_ARRAY;
 		result.Set(0U, JS_NUM(fbo));
 		result.Set(1U, JS_NUM(tex));
 		
@@ -406,8 +366,7 @@ JS_METHOD(getRenderTarget) { NAPI_ENV;
 }
 
 
-JS_METHOD(getSupportedExtensions) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getSupportedExtensions) { NAPI_ENV;
 	const char *extensions = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
 	
 	if (extensions != NULL) {
@@ -419,62 +378,51 @@ JS_METHOD(getSupportedExtensions) { NAPI_ENV;
 }
 
 
-JS_METHOD(hint) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(hint) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, mode);
 	
 	glHint(target, mode);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(isEnabled) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(isEnabled) { NAPI_ENV;
 	REQ_INT32_ARG(0, capability);
 	
 	bool ret = glIsEnabled(capability) != 0;
 	
 	RET_BOOL(ret);
-	
 }
 
 
-JS_METHOD(lineWidth) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(lineWidth) { NAPI_ENV;
 	REQ_FLOAT_ARG(0, width);
 	
 	glLineWidth(width);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(pixelStorei) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(pixelStorei) { NAPI_ENV;
 	REQ_INT32_ARG(0, name);
 	REQ_INT32_ARG(1, param);
 	
 	glPixelStorei(name, param);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(polygonOffset) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(polygonOffset) { NAPI_ENV;
 	REQ_FLOAT_ARG(0, factor);
 	REQ_FLOAT_ARG(1, units);
 	
 	glPolygonOffset(factor, units);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(readPixels) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(readPixels) { NAPI_ENV;
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
 	REQ_INT32_ARG(2, width);
@@ -486,23 +434,19 @@ JS_METHOD(readPixels) { NAPI_ENV;
 	void *pixels = getData(env, image);
 	glReadPixels(x, y, width, height, format, type, pixels);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(sampleCoverage) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(sampleCoverage) { NAPI_ENV;
 	REQ_FLOAT_ARG(0, value);
 	LET_BOOL_ARG(1, invert);
 	
 	glSampleCoverage(value, invert);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(scissor) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(scissor) { NAPI_ENV;
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
 	REQ_INT32_ARG(2, width);
@@ -510,12 +454,10 @@ JS_METHOD(scissor) { NAPI_ENV;
 	
 	glScissor(x, y, width, height);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(viewport) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(viewport) { NAPI_ENV;
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
 	REQ_INT32_ARG(2, w);
@@ -523,7 +465,6 @@ JS_METHOD(viewport) { NAPI_ENV;
 	
 	glViewport(x, y, w, h);
 	RET_UNDEFINED;
-	
 }
 
 

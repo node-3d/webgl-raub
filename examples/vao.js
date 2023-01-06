@@ -44,7 +44,7 @@ const shaders = {
 };
 
 
-const initContext = canvas => {
+const initContext = (canvas) => {
 	try {
 		gl = canvas.getContext('webgl');
 	} catch (e) {
@@ -114,18 +114,18 @@ const setMatrixUniforms = () => {
 };
 
 
-const degToRad = degrees => degrees * Math.PI / 180;
+const degToRad = (degrees) => degrees * Math.PI / 180;
 
 
 const currentlyPressedKeys = {};
 
-document.on('keydown', evt => {
+document.on('keydown', (evt) => {
 	// console.log('[KEYDOWN]:', evt);
 	currentlyPressedKeys[evt.keyCode] = true;
 	handleKeys();
 });
 
-document.on('keyup', evt => {
+document.on('keyup', (evt) => {
 	currentlyPressedKeys[evt.keyCode] = false;
 });
 
@@ -301,7 +301,7 @@ const drawScene = () => {
 let lastTime = 0;
 // let fps = 0;
 
-const animate = timeNow => {
+const animate = (timeNow) => {
 	if (lastTime) {
 		const elapsed = timeNow - lastTime;
 		// fps = Math.round(1000 / elapsed);
@@ -314,7 +314,7 @@ const animate = timeNow => {
 };
 
 
-const tick = timeNow => {
+const tick = (timeNow) => {
 	drawScene();
 	animate(timeNow);
 	

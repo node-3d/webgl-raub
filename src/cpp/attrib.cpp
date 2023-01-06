@@ -1,46 +1,36 @@
 #include "webgl.hpp"
 
 
-using namespace std;
-
-
 namespace webgl {
 
 
-JS_METHOD(bindAttribLocation) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(bindAttribLocation) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, index);
 	REQ_STR_ARG(2, name);
 	
 	glBindAttribLocation(program, index, name.c_str());
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(disableVertexAttribArray) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(disableVertexAttribArray) { NAPI_ENV;
 	REQ_INT32_ARG(0, index);
 	
 	glDisableVertexAttribArray(index);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(enableVertexAttribArray) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(enableVertexAttribArray) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	glEnableVertexAttribArray(id);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(getActiveAttrib) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getActiveAttrib) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, index);
 	
@@ -50,23 +40,20 @@ JS_METHOD(getActiveAttrib) { NAPI_ENV;
 	GLsizei size;
 	glGetActiveAttrib(program, index, 1024, &length, &size, &type, name);
 	
-	Napi::Array activeInfo = Napi::Array::New(env);
+	Napi::Array activeInfo = JS_ARRAY;
 	activeInfo.Set("size", JS_NUM(size));
 	activeInfo.Set("type", JS_NUM(static_cast<int>(type)));
 	activeInfo.Set("name", JS_STR(name));
 	
 	RET_VALUE(activeInfo);
-	
 }
 
 
-JS_METHOD(getAttribLocation) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getAttribLocation) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	REQ_STR_ARG(1, name);
 	
 	RET_NUM(glGetAttribLocation(program, name.c_str()));
-	
 }
 
 
@@ -81,14 +68,13 @@ JS_METHOD(getAttribLocation) { NAPI_ENV;
 #define CASES_VERTEX_ATTR_FLOAT4 case GL_CURRENT_VERTEX_ATTRIB:
 
 
-JS_METHOD(getVertexAttrib) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getVertexAttrib) { NAPI_ENV;
 	REQ_INT32_ARG(0, index);
 	REQ_INT32_ARG(1, pname);
 	
 	GLint value = 0;
 	float vextex_attribs[4];
-	Napi::Array arr = Napi::Array::New(env);
+	Napi::Array arr = JS_ARRAY;
 	
 	switch (pname) {
 	
@@ -112,40 +98,34 @@ JS_METHOD(getVertexAttrib) { NAPI_ENV;
 		break;
 	
 	default:
-		JS_THROW("GetVertexAttrib: Invalid Enum");
+		JS_THROW("GetVertexAttrib: Invalid Enum.");
 		RET_UNDEFINED;
 	
 	}
-	
 }
 
 
-JS_METHOD(getVertexAttribOffset) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getVertexAttribOffset) { NAPI_ENV;
 	REQ_UINT32_ARG(0, index);
 	REQ_INT32_ARG(1, name);
 	
 	void *ret = NULL;
 	glGetVertexAttribPointerv(index, name, &ret);
 	
-	RET_NUM(ToGLuint(ret));
-	
+	RET_NUM(reinterpret_cast<size_t>(ret));
 }
 
 
-JS_METHOD(vertexAttrib1f) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttrib1f) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	
 	glVertexAttrib1f(location, x);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttrib1fv) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttrib1fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
@@ -153,24 +133,20 @@ JS_METHOD(vertexAttrib1fv) { NAPI_ENV;
 	
 	glVertexAttrib1fv(location, data);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttrib2f) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttrib2f) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
 	
 	glVertexAttrib2f(location, x, y);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttrib2fv) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttrib2fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
@@ -178,12 +154,10 @@ JS_METHOD(vertexAttrib2fv) { NAPI_ENV;
 	
 	glVertexAttrib2fv(location, data);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttrib3f) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttrib3f) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
@@ -191,12 +165,10 @@ JS_METHOD(vertexAttrib3f) { NAPI_ENV;
 	
 	glVertexAttrib3f(location, x, y, z);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttrib3fv) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttrib3fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
@@ -204,12 +176,10 @@ JS_METHOD(vertexAttrib3fv) { NAPI_ENV;
 	
 	glVertexAttrib3fv(location, data);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttrib4f) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttrib4f) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
@@ -218,12 +188,10 @@ JS_METHOD(vertexAttrib4f) { NAPI_ENV;
 	
 	glVertexAttrib4f(location, x, y, z, w);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttrib4fv) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttrib4fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
@@ -231,12 +199,10 @@ JS_METHOD(vertexAttrib4fv) { NAPI_ENV;
 	
 	glVertexAttrib4fv(location, data);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttribPointer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttribPointer) { NAPI_ENV;
 	REQ_INT32_ARG(0, indx);
 	REQ_INT32_ARG(1, size);
 	REQ_INT32_ARG(2, type);
@@ -248,12 +214,10 @@ JS_METHOD(vertexAttribPointer) { NAPI_ENV;
 	
 	glVertexAttribPointer(indx, size, type, normalized, stride, vertices);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(vertexAttribIPointer) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(vertexAttribIPointer) { NAPI_ENV;
 	REQ_UINT32_ARG(0, indx);
 	REQ_INT32_ARG(1, size);
 	REQ_INT32_ARG(2, type);
@@ -264,7 +228,6 @@ JS_METHOD(vertexAttribIPointer) { NAPI_ENV;
 	
 	glVertexAttribIPointer(indx, size, type, stride, vertices);
 	RET_UNDEFINED;
-	
 }
 
 

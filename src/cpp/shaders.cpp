@@ -1,94 +1,76 @@
 #include "webgl.hpp"
 
 
-using namespace std;
-
-
 namespace webgl {
 
 
-JS_METHOD(createShader) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(createShader) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	GLuint shader = glCreateShader(id);
 	
 	RET_NUM(shader);
-	
 }
 
 
-JS_METHOD(deleteShader) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(deleteShader) { NAPI_ENV;
 	REQ_UINT32_ARG(0, shader);
 	
 	glDeleteShader(shader);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(isShader) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(isShader) { NAPI_ENV;
 	REQ_UINT32_ARG(0, shader);
 	
 	RET_BOOL(glIsShader(shader) != 0);
-	
 }
 
 
-JS_METHOD(attachShader) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(attachShader) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, shader);
 	
 	glAttachShader(program, shader);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(compileShader) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(compileShader) { NAPI_ENV;
 	REQ_INT32_ARG(0, shader);
 	
 	glCompileShader(shader);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(detachShader) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(detachShader) { NAPI_ENV;
 	REQ_UINT32_ARG(0, program);
 	REQ_UINT32_ARG(1, shader);
 	
 	glDetachShader(program, shader);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(getAttachedShaders) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getAttachedShaders) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	
 	GLuint shaders[1024];
 	GLsizei count;
 	glGetAttachedShaders(program, 1024, &count, shaders);
 	
-	Napi::Array shadersArr = Napi::Array::New(env);
+	Napi::Array shadersArr = JS_ARRAY;
 	for (int i = 0; i < count; i++) {
 		shadersArr.Set(i, JS_NUM(static_cast<int>(shaders[i])));
 	}
 	
 	RET_VALUE(shadersArr);
-	
 }
 
 
-JS_METHOD(getShaderInfoLog) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getShaderInfoLog) { NAPI_ENV;
 	REQ_INT32_ARG(0, shader);
 	
 	int len = 1024;
@@ -96,7 +78,6 @@ JS_METHOD(getShaderInfoLog) { NAPI_ENV;
 	glGetShaderInfoLog(shader, 1024, &len, error);
 	
 	RET_STR(error);
-	
 }
 
 
@@ -107,8 +88,7 @@ JS_METHOD(getShaderInfoLog) { NAPI_ENV;
 	case GL_INFO_LOG_LENGTH: \
 	case GL_SHADER_SOURCE_LENGTH:
 
-JS_METHOD(getShaderParameter) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getShaderParameter) { NAPI_ENV;
 	REQ_INT32_ARG(0, shader);
 	REQ_INT32_ARG(1, pname);
 	
@@ -127,15 +107,14 @@ JS_METHOD(getShaderParameter) { NAPI_ENV;
 		break;
 	
 	default:
-		JS_THROW("GetShaderParameter: Invalid Enum");
+		JS_THROW("GetShaderParameter: Invalid Enum.");
 		RET_NULL;
 	}
 	
 }
 
 
-JS_METHOD(getShaderSource) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getShaderSource) { NAPI_ENV;
 	REQ_INT32_ARG(0, shader);
 	
 	GLint len;
@@ -147,12 +126,10 @@ JS_METHOD(getShaderSource) { NAPI_ENV;
 	delete [] source;
 	
 	RET_VALUE(str);
-	
 }
 
 
-JS_METHOD(shaderSource) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(shaderSource) { NAPI_ENV;
 	REQ_INT32_ARG(0, shader);
 	REQ_STR_ARG(1, code);
 	
@@ -161,7 +138,6 @@ JS_METHOD(shaderSource) { NAPI_ENV;
 	
 	glShaderSource(shader, 1, &strings, &lengths);
 	RET_UNDEFINED;
-	
 }
 
 

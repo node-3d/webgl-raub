@@ -61,7 +61,7 @@ const shaders = {
 };
 
 
-const initContext = canvas => {
+const initContext = (canvas) => {
 	try {
 		gl = canvas.getContext('webgl');
 	} catch (e) {
@@ -144,7 +144,7 @@ const initShaders = () => {
 };
 
 
-const handleLoadedTexture = texture => {
+const handleLoadedTexture = (texture) => {
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 	
 	gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -183,7 +183,7 @@ const setMatrixUniforms = () => {
 };
 
 
-const degToRad = degrees => degrees * Math.PI / 180;
+const degToRad = (degrees) => degrees * Math.PI / 180;
 
 
 
@@ -198,13 +198,13 @@ let z = -5.0;
 
 const currentlyPressedKeys = {};
 
-document.on('keydown', evt => {
+document.on('keydown', (evt) => {
 	// console.log("[KEYDOWN] keyCode: "+evt.keyCode+" which: "+evt.which);
 	currentlyPressedKeys[evt.keyCode] = true;
 	handleKeys();
 });
 
-document.on('keyup', evt => {
+document.on('keyup', (evt) => {
 	// console.log("[KEYUP] keyCode: "+evt.keyCode);
 	currentlyPressedKeys[evt.keyCode] = false;
 });

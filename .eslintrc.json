@@ -1,11 +1,14 @@
 {
+	"ignorePatterns": [
+		"src/**"
+	],
 	"extends": [
-        "eslint:recommended",
-        "plugin:node/recommended"
-    ],
-    "parserOptions": {
-        "ecmaVersion": 2020
-    },
+		"eslint:recommended",
+		"plugin:node/recommended"
+	],
+	"parserOptions": {
+		"ecmaVersion": 2022
+	},
 	"overrides": [
 		{
 			"files": [
@@ -29,7 +32,7 @@
 		"es6": true
 	},
 	"rules": {
-		"arrow-parens": ["error", "as-needed"],
+		"arrow-parens": ["error", "always"],
 		"no-trailing-spaces": [
 			"error",
 			{
@@ -41,6 +44,16 @@
 			"tab",
 			{
 				"SwitchCase": 1
+			}
+		],
+		"operator-linebreak": [
+			"error",
+			"after",
+			{
+				"overrides": {
+				"?": "before",
+				":": "before"
+				}
 			}
 		],
 		"max-len": ["error", 110],
@@ -66,7 +79,21 @@
 		"no-process-exit": [0],
 		"linebreak-style": [0],
 		"node/no-missing-require": [0],
-		"node/no-unsupported-features/node-builtins": [0],
-		"no-console": [0]
+		"no-console": [0],
+		"node/no-unsupported-features/es-builtins": [
+			"error",
+			{ "version": ">=18.12.1" }
+		],
+		"node/no-unsupported-features/node-builtins": [
+			"error",
+			{ "version": ">=18.12.1" }
+		],
+		"func-names": [
+			"error",
+			"never",
+			{
+				"generators": "never"
+			}
+		]
 	}
 }

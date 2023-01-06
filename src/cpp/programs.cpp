@@ -1,39 +1,31 @@
 #include "webgl.hpp"
 
 
-using namespace std;
-
-
 namespace webgl {
 
 
-JS_METHOD(createProgram) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(createProgram) { NAPI_ENV;
 	GLuint program = glCreateProgram();
 	RET_NUM(program);
 }
 
 
-JS_METHOD(deleteProgram) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(deleteProgram) { NAPI_ENV;
 	REQ_UINT32_ARG(0, program);
 	
 	glDeleteProgram(program);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(isProgram) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(isProgram) { NAPI_ENV;
 	REQ_UINT32_ARG(0, program);
 	
 	RET_BOOL(glIsProgram(program) != 0);
-	
 }
 
 
-JS_METHOD(getProgramInfoLog) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getProgramInfoLog) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	
 	int Len = 1024;
@@ -41,7 +33,6 @@ JS_METHOD(getProgramInfoLog) { NAPI_ENV;
 	glGetProgramInfoLog(program, 1024, &Len, Error);
 	
 	RET_STR(Error);
-	
 }
 
 
@@ -58,8 +49,7 @@ JS_METHOD(getProgramInfoLog) { NAPI_ENV;
 	case GL_INFO_LOG_LENGTH: \
 	case GL_TRANSFORM_FEEDBACK_VARYINGS:
 
-JS_METHOD(getProgramParameter) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(getProgramParameter) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	REQ_INT32_ARG(1, name);
 	
@@ -83,40 +73,34 @@ JS_METHOD(getProgramParameter) { NAPI_ENV;
 		break;
 	
 	default:
-		JS_THROW("GetProgramParameter: Invalid Enum");
+		JS_THROW("GetProgramParameter: Invalid Enum.");
 		RET_NULL;
 	}
 	
 }
 
 
-JS_METHOD(linkProgram) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(linkProgram) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	
 	glLinkProgram(program);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(useProgram) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(useProgram) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	
 	glUseProgram(program);
 	RET_UNDEFINED;
-	
 }
 
 
-JS_METHOD(validateProgram) { NAPI_ENV;
-	
+DBG_EXPORT JS_METHOD(validateProgram) { NAPI_ENV;
 	REQ_INT32_ARG(0, program);
 	
 	glValidateProgram(program);
 	RET_UNDEFINED;
-	
 }
 
 
