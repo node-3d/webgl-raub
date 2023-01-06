@@ -45,7 +45,7 @@
 		"url": "https://github.com/node-3d/webgl-raub.git"
 	},
 	"dependencies": {
-		"addon-tools-raub": "^7.0.0",
+		"addon-tools-raub": "^7.1.0",
 		"deps-opengl-raub": "^5.0.1",
 		"segfault-raub": "^2.0.0"
 	},

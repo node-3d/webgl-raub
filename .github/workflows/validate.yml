@@ -62,5 +62,12 @@ jobs:
       - name: Build Current Binary
         run: npm run build-all
 
+      - name: Run Unit Tests - Linux
+        if: matrix.os == 'ubuntu-20.04'
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: npm run test-ci
+
       - name: Run Unit Tests
+        if: matrix.os != 'ubuntu-20.04'
         run: npm run test-ci
