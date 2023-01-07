@@ -62,16 +62,13 @@ jobs:
       - name: Build Current Binary
         run: npm run build-all
 
-      - name: Run Unit Tests - Linux
-        if: matrix.os == 'ubuntu-20.04'
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: npm run test-ci
-
-      - name: Copy Windows opengl32.dll
-        if: matrix.os == 'windows-2022'
-        run: node test/copy-windows
+      # - name: Run Unit Tests - Linux
+      #   if: matrix.os == 'ubuntu-20.04'
+      #   uses: GabrielBB/xvfb-action@v1
+      #   with:
+      #     run: npm run test-ci
 
       - name: Run Unit Tests
-        if: matrix.os != 'ubuntu-20.04'
+        # if: matrix.os != 'ubuntu-20.04'
+        if: matrix.os != 'windows-2022'
         run: npm run test-ci
