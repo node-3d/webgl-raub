@@ -82,11 +82,11 @@
 		"no-console": [0],
 		"node/no-unsupported-features/es-builtins": [
 			"error",
-			{ "version": ">=18.12.1" }
+			{ "version": ">=18.16.0" }
 		],
 		"node/no-unsupported-features/node-builtins": [
 			"error",
-			{ "version": ">=18.12.1" }
+			{ "version": ">=18.16.0" }
 		],
 		"func-names": [
 			"error",
