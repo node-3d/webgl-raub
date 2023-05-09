@@ -3,11 +3,8 @@
 	"version": "0.0.0",
 	"private": true,
 	"main": "lesson05.js",
-	"scripts": {
-		"postinstall": "cd .. && npm ci"
-	},
 	"dependencies": {
 		"glfw-raub": "^5.1.0",
-		"image-raub": "^4.1.0"
+		"image-raub": "^4.1.1"
 	}
 }
