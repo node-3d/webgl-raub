@@ -163,6 +163,14 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(transformFeedbackVaryings);
 	DBG_EXPORT JS_METHOD(getTransformFeedbackVarying);
 	
+	// Query
+	DBG_EXPORT JS_METHOD(createQuery);
+	DBG_EXPORT JS_METHOD(deleteQuery);
+	DBG_EXPORT JS_METHOD(isQuery);
+	DBG_EXPORT JS_METHOD(beginQuery);
+	DBG_EXPORT JS_METHOD(endQuery);
+	DBG_EXPORT JS_METHOD(getQueryParameter);
+	
 	// Misc OpenGL Functions
 	DBG_EXPORT JS_METHOD(clear);
 	DBG_EXPORT JS_METHOD(clearColor);

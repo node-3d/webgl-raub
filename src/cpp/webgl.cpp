@@ -467,5 +467,4 @@ DBG_EXPORT JS_METHOD(viewport) { NAPI_ENV;
 	RET_UNDEFINED;
 }
 
-
 } // namespace webgl

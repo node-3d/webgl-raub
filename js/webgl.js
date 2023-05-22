@@ -224,17 +224,7 @@ if (!gl.__isInited) {
 	gl._shaderSource = gl.shaderSource;
 	gl.shaderSource = (shaderId, code) => gl._shaderSource(
 		enforceId(shaderId),
-		code.replace(
-			/^\s*?(#version|precision).*?($|;)/gm, ''
-		).replace(
-			/^/, '#version 120\n'
-		).replace(
-			/gl_FragDepthEXT/g, 'gl_FragDepth'
-		).replace(
-			'#extension GL_EXT_frag_depth : enable', ''
-		).replace(
-			/\bhighp\s+/g, ''
-		)
+		code
 	);
 
 

@@ -21,6 +21,14 @@
 
 Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(init);
+
+	// Query
+	JS_GL_SET_METHOD(createQuery);
+	JS_GL_SET_METHOD(deleteQuery);
+	JS_GL_SET_METHOD(isQuery);
+	JS_GL_SET_METHOD(beginQuery);
+	JS_GL_SET_METHOD(endQuery);
+	JS_GL_SET_METHOD(getQueryParameter);
 	
 	// Attrib
 	JS_GL_SET_METHOD(bindAttribLocation);
