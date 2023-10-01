@@ -159,6 +159,76 @@ DBG_EXPORT JS_METHOD(texImage2D) { NAPI_ENV;
 	RET_UNDEFINED;
 }
 
+DBG_EXPORT JS_METHOD(texImage3D) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, level);
+	REQ_INT32_ARG(2, internalformat);
+	REQ_INT32_ARG(3, width);
+	REQ_INT32_ARG(4, height);
+	REQ_INT32_ARG(5, depth);
+	REQ_INT32_ARG(6, border);
+	REQ_INT32_ARG(7, format);
+	REQ_INT32_ARG(8, type);
+	
+	if (info.Length() == 9 || IS_ARG_EMPTY(9)) {
+		
+		glTexImage3D(
+			target,
+			level,
+			internalformat,
+			width,
+			height,
+			depth,
+			border,
+			format,
+			type,
+			nullptr
+		);
+		
+	} else if (info[9].IsNumber()) {
+		
+		// In WebGL2 the last parameter can be a byte offset if glBindBuffer()
+		// was called with GL_PIXEL_UNPACK_BUFFER prior to glTexImage3D
+		REQ_OFFS_ARG(9, offset);
+		// From https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glBindBuffer.xhtml
+		// "The pointer parameter is interpreted as an offset within the buffer
+		// object measured in basic machine units."
+		glTexImage3D(
+			target,
+			level,
+			internalformat,
+			width,
+			height,
+			depth,
+			border,
+			format,
+			type,
+			reinterpret_cast<void *>(offset)
+		);
+		
+	} else {
+		
+		REQ_OBJ_ARG(9, image);
+		
+		void *ptr = getData(env, image);
+		glTexImage3D(
+			target,
+			level,
+			internalformat,
+			width,
+			height,
+			depth,
+			border,
+			format,
+			type,
+			ptr
+		);
+		
+	}
+	
+	RET_UNDEFINED;
+}
+
 
 DBG_EXPORT JS_METHOD(texParameterf) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
@@ -251,6 +321,48 @@ DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 			pixels
 		);
 	}
+	
+	RET_UNDEFINED;
+}
+
+
+DBG_EXPORT JS_METHOD(compressedTexSubImage2D) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, level);
+	REQ_INT32_ARG(2, xoffset);
+	REQ_INT32_ARG(3, yoffset);
+	REQ_INT32_ARG(4, width);
+	REQ_INT32_ARG(5, height);
+	REQ_INT32_ARG(6, format);
+	REQ_OBJ_ARG(7, image);
+	
+	int size = 0;
+	void *pixels = nullptr;
+	
+	if (image.IsTypedArray() || image.IsArrayBuffer()) {
+		pixels = getArrayData<uint8_t>(env, image, &size);
+	} else if (image.IsBuffer()) {
+		pixels = getBufferData<uint8_t>(env, image, &size);
+	} else if (image.Has("data")) {
+		Napi::Object data = image.Get("data").As<Napi::Object>();
+		if (data.IsTypedArray() || data.IsArrayBuffer()) {
+			pixels = getArrayData<uint8_t>(env, data, &size);
+		} else if (data.IsBuffer()) {
+			pixels = getBufferData<uint8_t>(env, data, &size);
+		}
+	}
+	
+	glCompressedTexSubImage2D(
+		target,
+		level,
+		xoffset,
+		yoffset,
+		width,
+		height,
+		format,
+		size,
+		pixels
+	);
 	
 	RET_UNDEFINED;
 }

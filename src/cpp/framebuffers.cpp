@@ -19,6 +19,21 @@ DBG_EXPORT JS_METHOD(deleteFramebuffer) { NAPI_ENV;
 	RET_UNDEFINED;
 }
 
+DBG_EXPORT JS_METHOD(invalidateFramebuffer) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_ARRAY_ARG(1, jsAttachments);
+	
+	uint32_t count = jsAttachments.Length();
+	auto cppAttachments = std::make_unique<GLenum[]>(count);
+	
+	for (uint32_t i = 0; i < count; i++) {
+		cppAttachments[i] = jsAttachments.Get(i).As<Napi::Number>().Uint32Value();
+	}
+	
+	glInvalidateFramebuffer(target, count, cppAttachments.get());
+	RET_UNDEFINED;
+}
+
 
 DBG_EXPORT JS_METHOD(isFramebuffer) { NAPI_ENV;
 	REQ_UINT32_ARG(0, buffer);
@@ -80,6 +95,18 @@ DBG_EXPORT JS_METHOD(framebufferTexture2D) { NAPI_ENV;
 	REQ_INT32_ARG(4, level);
 	
 	glFramebufferTexture2D(target, attachment, textarget, texture, level);
+	RET_UNDEFINED;
+}
+
+
+DBG_EXPORT JS_METHOD(framebufferTextureLayer) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, attachment);
+	REQ_INT32_ARG(2, texture);
+	REQ_INT32_ARG(3, level);
+	REQ_INT32_ARG(4, layer);
+	
+	glFramebufferTextureLayer(target, attachment, texture, level, layer);
 	RET_UNDEFINED;
 }
 

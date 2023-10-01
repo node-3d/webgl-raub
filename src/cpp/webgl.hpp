@@ -52,12 +52,14 @@ namespace webgl {
 	// FBO
 	DBG_EXPORT JS_METHOD(createFramebuffer);
 	DBG_EXPORT JS_METHOD(deleteFramebuffer);
+	DBG_EXPORT JS_METHOD(invalidateFramebuffer);
 	DBG_EXPORT JS_METHOD(isFramebuffer);
 	DBG_EXPORT JS_METHOD(bindFramebuffer);
 	DBG_EXPORT JS_METHOD(blitFramebuffer);
 	DBG_EXPORT JS_METHOD(checkFramebufferStatus);
 	DBG_EXPORT JS_METHOD(framebufferRenderbuffer);
 	DBG_EXPORT JS_METHOD(framebufferTexture2D);
+	DBG_EXPORT JS_METHOD(framebufferTextureLayer);
 	DBG_EXPORT JS_METHOD(getFramebufferAttachmentParameter);
 	
 	// Program
@@ -77,6 +79,7 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(bindRenderbuffer);
 	DBG_EXPORT JS_METHOD(getRenderbufferParameter);
 	DBG_EXPORT JS_METHOD(renderbufferStorage);
+	DBG_EXPORT JS_METHOD(renderbufferStorageMultisample);
 	
 	// Shader
 	DBG_EXPORT JS_METHOD(deleteShader);
@@ -89,6 +92,7 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(getShaderInfoLog);
 	DBG_EXPORT JS_METHOD(getShaderParameter);
 	DBG_EXPORT JS_METHOD(getShaderSource);
+	DBG_EXPORT JS_METHOD(getShaderPrecisionFormat);
 	DBG_EXPORT JS_METHOD(shaderSource);
 	
 	// Stencil
@@ -111,9 +115,11 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(generateMipmap);
 	DBG_EXPORT JS_METHOD(getTexParameter);
 	DBG_EXPORT JS_METHOD(texImage2D);
+	DBG_EXPORT JS_METHOD(texImage3D);
 	DBG_EXPORT JS_METHOD(texParameterf);
 	DBG_EXPORT JS_METHOD(texParameteri);
 	DBG_EXPORT JS_METHOD(texSubImage2D);
+	DBG_EXPORT JS_METHOD(compressedTexSubImage2D);
 	DBG_EXPORT JS_METHOD(texStorage2D);
 	
 	// Uniform
@@ -167,6 +173,10 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(clear);
 	DBG_EXPORT JS_METHOD(clearColor);
 	DBG_EXPORT JS_METHOD(clearDepth);
+	DBG_EXPORT JS_METHOD(clearBufferfv);
+	DBG_EXPORT JS_METHOD(clearBufferiv);
+	DBG_EXPORT JS_METHOD(clearBufferuiv);
+	DBG_EXPORT JS_METHOD(clearBufferfi);
 	DBG_EXPORT JS_METHOD(colorMask);
 	DBG_EXPORT JS_METHOD(cullFace);
 	DBG_EXPORT JS_METHOD(depthFunc);
@@ -182,6 +192,7 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(frontFace);
 	DBG_EXPORT JS_METHOD(getError);
 	DBG_EXPORT JS_METHOD(getParameter);
+	DBG_EXPORT JS_METHOD(getInternalformatParameter);
 	DBG_EXPORT JS_METHOD(getRenderTarget);
 	DBG_EXPORT JS_METHOD(getSupportedExtensions);
 	DBG_EXPORT JS_METHOD(hint);

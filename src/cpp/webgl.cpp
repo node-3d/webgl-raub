@@ -48,6 +48,67 @@ DBG_EXPORT JS_METHOD(clearDepth) { NAPI_ENV;
 }
 
 
+DBG_EXPORT JS_METHOD(clearBufferfv) { NAPI_ENV;
+	REQ_INT32_ARG(0, buffer);
+	REQ_INT32_ARG(1, drawBuffer);
+	REQ_ARRAY_ARG(2, jsValues);
+	
+	uint32_t count = jsValues.Length();
+	auto cppValues = std::make_unique<GLfloat[]>(count);
+	
+	for (uint32_t i = 0; i < count; i++) {
+		cppValues[i] = jsValues.Get(i).As<Napi::Number>().FloatValue();
+	}
+	
+	glClearBufferfv(buffer, drawBuffer, cppValues.get());
+	RET_UNDEFINED;
+}
+
+
+DBG_EXPORT JS_METHOD(clearBufferiv) { NAPI_ENV;
+	REQ_INT32_ARG(0, buffer);
+	REQ_INT32_ARG(1, drawBuffer);
+	REQ_ARRAY_ARG(2, jsValues);
+	
+	uint32_t count = jsValues.Length();
+	auto cppValues = std::make_unique<GLint[]>(count);
+	
+	for (uint32_t i = 0; i < count; i++) {
+		cppValues[i] = jsValues.Get(i).As<Napi::Number>().Int32Value();
+	}
+	
+	glClearBufferiv(buffer, drawBuffer, cppValues.get());
+	RET_UNDEFINED;
+}
+
+
+DBG_EXPORT JS_METHOD(clearBufferuiv) { NAPI_ENV;
+	REQ_INT32_ARG(0, buffer);
+	REQ_INT32_ARG(1, drawBuffer);
+	REQ_ARRAY_ARG(2, jsValues);
+	
+	uint32_t count = jsValues.Length();
+	auto cppValues = std::make_unique<GLuint[]>(count);
+	
+	for (uint32_t i = 0; i < count; i++) {
+		cppValues[i] = jsValues.Get(i).As<Napi::Number>().Uint32Value();
+	}
+	
+	glClearBufferuiv(buffer, drawBuffer, cppValues.get());
+	RET_UNDEFINED;
+}
+
+
+DBG_EXPORT JS_METHOD(clearBufferfi) { NAPI_ENV;
+	REQ_INT32_ARG(0, buffer);
+	REQ_INT32_ARG(1, drawBuffer);
+	REQ_FLOAT_ARG(2, depth);
+	REQ_INT32_ARG(3, stencil);
+	glClearBufferfi(buffer, drawBuffer, depth, stencil);
+	RET_UNDEFINED;
+}
+
+
 DBG_EXPORT JS_METHOD(colorMask) { NAPI_ENV;
 	LET_BOOL_ARG(0, red);
 	LET_BOOL_ARG(1, green);
@@ -127,13 +188,13 @@ DBG_EXPORT JS_METHOD(drawBuffers) { NAPI_ENV;
 	REQ_ARRAY_ARG(0, jsBuffers);
 	
 	uint32_t count = jsBuffers.Length();
-	GLenum *cppBuffers = new GLenum[count];
+	auto cppBuffers = std::make_unique<GLenum[]>(count);
 	
 	for (uint32_t i = 0; i < count; i++) {
 		cppBuffers[i] = jsBuffers.Get(i).As<Napi::Number>().Uint32Value();
 	}
 	
-	glDrawBuffers(count, cppBuffers);
+	glDrawBuffers(count, cppBuffers.get());
 	RET_UNDEFINED;
 }
 
@@ -302,7 +363,97 @@ DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 		break;
 	
 	}
+}
+
+
+DBG_EXPORT JS_METHOD(getInternalformatParameter) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, internalformat);
+	REQ_INT32_ARG(2, pname);
 	
+	if (target != GL_RENDERBUFFER) {
+		RET_NULL;
+	}
+	
+	switch (internalformat) {
+		// Renderbuffer doesn't support unsized internal formats,
+		// though GL_RGB and GL_RGBA are color-renderable.
+		case GL_RGB:
+		case GL_RGBA:
+		// Multisampling is not supported for signed and unsigned integer internal
+		// formats.
+		case GL_R8UI:
+		case GL_R8I:
+		case GL_R16UI:
+		case GL_R16I:
+		case GL_R32UI:
+		case GL_R32I:
+		case GL_RG8UI:
+		case GL_RG8I:
+		case GL_RG16UI:
+		case GL_RG16I:
+		case GL_RG32UI:
+		case GL_RG32I:
+		case GL_RGBA8UI:
+		case GL_RGBA8I:
+		case GL_RGB10_A2UI:
+		case GL_RGBA16UI:
+		case GL_RGBA16I:
+		case GL_RGBA32UI:
+		case GL_RGBA32I:
+			return Napi::Int32Array::New(env, 0);
+		case GL_R8:
+		case GL_RG8:
+		case GL_RGB8:
+		case GL_RGB565:
+		case GL_RGBA8:
+		case GL_SRGB8_ALPHA8:
+		case GL_RGB5_A1:
+		case GL_RGBA4:
+		case GL_RGB10_A2:
+		case GL_DEPTH_COMPONENT16:
+		case GL_DEPTH_COMPONENT24:
+		case GL_DEPTH_COMPONENT32F:
+		case GL_DEPTH24_STENCIL8:
+		case GL_DEPTH32F_STENCIL8:
+		case GL_STENCIL_INDEX8:
+			break;
+		case GL_R16F:
+		case GL_RG16F:
+		case GL_RGBA16F:
+		case GL_R32F:
+		case GL_RG32F:
+		case GL_RGBA32F:
+		case GL_R11F_G11F_B10F:
+			RET_NULL;
+		default:
+			RET_NULL;
+	}
+	
+	switch (pname) {
+		case GL_SAMPLES: {
+			GLint length = -1;
+			glGetInternalformativ(target, internalformat, GL_NUM_SAMPLE_COUNTS, 1, &length);
+			if (length <= 0) {
+				return Napi::Int32Array::New(env, 0);
+			}
+			
+			auto values = std::make_unique<GLint[]>(length);
+			for (GLint i = 0; i < length; ++i) {
+				values[i] = 0;
+			}
+			glGetInternalformativ(target, internalformat, GL_SAMPLES, length, values.get());
+			
+			auto arr = Napi::Int32Array::New(env, length);
+			for (GLint i = 0; i < length; ++i) {
+				arr.Set(i, values[i]);
+			}
+			
+			return arr;
+		}
+		default:
+			RET_NULL;
+	}
 }
 
 

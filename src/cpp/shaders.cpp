@@ -119,13 +119,30 @@ DBG_EXPORT JS_METHOD(getShaderSource) { NAPI_ENV;
 	
 	GLint len;
 	glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &len);
-	GLchar *source = new GLchar[len];
-	glGetShaderSource(shader, len, NULL, source);
+	auto source = std::make_unique<GLchar[]>(len);
+	glGetShaderSource(shader, len, NULL, source.get());
 	
-	Napi::String str = JS_STR(source);
-	delete [] source;
+	Napi::String str = JS_STR(source.get());
 	
 	RET_VALUE(str);
+}
+
+
+DBG_EXPORT JS_METHOD(getShaderPrecisionFormat) { NAPI_ENV;
+	REQ_INT32_ARG(0, shaderType);
+	REQ_INT32_ARG(1, precisionType);
+	
+	GLint lowHigh[2];
+	GLint precision;
+	
+	glGetShaderPrecisionFormat(shaderType, precisionType, lowHigh, &precision);
+	
+	Napi::Object res = JS_OBJECT;
+	res.Set("rangeMin", JS_NUM(lowHigh[0]));
+	res.Set("rangeMax", JS_NUM(lowHigh[1]));
+	res.Set("precision", JS_NUM(precision));
+	
+	RET_VALUE(res);
 }
 
 

@@ -69,18 +69,15 @@ DBG_EXPORT JS_METHOD(transformFeedbackVaryings) { NAPI_ENV;
 	REQ_INT32_ARG(2, bufferMode);
 	
 	uint32_t count = jsVaryings.Length();
-	std::string *cppVaryings = new std::string[count];
-	const char **varyings = new const char* [count];
+	auto cppVaryings = std::make_unique<std::string[]>(count);
+	auto varyings = std::make_unique<const char*[]>(count);
 	
 	for (uint32_t i = 0; i < count; i++) {
 		cppVaryings[i] = jsVaryings.Get(i).As<Napi::String>().Utf8Value();
 		varyings[i] = cppVaryings[i].c_str();
 	}
 	
-	glTransformFeedbackVaryings(program, count, varyings, bufferMode);
-	
-	delete [] varyings;
-	delete [] cppVaryings;
+	glTransformFeedbackVaryings(program, count, varyings.get(), bufferMode);
 	
 	RET_UNDEFINED;
 }
