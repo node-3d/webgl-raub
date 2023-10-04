@@ -15,7 +15,9 @@ const unfoldBool = (x) => typeof x === 'boolean' ? (x ? 1 : 0) : x;
 if (!gl.__isInited) {
 	gl.__isInited = true;
 	
-	gl.init();
+	if (!global.__skipGlewInit) {
+		gl.init();
+	}
 	
 	// WebGL constructors
 	gl.WebGLRenderingContext = function WebGLRenderingContext(_) { this._ = _; };
