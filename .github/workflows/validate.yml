@@ -60,7 +60,7 @@ jobs:
         run: npm ci
 
       - name: Build Current Binary
-        run: npm run build-all
+        run: npm run build
 
       - name: Run Unit Tests
         if: matrix.os != 'windows-2022'

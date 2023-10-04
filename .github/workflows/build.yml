@@ -68,7 +68,7 @@ jobs:
         run: npm ci
 
       - name: Build Current Binary
-        run: npm run build-all
+        run: npm run build
 
       - name: Get Package Version
         id: package-version
