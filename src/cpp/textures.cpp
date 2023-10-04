@@ -104,7 +104,6 @@ DBG_EXPORT JS_METHOD(texImage2D) { NAPI_ENV;
 	REQ_INT32_ARG(7, type);
 	
 	if (info.Length() <= 8 || IS_ARG_EMPTY(8)) {
-		
 		glTexImage2D(
 			target,
 			level,
@@ -116,9 +115,7 @@ DBG_EXPORT JS_METHOD(texImage2D) { NAPI_ENV;
 			type,
 			nullptr
 		);
-		
 	} else if (info[8].IsNumber()) {
-		
 		// In WebGL2 the last parameter can be a byte offset if glBindBuffer()
 		// was called with GL_PIXEL_UNPACK_BUFFER prior to glTexImage2D
 		REQ_OFFS_ARG(8, offset);
@@ -136,9 +133,7 @@ DBG_EXPORT JS_METHOD(texImage2D) { NAPI_ENV;
 			type,
 			reinterpret_cast<void *>(offset)
 		);
-		
 	} else {
-		
 		REQ_OBJ_ARG(8, image);
 		
 		void *ptr = getData(env, image);
@@ -153,7 +148,6 @@ DBG_EXPORT JS_METHOD(texImage2D) { NAPI_ENV;
 			type,
 			ptr
 		);
-		
 	}
 	
 	RET_UNDEFINED;
@@ -171,7 +165,6 @@ DBG_EXPORT JS_METHOD(texImage3D) { NAPI_ENV;
 	REQ_INT32_ARG(8, type);
 	
 	if (info.Length() == 9 || IS_ARG_EMPTY(9)) {
-		
 		glTexImage3D(
 			target,
 			level,
@@ -184,30 +177,7 @@ DBG_EXPORT JS_METHOD(texImage3D) { NAPI_ENV;
 			type,
 			nullptr
 		);
-		
-	} else if (info[9].IsNumber()) {
-		
-		// In WebGL2 the last parameter can be a byte offset if glBindBuffer()
-		// was called with GL_PIXEL_UNPACK_BUFFER prior to glTexImage3D
-		REQ_OFFS_ARG(9, offset);
-		// From https://www.khronos.org/registry/OpenGL-Refpages/es3.0/html/glBindBuffer.xhtml
-		// "The pointer parameter is interpreted as an offset within the buffer
-		// object measured in basic machine units."
-		glTexImage3D(
-			target,
-			level,
-			internalformat,
-			width,
-			height,
-			depth,
-			border,
-			format,
-			type,
-			reinterpret_cast<void *>(offset)
-		);
-		
 	} else {
-		
 		REQ_OBJ_ARG(9, image);
 		
 		void *ptr = getData(env, image);
@@ -223,7 +193,6 @@ DBG_EXPORT JS_METHOD(texImage3D) { NAPI_ENV;
 			type,
 			ptr
 		);
-		
 	}
 	
 	RET_UNDEFINED;

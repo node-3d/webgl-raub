@@ -6,9 +6,21 @@ declare module "webgl-raub" {
 		name: string;
 	}>;
 	
+	export type TContextAttributes = Readonly<{
+		alpha: boolean,
+		antialias: boolean,
+		depth: boolean,
+		failIfMajorPerformanceCaveat: boolean,
+		powerPreference: string,
+		premultipliedAlpha: boolean,
+		preserveDrawingBuffer: boolean,
+		stencil: boolean,
+		desynchronized: boolean,
+	}>;
+	
 	export type TResourceId = number;
 	
-	export 	type TSize = Readonly<{ width: number; height: number }>;
+	export type TSize = Readonly<{ width: number; height: number }>;
 	
 	export type TImage = TSize & Readonly<{
 		data: Buffer;
@@ -33,6 +45,7 @@ declare module "webgl-raub" {
 	export class WebGLRenderingContext extends TGLObject {}
 	export class WebGLProgram extends TGLObject {}
 	export class WebGLShader extends TGLObject {}
+	export class WebGLVertexArrayObject extends TGLObject {}
 	export class WebGLBuffer extends TGLObject {}
 	export class WebGLVertexArray extends TGLObject {}
 	export class WebGLFramebuffer extends TGLObject {}
@@ -42,10 +55,13 @@ declare module "webgl-raub" {
 	export class WebGLActiveInfo extends TGLActiveInfo {}
 	export class WebGLTransformFeedback extends TGLObject {}
 	
-	const webgl: WebGL
-	export default webgl
+	const webgl: WebGL;
+	export default webgl;
+	
 	export interface WebGL {
-		init: () => void;
+		contextAttributes: TContextAttributes;
+		getContextAttributes: () => TContextAttributes;
+		
 		bindAttribLocation: (program: WebGLProgram, index: number, name: string) => void;
 		disableVertexAttribArray: (index: number) => void;
 		enableVertexAttribArray: (id: number) => void;
@@ -100,9 +116,14 @@ declare module "webgl-raub" {
 			offset: number,
 			size: number,
 		) => void;
+		bufferSubData: (
+			target: number,
+			offset: number,
+			v: number[] | Float32Array,
+		) => void;
 		bufferData: (
 			target: number,
-			value: number | number[] | Float32Array| Uint16Array,
+			value: number | number[] | Float32Array | Uint16Array,
 			usage: number,
 			srcOffset?: number,
 			length?: number,
@@ -129,6 +150,7 @@ declare module "webgl-raub" {
 		getBufferParameter: (target: number, name: number) => number;
 		createFramebuffer: () => WebGLFramebuffer;
 		deleteFramebuffer: (frameBuffer: WebGLFramebuffer) => void;
+		invalidateFramebuffer: (target: number, attachments: number[]) => void;
 		isFramebuffer: (frameBuffer: WebGLFramebuffer) => boolean;
 		bindFramebuffer: (target: number, buffer?: WebGLFramebuffer) => void;
 		blitFramebuffer: (
@@ -157,6 +179,13 @@ declare module "webgl-raub" {
 			texture: WebGLTexture,
 			level: number,
 		) => void;
+		framebufferTextureLayer: (
+			target: number,
+			attachment: number,
+			texture: WebGLTexture,
+			level: number,
+			layer: number,
+		) => void;
 		getFramebufferAttachmentParameter: (
 			target: number,
 			attachment: number,
@@ -181,6 +210,13 @@ declare module "webgl-raub" {
 			width: number,
 			height: number,
 		) => void;
+		renderbufferStorageMultisample: (
+			target: number,
+			samples: number,
+			internalformat: number,
+			width: number,
+			height: number,
+		) => void;
 		createShader: (type: number) => WebGLShader;
 		deleteShader: (shader: WebGLShader) => void;
 		isShader: (shader: WebGLShader) => boolean;
@@ -191,6 +227,7 @@ declare module "webgl-raub" {
 		getShaderInfoLog: (shader: WebGLShader) => string;
 		getShaderParameter: (shader: WebGLShader, pname: number) => (number | boolean);
 		getShaderSource: (shader: WebGLShader) => string;
+		getShaderPrecisionFormat: (shaderType: number, precisionType: number) => string;
 		shaderSource: (shader: WebGLShader, code: string) => void;
 		clearStencil: (index: number) => void;
 		stencilFunc: (
@@ -255,6 +292,18 @@ declare module "webgl-raub" {
 			type: number,
 			ptr?: TImage | number,
 		) => void;
+		texImage3D: (
+			target: number,
+			level: number,
+			internalformat: number,
+			width: number,
+			height: number,
+			depth: number,
+			border: number,
+			format: number,
+			type: number,
+			ptr?: TImage,
+		) => void;
 		texParameterf: (
 			target: number,
 			name: number,
@@ -274,6 +323,16 @@ declare module "webgl-raub" {
 			height: number,
 			format: number,
 			type: number,
+			image?: TImage,
+		) => void;
+		compressedTexSubImage2D: (
+			target: number,
+			level: number,
+			xoffset: number,
+			yoffset: number,
+			width: number,
+			height: number,
+			format: number,
 			image?: TImage,
 		) => void;
 		texStorage2D: (
@@ -345,6 +404,10 @@ declare module "webgl-raub" {
 			alpha: number,
 		) => void;
 		clearDepth: (depth: number) => void;
+		clearBufferfv: (buffer: number, drawBuffer: number, value: number[]) => void;
+		clearBufferiv: (buffer: number, drawBuffer: number, value: number[]) => void;
+		clearBufferuiv: (buffer: number, drawBuffer: number, value: number[]) => void;
+		clearBufferfi: (buffer: number, drawBuffer: number, depth: number, stencil: number) => void;
 		colorMask: (
 			red: boolean,
 			green: boolean,
@@ -374,6 +437,11 @@ declare module "webgl-raub" {
 		frontFace: (id: number) => void;
 		getError: () => number;
 		getParameter: (name: number) => (number | boolean | number[] | string | boolean[]);
+		getInternalformatParameter: (
+			target: number,
+			internalformat: number,
+			name: number,
+		) => (Int32Array | null);
 		getRenderTarget: (
 			width: number,
 			height: number,
@@ -464,6 +532,8 @@ declare module "webgl-raub" {
 		BACK: number;
 		FRONT_AND_BACK: number;
 		TEXTURE_2D: number;
+		TEXTURE_2D_ARRAY: number;
+		TEXTURE_3D: number;
 		CULL_FACE: number;
 		BLEND: number;
 		DITHER: number;
@@ -538,6 +608,7 @@ declare module "webgl-raub" {
 		UNSIGNED_SHORT: number;
 		INT: number;
 		UNSIGNED_INT: number;
+		UNSIGNED_INT_24_8: number;
 		FLOAT: number;
 		FIXED: number;
 		DEPTH_COMPONENT: number;
@@ -546,6 +617,29 @@ declare module "webgl-raub" {
 		RGBA: number;
 		LUMINANCE: number;
 		LUMINANCE_ALPHA: number;
+		RGBA4: number;
+		RGB5_A1: number;
+		R16F: number;
+		R16I: number;
+		R16UI: number;
+		R32F: number;
+		R32I: number;
+		R32UI: number;
+		R8: number;
+		R8I: number;
+		R8UI: number;
+		RED: number;
+		RED_INTEGER: number;
+		RG: number;
+		RG_INTEGER: number;
+		RG16F: number;
+		RG32F: number;
+		RG8: number;
+		RGBA_INTEGER: number;
+		RGBA16F: number;
+		RGBA32F: number;
+		RGBA8: number;
+		SRGB8_ALPHA8: number;
 		UNSIGNED_SHORT_4_4_4_4: number;
 		UNSIGNED_SHORT_5_5_5_1: number;
 		UNSIGNED_SHORT_5_6_5: number;
@@ -569,6 +663,7 @@ declare module "webgl-raub" {
 		ACTIVE_ATTRIBUTE_MAX_LENGTH: number;
 		SHADING_LANGUAGE_VERSION: number;
 		CURRENT_PROGRAM: number;
+		UNIFORM_BUFFER: number;
 		NEVER: number;
 		LESS: number;
 		EQUAL: number;
@@ -600,6 +695,7 @@ declare module "webgl-raub" {
 		TEXTURE_MIN_FILTER: number;
 		TEXTURE_WRAP_S: number;
 		TEXTURE_WRAP_T: number;
+		TEXTURE_WRAP_R: number;
 		TEXTURE: number;
 		TEXTURE_CUBE_MAP: number;
 		TEXTURE_BINDING_CUBE_MAP: number;
@@ -680,16 +776,17 @@ declare module "webgl-raub" {
 		NUM_SHADER_BINARY_FORMATS: number;
 		LOW_FLOAT: number;
 		MEDIUM_FLOAT: number;
+		HALF_FLOAT: number;
 		HIGH_FLOAT: number;
 		LOW_INT: number;
 		MEDIUM_INT: number;
 		HIGH_INT: number;
 		FRAMEBUFFER: number;
 		RENDERBUFFER: number;
-		RGBA4: number;
-		RGB5_A1: number;
 		RGB565: number;
 		DEPTH_COMPONENT16: number;
+		DEPTH_COMPONENT24: number;
+		DEPTH_COMPONENT32F: number;
 		STENCIL_INDEX: number;
 		STENCIL_INDEX8: number;
 		DEPTH_STENCIL: number;
@@ -707,6 +804,7 @@ declare module "webgl-raub" {
 		FRAMEBUFFER_ATTACHMENT_OBJECT_NAME: number;
 		FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL: number;
 		FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: number;
+		COLOR: number;
 		COLOR_ATTACHMENT0: number;
 		DEPTH_ATTACHMENT: number;
 		STENCIL_ATTACHMENT: number;
@@ -719,6 +817,9 @@ declare module "webgl-raub" {
 		FRAMEBUFFER_INCOMPLETE_DIMENSIONS: number;
 		FRAMEBUFFER_UNSUPPORTED: number;
 		FRAMEBUFFER_BINDING: number;
+		DRAW_FRAMEBUFFER_BINDING: number;
+		DRAW_FRAMEBUFFER: number;
+		READ_FRAMEBUFFER: number;
 		RENDERBUFFER_BINDING: number;
 		MAX_RENDERBUFFER_SIZE: number;
 		INVALID_FRAMEBUFFER_OPERATION: number;
@@ -738,11 +839,21 @@ declare module "webgl-raub" {
 		TRANSFORM_FEEDBACK_PAUSED: number;
 		TRANSFORM_FEEDBACK_ACTIVE: number;
 		TRANSFORM_FEEDBACK_BINDING: number;
+		UNPACK_IMAGE_HEIGHT: number;
+		UNPACK_SKIP_IMAGES: number;
+		UNPACK_SKIP_PIXELS: number;
+		UNPACK_SKIP_ROWS: number;
+		TEXTURE_COMPARE_FUNC: number;
+		TEXTURE_COMPARE_MODE: number;
+		COMPARE_REF_TO_TEXTURE: number;
 		UNPACK_FLIP_Y_WEBGL: number;
 		UNPACK_PREMULTIPLY_ALPHA_WEBGL: number;
 		CONTEXT_LOST_WEBGL: number;
 		UNPACK_COLORSPACE_CONVERSION_WEBGL: number;
 		BROWSER_DEFAULT_WEBGL: number;
+		MAX: number;
+		MIN: number;
+		UNPACK_ROW_LENGTH: number;
 		PIXEL_PACK_BUFFER: number;
 		PIXEL_UNPACK_BUFFER: number;
 		PIXEL_PACK_BUFFER_BINDING: number;
