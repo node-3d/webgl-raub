@@ -13,6 +13,7 @@
 			'cpp/buffers.cpp',
 			'cpp/framebuffers.cpp',
 			'cpp/instances.cpp',
+			'cpp/queries.cpp',
 			'cpp/programs.cpp',
 			'cpp/renderbuffers.cpp',
 			'cpp/shaders.cpp',

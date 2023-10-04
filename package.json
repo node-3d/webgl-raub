@@ -34,7 +34,7 @@
 	"scripts": {
 		"postinstall": "node install",
 		"eslint": "eslint .",
-		"build-all": "cd src && node-gyp rebuild -j max --silent && node -e \"require('addon-tools-raub').cpbin('webgl')\" && cd ..",
+		"build": "cd src && node-gyp rebuild -j max --silent && node -e \"require('addon-tools-raub').cpbin('webgl')\" && cd ..",
 		"build-only": "cd src && node-gyp build -j max --silent && node -e \"require('addon-tools-raub').cpbin('webgl')\" && cd ..",
 		"test": "jest --coverage=false --watch --config=conf/jest.json",
 		"test-ci": "jest --ci --runInBand --coverage=false --forceExit --detectOpenHandles --config=conf/jest.json",

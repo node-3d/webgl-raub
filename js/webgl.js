@@ -15,9 +15,12 @@ const unfoldBool = (x) => typeof x === 'boolean' ? (x ? 1 : 0) : x;
 if (!gl.__isInited) {
 	gl.__isInited = true;
 	
+	gl.init();
+	
 	// WebGL constructors
 	gl.WebGLRenderingContext = function WebGLRenderingContext(_) { this._ = _; };
 	gl.WebGLProgram = function WebGLProgram(_) { this._ = _; };
+	gl.WebGLQuery  = function WebGLQuery(_) { this._ = _; };
 	gl.WebGLShader = function WebGLShader(_) { this._ = _; };
 	gl.WebGLBuffer = function WebGLBuffer(_) { this._ = _; };
 	gl.WebGLVertexArray = function WebGLVertexArray(_) { this._ = _; };
@@ -36,6 +39,7 @@ if (!gl.__isInited) {
 	// Global scope constructors for browser-style libs
 	global.WebGLRenderingContext = gl.WebGLRenderingContext;
 	global.WebGLProgram = gl.WebGLProgram;
+	global.WebGLQuery = gl.WebGLQuery;
 	global.WebGLShader = gl.WebGLShader;
 	global.WebGLBuffer = gl.WebGLBuffer;
 	global.WebGLVertexArrayObject = gl.WebGLVertexArrayObject;
@@ -414,6 +418,26 @@ if (!gl.__isInited) {
 	gl.getTransformFeedbackVarying = (program, location) => new gl.WebGLActiveInfo(
 		_getTransformFeedbackVarying(extractId(program), location)
 	);
+	
+	// Query
+	
+	const _createQuery = gl.createQuery;
+	gl.createQuery = () => new gl.WebGLBuffer(_createQuery());
+	
+	const _deleteQuery = gl.deleteQuery;
+	gl.deleteQuery = (query) => _deleteQuery(extractId(query));
+	
+	const _isQuery = gl.isQuery;
+	gl.isQuery = (query) => _isQuery(extractId(query));
+	
+	const _beginQuery = gl.beginQuery;
+	gl.beginQuery = (target, query) => _beginQuery(target, extractId(query));
+	
+	const _endQuery = gl.endQuery;
+	gl.endQuery = (target) => _endQuery(target);
+	
+	const _getQueryParameter = gl.getQueryParameter;
+	gl.getQueryParameter = (query, name) => _getQueryParameter(extractId(query), name);
 	
 	// Misc OpenGL Functions
 	

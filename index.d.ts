@@ -44,6 +44,7 @@ declare module "webgl-raub" {
 	
 	export class WebGLRenderingContext extends TGLObject {}
 	export class WebGLProgram extends TGLObject {}
+	export class WebGLQuery extends TGLObject {}
 	export class WebGLShader extends TGLObject {}
 	export class WebGLVertexArrayObject extends TGLObject {}
 	export class WebGLBuffer extends TGLObject {}
@@ -61,6 +62,9 @@ declare module "webgl-raub" {
 	export interface WebGL {
 		contextAttributes: TContextAttributes;
 		getContextAttributes: () => TContextAttributes;
+		
+		createQuery: ()=> WebGLQuery;
+		deleteQuery: (query: WebGLQuery)=> void;
 		
 		bindAttribLocation: (program: WebGLProgram, index: number, name: string) => void;
 		disableVertexAttribArray: (index: number) => void;
