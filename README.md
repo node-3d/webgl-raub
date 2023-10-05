@@ -59,6 +59,10 @@ const canvas = document.createElement('canvas'); // === doc
 const gl = canvas.getContext('webgl'); // === webgl
 ```
 
+You can optionally call `webgl.init()` after the GL context becomes available - this translates
+into a `glewInit()` call. See [GLEW docs](https://glew.sourceforge.net/basic.html) for what
+it does and if you need it (probably "yes"?).
+
 > OSX Note: some features may depend on OpenGL profile being used. Core profile
 is necessary for VAO and other OpenGL 3.2+ features. Depending on your windowing
 backend, set the OpenGL profile of your preference.
