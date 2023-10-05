@@ -1,6 +1,5 @@
 'use strict';
 
-global.__skipGlewInit = true;
 const webgl = require('..');
 
 

@@ -14,6 +14,7 @@ webgl.canvas = document;
 const canvas = document.createElement('canvas');
 const frame = document.requestAnimationFrame;
 
+webgl.init(); // optional
 let gl;
 
 document.title = 'Lesson02';

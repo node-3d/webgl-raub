@@ -60,6 +60,8 @@ declare module "webgl-raub" {
 	export default webgl;
 	
 	export interface WebGL {
+		init: ()=> void;
+		
 		contextAttributes: TContextAttributes;
 		getContextAttributes: () => TContextAttributes;
 		
@@ -131,11 +133,6 @@ declare module "webgl-raub" {
 			usage: number,
 			srcOffset?: number,
 			length?: number,
-		) => void;
-		bufferSubData: (
-			target: number,
-			offset: number,
-			arr: Float32Array,
 		) => void;
 		copyBufferSubData: (
 			readTarget: number,
