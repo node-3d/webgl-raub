@@ -3,7 +3,8 @@
 This is a part of [Node3D](https://github.com/node-3d) project.
 
 [![NPM](https://badge.fury.io/js/webgl-raub.svg)](https://badge.fury.io/js/webgl-raub)
-[![CodeFactor](https://www.codefactor.io/repository/github/node-3d/webgl-raub/badge)](https://www.codefactor.io/repository/github/node-3d/webgl-raub)
+[![ESLint](https://github.com/node-3d/webgl-raub/actions/workflows/eslint.yml/badge.svg)](https://github.com/node-3d/webgl-raub/actions/workflows/eslint.yml)
+[![Test](https://github.com/node-3d/webgl-raub/actions/workflows/test.yml/badge.svg)](https://github.com/node-3d/webgl-raub/actions/workflows/test.yml)
 
 ```
 npm i -s webgl-raub
