@@ -1,5 +1,7 @@
 'use strict';
 
+const assert = require('node:assert').strict;
+const { describe, it } = require('node:test');
 const webgl = require('..');
 
 
@@ -135,18 +137,18 @@ const methods = [
 
 describe('WebGL', () => {
 	it('exports an object', () => {
-		expect(typeof webgl).toBe('object');
+		assert.strictEqual(typeof webgl, 'object');
 	});
 	
 	constants.forEach((constant) => {
 		it(`#${constant} constant exposed`, () => {
-			expect(webgl).toHaveProperty(constant);
+			assert.ok(webgl[constant] !== undefined);
 		});
 	});
 	
 	methods.forEach((method) => {
 		it(`#${method}() method exposed`, () => {
-			expect(typeof webgl[method]).toBe('function');
+			assert.strictEqual(typeof webgl[method], 'function');
 		});
 	});
 });

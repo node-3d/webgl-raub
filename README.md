@@ -6,7 +6,7 @@ This is a part of [Node3D](https://github.com/node-3d) project.
 [![CodeFactor](https://www.codefactor.io/repository/github/node-3d/webgl-raub/badge)](https://www.codefactor.io/repository/github/node-3d/webgl-raub)
 
 ```
-npm i webgl-raub
+npm i -s webgl-raub
 ```
 
 ![Example](examples/screenshot.jpg)
