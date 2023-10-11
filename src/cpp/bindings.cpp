@@ -19,7 +19,7 @@
 	);
 
 
-static inline void initMethods(Napi::Env &env, Napi::Object &exports) {
+static inline void initMethods(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(init);
 
 	// Query
@@ -227,7 +227,7 @@ static inline void initMethods(Napi::Env &env, Napi::Object &exports) {
 }
 
 
-static inline void initConstants(Napi::Env &env, Napi::Object &exports) {
+static inline void initConstants(Napi::Env env, Napi::Object exports) {
 // ClearBufferMask
 	JS_GL_CONSTANT(DEPTH_BUFFER_BIT);
 	JS_GL_CONSTANT(STENCIL_BUFFER_BIT);
