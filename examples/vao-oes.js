@@ -1,14 +1,13 @@
 'use strict';
 
-const webgl = require('..');
-
 const { Document } = require('glfw-raub');
 
+const webgl = require('..');
 const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
 
 Document.setWebgl(webgl);
-const document = new Document({ osxCore: true });
+const document = new Document({ vsync: true, autoEsc: true });
 webgl.canvas = document;
 const frame = document.requestAnimationFrame;
 

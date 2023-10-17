@@ -1,8 +1,8 @@
 'use strict';
 
-const webgl = require('..');
-
 const { Document } = require('glfw-raub');
+
+const webgl = require('..');
 
 
 Document.setWebgl(webgl);
