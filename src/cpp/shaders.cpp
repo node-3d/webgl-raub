@@ -157,5 +157,25 @@ DBG_EXPORT JS_METHOD(shaderSource) { NAPI_ENV;
 	RET_UNDEFINED;
 }
 
+DBG_EXPORT JS_METHOD(releaseShaderCompiler) { NAPI_ENV;
+	glReleaseShaderCompiler();
+	RET_UNDEFINED;
+}
+
+DBG_EXPORT JS_METHOD(shaderBinary) { NAPI_ENV;
+	REQ_INT32_ARG(0, count);
+	REQ_ARRAY_ARG(1, jsShaders);
+	REQ_INT32_ARG(2, binaryFormat);
+	REQ_STR_ARG(3, binary);
+	
+	uint32_t shaderCount = jsShaders.Length();
+	auto cppShaders = std::make_unique<GLuint[]>(shaderCount);
+	for (uint32_t i = 0; i < shaderCount; i++) {
+		cppShaders[i] = jsShaders.Get(i).As<Napi::Number>().FloatValue();
+	}
+	
+	glShaderBinary(count, cppShaders.get(), binaryFormat, binary.c_str(), binary.length());
+	RET_UNDEFINED;
+}
 
 } // namespace webgl

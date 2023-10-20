@@ -22,93 +22,6 @@ DBG_EXPORT JS_METHOD(init) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(clear) { NAPI_ENV;
-	REQ_INT32_ARG(0, target);
-	
-	glClear(target);
-	RET_UNDEFINED;
-}
-
-
-DBG_EXPORT JS_METHOD(clearColor) { NAPI_ENV;
-	REQ_FLOAT_ARG(0, red);
-	REQ_FLOAT_ARG(1, green);
-	REQ_FLOAT_ARG(2, blue);
-	REQ_FLOAT_ARG(3, alpha);
-	
-	glClearColor(red, green, blue, alpha);
-	RET_UNDEFINED;
-}
-
-
-DBG_EXPORT JS_METHOD(clearDepth) { NAPI_ENV;
-	REQ_FLOAT_ARG(0, depth);
-	glClearDepth(depth);
-	RET_UNDEFINED;
-}
-
-
-DBG_EXPORT JS_METHOD(clearBufferfv) { NAPI_ENV;
-	REQ_INT32_ARG(0, buffer);
-	REQ_INT32_ARG(1, drawBuffer);
-	REQ_ARRAY_ARG(2, jsValues);
-	
-	uint32_t count = jsValues.Length();
-	auto cppValues = std::make_unique<GLfloat[]>(count);
-	
-	for (uint32_t i = 0; i < count; i++) {
-		cppValues[i] = jsValues.Get(i).As<Napi::Number>().FloatValue();
-	}
-	
-	glClearBufferfv(buffer, drawBuffer, cppValues.get());
-	RET_UNDEFINED;
-}
-
-
-DBG_EXPORT JS_METHOD(clearBufferiv) { NAPI_ENV;
-	REQ_INT32_ARG(0, buffer);
-	REQ_INT32_ARG(1, drawBuffer);
-	REQ_ARRAY_ARG(2, jsValues);
-	
-	uint32_t count = jsValues.Length();
-	auto cppValues = std::make_unique<GLint[]>(count);
-	
-	for (uint32_t i = 0; i < count; i++) {
-		cppValues[i] = jsValues.Get(i).As<Napi::Number>().Int32Value();
-	}
-	
-	glClearBufferiv(buffer, drawBuffer, cppValues.get());
-	RET_UNDEFINED;
-}
-
-
-DBG_EXPORT JS_METHOD(clearBufferuiv) { NAPI_ENV;
-	REQ_INT32_ARG(0, buffer);
-	REQ_INT32_ARG(1, drawBuffer);
-	REQ_ARRAY_ARG(2, jsValues);
-	
-	uint32_t count = jsValues.Length();
-	auto cppValues = std::make_unique<GLuint[]>(count);
-	
-	for (uint32_t i = 0; i < count; i++) {
-		cppValues[i] = jsValues.Get(i).As<Napi::Number>().Uint32Value();
-	}
-	
-	glClearBufferuiv(buffer, drawBuffer, cppValues.get());
-	RET_UNDEFINED;
-}
-
-
-DBG_EXPORT JS_METHOD(clearBufferfi) { NAPI_ENV;
-	REQ_INT32_ARG(0, buffer);
-	REQ_INT32_ARG(1, drawBuffer);
-	REQ_FLOAT_ARG(2, depth);
-	REQ_INT32_ARG(3, stencil);
-	glClearBufferfi(buffer, drawBuffer, depth, stencil);
-	RET_UNDEFINED;
-}
-
-
 DBG_EXPORT JS_METHOD(colorMask) { NAPI_ENV;
 	LET_BOOL_ARG(0, red);
 	LET_BOOL_ARG(1, green);
@@ -161,44 +74,6 @@ DBG_EXPORT JS_METHOD(disable) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(drawArrays) { NAPI_ENV;
-	REQ_INT32_ARG(0, mode);
-	REQ_INT32_ARG(1, first);
-	REQ_INT32_ARG(2, count);
-	
-	glDrawArrays(mode, first, count);
-	RET_UNDEFINED;
-}
-
-
-DBG_EXPORT JS_METHOD(drawElements) { NAPI_ENV;
-	REQ_INT32_ARG(0, mode);
-	REQ_INT32_ARG(1, count);
-	REQ_INT32_ARG(2, type);
-	REQ_OFFS_ARG(3, ptr);
-	
-	GLvoid *indices = reinterpret_cast<GLvoid*>(ptr);
-	
-	glDrawElements(mode, count, type, indices);
-	RET_UNDEFINED;
-}
-
-
-DBG_EXPORT JS_METHOD(drawBuffers) { NAPI_ENV;
-	REQ_ARRAY_ARG(0, jsBuffers);
-	
-	uint32_t count = jsBuffers.Length();
-	auto cppBuffers = std::make_unique<GLenum[]>(count);
-	
-	for (uint32_t i = 0; i < count; i++) {
-		cppBuffers[i] = jsBuffers.Get(i).As<Napi::Number>().Uint32Value();
-	}
-	
-	glDrawBuffers(count, cppBuffers.get());
-	RET_UNDEFINED;
-}
-
-
 DBG_EXPORT JS_METHOD(enable) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
@@ -233,6 +108,7 @@ DBG_EXPORT JS_METHOD(getError) { NAPI_ENV;
 
 
 #define CASES_PARAM_BOOL case GL_BLEND: \
+	case GL_TRANSFORM_FEEDBACK_ACTIVE: \
 	case GL_CULL_FACE: \
 	case GL_DEPTH_TEST: \
 	case GL_DEPTH_WRITEMASK: \
@@ -287,18 +163,17 @@ DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 	GLint iParams[4];
 	GLfloat fParams[4];
 	Napi::Array arr = JS_ARRAY;
+	int32_t boundFeedback;
 	
 	switch(name) {
 	
 	CASES_PARAM_BOOL
 		glGetBooleanv(name, bParams);
 		RET_BOOL(bParams[0] != 0);
-		break;
 	
 	CASES_PARAM_FLOAT
 		glGetFloatv(name, fParams);
 		RET_NUM(fParams[0]);
-		break;
 	
 	CASES_PARAM_STRING
 		cParams = reinterpret_cast<const char*>(glGetString(name));
@@ -307,15 +182,12 @@ DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 		} else {
 			RET_UNDEFINED;
 		}
-		break;
 	
 	CASES_PARAM_INT2
 		glGetIntegerv(name, iParams);
-		arr = JS_ARRAY;
 		arr.Set(0U, JS_NUM(iParams[0]));
 		arr.Set(1U, JS_NUM(iParams[1]));
 		RET_VALUE(arr);
-		break;
 	
 	CASES_PARAM_INT4
 		glGetIntegerv(name, iParams);
@@ -324,14 +196,12 @@ DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 		arr.Set(2U, JS_NUM(iParams[2]));
 		arr.Set(3U, JS_NUM(iParams[3]));
 		RET_VALUE(arr);
-		break;
 	
 	CASES_PARAM_FLOAT2
 		glGetFloatv(name, fParams);
 		arr.Set(0U, JS_NUM(fParams[0]));
 		arr.Set(1U, JS_NUM(fParams[1]));
 		RET_VALUE(arr);
-		break;
 	
 	CASES_PARAM_FLOAT4
 		glGetFloatv(name, fParams);
@@ -340,7 +210,6 @@ DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 		arr.Set(2U, JS_NUM(fParams[2]));
 		arr.Set(3U, JS_NUM(fParams[3]));
 		RET_VALUE(arr);
-		break;
 	
 	CASES_PARAM_BOOL4
 		glGetBooleanv(name, bParams);
@@ -349,19 +218,25 @@ DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 		arr.Set(2U, JS_BOOL(bParams[2] != 0));
 		arr.Set(3U, JS_BOOL(bParams[3] != 0));
 		RET_VALUE(arr);
-		break;
 	
 	CASES_PARAM_INT
 		glGetIntegerv(name, iParams);
 		RET_NUM(iParams[0]);
-		break;
+	
+	case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING:
+		RET_NULL;
+	
+	case GL_TRANSFORM_FEEDBACK_BINDING:
+		boundFeedback = getBoundFeedback();
+		if (boundFeedback < 0) {
+			RET_NULL;
+		}
+		RET_NUM(boundFeedback);
 	
 	// returns an int
 	default:
 		glGetIntegerv(name, iParams);
 		RET_NUM(iParams[0]);
-		break;
-	
 	}
 }
 
@@ -588,15 +463,6 @@ DBG_EXPORT JS_METHOD(readPixels) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(sampleCoverage) { NAPI_ENV;
-	REQ_FLOAT_ARG(0, value);
-	LET_BOOL_ARG(1, invert);
-	
-	glSampleCoverage(value, invert);
-	RET_UNDEFINED;
-}
-
-
 DBG_EXPORT JS_METHOD(scissor) { NAPI_ENV;
 	REQ_INT32_ARG(0, x);
 	REQ_INT32_ARG(1, y);
@@ -615,6 +481,40 @@ DBG_EXPORT JS_METHOD(viewport) { NAPI_ENV;
 	REQ_INT32_ARG(3, h);
 	
 	glViewport(x, y, w, h);
+	RET_UNDEFINED;
+}
+
+DBG_EXPORT JS_METHOD(getIndexedParameter) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_UINT32_ARG(1, index);
+	switch (target) {
+		case GL_TRANSFORM_FEEDBACK_BUFFER_BINDING: {
+			RET_NULL;
+			break;
+		}
+		case GL_UNIFORM_BUFFER_BINDING:
+			RET_NULL;
+			break;
+		case GL_TRANSFORM_FEEDBACK_BUFFER_SIZE:
+		case GL_TRANSFORM_FEEDBACK_BUFFER_START:
+		case GL_UNIFORM_BUFFER_SIZE:
+		case GL_UNIFORM_BUFFER_START: {
+			GLint64 value = -1;
+			glGetInteger64i_v(target, index, &value);
+			RET_NUM(value);
+			break;
+		}
+		default:
+			RET_NULL;
+			break;
+	}
+}
+
+DBG_EXPORT JS_METHOD(sampleCoverage) { NAPI_ENV;
+	REQ_FLOAT_ARG(0, value);
+	LET_BOOL_ARG(1, invert);
+	
+	glSampleCoverage(value, invert);
 	RET_UNDEFINED;
 }
 

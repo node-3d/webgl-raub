@@ -5,17 +5,17 @@ namespace webgl {
 
 
 DBG_EXPORT JS_METHOD(createRenderbuffer) { NAPI_ENV;
-	GLuint renderbuffers;
-	glGenRenderbuffers(1, &renderbuffers);
+	GLuint buffer;
+	glGenRenderbuffers(1, &buffer);
 	
-	RET_NUM(renderbuffers);
+	RET_NUM(buffer);
 }
 
 
 DBG_EXPORT JS_METHOD(deleteRenderbuffer) { NAPI_ENV;
-	REQ_UINT32_ARG(0, renderbuffer);
-	
-	glDeleteRenderbuffers(1, reinterpret_cast<GLuint*>(&renderbuffer));
+	REQ_UINT32_ARG(0, buffer);
+	GLuint buffers[1] = { buffer };
+	glDeleteRenderbuffers(1, buffers);
 	RET_UNDEFINED;
 }
 

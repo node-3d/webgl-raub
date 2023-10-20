@@ -6,6 +6,8 @@ const gl = require('../core');
 module.exports = gl;
 
 const wrapF32 = (v) => v instanceof Array ? new Float32Array(v) : v;
+const wrapI32 = (v) => v instanceof Array ? new Int32Array(v) : v;
+const wrapUi32 = (v) => v instanceof Array ? new Uint32Array(v) : v;
 
 const extractId = (x) => x ? x._ : 0;
 
@@ -26,6 +28,9 @@ if (!gl.__isInited) {
 	gl.WebGLRenderbuffer = function WebGLRenderbuffer(_) { this._ = _; };
 	gl.WebGLTexture = function WebGLTexture(_) { this._ = _; };
 	gl.WebGLUniformLocation = function WebGLUniformLocation(_) { this._ = _; };
+	gl.WebGLSampler = function WebGLSampler(_) { this._ = _; };
+	gl.WebGLSync = function WebGLSync(_) { this._ = _; };
+	gl.WebGLVertexArrayObject = function WebGLVertexArrayObject(_) { this._ = _; };
 	gl.WebGLActiveInfo = function WebGLActiveInfo(_) {
 		this._ = _;
 		this.size = _.size;
@@ -86,24 +91,34 @@ if (!gl.__isInited) {
 	};
 	
 	const _vertexAttrib1fv = gl.vertexAttrib1fv;
-	gl.vertexAttrib1fv = (idx, v) => {
-		return _vertexAttrib1fv(idx, wrapF32(v));
-	};
+	gl.vertexAttrib1fv = (idx, v) => (
+		_vertexAttrib1fv(idx, wrapF32(v))
+	);
 	
 	const _vertexAttrib2fv = gl.vertexAttrib2fv;
-	gl.vertexAttrib2fv = (idx, v) => {
-		return _vertexAttrib2fv(idx, wrapF32(v));
-	};
+	gl.vertexAttrib2fv = (idx, v) => (
+		_vertexAttrib2fv(idx, wrapF32(v))
+	);
 	
 	const _vertexAttrib3fv = gl.vertexAttrib3fv;
-	gl.vertexAttrib3fv = (idx, v) => {
-		return _vertexAttrib3fv(idx, wrapF32(v));
-	};
+	gl.vertexAttrib3fv = (idx, v) => (
+		_vertexAttrib3fv(idx, wrapF32(v))
+	);
 	
 	const _vertexAttrib4fv = gl.vertexAttrib4fv;
-	gl.vertexAttrib4fv = (idx, v) => {
-		return _vertexAttrib4fv(idx, wrapF32(v));
-	};
+	gl.vertexAttrib4fv = (idx, v) => (
+		_vertexAttrib4fv(idx, wrapF32(v))
+	);
+	
+	const _vertexAttribI4iv = gl.vertexAttribI4iv;
+	gl.vertexAttribI4iv = (idx, v) => (
+		_vertexAttribI4iv(idx, wrapI32(v))
+	);
+	
+	const _vertexAttribI4uiv = gl.vertexAttribI4uiv;
+	gl.vertexAttribI4uiv = (idx, v) => (
+		_vertexAttribI4uiv(idx, wrapUi32(v))
+	);
 	
 	// VBO
 	
@@ -195,6 +210,31 @@ if (!gl.__isInited) {
 	const _validateProgram = gl.validateProgram;
 	gl.validateProgram = (program) => _validateProgram(extractId(program));
 	
+	const _programParameteri = gl.programParameteri;
+	gl.programParameteri = (program, pname, value) => (
+		_programParameteri(extractId(program), pname, value)
+	);
+	const _getFragDataLocation = gl.getFragDataLocation;
+	gl.getFragDataLocation = (program, name) => (
+		_getFragDataLocation(extractId(program), name)
+	);
+	const _getProgramBinary = gl.getProgramBinary;
+	gl.getProgramBinary = (program) => (
+		_getProgramBinary(extractId(program))
+	);
+	const _programBinary = gl.programBinary;
+	gl.programBinary = (program, binaryFormat, binary) => (
+		_programBinary(extractId(program), binaryFormat, binary)
+	);
+	const _getUniformBlockIndex = gl.getUniformBlockIndex;
+	gl.getUniformBlockIndex = (program, uniformBlockName) => (
+		_getUniformBlockIndex(extractId(program), uniformBlockName)
+	);
+	const _getUniformIndices = gl.getUniformIndices;
+	gl.getUniformIndices = (program, uniformNames) => (
+		_getUniformIndices(extractId(program), uniformNames)
+	);
+	
 	// RBO
 	
 	const _createRenderbuffer = gl.createRenderbuffer;
@@ -232,7 +272,9 @@ if (!gl.__isInited) {
 	gl.detachShader = (program, shader) => _detachShader(extractId(program), extractId(shader));
 	
 	const _getAttachedShaders = gl.getAttachedShaders;
-	gl.getAttachedShaders = (program) => _getAttachedShaders(extractId(program));
+	gl.getAttachedShaders = (program) => (
+		_getAttachedShaders(extractId(program)).map((id) => new gl.WebGLShader(id))
+	);
 	
 	const _getShaderInfoLog = gl.getShaderInfoLog;
 	gl.getShaderInfoLog = (shader) => _getShaderInfoLog(extractId(shader));
@@ -245,6 +287,11 @@ if (!gl.__isInited) {
 	
 	gl._shaderSource = gl.shaderSource;
 	gl.shaderSource = (shaderId, code) => gl._shaderSource(extractId(shaderId), code);
+	
+	gl._shaderBinary = gl.shaderBinary;
+	gl.shaderBinary = (count, shaders, binaryFormat, binary) => (
+		gl._shaderBinary(count, shaders.map(extractId), binaryFormat, binary)
+	);
 	
 	// Texture
 	
@@ -377,6 +424,101 @@ if (!gl.__isInited) {
 		return _uniformMatrix4fv(extractId(location), !!transpose, wrapF32(v));
 	};
 	
+	const _uniform1ui = gl.uniform1ui;
+	gl.uniform1ui = (location, v0) => (
+		_uniform1ui(extractId(location), v0)
+	);
+	
+	const _uniform2ui = gl.uniform2ui;
+	gl.uniform2ui = (location, v0, v1) => (
+		_uniform2ui(extractId(location), v0, v1)
+	);
+	
+	const _uniform3ui = gl.uniform3ui;
+	gl.uniform3ui = (location, v0, v1, v2) => (
+		_uniform3ui(extractId(location), v0, v1, v2)
+	);
+	
+	const _uniform4ui = gl.uniform4ui;
+	gl.uniform4ui = (location, v0, v1, v2, v3) => (
+		_uniform4ui(extractId(location), v0, v1, v2, v3)
+	);
+	
+	const _uniform1uiv = gl.uniform1uiv;
+	gl.uniform1uiv = (location, data) => (
+		_uniform1uiv(extractId(location), wrapUi32(data))
+	);
+	
+	const _uniform2uiv = gl.uniform2uiv;
+	gl.uniform2uiv = (location, data) => (
+		_uniform2uiv(extractId(location), wrapUi32(data))
+	);
+	
+	const _uniform3uiv = gl.uniform3uiv;
+	gl.uniform3uiv = (location, data) => (
+		_uniform3uiv(extractId(location), wrapUi32(data))
+	);
+	
+	const _uniform4uiv = gl.uniform4uiv;
+	gl.uniform4uiv = (location, data) => (
+		_uniform4uiv(extractId(location), wrapUi32(data))
+	);
+	
+	const _uniformMatrix2x3fv = gl.uniformMatrix2x3fv;
+	gl.uniformMatrix2x3fv = (location, transpose, data) => (
+		_uniformMatrix2x3fv(extractId(location), !!transpose, wrapF32(data))
+	);
+	
+	const _uniformMatrix2x4fv = gl.uniformMatrix2x4fv;
+	gl.uniformMatrix2x4fv = (location, transpose, data) => (
+		_uniformMatrix2x4fv(extractId(location), !!transpose, wrapF32(data))
+	);
+	
+	const _uniformMatrix3x2fv = gl.uniformMatrix3x2fv;
+	gl.uniformMatrix3x2fv = (location, transpose, data) => (
+		_uniformMatrix3x2fv(extractId(location), !!transpose, wrapF32(data))
+	);
+	
+	const _uniformMatrix3x4fv = gl.uniformMatrix3x4fv;
+	gl.uniformMatrix3x4fv = (location, transpose, data) => (
+		_uniformMatrix3x4fv(extractId(location), !!transpose, wrapF32(data))
+	);
+	
+	const _uniformMatrix4x2fv = gl.uniformMatrix4x2fv;
+	gl.uniformMatrix4x2fv = (location, transpose, data) => (
+		_uniformMatrix4x2fv(extractId(location), !!transpose, wrapF32(data))
+	);
+	
+	const _uniformMatrix4x3fv = gl.uniformMatrix4x3fv;
+	gl.uniformMatrix4x3fv = (location, transpose, data) => (
+		_uniformMatrix4x3fv(extractId(location), !!transpose, wrapF32(data))
+	);
+	
+	const _getUniformfv = gl.getUniformfv;
+	gl.getUniformfv = (program, location) => (
+		_getUniformfv(extractId(program), extractId(location))
+	);
+	
+	const _getActiveUniforms = gl.getActiveUniforms;
+	gl.getActiveUniforms = (program, uniformIndices, pname) => (
+		_getActiveUniforms(extractId(program), uniformIndices, pname)
+	);
+	
+	const _uniformBlockBinding = gl.uniformBlockBinding;
+	gl.uniformBlockBinding = (program, uniformBlockIndex, blockBinding) => (
+		_uniformBlockBinding(extractId(program), uniformBlockIndex, blockBinding)
+	);
+	
+	const _getActiveUniformBlockParameter = gl.getActiveUniformBlockParameter;
+	gl.getActiveUniformBlockParameter = (program, uniformBlockIndex, pname) => (
+		_getActiveUniformBlockParameter(extractId(program), uniformBlockIndex, pname)
+	);
+	
+	const _getActiveUniformBlockName = gl.getActiveUniformBlockName;
+	gl.getActiveUniformBlockName = (program, uniformBlockIndex) => (
+		_getActiveUniformBlockName(extractId(program), uniformBlockIndex)
+	);
+	
 	// VAO
 	
 	const _createVertexArray = gl.createVertexArray;
@@ -420,7 +562,7 @@ if (!gl.__isInited) {
 	// Query
 	
 	const _createQuery = gl.createQuery;
-	gl.createQuery = () => new gl.WebGLBuffer(_createQuery());
+	gl.createQuery = () => new gl.WebGLQuery(_createQuery());
 	
 	const _deleteQuery = gl.deleteQuery;
 	gl.deleteQuery = (query) => _deleteQuery(extractId(query));
@@ -436,6 +578,49 @@ if (!gl.__isInited) {
 	
 	const _getQueryParameter = gl.getQueryParameter;
 	gl.getQueryParameter = (query, name) => _getQueryParameter(extractId(query), name);
+	
+	// Sync
+	
+	const _fenceSync = gl.fenceSync;
+	gl.fenceSync = (condition, flags) => new gl.WebGLSync(_fenceSync(condition, flags));
+	
+	const _deleteSync = gl.deleteSync;
+	gl.deleteSync = (sync) => _deleteSync(extractId(sync));
+	
+	const _isSync = gl.isSync;
+	gl.isSync = (sync) => _isSync(extractId(sync));
+	
+	const _clientWaitSync = gl.clientWaitSync;
+	gl.clientWaitSync = (sync, flags, timeout) => _clientWaitSync(extractId(sync), flags, timeout);
+	
+	const _waitSync = gl.waitSync;
+	gl.waitSync = (sync, flags, timeout) => _waitSync(extractId(sync), flags, timeout);
+	
+	const _getSyncParameter = gl.getSyncParameter;
+	gl.getSyncParameter = (sync, pname) => _getSyncParameter(extractId(sync), pname);
+	
+	// Sampler
+	
+	const _createSampler = gl.createSampler;
+	gl.createSampler = () => new gl.WebGLSampler(_createSampler());
+	
+	const _deleteSampler = gl.deleteSampler;
+	gl.deleteSampler = (sampler) => _deleteSampler(extractId(sampler));
+	
+	const _isSampler = gl.isSampler;
+	gl.isSampler = (sampler) => _isSampler(extractId(sampler));
+	
+	const _bindSampler = gl.bindSampler;
+	gl.bindSampler = (unit, sampler) => _bindSampler(unit, extractId(sampler));
+	
+	const _samplerParameterf = gl.samplerParameterf;
+	gl.samplerParameterf = (sampler, pname, param) => _samplerParameterf(extractId(sampler), pname, param);
+	
+	const _samplerParameteri = gl.samplerParameteri;
+	gl.samplerParameteri = (sampler, pname, param) => _samplerParameteri(extractId(sampler), pname, param);
+	
+	const _getSamplerParameter = gl.getSamplerParameter;
+	gl.getSamplerParameter = (sampler, pname) => _getSamplerParameter(extractId(sampler), pname);
 	
 	// Misc OpenGL Functions
 	

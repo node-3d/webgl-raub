@@ -5,35 +5,45 @@
 
 namespace webgl {
 
+static int32_t boundFeedback = -1;
+int32_t getBoundFeedback() {
+	return boundFeedback;
+}
+
 
 DBG_EXPORT JS_METHOD(createTransformFeedback) { NAPI_ENV;
-	GLuint transformFeedback;
-	glGenTransformFeedbacks(1, &transformFeedback);
-	
-	RET_NUM(transformFeedback);
+	GLuint feedback;
+	glGenTransformFeedbacks(1, &feedback);
+	RET_NUM(feedback);
 }
 
 
 DBG_EXPORT JS_METHOD(deleteTransformFeedback) { NAPI_ENV;
-	REQ_UINT32_ARG(0, transformFeedback);
+	REQ_UINT32_ARG(0, feedback);
 	
-	glDeleteTransformFeedbacks(1, reinterpret_cast<GLuint*>(&transformFeedback));
+	if (boundFeedback == feedback) {
+		boundFeedback = -1;
+	}
+	
+	GLuint feedbacks[1] = { feedback };
+	glDeleteTransformFeedbacks(1, feedbacks);
 	RET_UNDEFINED;
 }
 
 
 DBG_EXPORT JS_METHOD(isTransformFeedback) { NAPI_ENV;
-	REQ_UINT32_ARG(0, transformFeedback);
+	REQ_UINT32_ARG(0, feedback);
 	
-	RET_VALUE(JS_BOOL(glIsTransformFeedback(transformFeedback) != 0));
+	RET_VALUE(JS_BOOL(glIsTransformFeedback(feedback) != 0));
 }
 
 
 DBG_EXPORT JS_METHOD(bindTransformFeedback) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
-	REQ_UINT32_ARG(1, transformFeedback);
+	REQ_UINT32_ARG(1, feedback);
 	
-	glBindTransformFeedback(target, transformFeedback);
+	boundFeedback = feedback;
+	glBindTransformFeedback(target, feedback);
 	RET_UNDEFINED;
 }
 
@@ -95,7 +105,7 @@ DBG_EXPORT JS_METHOD(getTransformFeedbackVarying) { NAPI_ENV;
 	
 	glGetTransformFeedbackVarying(program, index, 1024, &len, &size, &type, name);
 	
-	Napi::Array activeInfo = JS_ARRAY;
+	Napi::Object activeInfo = JS_OBJECT;
 	activeInfo.Set("size", JS_NUM(size));
 	activeInfo.Set("type", JS_NUM(static_cast<int>(type)));
 	activeInfo.Set("name", JS_STR(name));

@@ -28,7 +28,12 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(vertexAttrib4fv);
 	DBG_EXPORT JS_METHOD(vertexAttribPointer);
 	DBG_EXPORT JS_METHOD(vertexAttribIPointer);
-	
+	DBG_EXPORT JS_METHOD(vertexAttribI4i);
+	DBG_EXPORT JS_METHOD(vertexAttribI4iv);
+	DBG_EXPORT JS_METHOD(vertexAttribI4ui);
+	DBG_EXPORT JS_METHOD(vertexAttribI4uiv);
+	DBG_EXPORT JS_METHOD(vertexAttribDivisor);
+
 	// Blend
 	DBG_EXPORT JS_METHOD(blendColor);
 	DBG_EXPORT JS_METHOD(blendEquation);
@@ -48,11 +53,13 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(copyBufferSubData);
 	DBG_EXPORT JS_METHOD(getBufferSubData);
 	DBG_EXPORT JS_METHOD(getBufferParameter);
+	DBG_EXPORT JS_METHOD(readBuffer);
 	
 	// FBO
 	DBG_EXPORT JS_METHOD(createFramebuffer);
 	DBG_EXPORT JS_METHOD(deleteFramebuffer);
 	DBG_EXPORT JS_METHOD(invalidateFramebuffer);
+	DBG_EXPORT JS_METHOD(invalidateSubFramebuffer);
 	DBG_EXPORT JS_METHOD(isFramebuffer);
 	DBG_EXPORT JS_METHOD(bindFramebuffer);
 	DBG_EXPORT JS_METHOD(blitFramebuffer);
@@ -71,6 +78,12 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(linkProgram);
 	DBG_EXPORT JS_METHOD(useProgram);
 	DBG_EXPORT JS_METHOD(validateProgram);
+	DBG_EXPORT JS_METHOD(programParameteri);
+	DBG_EXPORT JS_METHOD(getFragDataLocation);
+	DBG_EXPORT JS_METHOD(getProgramBinary);
+	DBG_EXPORT JS_METHOD(programBinary);
+	DBG_EXPORT JS_METHOD(getUniformBlockIndex);
+	DBG_EXPORT JS_METHOD(getUniformIndices);
 	
 	// RBO
 	DBG_EXPORT JS_METHOD(createRenderbuffer);
@@ -94,6 +107,8 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(getShaderSource);
 	DBG_EXPORT JS_METHOD(getShaderPrecisionFormat);
 	DBG_EXPORT JS_METHOD(shaderSource);
+	DBG_EXPORT JS_METHOD(releaseShaderCompiler);
+	DBG_EXPORT JS_METHOD(shaderBinary);
 	
 	// Stencil
 	DBG_EXPORT JS_METHOD(clearStencil);
@@ -121,6 +136,9 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(texSubImage2D);
 	DBG_EXPORT JS_METHOD(compressedTexSubImage2D);
 	DBG_EXPORT JS_METHOD(texStorage2D);
+	DBG_EXPORT JS_METHOD(compressedTexImage2D);
+	DBG_EXPORT JS_METHOD(сompressedTexImage3D);
+	DBG_EXPORT JS_METHOD(compressedTexSubImage3D);
 	
 	// Uniform
 	DBG_EXPORT JS_METHOD(getActiveUniform);
@@ -145,6 +163,26 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(uniformMatrix2fv);
 	DBG_EXPORT JS_METHOD(uniformMatrix3fv);
 	DBG_EXPORT JS_METHOD(uniformMatrix4fv);
+	DBG_EXPORT JS_METHOD(uniform1ui);
+	DBG_EXPORT JS_METHOD(uniform2ui);
+	DBG_EXPORT JS_METHOD(uniform3ui);
+	DBG_EXPORT JS_METHOD(uniform4ui);
+	DBG_EXPORT JS_METHOD(uniform1uiv);
+	DBG_EXPORT JS_METHOD(uniform2uiv);
+	DBG_EXPORT JS_METHOD(uniform3uiv);
+	DBG_EXPORT JS_METHOD(uniform4uiv);
+	DBG_EXPORT JS_METHOD(uniformMatrix2x3fv);
+	DBG_EXPORT JS_METHOD(uniformMatrix2x4fv);
+	DBG_EXPORT JS_METHOD(uniformMatrix3x2fv);
+	DBG_EXPORT JS_METHOD(uniformMatrix3x4fv);
+	DBG_EXPORT JS_METHOD(uniformMatrix4x2fv);
+	DBG_EXPORT JS_METHOD(uniformMatrix4x3fv);
+	DBG_EXPORT JS_METHOD(getUniformfv);
+	DBG_EXPORT JS_METHOD(getUniform);
+	DBG_EXPORT JS_METHOD(getActiveUniforms);
+	DBG_EXPORT JS_METHOD(uniformBlockBinding);
+	DBG_EXPORT JS_METHOD(getActiveUniformBlockParameter);
+	DBG_EXPORT JS_METHOD(getActiveUniformBlockName);
 	
 	// VAO
 	DBG_EXPORT JS_METHOD(createVertexArray);
@@ -152,12 +190,8 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(isVertexArray);
 	DBG_EXPORT JS_METHOD(bindVertexArray);
 	
-	// Instances
-	DBG_EXPORT JS_METHOD(drawArraysInstanced);
-	DBG_EXPORT JS_METHOD(drawElementsInstanced);
-	DBG_EXPORT JS_METHOD(vertexAttribDivisor);
-	
 	// Transform feedback
+	int32_t getBoundFeedback();
 	DBG_EXPORT JS_METHOD(createTransformFeedback);
 	DBG_EXPORT JS_METHOD(deleteTransformFeedback);
 	DBG_EXPORT JS_METHOD(isTransformFeedback);
@@ -176,8 +210,26 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(beginQuery);
 	DBG_EXPORT JS_METHOD(endQuery);
 	DBG_EXPORT JS_METHOD(getQueryParameter);
+	DBG_EXPORT JS_METHOD(getQuery);
 	
-	// Misc OpenGL Functions
+	// Sampler
+	DBG_EXPORT JS_METHOD(createSampler);
+	DBG_EXPORT JS_METHOD(deleteSampler);
+	DBG_EXPORT JS_METHOD(isSampler);
+	DBG_EXPORT JS_METHOD(bindSampler);
+	DBG_EXPORT JS_METHOD(samplerParameterf);
+	DBG_EXPORT JS_METHOD(samplerParameteri);
+	DBG_EXPORT JS_METHOD(getSamplerParameter);
+	
+	// Sync
+	DBG_EXPORT JS_METHOD(fenceSync);
+	DBG_EXPORT JS_METHOD(deleteSync);
+	DBG_EXPORT JS_METHOD(isSync);
+	DBG_EXPORT JS_METHOD(clientWaitSync);
+	DBG_EXPORT JS_METHOD(waitSync);
+	DBG_EXPORT JS_METHOD(getSyncParameter);
+	
+	// Clear
 	DBG_EXPORT JS_METHOD(clear);
 	DBG_EXPORT JS_METHOD(clearColor);
 	DBG_EXPORT JS_METHOD(clearDepth);
@@ -185,15 +237,22 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(clearBufferiv);
 	DBG_EXPORT JS_METHOD(clearBufferuiv);
 	DBG_EXPORT JS_METHOD(clearBufferfi);
+	
+	// Draw
+	DBG_EXPORT JS_METHOD(drawArrays);
+	DBG_EXPORT JS_METHOD(drawElements);
+	DBG_EXPORT JS_METHOD(drawBuffers);
+	DBG_EXPORT JS_METHOD(drawRangeElements);
+	DBG_EXPORT JS_METHOD(drawArraysInstanced);
+	DBG_EXPORT JS_METHOD(drawElementsInstanced);
+	
+	// Misc OpenGL Functions
 	DBG_EXPORT JS_METHOD(colorMask);
 	DBG_EXPORT JS_METHOD(cullFace);
 	DBG_EXPORT JS_METHOD(depthFunc);
 	DBG_EXPORT JS_METHOD(depthMask);
 	DBG_EXPORT JS_METHOD(depthRange);
 	DBG_EXPORT JS_METHOD(disable);
-	DBG_EXPORT JS_METHOD(drawArrays);
-	DBG_EXPORT JS_METHOD(drawElements);
-	DBG_EXPORT JS_METHOD(drawBuffers);
 	DBG_EXPORT JS_METHOD(enable);
 	DBG_EXPORT JS_METHOD(finish);
 	DBG_EXPORT JS_METHOD(flush);
@@ -212,6 +271,7 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(sampleCoverage);
 	DBG_EXPORT JS_METHOD(scissor);
 	DBG_EXPORT JS_METHOD(viewport);
+	DBG_EXPORT JS_METHOD(getIndexedParameter);
 } // namespace webgl
 
 #endif /* _WEBGL_HPP_ */

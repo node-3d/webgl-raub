@@ -15,8 +15,8 @@ DBG_EXPORT JS_METHOD(createBuffer) { NAPI_ENV;
 
 DBG_EXPORT JS_METHOD(deleteBuffer) { NAPI_ENV;
 	REQ_UINT32_ARG(0, buffer);
-	
-	glDeleteBuffers(1, reinterpret_cast<GLuint*>(&buffer));
+	GLuint buffers[1] = { buffer };
+	glDeleteBuffers(1, buffers);
 	RET_UNDEFINED;
 }
 
@@ -143,6 +143,14 @@ DBG_EXPORT JS_METHOD(getBufferParameter) { NAPI_ENV;
 	glGetBufferParameteriv(target, name, &params);
 	
 	RET_NUM(params);
+}
+
+
+DBG_EXPORT JS_METHOD(readBuffer) { NAPI_ENV;
+	REQ_INT32_ARG(0, src);
+	
+	glReadBuffer(src);
+	RET_UNDEFINED;
 }
 
 

@@ -27,7 +27,9 @@ declare module "webgl-raub" {
 		noflip?: boolean;
 	}>;
 	
-	export type TShaderArray = number[] | Float32Array;
+	export type TFloatArray = number[] | Float32Array;
+	export type TIntArray = number[] | Int32Array;
+	export type TUintArray = number[] | Uint32Array;
 	
 	export class TGLObject {
 		constructor(_: TResourceId);
@@ -55,14 +57,13 @@ declare module "webgl-raub" {
 	export class WebGLUniformLocation extends TGLObject {}
 	export class WebGLActiveInfo extends TGLActiveInfo {}
 	export class WebGLTransformFeedback extends TGLObject {}
+	export class WebGLSampler extends TGLObject {}
+	export class WebGLSync extends TGLObject {}
 	
 	const init: ()=> void;
 	
 	const contextAttributes: TContextAttributes;
 	const getContextAttributes: () => TContextAttributes;
-	
-	const createQuery: ()=> WebGLQuery;
-	const deleteQuery: (query: WebGLQuery)=> void;
 	
 	const bindAttribLocation: (program: WebGLProgram, index: number, name: string) => void;
 	const disableVertexAttribArray: (index: number) => void;
@@ -71,14 +72,14 @@ declare module "webgl-raub" {
 	const getAttribLocation: (program: WebGLProgram, name: string) => number;
 	const getVertexAttrib: (index: number, name: number) => (boolean | number | number[]);
 	const getVertexAttribOffset: (index: number, name: number) => number;
-	const vertexAttrib1f: (location: number, x: number) => void;
-	const vertexAttrib1fv: (location: number, v: TShaderArray) => void;
-	const vertexAttrib2f: (location: number, x: number, y: number) => void;
-	const vertexAttrib2fv: (location: number, v: TShaderArray) => void;
-	const vertexAttrib3f: (location: number, x: number, y: number, z: number) => void;
-	const vertexAttrib3fv: (location: number, v: TShaderArray) => void;
-	const vertexAttrib4f: (location: number, x: number, y: number, z: number, w: number) => void;
-	const vertexAttrib4fv: (location: number, v: TShaderArray) => void;
+	const vertexAttrib1f: (index: number, x: number) => void;
+	const vertexAttrib1fv: (index: number, v: TFloatArray) => void;
+	const vertexAttrib2f: (index: number, x: number, y: number) => void;
+	const vertexAttrib2fv: (index: number, v: TFloatArray) => void;
+	const vertexAttrib3f: (index: number, x: number, y: number, z: number) => void;
+	const vertexAttrib3fv: (index: number, v: TFloatArray) => void;
+	const vertexAttrib4f: (index: number, x: number, y: number, z: number, w: number) => void;
+	const vertexAttrib4fv: (index: number, v: TFloatArray) => void;
 	const vertexAttribPointer: (index: number, size: number, type: number, isNormalized: boolean, stride: number, offset: number) => number;
 	const vertexAttribIPointer: (
 		indx: number,
@@ -220,7 +221,7 @@ declare module "webgl-raub" {
 	const attachShader: (program: WebGLProgram, shader: WebGLShader) => void;
 	const compileShader: (shader: WebGLShader) => void;
 	const detachShader: (program: WebGLProgram, shader: WebGLShader) => void;
-	const getAttachedShaders: (program: WebGLProgram) => (number[]);
+	const getAttachedShaders: (program: WebGLProgram) => (WebGLShader[]);
 	const getShaderInfoLog: (shader: WebGLShader) => string;
 	const getShaderParameter: (shader: WebGLShader, pname: number) => (number | boolean);
 	const getShaderSource: (shader: WebGLShader) => string;
@@ -343,24 +344,24 @@ declare module "webgl-raub" {
 	const getUniform: (program: WebGLProgram, location: WebGLUniformLocation) => (undefined | number[]);
 	const getUniformLocation: (program: WebGLProgram, name: string) => WebGLUniformLocation;
 	const uniform1f: (location: WebGLUniformLocation, x: number) => void;
-	const uniform1fv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+	const uniform1fv: (location: WebGLUniformLocation, values: TFloatArray) => void;
 	const uniform1i: (location: WebGLUniformLocation, x: number) => void;
-	const uniform1iv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+	const uniform1iv: (location: WebGLUniformLocation, values: TIntArray) => void;
 	const uniform2f: (location: WebGLUniformLocation, x: number, y: number) => void;
-	const uniform2fv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+	const uniform2fv: (location: WebGLUniformLocation, values: TFloatArray) => void;
 	const uniform2i: (location: WebGLUniformLocation, x: number, y: number) => void;
-	const uniform2iv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+	const uniform2iv: (location: WebGLUniformLocation, values: TIntArray) => void;
 	const uniform3f: (location: WebGLUniformLocation, x: number, y: number, z: number) => void;
-	const uniform3fv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+	const uniform3fv: (location: WebGLUniformLocation, values: TFloatArray) => void;
 	const uniform3i: (location: WebGLUniformLocation, x: number, y: number, z: number) => void;
-	const uniform3iv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+	const uniform3iv: (location: WebGLUniformLocation, values: TIntArray) => void;
 	const uniform4f: (location: WebGLUniformLocation, x: number, y: number, z: number, w: number) => void;
-	const uniform4fv: (location: WebGLUniformLocation, values: TShaderArray) => void;
+	const uniform4fv: (location: WebGLUniformLocation, values: TFloatArray) => void;
 	const uniform4i: (location: WebGLUniformLocation, x: number, y: number, z: number, w: number) => void;
-	const uniform4iv: (location: WebGLUniformLocation, values: TShaderArray) => void;
-	const uniformMatrix2fv: (location: WebGLUniformLocation, transpose: boolean, values: TShaderArray) => void;
-	const uniformMatrix3fv: (location: WebGLUniformLocation, transpose: boolean, values: TShaderArray) => void;
-	const uniformMatrix4fv: (location: WebGLUniformLocation, transpose: boolean, values: TShaderArray) => void;
+	const uniform4iv: (location: WebGLUniformLocation, values: TIntArray) => void;
+	const uniformMatrix2fv: (location: WebGLUniformLocation, transpose: boolean, values: TFloatArray) => void;
+	const uniformMatrix3fv: (location: WebGLUniformLocation, transpose: boolean, values: TFloatArray) => void;
+	const uniformMatrix4fv: (location: WebGLUniformLocation, transpose: boolean, values: TFloatArray) => void;
 	const createVertexArray: () => WebGLVertexArray;
 	const deleteVertexArray: (vertexArray: WebGLVertexArray) => void;
 	const isVertexArray: (vertexArray: WebGLVertexArray) => boolean;
@@ -389,7 +390,7 @@ declare module "webgl-raub" {
 	const resumeTransformFeedback: () => void;
 	const transformFeedbackVaryings: (
 		program: WebGLProgram,
-		jsVaryings: string[],
+		varyings: string[],
 		bufferMode: number,
 	) => void;
 	const getTransformFeedbackVarying: (program: WebGLProgram, index: number) => TActiveInfo;
@@ -473,6 +474,100 @@ declare module "webgl-raub" {
 		w: number,
 		h: number,
 	) => void;
+	
+	const createQuery: () => WebGLQuery;
+	const deleteQuery: (query: WebGLQuery) => void;
+	const isQuery: (query: WebGLQuery) => boolean;
+	const beginQuery: (target: number, query: WebGLQuery) => void;
+	const endQuery: (target: number) => void;
+	const getQueryParameter: (query: WebGLQuery, pname: number) => void;
+	const getQuery: (target: number, pname: number) => WebGLQuery;
+	const createSampler: () => WebGLSampler;
+	const deleteSampler: (sampler: WebGLSampler) => void;
+	const isSampler: (sampler: WebGLSampler) => boolean;
+	const bindSampler: (unit: number, sampler: WebGLSampler) => void;
+	const samplerParameterf: (sampler: WebGLSampler, pname: number, param: number) => void;
+	const samplerParameteri: (sampler: WebGLSampler, pname: number, param: number) => void;
+	const getSamplerParameter: (sampler: WebGLSampler, pname: number) => unknown;
+	const fenceSync: (condition: number, flags: number) => WebGLSync;
+	const deleteSync: (sync: WebGLSync) => void;
+	const isSync: (sync: WebGLSync) => boolean;
+	const clientWaitSync: (sync: WebGLSync, flags: number, timeout: number) => number;
+	const waitSync: (sync: WebGLSync, flags: number, timeout: number) => void;
+	const getSyncParameter: (sync: WebGLSync, pname: number) => unknown;
+	const vertexAttribI4i: (index: number, x: number, y: number, z: number, w: number) => void;
+	const vertexAttribI4iv: (index: number, values: Int32Array) => void;
+	const vertexAttribI4ui: (index: number, x: number, y: number, z: number, w: number) => void;
+	const vertexAttribI4uiv: (index: number, values: Uint32Array) => void;
+	const readBuffer: (src: number) => void;
+	const invalidateSubFramebuffer: (
+		target: number, attachments: number[],
+		x: number, y: number, width: number, height: number,
+	) => void;
+	const programParameteri: (program: WebGLProgram, pname: number, value: number) => void;
+	const getFragDataLocation: (program: WebGLProgram, name: string) => number;
+	const getProgramBinary: (program: WebGLProgram) => Readonly<{
+		binary: string;
+		binaryFormat: number;
+	}>;
+	const programBinary: (program: WebGLProgram, binaryFormat: number, binary: string) => void;
+	const getUniformBlockIndex: (program: WebGLProgram, uniformBlockName: string) => number;
+	const getUniformIndices: (program: WebGLProgram, uniformNames: string[]) => number[];
+	const drawRangeElements: (mode: number, start: number, end: number, count: number, type: number, offset: number) => void;
+	const releaseShaderCompiler: () => void;
+	const shaderBinary: (count: number, shaders: WebGLShader[], binaryFormat: number, binary: string) => void;
+	const compressedTexImage2D: (
+		target: number, level: number, internalformat: number, width: number,
+		height: number, border: number, image: TImage,
+	) => void;
+	const сompressedTexImage3D: (
+		target: number, level: number, internalformat: number, width: number,
+		height: number, depth: number, border: number, image: TImage,
+	) => void;
+	const compressedTexSubImage3D: (
+		target: number, level: number, x: number, y: number, z: number, width: number,
+		height: number, depth: number, format: number, image: TImage,
+	) => void;
+	const uniform1ui: (location: WebGLUniformLocation, v0: number) => void;
+	const uniform2ui: (location: WebGLUniformLocation, v0: number, v1: number) => void;
+	const uniform3ui: (location: WebGLUniformLocation, v0: number, v1: number, v2: number) => void;
+	const uniform4ui: (location: WebGLUniformLocation, v0: number, v1: number, v2: number, v3: number) => void;
+	const uniform1uiv: (
+		location: WebGLUniformLocation, data: TUintArray,
+	) => void;
+	const uniform2uiv: (
+		location: WebGLUniformLocation, data: TUintArray,
+	) => void;
+	const uniform3uiv: (
+		location: WebGLUniformLocation, data: TUintArray,
+	) => void;
+	const uniform4uiv: (
+		location: WebGLUniformLocation, data: TUintArray,
+	) => void;
+	const uniformMatrix2x3fv: (
+		location: WebGLUniformLocation, transpose: boolean, data: TFloatArray,
+	) => void;
+	const uniformMatrix2x4fv: (
+		location: WebGLUniformLocation, transpose: boolean, data: TFloatArray,
+	) => void;
+	const uniformMatrix3x2fv: (
+		location: WebGLUniformLocation, transpose: boolean, data: TFloatArray,
+	) => void;
+	const uniformMatrix3x4fv: (
+		location: WebGLUniformLocation, transpose: boolean, data: TFloatArray,
+	) => void;
+	const uniformMatrix4x2fv: (
+		location: WebGLUniformLocation, transpose: boolean, data: TFloatArray,
+	) => void;
+	const uniformMatrix4x3fv: (
+		location: WebGLUniformLocation, transpose: boolean, data: TFloatArray,
+	) => void;
+	const getUniformfv: (program: WebGLProgram, location: WebGLUniformLocation) => number[];
+	const getActiveUniforms: (program: WebGLProgram, uniformIndices: number[], pname: number) => unknown;
+	const uniformBlockBinding: (program: WebGLProgram, uniformBlockIndex: number, blockBinding: number) => void;
+	const getActiveUniformBlockParameter: (program: WebGLProgram, uniformBlockIndex: number, pname: number) => unknown;
+	const getActiveUniformBlockName: (program: WebGLProgram, uniformBlockIndex: number) => string;
+	const getIndexedParameter: (target: number, index: number) => unknown;
 	
 	const drawingBufferWidth: number;
 	const drawingBufferHeight: number;
@@ -803,6 +898,21 @@ declare module "webgl-raub" {
 	const FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE: number;
 	const COLOR: number;
 	const COLOR_ATTACHMENT0: number;
+	const COLOR_ATTACHMENT1: number;
+	const COLOR_ATTACHMENT2: number;
+	const COLOR_ATTACHMENT3: number;
+	const COLOR_ATTACHMENT4: number;
+	const COLOR_ATTACHMENT5: number;
+	const COLOR_ATTACHMENT6: number;
+	const COLOR_ATTACHMENT7: number;
+	const COLOR_ATTACHMENT8: number;
+	const COLOR_ATTACHMENT9: number;
+	const COLOR_ATTACHMENT10: number;
+	const COLOR_ATTACHMENT11: number;
+	const COLOR_ATTACHMENT12: number;
+	const COLOR_ATTACHMENT13: number;
+	const COLOR_ATTACHMENT14: number;
+	const COLOR_ATTACHMENT15: number;
 	const DEPTH_ATTACHMENT: number;
 	const STENCIL_ATTACHMENT: number;
 	const DEPTH_STENCIL_ATTACHMENT: number;
@@ -855,4 +965,184 @@ declare module "webgl-raub" {
 	const PIXEL_UNPACK_BUFFER: number;
 	const PIXEL_PACK_BUFFER_BINDING: number;
 	const PIXEL_UNPACK_BUFFER_BINDING: number;
+	
+	const READ_BUFFER: number;
+	const PACK_ROW_LENGTH: number;
+	const PACK_SKIP_ROWS: number;
+	const PACK_SKIP_PIXELS: number;
+	const DEPTH: number;
+	const STENCIL: number;
+	const RGB8: number;
+	const RGB10_A2: number;
+	const TEXTURE_BINDING_3D: number;
+	const MAX_3D_TEXTURE_SIZE: number;
+	const UNSIGNED_INT_2_10_10_10_REV: number;
+	const MAX_ELEMENTS_VERTICES: number;
+	const MAX_ELEMENTS_INDICES: number;
+	const TEXTURE_MIN_LOD: number;
+	const TEXTURE_MAX_LOD: number;
+	const TEXTURE_BASE_LEVEL: number;
+	const TEXTURE_MAX_LEVEL: number;
+	const MAX_TEXTURE_LOD_BIAS: number;
+	const CURRENT_QUERY: number;
+	const QUERY_RESULT: number;
+	const QUERY_RESULT_AVAILABLE: number;
+	const STREAM_READ: number;
+	const STREAM_COPY: number;
+	const STATIC_READ: number;
+	const STATIC_COPY: number;
+	const DYNAMIC_READ: number;
+	const DYNAMIC_COPY: number;
+	const MAX_DRAW_BUFFERS: number;
+	const DRAW_BUFFER0: number;
+	const DRAW_BUFFER1: number;
+	const DRAW_BUFFER2: number;
+	const DRAW_BUFFER3: number;
+	const DRAW_BUFFER4: number;
+	const DRAW_BUFFER5: number;
+	const DRAW_BUFFER6: number;
+	const DRAW_BUFFER7: number;
+	const DRAW_BUFFER8: number;
+	const DRAW_BUFFER9: number;
+	const DRAW_BUFFER10: number;
+	const DRAW_BUFFER11: number;
+	const DRAW_BUFFER12: number;
+	const DRAW_BUFFER13: number;
+	const DRAW_BUFFER14: number;
+	const DRAW_BUFFER15: number;
+	const MAX_FRAGMENT_UNIFORM_COMPONENTS: number;
+	const MAX_VERTEX_UNIFORM_COMPONENTS: number;
+	const SAMPLER_3D: number;
+	const SAMPLER_2D_SHADOW: number;
+	const FRAGMENT_SHADER_DERIVATIVE_HINT: number;
+	const FLOAT_MAT2x3: number;
+	const FLOAT_MAT2x4: number;
+	const FLOAT_MAT3x2: number;
+	const FLOAT_MAT3x4: number;
+	const FLOAT_MAT4x2: number;
+	const FLOAT_MAT4x3: number;
+	const SRGB: number;
+	const SRGB8: number;
+	const RGB32F: number;
+	const RGB16F: number;
+	const VERTEX_ATTRIB_ARRAY_INTEGER: number;
+	const MAX_ARRAY_TEXTURE_LAYERS: number;
+	const MIN_PROGRAM_TEXEL_OFFSET: number;
+	const MAX_PROGRAM_TEXEL_OFFSET: number;
+	const MAX_VARYING_COMPONENTS: number;
+	const TEXTURE_BINDING_2D_ARRAY: number;
+	const R11F_G11F_B10F: number;
+	const UNSIGNED_INT_10F_11F_11F_REV: number;
+	const RGB9_E5: number;
+	const UNSIGNED_INT_5_9_9_9_REV: number;
+	const RASTERIZER_DISCARD: number;
+	const RGBA32UI: number;
+	const RGB32UI: number;
+	const RGBA16UI: number;
+	const RGB16UI: number;
+	const RGBA8UI: number;
+	const RGB8UI: number;
+	const RGBA32I: number;
+	const RGB32I: number;
+	const RGBA16I: number;
+	const RGB16I: number;
+	const RGB8I: number;
+	const RGB_INTEGER: number;
+	const SAMPLER_2D_ARRAY: number;
+	const SAMPLER_2D_ARRAY_SHADOW: number;
+	const SAMPLER_CUBE_SHADOW: number;
+	const UNSIGNED_INT_VEC2: number;
+	const UNSIGNED_INT_VEC3: number;
+	const UNSIGNED_INT_VEC4: number;
+	const INT_SAMPLER_2D: number;
+	const INT_SAMPLER_3D: number;
+	const INT_SAMPLER_CUBE: number;
+	const INT_SAMPLER_2D_ARRAY: number;
+	const UNSIGNED_INT_SAMPLER_2D: number;
+	const UNSIGNED_INT_SAMPLER_3D: number;
+	const UNSIGNED_INT_SAMPLER_CUBE: number;
+	const UNSIGNED_INT_SAMPLER_2D_ARRAY: number;
+	const DEPTH32F_STENCIL8: number;
+	const FLOAT_32_UNSIGNED_INT_24_8_REV: number;
+	const FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING: number;
+	const FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE: number;
+	const FRAMEBUFFER_ATTACHMENT_RED_SIZE: number;
+	const FRAMEBUFFER_ATTACHMENT_GREEN_SIZE: number;
+	const FRAMEBUFFER_ATTACHMENT_BLUE_SIZE: number;
+	const FRAMEBUFFER_ATTACHMENT_ALPHA_SIZE: number;
+	const FRAMEBUFFER_ATTACHMENT_DEPTH_SIZE: number;
+	const FRAMEBUFFER_ATTACHMENT_STENCIL_SIZE: number;
+	const FRAMEBUFFER_DEFAULT: number;
+	const UNSIGNED_NORMALIZED: number;
+	const READ_FRAMEBUFFER_BINDING: number;
+	const RENDERBUFFER_SAMPLES: number;
+	const FRAMEBUFFER_ATTACHMENT_TEXTURE_LAYER: number;
+	const MAX_COLOR_ATTACHMENTS: number;
+	const FRAMEBUFFER_INCOMPLETE_MULTISAMPLE: number;
+	const RG8I: number;
+	const RG8UI: number;
+	const RG16I: number;
+	const RG16UI: number;
+	const RG32I: number;
+	const RG32UI: number;
+	const R8_SNORM: number;
+	const RG8_SNORM: number;
+	const RGB8_SNORM: number;
+	const RGBA8_SNORM: number;
+	const SIGNED_NORMALIZED: number;
+	const COPY_READ_BUFFER: number;
+	const COPY_WRITE_BUFFER: number;
+	const COPY_READ_BUFFER_BINDING: number;
+	const COPY_WRITE_BUFFER_BINDING: number;
+	const UNIFORM_BUFFER_BINDING: number;
+	const UNIFORM_BUFFER_START: number;
+	const UNIFORM_BUFFER_SIZE: number;
+	const MAX_VERTEX_UNIFORM_BLOCKS: number;
+	const MAX_FRAGMENT_UNIFORM_BLOCKS: number;
+	const MAX_COMBINED_UNIFORM_BLOCKS: number;
+	const MAX_UNIFORM_BLOCK_SIZE: number;
+	const MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS: number;
+	const MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS: number;
+	const UNIFORM_BUFFER_OFFSET_ALIGNMENT: number;
+	const ACTIVE_UNIFORM_BLOCKS: number;
+	const UNIFORM_TYPE: number;
+	const UNIFORM_SIZE: number;
+	const UNIFORM_BLOCK_INDEX: number;
+	const UNIFORM_OFFSET: number;
+	const UNIFORM_ARRAY_STRIDE: number;
+	const UNIFORM_MATRIX_STRIDE: number;
+	const UNIFORM_IS_ROW_MAJOR: number;
+	const UNIFORM_BLOCK_BINDING: number;
+	const UNIFORM_BLOCK_DATA_SIZE: number;
+	const UNIFORM_BLOCK_ACTIVE_UNIFORMS: number;
+	const UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: number;
+	const UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER: number;
+	const UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: number;
+	const INVALID_INDEX: number;
+	const MAX_VERTEX_OUTPUT_COMPONENTS: number;
+	const MAX_FRAGMENT_INPUT_COMPONENTS: number;
+	const MAX_SERVER_WAIT_TIMEOUT: number;
+	const OBJECT_TYPE: number;
+	const SYNC_CONDITION: number;
+	const SYNC_STATUS: number;
+	const SYNC_FLAGS: number;
+	const SYNC_FENCE: number;
+	const SYNC_GPU_COMMANDS_COMPLETE: number;
+	const UNSIGNALED: number;
+	const SIGNALED: number;
+	const ALREADY_SIGNALED: number;
+	const TIMEOUT_EXPIRED: number;
+	const CONDITION_SATISFIED: number;
+	const WAIT_FAILED: number;
+	const SYNC_FLUSH_COMMANDS_BIT: number;
+	const VERTEX_ATTRIB_ARRAY_DIVISOR: number;
+	const ANY_SAMPLES_PASSED: number;
+	const ANY_SAMPLES_PASSED_CONSERVATIVE: number;
+	const SAMPLER_BINDING: number;
+	const RGB10_A2UI: number;
+	const INT_2_10_10_10_REV: number;
+	const TEXTURE_IMMUTABLE_FORMAT: number;
+	const MAX_ELEMENT_INDEX: number;
+	const TEXTURE_IMMUTABLE_LEVELS: number;
+	const TIMEOUT_IGNORED: number;
 }

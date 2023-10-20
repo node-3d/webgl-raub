@@ -7,15 +7,14 @@ namespace webgl {
 DBG_EXPORT JS_METHOD(createTexture) { NAPI_ENV;
 	GLuint texture;
 	glGenTextures(1, &texture);
-	
 	RET_NUM(texture);
 }
 
 
 DBG_EXPORT JS_METHOD(deleteTexture) { NAPI_ENV;
 	REQ_UINT32_ARG(0, texture);
-	
-	glDeleteTextures(1, reinterpret_cast<GLuint*>(&texture));
+	GLuint textures[1] = { texture };
+	glDeleteTextures(1, textures);
 	RET_UNDEFINED;
 }
 
@@ -245,15 +244,7 @@ DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 		void *pixels = getData(env, image);
 		
 		glTexSubImage2D(
-			target,
-			level,
-			xoffset,
-			yoffset,
-			0,
-			0,
-			format,
-			type,
-			pixels
+			target, level, xoffset, yoffset, 0, 0, format, type, pixels
 		);
 		RET_UNDEFINED;
 	}
@@ -265,29 +256,13 @@ DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 	
 	if (info.Length() <= 8 || IS_ARG_EMPTY(8)) {
 		glTexSubImage2D(
-			target,
-			level,
-			xoffset,
-			yoffset,
-			width,
-			height,
-			format,
-			type,
-			nullptr
+			target, level, xoffset, yoffset, width, height, format, type, nullptr
 		);
 	} else {
 		REQ_OBJ_ARG(8, image);
 		void *pixels = getData(env, image);
 		glTexSubImage2D(
-			target,
-			level,
-			xoffset,
-			yoffset,
-			width,
-			height,
-			format,
-			type,
-			pixels
+			target, level, xoffset, yoffset, width, height, format, type, pixels
 		);
 	}
 	
@@ -322,19 +297,114 @@ DBG_EXPORT JS_METHOD(compressedTexSubImage2D) { NAPI_ENV;
 	}
 	
 	glCompressedTexSubImage2D(
-		target,
-		level,
-		xoffset,
-		yoffset,
-		width,
-		height,
-		format,
-		size,
-		pixels
+		target, level, xoffset, yoffset, width, height, format, size, pixels
 	);
 	
 	RET_UNDEFINED;
 }
 
+DBG_EXPORT JS_METHOD(compressedTexImage2D) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, level);
+	REQ_INT32_ARG(2, internalformat);
+	REQ_INT32_ARG(3, width);
+	REQ_INT32_ARG(4, height);
+	REQ_INT32_ARG(5, border);
+	REQ_OBJ_ARG(6, image);
+	
+	int size = 0;
+	void *pixels = nullptr;
+	
+	if (image.IsTypedArray() || image.IsArrayBuffer()) {
+		pixels = getArrayData<uint8_t>(env, image, &size);
+	} else if (image.IsBuffer()) {
+		pixels = getBufferData<uint8_t>(env, image, &size);
+	} else if (image.Has("data")) {
+		Napi::Object data = image.Get("data").As<Napi::Object>();
+		if (data.IsTypedArray() || data.IsArrayBuffer()) {
+			pixels = getArrayData<uint8_t>(env, data, &size);
+		} else if (data.IsBuffer()) {
+			pixels = getBufferData<uint8_t>(env, data, &size);
+		}
+	}
+	
+	glCompressedTexImage2D(
+		target, level, internalformat, width, height, border, size, pixels
+	);
+	
+	RET_UNDEFINED;
+}
+
+DBG_EXPORT JS_METHOD(сompressedTexImage3D) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, level);
+	REQ_INT32_ARG(2, internalformat);
+	REQ_INT32_ARG(3, width);
+	REQ_INT32_ARG(4, height);
+	REQ_INT32_ARG(5, depth);
+	REQ_INT32_ARG(6, border);
+	REQ_OBJ_ARG(7, image);
+	
+	int size = 0;
+	void *pixels = nullptr;
+	
+	if (image.IsTypedArray() || image.IsArrayBuffer()) {
+		pixels = getArrayData<uint8_t>(env, image, &size);
+	} else if (image.IsBuffer()) {
+		pixels = getBufferData<uint8_t>(env, image, &size);
+	} else if (image.Has("data")) {
+		Napi::Object data = image.Get("data").As<Napi::Object>();
+		if (data.IsTypedArray() || data.IsArrayBuffer()) {
+			pixels = getArrayData<uint8_t>(env, data, &size);
+		} else if (data.IsBuffer()) {
+			pixels = getBufferData<uint8_t>(env, data, &size);
+		}
+	}
+	
+	glCompressedTexImage3D(
+		target, level, internalformat, width, height, depth, border, size, pixels
+	);
+	
+	RET_UNDEFINED;
+}
+
+DBG_EXPORT JS_METHOD(compressedTexSubImage3D) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, level);
+	REQ_INT32_ARG(2, xoffset);
+	REQ_INT32_ARG(3, yoffset);
+	REQ_INT32_ARG(4, zoffset);
+	REQ_INT32_ARG(5, width);
+	REQ_INT32_ARG(6, height);
+	REQ_INT32_ARG(7, depth);
+	REQ_INT32_ARG(8, format);
+	REQ_OBJ_ARG(9, image);
+	
+	int size = 0;
+	void *pixels = nullptr;
+	
+	if (image.IsTypedArray() || image.IsArrayBuffer()) {
+		pixels = getArrayData<uint8_t>(env, image, &size);
+	} else if (image.IsBuffer()) {
+		pixels = getBufferData<uint8_t>(env, image, &size);
+	} else if (image.Has("data")) {
+		Napi::Object data = image.Get("data").As<Napi::Object>();
+		if (data.IsTypedArray() || data.IsArrayBuffer()) {
+			pixels = getArrayData<uint8_t>(env, data, &size);
+		} else if (data.IsBuffer()) {
+			pixels = getBufferData<uint8_t>(env, data, &size);
+		}
+	}
+	
+	glCompressedTexSubImage3D(
+		target, level, xoffset, yoffset, zoffset, width, height, depth, format, size, pixels
+	);
+	
+	RET_UNDEFINED;
+}
+
+// glCopyTexSubImage3D?
+// glTexStorage3D?
+// glTexSubImage3D?
 
 } // namespace webgl

@@ -18,7 +18,8 @@ DBG_EXPORT JS_METHOD(createVertexArray) { NAPI_ENV;
 DBG_EXPORT JS_METHOD(deleteVertexArray) { NAPI_ENV;
 	REQ_UINT32_ARG(0, vertexarray);
 	
-	glDeleteVertexArrays(1, reinterpret_cast<GLuint*>(&vertexarray));
+	GLuint vertexarrays[1] = { vertexarray };
+	glDeleteVertexArrays(1, vertexarrays);
 	RET_UNDEFINED;
 }
 

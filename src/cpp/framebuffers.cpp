@@ -14,8 +14,8 @@ DBG_EXPORT JS_METHOD(createFramebuffer) { NAPI_ENV;
 
 DBG_EXPORT JS_METHOD(deleteFramebuffer) { NAPI_ENV;
 	REQ_UINT32_ARG(0, buffer);
-	
-	glDeleteFramebuffers(1, reinterpret_cast<GLuint*>(&buffer));
+	GLuint buffers[1] = { buffer };
+	glDeleteFramebuffers(1, buffers);
 	RET_UNDEFINED;
 }
 
@@ -31,6 +31,26 @@ DBG_EXPORT JS_METHOD(invalidateFramebuffer) { NAPI_ENV;
 	}
 	
 	glInvalidateFramebuffer(target, count, cppAttachments.get());
+	RET_UNDEFINED;
+}
+
+
+DBG_EXPORT JS_METHOD(invalidateSubFramebuffer) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_ARRAY_ARG(1, jsAttachments);
+	REQ_INT32_ARG(2, x);
+	REQ_INT32_ARG(3, y);
+	REQ_INT32_ARG(4, w);
+	REQ_INT32_ARG(5, h);
+	
+	uint32_t count = jsAttachments.Length();
+	auto cppAttachments = std::make_unique<GLenum[]>(count);
+	
+	for (uint32_t i = 0; i < count; i++) {
+		cppAttachments[i] = jsAttachments.Get(i).As<Napi::Number>().Uint32Value();
+	}
+	
+	glInvalidateSubFramebuffer(target, count, cppAttachments.get(), x, y, w, h);
 	RET_UNDEFINED;
 }
 
@@ -121,6 +141,5 @@ DBG_EXPORT JS_METHOD(getFramebufferAttachmentParameter) { NAPI_ENV;
 	
 	RET_NUM(params);
 }
-
 
 } // namespace webgl

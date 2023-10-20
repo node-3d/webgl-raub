@@ -40,7 +40,7 @@ DBG_EXPORT JS_METHOD(getActiveAttrib) { NAPI_ENV;
 	GLsizei size;
 	glGetActiveAttrib(program, index, 1024, &length, &size, &type, name);
 	
-	Napi::Array activeInfo = JS_ARRAY;
+	Napi::Object activeInfo = JS_OBJECT;
 	activeInfo.Set("size", JS_NUM(size));
 	activeInfo.Set("type", JS_NUM(static_cast<int>(type)));
 	activeInfo.Set("name", JS_STR(name));
@@ -63,6 +63,7 @@ DBG_EXPORT JS_METHOD(getAttribLocation) { NAPI_ENV;
 #define CASES_VERTEX_ATTR_INT case GL_VERTEX_ATTRIB_ARRAY_SIZE: \
 	case GL_VERTEX_ATTRIB_ARRAY_STRIDE: \
 	case GL_VERTEX_ATTRIB_ARRAY_TYPE: \
+	case GL_VERTEX_ATTRIB_ARRAY_INTEGER: \
 	case GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
 
 #define CASES_VERTEX_ATTR_FLOAT4 case GL_CURRENT_VERTEX_ATTRIB:
@@ -81,12 +82,10 @@ DBG_EXPORT JS_METHOD(getVertexAttrib) { NAPI_ENV;
 	CASES_VERTEX_ATTR_BOOL
 		glGetVertexAttribiv(index, pname, &value);
 		RET_BOOL(value != 0);
-		break;
 	
 	CASES_VERTEX_ATTR_INT
 		glGetVertexAttribiv(index, pname, &value);
 		RET_NUM(value);
-		break;
 	
 	CASES_VERTEX_ATTR_FLOAT4
 		glGetVertexAttribfv(index, pname, vextex_attribs);
@@ -95,12 +94,9 @@ DBG_EXPORT JS_METHOD(getVertexAttrib) { NAPI_ENV;
 		arr.Set(2U, JS_NUM(vextex_attribs[2]));
 		arr.Set(3U, JS_NUM(vextex_attribs[3]));
 		RET_VALUE(arr);
-		break;
 	
 	default:
-		JS_THROW("GetVertexAttrib: Invalid Enum.");
-		RET_UNDEFINED;
-	
+		RET_NULL;
 	}
 }
 
@@ -117,87 +113,131 @@ DBG_EXPORT JS_METHOD(getVertexAttribOffset) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(vertexAttrib1f) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	REQ_INT32_ARG(0, index);
 	REQ_FLOAT_ARG(1, x);
 	
-	glVertexAttrib1f(location, x);
+	glVertexAttrib1f(index, x);
 	RET_UNDEFINED;
 }
 
 
 DBG_EXPORT JS_METHOD(vertexAttrib1fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
 	GLfloat *data = getArrayData<GLfloat>(env, abv);
 	
-	glVertexAttrib1fv(location, data);
+	glVertexAttrib1fv(index, data);
 	RET_UNDEFINED;
 }
 
 
 DBG_EXPORT JS_METHOD(vertexAttrib2f) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	REQ_INT32_ARG(0, index);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
 	
-	glVertexAttrib2f(location, x, y);
+	glVertexAttrib2f(index, x, y);
 	RET_UNDEFINED;
 }
 
 
 DBG_EXPORT JS_METHOD(vertexAttrib2fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
 	GLfloat *data = getArrayData<GLfloat>(env, abv);
 	
-	glVertexAttrib2fv(location, data);
+	glVertexAttrib2fv(index, data);
 	RET_UNDEFINED;
 }
 
 
 DBG_EXPORT JS_METHOD(vertexAttrib3f) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	REQ_INT32_ARG(0, index);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
 	REQ_FLOAT_ARG(3, z);
 	
-	glVertexAttrib3f(location, x, y, z);
+	glVertexAttrib3f(index, x, y, z);
 	RET_UNDEFINED;
 }
 
 
 DBG_EXPORT JS_METHOD(vertexAttrib3fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
 	GLfloat *data = getArrayData<GLfloat>(env, abv);
 	
-	glVertexAttrib3fv(location, data);
+	glVertexAttrib3fv(index, data);
 	RET_UNDEFINED;
 }
 
 
 DBG_EXPORT JS_METHOD(vertexAttrib4f) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	REQ_INT32_ARG(0, index);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
 	REQ_FLOAT_ARG(3, z);
 	REQ_FLOAT_ARG(4, w);
 	
-	glVertexAttrib4f(location, x, y, z, w);
+	glVertexAttrib4f(index, x, y, z, w);
 	RET_UNDEFINED;
 }
 
 
 DBG_EXPORT JS_METHOD(vertexAttrib4fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
 	GLfloat *data = getArrayData<GLfloat>(env, abv);
 	
-	glVertexAttrib4fv(location, data);
+	glVertexAttrib4fv(index, data);
+	RET_UNDEFINED;
+}
+
+
+DBG_EXPORT JS_METHOD(vertexAttribI4i) { NAPI_ENV;
+	REQ_INT32_ARG(0, index);
+	REQ_INT32_ARG(1, x);
+	REQ_INT32_ARG(2, y);
+	REQ_INT32_ARG(3, z);
+	REQ_INT32_ARG(4, w);
+	
+	glVertexAttribI4i(index, x, y, z, w);
+	RET_UNDEFINED;
+}
+
+DBG_EXPORT JS_METHOD(vertexAttribI4iv) { NAPI_ENV;
+	REQ_INT32_ARG(0, index);
+	REQ_OBJ_ARG(1, abv);
+	
+	GLint *data = getArrayData<GLint>(env, abv);
+	
+	glVertexAttribI4iv(index, data);
+	RET_UNDEFINED;
+}
+
+
+DBG_EXPORT JS_METHOD(vertexAttribI4ui) { NAPI_ENV;
+	REQ_INT32_ARG(0, index);
+	REQ_UINT32_ARG(1, x);
+	REQ_UINT32_ARG(2, y);
+	REQ_UINT32_ARG(3, z);
+	REQ_UINT32_ARG(4, w);
+	
+	glVertexAttribI4ui(index, x, y, z, w);
+	RET_UNDEFINED;
+}
+
+DBG_EXPORT JS_METHOD(vertexAttribI4uiv) { NAPI_ENV;
+	REQ_INT32_ARG(0, index);
+	REQ_OBJ_ARG(1, abv);
+	
+	GLuint *data = getArrayData<GLuint>(env, abv);
+	
+	glVertexAttribI4uiv(index, data);
 	RET_UNDEFINED;
 }
 
@@ -230,5 +270,12 @@ DBG_EXPORT JS_METHOD(vertexAttribIPointer) { NAPI_ENV;
 	RET_UNDEFINED;
 }
 
+DBG_EXPORT JS_METHOD(vertexAttribDivisor) { NAPI_ENV;
+	REQ_UINT32_ARG(0, index);
+	REQ_UINT32_ARG(1, divisor);
+	
+	glVertexAttribDivisor(index, divisor);
+	RET_UNDEFINED;
+}
 
 } // namespace webgl
