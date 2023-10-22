@@ -119,12 +119,15 @@ DBG_EXPORT JS_METHOD(getShaderSource) { NAPI_ENV;
 	
 	GLint len;
 	glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &len);
+	
+	if (!len) {
+		RET_STR("");
+	}
+	
 	auto source = std::make_unique<GLchar[]>(len);
 	glGetShaderSource(shader, len, NULL, source.get());
 	
-	Napi::String str = JS_STR(source.get());
-	
-	RET_VALUE(str);
+	RET_STR(source.get());
 }
 
 

@@ -243,8 +243,11 @@ DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 		
 		void *pixels = getData(env, image);
 		
+		GLsizei w = image.Get("width").ToNumber().Uint32Value();
+		GLsizei h = image.Get("height").ToNumber().Uint32Value();
+		
 		glTexSubImage2D(
-			target, level, xoffset, yoffset, 0, 0, format, type, pixels
+			target, level, xoffset, yoffset, w, h, format, type, pixels
 		);
 		RET_UNDEFINED;
 	}

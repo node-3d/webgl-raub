@@ -33,6 +33,10 @@ DBG_EXPORT JS_METHOD(getProgramInfoLog) { NAPI_ENV;
 	GLint length = 0;
 	glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
 	
+	if (!length) {
+		RET_STR("");
+	}
+	
 	// Retrieve the binary code
 	auto buffer = std::make_unique<GLchar[]>(length);
 	GLenum format = 0;
@@ -120,6 +124,10 @@ DBG_EXPORT JS_METHOD(getProgramBinary) { NAPI_ENV;
 	// Get the binary length
 	GLint length = 0;
 	glGetProgramiv(program, GL_PROGRAM_BINARY_LENGTH, &length);
+	
+	if (!length) {
+		RET_NULL;
+	}
 	
 	// Retrieve the binary code
 	auto buffer = std::make_unique<GLubyte[]>(length);

@@ -44,22 +44,35 @@ declare module "webgl-raub" {
 		name: string;
 	}
 	
-	export class WebGLRenderingContext extends TGLObject {}
-	export class WebGLProgram extends TGLObject {}
-	export class WebGLQuery extends TGLObject {}
-	export class WebGLShader extends TGLObject {}
-	export class WebGLVertexArrayObject extends TGLObject {}
-	export class WebGLBuffer extends TGLObject {}
-	export class WebGLVertexArray extends TGLObject {}
-	export class WebGLFramebuffer extends TGLObject {}
-	export class WebGLRenderbuffer extends TGLObject {}
-	export class WebGLTexture extends TGLObject {}
-	export class WebGLUniformLocation extends TGLObject {}
-	export class WebGLActiveInfo extends TGLActiveInfo {}
-	export class WebGLTransformFeedback extends TGLObject {}
-	export class WebGLSampler extends TGLObject {}
-	export class WebGLSync extends TGLObject {}
+	const WebGLRenderingContext = class WebGLRenderingContext extends TGLObject {};
+	const WebGLProgram = class WebGLProgram extends TGLObject {};
+	const WebGLQuery = class WebGLQuery extends TGLObject {};
+	const WebGLShader = class WebGLShader extends TGLObject {};
+	const WebGLVertexArrayObject = class WebGLVertexArrayObject extends TGLObject {};
+	const WebGLBuffer = class WebGLBuffer extends TGLObject {};
+	const WebGLVertexArray = class WebGLVertexArray extends TGLObject {};
+	const WebGLFramebuffer = class WebGLFramebuffer extends TGLObject {};
+	const WebGLRenderbuffer = class WebGLRenderbuffer extends TGLObject {};
+	const WebGLTexture = class WebGLTexture extends TGLObject {};
+	const WebGLUniformLocation = class WebGLUniformLocation extends TGLObject {};
+	const WebGLActiveInfo = class WebGLActiveInfo extends TGLActiveInfo {};
+	const WebGLTransformFeedback = class WebGLTransformFeedback extends TGLObject {};
+	const WebGLSampler = class WebGLSampler extends TGLObject {};
+	const WebGLSync = class WebGLSync extends TGLObject {};
+	const WebGL2RenderingContext = class WebGL2RenderingContext extends TGLObject {};
 	
+	/**
+	 * Add `WebGL2RenderingContext` to global, and set the GL object prototype.
+	 *
+	 * `typeof WebGL2RenderingContext !== 'undefined' && gl.constructor.name === 'WebGL2RenderingContext';`
+	 * The condition above becomes true, after using this method - this is how
+	 * frameworks usually look for WebGL2 compatibility.
+	 */
+	const useWebGL2: ()=> void;
+	
+	/**
+	 * Init GLEW.
+	 */
 	const init: ()=> void;
 	
 	const contextAttributes: TContextAttributes;
@@ -571,7 +584,7 @@ declare module "webgl-raub" {
 	
 	const drawingBufferWidth: number;
 	const drawingBufferHeight: number;
-		
+	
 	const DEPTH_BUFFER_BIT: number;
 	const STENCIL_BUFFER_BIT: number;
 	const COLOR_BUFFER_BIT: number;
@@ -965,7 +978,6 @@ declare module "webgl-raub" {
 	const PIXEL_UNPACK_BUFFER: number;
 	const PIXEL_PACK_BUFFER_BINDING: number;
 	const PIXEL_UNPACK_BUFFER_BINDING: number;
-	
 	const READ_BUFFER: number;
 	const PACK_ROW_LENGTH: number;
 	const PACK_SKIP_ROWS: number;

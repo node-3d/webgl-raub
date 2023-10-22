@@ -38,6 +38,7 @@ if (!gl.__isInited) {
 		this.name = _.name;
 	};
 	gl.WebGLTransformFeedback = function WebGLTransformFeedback(_) { this._ = _; };
+	gl.WebGL2RenderingContext = function WebGL2RenderingContext(_) { this._ = _; };
 	
 	// Global scope constructors for browser-style libs
 	global.WebGLRenderingContext = gl.WebGLRenderingContext;
@@ -52,6 +53,11 @@ if (!gl.__isInited) {
 	global.WebGLUniformLocation = gl.WebGLUniformLocation;
 	global.WebGLActiveInfo = gl.WebGLActiveInfo;
 	global.WebGLTransformFeedback = gl.WebGLTransformFeedback;
+	
+	gl.useWebGL2 = () => {
+		global.WebGL2RenderingContext = gl.WebGL2RenderingContext;
+		Object.setPrototypeOf(gl, gl.WebGL2RenderingContext.prototype);
+	};
 	
 	gl.contextAttributes = {
 		alpha: true,
