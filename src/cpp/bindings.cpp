@@ -189,7 +189,7 @@ static inline void initMethods(Napi::Env env, Napi::Object exports) {
 	JS_GL_SET_METHOD(compressedTexSubImage2D);
 	JS_GL_SET_METHOD(texStorage2D);
 	JS_GL_SET_METHOD(compressedTexImage2D);
-	JS_GL_SET_METHOD(сompressedTexImage3D);
+	JS_GL_SET_METHOD(compressedTexImage3D);
 	JS_GL_SET_METHOD(compressedTexSubImage3D);
 	
 	// Uniform

@@ -44,22 +44,22 @@ declare module "webgl-raub" {
 		name: string;
 	}
 	
-	const WebGLRenderingContext = class WebGLRenderingContext extends TGLObject {};
-	const WebGLProgram = class WebGLProgram extends TGLObject {};
-	const WebGLQuery = class WebGLQuery extends TGLObject {};
-	const WebGLShader = class WebGLShader extends TGLObject {};
-	const WebGLVertexArrayObject = class WebGLVertexArrayObject extends TGLObject {};
-	const WebGLBuffer = class WebGLBuffer extends TGLObject {};
-	const WebGLVertexArray = class WebGLVertexArray extends TGLObject {};
-	const WebGLFramebuffer = class WebGLFramebuffer extends TGLObject {};
-	const WebGLRenderbuffer = class WebGLRenderbuffer extends TGLObject {};
-	const WebGLTexture = class WebGLTexture extends TGLObject {};
-	const WebGLUniformLocation = class WebGLUniformLocation extends TGLObject {};
-	const WebGLActiveInfo = class WebGLActiveInfo extends TGLActiveInfo {};
-	const WebGLTransformFeedback = class WebGLTransformFeedback extends TGLObject {};
-	const WebGLSampler = class WebGLSampler extends TGLObject {};
-	const WebGLSync = class WebGLSync extends TGLObject {};
-	const WebGL2RenderingContext = class WebGL2RenderingContext extends TGLObject {};
+	class WebGLRenderingContext extends TGLObject {}
+	class WebGLProgram extends TGLObject {}
+	class WebGLQuery extends TGLObject {}
+	class WebGLShader extends TGLObject {}
+	class WebGLVertexArrayObject extends TGLObject {}
+	class WebGLBuffer extends TGLObject {}
+	class WebGLVertexArray extends TGLObject {}
+	class WebGLFramebuffer extends TGLObject {}
+	class WebGLRenderbuffer extends TGLObject {}
+	class WebGLTexture extends TGLObject {}
+	class WebGLUniformLocation extends TGLObject {}
+	class WebGLActiveInfo extends TGLActiveInfo {}
+	class WebGLTransformFeedback extends TGLObject {}
+	class WebGLSampler extends TGLObject {}
+	class WebGLSync extends TGLObject {}
+	class WebGL2RenderingContext extends TGLObject {}
 	
 	/**
 	 * Add `WebGL2RenderingContext` to global, and set the GL object prototype.
@@ -533,7 +533,7 @@ declare module "webgl-raub" {
 		target: number, level: number, internalformat: number, width: number,
 		height: number, border: number, image: TImage,
 	) => void;
-	const сompressedTexImage3D: (
+	const compressedTexImage3D: (
 		target: number, level: number, internalformat: number, width: number,
 		height: number, depth: number, border: number, image: TImage,
 	) => void;

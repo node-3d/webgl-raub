@@ -338,7 +338,7 @@ DBG_EXPORT JS_METHOD(compressedTexImage2D) { NAPI_ENV;
 	RET_UNDEFINED;
 }
 
-DBG_EXPORT JS_METHOD(сompressedTexImage3D) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(compressedTexImage3D) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_INT32_ARG(1, level);
 	REQ_INT32_ARG(2, internalformat);
