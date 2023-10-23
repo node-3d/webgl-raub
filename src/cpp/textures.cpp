@@ -406,8 +406,59 @@ DBG_EXPORT JS_METHOD(compressedTexSubImage3D) { NAPI_ENV;
 	RET_UNDEFINED;
 }
 
-// glCopyTexSubImage3D?
-// glTexStorage3D?
-// glTexSubImage3D?
+DBG_EXPORT JS_METHOD(copyTexSubImage3D) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, level);
+	REQ_INT32_ARG(2, xoffset);
+	REQ_INT32_ARG(3, yoffset);
+	REQ_INT32_ARG(4, zoffset);
+	REQ_INT32_ARG(5, x);
+	REQ_INT32_ARG(6, y);
+	REQ_INT32_ARG(7, width);
+	REQ_INT32_ARG(8, height);
+	
+	glCopyTexSubImage3D(
+		target, level, xoffset, yoffset, zoffset, x, y, width, height
+	);
+	
+	RET_UNDEFINED;
+}
+
+DBG_EXPORT JS_METHOD(texStorage3D) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, level);
+	REQ_INT32_ARG(2, internalformat);
+	REQ_INT32_ARG(3, width);
+	REQ_INT32_ARG(4, height);
+	REQ_INT32_ARG(5, depth);
+	
+	glTexStorage3D(
+		target, level, internalformat, width, height, depth
+	);
+	
+	RET_UNDEFINED;
+}
+
+DBG_EXPORT JS_METHOD(texSubImage3D) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	REQ_INT32_ARG(1, level);
+	REQ_INT32_ARG(2, xoffset);
+	REQ_INT32_ARG(3, yoffset);
+	REQ_INT32_ARG(4, zoffset);
+	REQ_INT32_ARG(5, width);
+	REQ_INT32_ARG(6, height);
+	REQ_INT32_ARG(7, depth);
+	REQ_INT32_ARG(8, format);
+	REQ_INT32_ARG(9, type);
+	REQ_OBJ_ARG(10, image);
+	
+	void *pixels = getData(env, image);
+		
+	glTexSubImage3D(
+		target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels
+	);
+	
+	RET_UNDEFINED;
+}
 
 } // namespace webgl

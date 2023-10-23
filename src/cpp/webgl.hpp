@@ -139,6 +139,9 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(compressedTexImage2D);
 	DBG_EXPORT JS_METHOD(compressedTexImage3D);
 	DBG_EXPORT JS_METHOD(compressedTexSubImage3D);
+	DBG_EXPORT JS_METHOD(copyTexSubImage3D);
+	DBG_EXPORT JS_METHOD(texStorage3D);
+	DBG_EXPORT JS_METHOD(texSubImage3D);
 	
 	// Uniform
 	DBG_EXPORT JS_METHOD(getActiveUniform);
