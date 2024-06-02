@@ -35,7 +35,7 @@ DBG_EXPORT JS_METHOD(clientWaitSync) { NAPI_ENV;
 	USE_DOUBLE_ARG(2, nanosec, -1.0);
 	
 	GLuint64 timeout64 = nanosec < 0.0 ? GL_TIMEOUT_IGNORED : static_cast<GLuint64>(nanosec);
-	GLenum result = glClientWaitSync(reinterpret_cast<GLsync>(sync), flags, nanosec);
+	GLenum result = glClientWaitSync(reinterpret_cast<GLsync>(sync), flags, timeout64);
 	RET_NUM(result);
 }
 
@@ -45,7 +45,7 @@ DBG_EXPORT JS_METHOD(waitSync) { NAPI_ENV;
 	USE_OFFS_ARG(2, nanosec, -1.0);
 	
 	GLuint64 timeout64 = nanosec < 0.0 ? GL_TIMEOUT_IGNORED : static_cast<GLuint64>(nanosec);
-	glWaitSync(reinterpret_cast<GLsync>(sync), flags, nanosec);
+	glWaitSync(reinterpret_cast<GLsync>(sync), flags, timeout64);
 	RET_UNDEFINED;
 }
 

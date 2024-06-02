@@ -39,7 +39,6 @@ DBG_EXPORT JS_METHOD(getProgramInfoLog) { NAPI_ENV;
 	
 	// Retrieve the binary code
 	auto buffer = std::make_unique<GLchar[]>(length);
-	GLenum format = 0;
 	glGetProgramInfoLog(program, length, nullptr, buffer.get());
 	
 	RET_STR(buffer.get());

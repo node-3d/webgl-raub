@@ -21,7 +21,7 @@ DBG_EXPORT JS_METHOD(createTransformFeedback) { NAPI_ENV;
 DBG_EXPORT JS_METHOD(deleteTransformFeedback) { NAPI_ENV;
 	REQ_UINT32_ARG(0, feedback);
 	
-	if (boundFeedback == feedback) {
+	if (boundFeedback > -1 && static_cast<uint32_t>(boundFeedback) == feedback) {
 		boundFeedback = -1;
 	}
 	
