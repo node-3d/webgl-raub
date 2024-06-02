@@ -16,21 +16,21 @@ jobs:
     name: Unit Tests
     strategy:
         matrix:
-          os: [ubuntu-20.04, windows-2022, macos-11, [self-hosted, linux, ARM64]]
+          os: [ubuntu-22.04, windows-2022, macos-12, macos-14, [self-hosted, linux, ARM64]]
 
     runs-on: ${{ matrix.os }}
 
     steps:
 
       - name: Fetch Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.16.0
+          node-version: 20.14.0
           cache: 'npm'
 
       - name: Install Modules

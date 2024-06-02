@@ -4,7 +4,7 @@
 	"private": true,
 	"main": "lesson05.js",
 	"dependencies": {
-		"glfw-raub": "^5.3.1",
-		"image-raub": "^4.2.0"
+		"glfw-raub": "^5.5.0",
+		"image-raub": "^4.3.0"
 	}
 }
