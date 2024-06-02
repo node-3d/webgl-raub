@@ -44,7 +44,7 @@ let shaders = {
 const initContext = (canvas) => {
 	try {
 		gl = canvas.getContext('webgl');
-	} catch (e) {
+	} catch (_e) {
 		console.error('Could not initialise WebGL, sorry :-(');
 		process.exit(-1);
 	}
