@@ -1,7 +1,3 @@
-#include <cstring>
-#include <vector>
-#include <iostream>
-
 #include "webgl.hpp"
 
 
@@ -14,7 +10,8 @@ DBG_EXPORT JS_METHOD(init) { NAPI_ENV;
 	GLenum err = glewInit();
 	
 	if (GLEW_OK != err) {
-		std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
+		const GLubyte *text = glewGetErrorString(err);
+		globalLog(env, "webgl", "error", reinterpret_cast<const char*>(text));
 		JS_THROW("Can't initialize GLEW.");
 	}
 	

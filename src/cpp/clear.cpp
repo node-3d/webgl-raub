@@ -1,6 +1,3 @@
-#include <cstring>
-#include <vector>
-
 #include "webgl.hpp"
 
 

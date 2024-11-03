@@ -1,5 +1,3 @@
-#include <vector>
-
 #include "webgl.hpp"
 
 

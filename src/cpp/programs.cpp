@@ -1,5 +1,4 @@
 #include "webgl.hpp"
-#include <vector>
 
 
 namespace webgl {

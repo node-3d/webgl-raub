@@ -46,7 +46,7 @@ and additional browser-like interfaces.
 Those two are bundled into
 the [3d-core-raub](https://github.com/node-3d/3d-core-raub) in a following manner:
 
-```
+```js
 const image = require('image-raub');
 const webgl = require('webgl-raub');
 const { Document } = require('glfw-raub');
