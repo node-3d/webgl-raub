@@ -26,16 +26,11 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.14.0
+          node-version: 22.9.0
           cache: 'npm'
 
       - name: Install Modules
         run: npm ci
-
-      - name: Install Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.12'
 
       - name: Install Cpplint
         run: pip install cpplint
