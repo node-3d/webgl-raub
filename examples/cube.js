@@ -353,7 +353,7 @@ initBuffers();
 gl.clearColor(255, 0, 0, 1);
 gl.enable(gl.DEPTH_TEST);
 
-const tick = (timeNow) => {
+const tick = () => {
 	animate();
 	drawScene();
 	document.requestAnimationFrame(tick);
