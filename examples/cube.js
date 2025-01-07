@@ -8,8 +8,6 @@ const { mat4 } = require('./libs/glMatrix-0.9.5.min');
 
 Document.setWebgl(webgl);
 const document = new Document({ vsync: true, autoEsc: true });
-webgl.canvas = document;
-const frame = document.requestAnimationFrame;
 
 let xRot = 0;
 let xSpeed = 5;
@@ -342,45 +340,22 @@ const drawScene = () => {
 };
 
 
-let lastTime = 0;
-// let fps = 0;
-
-const animate = (timeNow) => {
-	if (lastTime) {
-		
-		const elapsed = timeNow - lastTime;
-		// fps = Math.round(1000 / elapsed);
-		
-		xRot += (xSpeed * elapsed) / 1000.0;
-		yRot += (ySpeed * elapsed) / 1000.0;
-		
-	}
-	
-	lastTime = timeNow;
+const animate = () => {
+	xRot = (xSpeed * Date.now()) * 0.001;
+	yRot = (ySpeed * Date.now()) * 0.001;
 };
 
+
+initContext(document);
+initShaders();
+initBuffers();
+
+gl.clearColor(255, 0, 0, 1);
+gl.enable(gl.DEPTH_TEST);
 
 const tick = (timeNow) => {
+	animate();
 	drawScene();
-	animate(timeNow);
-	
-	gl.finish(); // for timing
-	frame(tick, 0);
+	document.requestAnimationFrame(tick);
 };
-
-
-const start = () => {
-	const canvas = document.createElement('canvas');
-	
-	initContext(canvas);
-	initShaders();
-	initBuffers();
-	
-	gl.clearColor(255, 0, 0, 1);
-	gl.enable(gl.DEPTH_TEST);
-	
-	tick(Date.now());
-};
-
-start();
-
+document.requestAnimationFrame(tick);

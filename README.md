@@ -34,6 +34,7 @@ const webgl = require('webgl-raub');
 Here `webgl` contains the **WebGL** API, like a `WebGLRenderingContext` instance would. See
 [WebGLRenderingContext docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext)
 for reference, and [TypeScript definitions](/index.d.ts) for the full list of exports.
+There are also numerous non-WebGL methods exported in case you want to use advanced OpenGL functions.
 
 To use browser **WebGL** libs, like [three.js](https://threejs.org/),
 several additional interfaces must also be provided to mimic the browser.

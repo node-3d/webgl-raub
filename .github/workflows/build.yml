@@ -47,7 +47,7 @@ jobs:
     name: Build
     strategy:
         matrix:
-          os: [ubuntu-22.04, windows-2022, macos-14, [self-hosted, linux, ARM64]]
+          os: [ubuntu-22.04, windows-2022, macos-14]
 
     runs-on: ${{ matrix.os }}
 
