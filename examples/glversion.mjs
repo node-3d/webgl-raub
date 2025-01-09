@@ -1,12 +1,13 @@
 'use strict';
 
-const { Document } = require('glfw-raub');
+import glfw from 'glfw-raub';
+const { Document } = glfw;
 
-const gl = require('..');
+import gl from '../index.js';
 
 
 Document.setWebgl(gl);
-new Document();
+const _doc = new Document();
 
 console.log(`
 OpenGL
