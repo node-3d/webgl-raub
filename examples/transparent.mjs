@@ -1,5 +1,3 @@
-'use strict';
-
 import Image from 'image-raub';
 import glfw from 'glfw-raub';
 const { Document } = glfw;
@@ -13,9 +11,29 @@ import { mat4, mat3, vec3 } from './utils/glMatrix-0.9.5.min.js';
 import { deg2rad } from './utils/deg2rad.mjs';
 
 
+const lighting = false;
+const ambientR = 0.2;
+const ambientG = 0.2;
+const ambientB = 0.2;
+const blending = 0.5;
+
+const lightDirectionX = -0.25;
+const lightDirectionY = -0.25;
+const lightDirectionZ = -1;
+
+const directionalR = 0.8;
+const directionalG = 0.8;
+const directionalB = 0.8;
+
+const lightingDirection = [
+	lightDirectionX,
+	lightDirectionY,
+	lightDirectionZ,
+];
+
 Document.setWebgl(gl);
 const document = new Document({
-	vsync: true, autoEsc: true, autoFullscreen: true, title: 'Transparent',
+	vsync: !true, autoEsc: true, autoFullscreen: true, title: 'Transparent',
 });
 
 const shaderProgram = buildShader(transparentShaders);
@@ -71,7 +89,9 @@ let xSpeed = 5;
 let yRot = 0;
 let ySpeed = -5;
 
-let z = -5.0;
+const translateVec = [0.0, 0.0, -5.0];
+const rotate100 = [1, 0, 0];
+const rotate010 = [0, 1, 0];
 
 
 const currentlyPressedKeys = {};
@@ -91,11 +111,11 @@ document.on('keyup', (evt) => {
 const handleKeys = () => {
 	if (currentlyPressedKeys[221]) {
 		// ]
-		z -= 0.5;
+		translateVec[2] -= 0.5;
 	}
 	if (currentlyPressedKeys[220]) {
 		// \
-		z += 0.5;
+		translateVec[2] += 0.5;
 	}
 	if (currentlyPressedKeys[37]) {
 		// Left cursor key
@@ -140,7 +160,6 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.ST
 cubeVertexIndexBuffer.itemSize = 1;
 cubeVertexIndexBuffer.numItems = 36;
 
-
 const drawScene = () => {
 	gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	gl.enable(gl.DEPTH_TEST);
@@ -158,10 +177,10 @@ const drawScene = () => {
 	
 	mat4.identity(mvMatrix);
 	
-	mat4.translate(mvMatrix, [0.0, 0.0, z]);
+	mat4.translate(mvMatrix, translateVec);
 	
-	mat4.rotate(mvMatrix, deg2rad(xRot), [1, 0, 0]);
-	mat4.rotate(mvMatrix, deg2rad(yRot), [0, 1, 0]);
+	mat4.rotate(mvMatrix, deg2rad(xRot), rotate100);
+	mat4.rotate(mvMatrix, deg2rad(yRot), rotate010);
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 	gl.vertexAttribPointer(
@@ -182,47 +201,25 @@ const drawScene = () => {
 	gl.bindTexture(gl.TEXTURE_2D, glassTexture);
 	gl.uniform1i(shaderProgram.samplerUniform, 0);
 	
-	const blending = 0.5;
 	if (blending > 0) {
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 		gl.enable(gl.BLEND);
 		gl.disable(gl.DEPTH_TEST);
-		gl.uniform1f(
-			shaderProgram.alphaUniform,
-			parseFloat(blending),
-		);
+		gl.uniform1f(shaderProgram.alphaUniform, blending);
 	} else {
 		gl.disable(gl.BLEND);
 		gl.enable(gl.DEPTH_TEST);
 	}
 	
-	const lighting = false;
-	const ambientR = 0.2;
-	const ambientG = 0.2;
-	const ambientB = 0.2;
-	
-	const lightDirectionX = -0.25;
-	const lightDirectionY = -0.25;
-	const lightDirectionZ = -1;
-	
-	const directionalR = 0.8;
-	const directionalG = 0.8;
-	const directionalB = 0.8;
-	
 	gl.uniform1i(shaderProgram.useLightingUniform, lighting);
 	if (lighting) {
 		gl.uniform3f(
 			shaderProgram.ambientColorUniform,
-			parseFloat(ambientR),
-			parseFloat(ambientG),
-			parseFloat(ambientB),
+			ambientR,
+			ambientG,
+			ambientB,
 		);
 		
-		const lightingDirection = [
-			parseFloat(lightDirectionX),
-			parseFloat(lightDirectionY),
-			parseFloat(lightDirectionZ),
-		];
 		const adjustedLD = vec3.create();
 		vec3.normalize(lightingDirection, adjustedLD);
 		vec3.scale(adjustedLD, -1);
@@ -230,9 +227,9 @@ const drawScene = () => {
 		
 		gl.uniform3f(
 			shaderProgram.directionalColorUniform,
-			parseFloat(directionalR),
-			parseFloat(directionalG),
-			parseFloat(directionalB),
+			directionalR,
+			directionalG,
+			directionalB,
 		);
 	}
 	
@@ -247,13 +244,22 @@ const drawScene = () => {
 	gl.useProgram(null);
 };
 
-const tick = () => {
-	xRot = (xSpeed * Date.now()) * 0.001;
-	yRot = (ySpeed * Date.now()) * 0.001;
+let prevTime = Date.now();
+let frames = 0;
+
+document.loop((now) => {
+	xRot = (xSpeed * now) * 0.001;
+	yRot = (ySpeed * now) * 0.001;
 	
 	drawScene();
 	
-	document.requestAnimationFrame(tick);
-};
-
-document.requestAnimationFrame(tick);
+	frames++;
+	const time = now;
+	if (time >= prevTime + 2000) {
+		console.log(
+			'FPS:', Math.floor((frames * 1000) / (time - prevTime)),
+		);
+		prevTime = time;
+		frames = 0;
+	}
+});

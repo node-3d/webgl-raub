@@ -3,16 +3,16 @@
 
 namespace webgl {
 
+constexpr uint32_t UNIFORM_COUNT_MAX = 256;
 
 DBG_EXPORT JS_METHOD(getActiveUniform) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
+	LET_ID_ARG(0, program);
 	REQ_INT32_ARG(1, index);
 	
-	char name[1024];
-	GLsizei length = 0;
+	char name[NAME_SIZE_MAX];
 	GLenum type;
 	GLsizei size;
-	glGetActiveUniform(program, index, 1024, &length, &size, &type, name);
+	glGetActiveUniform(program, index, NAME_SIZE_MAX, nullptr, &size, &type, name);
 	
 	Napi::Object activeInfo = JS_OBJECT;
 	activeInfo.Set("size", JS_NUM(size));
@@ -23,7 +23,7 @@ DBG_EXPORT JS_METHOD(getActiveUniform) { NAPI_ENV;
 }
 
 DBG_EXPORT JS_METHOD(getUniformLocation) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
+	LET_ID_ARG(0, program);
 	REQ_STR_ARG(1, name);
 	
 	RET_NUM(glGetUniformLocation(program, name.c_str()));
@@ -31,145 +31,145 @@ DBG_EXPORT JS_METHOD(getUniformLocation) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(uniform1f) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	
 	glUniform1f(location, x);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform2f) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
 	
 	glUniform2f(location, x, y);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform3f) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
 	REQ_FLOAT_ARG(3, z);
 	
 	glUniform3f(location, x, y, z);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform4f) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_FLOAT_ARG(1, x);
 	REQ_FLOAT_ARG(2, y);
 	REQ_FLOAT_ARG(3, z);
 	REQ_FLOAT_ARG(4, w);
 	
 	glUniform4f(location, x, y, z, w);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform1i) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	REQ_INT32_ARG(1, x);
+	LET_ID_ARG(0, location);
+	WEAK_INT32_ARG(1, x);
 	
 	glUniform1i(location, x);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform2i) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_INT32_ARG(1, x);
 	REQ_INT32_ARG(2, y);
 	
 	glUniform2i(location, x, y);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform3i) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_INT32_ARG(1, x);
 	REQ_INT32_ARG(2, y);
 	REQ_INT32_ARG(3, z);
 	
 	glUniform3i(location, x, y, z);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform4i) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_INT32_ARG(1, x);
 	REQ_INT32_ARG(2, y);
 	REQ_INT32_ARG(3, z);
 	REQ_INT32_ARG(4, w);
 	
 	glUniform4i(location, x, y, z, w);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform1ui) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_UINT32_ARG(1, x);
 	
 	glUniform1ui(location, x);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform2ui) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_UINT32_ARG(1, x);
 	REQ_UINT32_ARG(2, y);
 	
 	glUniform2ui(location, x, y);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform3ui) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_UINT32_ARG(1, x);
 	REQ_UINT32_ARG(2, y);
 	REQ_UINT32_ARG(3, z);
 	
 	glUniform3ui(location, x, y, z);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform4ui) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_UINT32_ARG(1, x);
 	REQ_UINT32_ARG(2, y);
 	REQ_UINT32_ARG(3, z);
 	REQ_UINT32_ARG(4, w);
 	
 	glUniform4ui(location, x, y, z, w);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform1fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
 	GLfloat *ptr = getArrayData<GLfloat>(env, abv, &num);
 	
 	glUniform1fv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform2fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
@@ -177,12 +177,12 @@ DBG_EXPORT JS_METHOD(uniform2fv) { NAPI_ENV;
 	num /= 2;
 	
 	glUniform2fv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform3fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
@@ -190,12 +190,12 @@ DBG_EXPORT JS_METHOD(uniform3fv) { NAPI_ENV;
 	num /= 3;
 	
 	glUniform3fv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform4fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
@@ -203,24 +203,24 @@ DBG_EXPORT JS_METHOD(uniform4fv) { NAPI_ENV;
 	num /= 4;
 	
 	glUniform4fv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform1iv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
 	GLint *ptr = getArrayData<GLint>(env, abv, &num);
 	
 	glUniform1iv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform2iv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
@@ -228,12 +228,12 @@ DBG_EXPORT JS_METHOD(uniform2iv) { NAPI_ENV;
 	num /= 2;
 	
 	glUniform2iv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform3iv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
@@ -241,12 +241,12 @@ DBG_EXPORT JS_METHOD(uniform3iv) { NAPI_ENV;
 	num /= 3;
 	
 	glUniform3iv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform4iv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
@@ -254,23 +254,23 @@ DBG_EXPORT JS_METHOD(uniform4iv) { NAPI_ENV;
 	num /= 4;
 	
 	glUniform4iv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(uniform1uiv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
 	GLuint *ptr = getArrayData<GLuint>(env, abv, &num);
 	
 	glUniform1uiv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform2uiv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
@@ -278,12 +278,12 @@ DBG_EXPORT JS_METHOD(uniform2uiv) { NAPI_ENV;
 	num /= 2;
 	
 	glUniform2uiv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform3uiv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
@@ -291,12 +291,12 @@ DBG_EXPORT JS_METHOD(uniform3uiv) { NAPI_ENV;
 	num /= 3;
 	
 	glUniform3uiv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniform4uiv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
+	LET_ID_ARG(0, location);
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
@@ -304,13 +304,13 @@ DBG_EXPORT JS_METHOD(uniform4uiv) { NAPI_ENV;
 	num /= 4;
 	
 	glUniform4uiv(location, num, ptr);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(uniformMatrix2fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	LET_BOOL_ARG(1, transpose);
+	LET_ID_ARG(0, location);
+	WEAK_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -322,12 +322,12 @@ DBG_EXPORT JS_METHOD(uniformMatrix2fv) { NAPI_ENV;
 		glUniformMatrix2fv(location, count / 4, transpose, data);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(uniformMatrix2x3fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	LET_BOOL_ARG(1, transpose);
+	LET_ID_ARG(0, location);
+	WEAK_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -339,12 +339,12 @@ DBG_EXPORT JS_METHOD(uniformMatrix2x3fv) { NAPI_ENV;
 		glUniformMatrix2x3fv(location, count / 6, transpose, data);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(uniformMatrix2x4fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	LET_BOOL_ARG(1, transpose);
+	LET_ID_ARG(0, location);
+	WEAK_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -356,12 +356,12 @@ DBG_EXPORT JS_METHOD(uniformMatrix2x4fv) { NAPI_ENV;
 		glUniformMatrix2x4fv(location, count / 8, transpose, data);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(uniformMatrix3fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	LET_BOOL_ARG(1, transpose);
+	LET_ID_ARG(0, location);
+	WEAK_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -373,12 +373,12 @@ DBG_EXPORT JS_METHOD(uniformMatrix3fv) { NAPI_ENV;
 		glUniformMatrix3fv(location, count / 9, transpose, data);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(uniformMatrix3x2fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	LET_BOOL_ARG(1, transpose);
+	LET_ID_ARG(0, location);
+	WEAK_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -390,12 +390,12 @@ DBG_EXPORT JS_METHOD(uniformMatrix3x2fv) { NAPI_ENV;
 		glUniformMatrix3x2fv(location, count / 6, transpose, data);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(uniformMatrix3x4fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	LET_BOOL_ARG(1, transpose);
+	LET_ID_ARG(0, location);
+	WEAK_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -407,12 +407,12 @@ DBG_EXPORT JS_METHOD(uniformMatrix3x4fv) { NAPI_ENV;
 		glUniformMatrix3x4fv(location, count / 12, transpose, data);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(uniformMatrix4fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	LET_BOOL_ARG(1, transpose);
+	LET_ID_ARG(0, location);
+	WEAK_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -420,17 +420,17 @@ DBG_EXPORT JS_METHOD(uniformMatrix4fv) { NAPI_ENV;
 	
 	if (count < 16) {
 		JS_THROW("Not enough data for `uniformMatrix4fv`.");
-		RET_UNDEFINED;
+		RET_WEBGL_VOID;
 	} else {
 		glUniformMatrix4fv(location, count / 16, transpose, data);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(uniformMatrix4x2fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	LET_BOOL_ARG(1, transpose);
+	LET_ID_ARG(0, location);
+	WEAK_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -438,17 +438,17 @@ DBG_EXPORT JS_METHOD(uniformMatrix4x2fv) { NAPI_ENV;
 	
 	if (count < 8) {
 		JS_THROW("Not enough data for `uniformMatrix4x2fv`.");
-		RET_UNDEFINED;
+		RET_WEBGL_VOID;
 	} else {
 		glUniformMatrix4x2fv(location, count / 8, transpose, data);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(uniformMatrix4x3fv) { NAPI_ENV;
-	REQ_INT32_ARG(0, location);
-	LET_BOOL_ARG(1, transpose);
+	LET_ID_ARG(0, location);
+	WEAK_BOOL_ARG(1, transpose);
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
@@ -456,28 +456,20 @@ DBG_EXPORT JS_METHOD(uniformMatrix4x3fv) { NAPI_ENV;
 	
 	if (count < 12) {
 		JS_THROW("Not enough data for `uniformMatrix4x3fv`.");
-		RET_UNDEFINED;
+		RET_WEBGL_VOID;
 	} else {
 		glUniformMatrix4x3fv(location, count / 12, transpose, data);
 	}
 	
-	RET_UNDEFINED;
-}
-
-bool isArrayName(std::string const &name) {
-	if (name.length() < 3) {
-		return false;
-	}
-	
-	return (0 == name.compare(name.length() - 3, 3, "[0]"));
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(getUniformfv) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
-	REQ_INT32_ARG(1, location);
+	LET_ID_ARG(0, program);
+	LET_ID_ARG(1, location);
 	
 	if (location < 0) {
-		RET_UNDEFINED;
+		RET_WEBGL_VOID;
 	}
 	
 	float data[16]; // worst case scenario is 16 floats
@@ -491,27 +483,40 @@ DBG_EXPORT JS_METHOD(getUniformfv) { NAPI_ENV;
 	RET_VALUE(arr);
 }
 
+static inline bool isArrayName(const char *name, GLsizei nameLen) {
+	if (nameLen < 4) {
+		return false;
+	}
+	GLsizei cmpIdx = nameLen - 3;
+	return (
+		name[cmpIdx + 0] == '[' &&
+		name[cmpIdx + 1] == '0' &&
+		name[cmpIdx + 2] == ']'
+	);
+}
+
 // https://chromium.googlesource.com/chromium/blink/+/refs/heads/main/Source/modules/webgl/WebGLRenderingContextBase.cpp
 DBG_EXPORT JS_METHOD(getUniform) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
-	REQ_INT32_ARG(1, location);
+	LET_ID_ARG(0, program);
+	LET_ID_ARG(1, location);
 	
 	GLint activeUniforms = 0;
 	glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &activeUniforms);
 	
 	for (GLint i = 0; i < activeUniforms; i++) {
 		GLint size;
+		GLsizei nameLen;
 		GLenum typeUniform;
 		GLchar nameBuf[200];
 		glGetActiveUniform(
-			program, i, 200, nullptr, &size, &typeUniform, nameBuf
+			program, i, 200, &nameLen, &size, &typeUniform, nameBuf
 		);
 		
 		std::string name = std::string(nameBuf);
 		
 		// Strip "[0]" from the name if it's an array.
-		if (size > 1 && isArrayName(name)) {
-			name = name.substr(0, name.length() - 3);
+		if (size > 1 && isArrayName(nameBuf, nameLen)) {
+			name = name.substr(0, nameLen - 3);
 		}
 		
 		// If it's an array, we need to iterate through each element, appending "[index]" to the name.
@@ -710,94 +715,81 @@ DBG_EXPORT JS_METHOD(getUniform) { NAPI_ENV;
 }
 
 DBG_EXPORT JS_METHOD(getActiveUniforms) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
+	LET_ID_ARG(0, program);
 	REQ_ARRAY_ARG(1, jsIndices);
 	REQ_INT32_ARG(2, pname);
 	
-	uint32_t count = jsIndices.Length();
-	auto indices = std::make_unique<GLuint[]>(count);
-	auto outParams = std::make_unique<GLint[]>(count);
+	uint32_t count = std::min(UNIFORM_COUNT_MAX, jsIndices.Length());
+	GLuint indices[UNIFORM_COUNT_MAX];
+	GLint outParams[UNIFORM_COUNT_MAX];
+	
 	for (uint32_t i = 0; i < count; ++i) {
 		indices[i] = 0;
 	}
 	
-	glGetActiveUniformsiv(
-		program, count, indices.get(), pname, outParams.get()
-	);
+	glGetActiveUniformsiv(program, count, indices, pname, outParams);
 	
 	Napi::Array result = JS_ARRAY;
-	for (unsigned j = 0; j < count; j++) {
+	for (uint32_t j = 0; j < count; j++) {
 		result.Set(j, outParams[j]);
 	}
 	RET_VALUE(result);
 }
 
 DBG_EXPORT JS_METHOD(uniformBlockBinding) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
+	LET_ID_ARG(0, program);
 	REQ_UINT32_ARG(1, uniformBlockIndex);
 	REQ_UINT32_ARG(2, uniformBlockBinding);
 	
-	glUniformBlockBinding(
-		program, uniformBlockIndex, uniformBlockBinding
-	);
-	RET_UNDEFINED;
+	glUniformBlockBinding(program, uniformBlockIndex, uniformBlockBinding);
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(getActiveUniformBlockParameter) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
+	LET_ID_ARG(0, program);
 	REQ_UINT32_ARG(1, uniformBlockIndex);
 	REQ_UINT32_ARG(2, pname);
 	
 	switch (pname) {
 	case GL_UNIFORM_BLOCK_BINDING:
 	case GL_UNIFORM_BLOCK_DATA_SIZE:
-	case GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS:
-		{
-			GLint intValue = 0;
-			glGetActiveUniformBlockiv(program, uniformBlockIndex, pname, &intValue);
-			RET_NUM(intValue);
+	case GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS: {
+		GLint intValue = 0;
+		glGetActiveUniformBlockiv(program, uniformBlockIndex, pname, &intValue);
+		RET_NUM(intValue);
+	}
+	case GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES: {
+		GLint uniformCount = 0;
+		glGetActiveUniformBlockiv(program, uniformBlockIndex, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &uniformCount);
+		
+		GLint indices[UNIFORM_COUNT_MAX];
+		glGetActiveUniformBlockiv(program, uniformBlockIndex, pname, indices);
+		
+		Napi::Uint32Array result = Napi::Uint32Array::New(env, uniformCount, napi_uint32_array);
+		for (GLint j = 0; j < uniformCount; j++) {
+			result[j] = indices[j];
 		}
-	case GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES:
-		{
-			GLint uniformCount = 0;
-			glGetActiveUniformBlockiv(program, uniformBlockIndex, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &uniformCount);
-			
-			auto indices = std::make_unique<GLint[]>(uniformCount);
-			glGetActiveUniformBlockiv(program, uniformBlockIndex, pname, indices.get());
-			
-			Napi::Uint32Array result = Napi::Uint32Array::New(env, uniformCount, napi_uint32_array);
-			for (GLint j = 0; j < uniformCount; j++) {
-				result[j] = indices[j];
-			}
-			RET_VALUE(result);
-		}
+		RET_VALUE(result);
+	}
 	case GL_UNIFORM_BLOCK_REFERENCED_BY_VERTEX_SHADER:
-	case GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER:
-		{
-			GLint boolValue = 0;
-			glGetActiveUniformBlockiv(program, uniformBlockIndex, pname, &boolValue);
-			RET_BOOL(boolValue != 0);
-		}
+	case GL_UNIFORM_BLOCK_REFERENCED_BY_FRAGMENT_SHADER: {
+		GLint boolValue = 0;
+		glGetActiveUniformBlockiv(program, uniformBlockIndex, pname, &boolValue);
+		RET_BOOL(boolValue != 0);
+	}
 	default:
 		RET_NULL;
 	}
 }
 
 DBG_EXPORT JS_METHOD(getActiveUniformBlockName) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
+	LET_ID_ARG(0, program);
 	REQ_UINT32_ARG(1, uniformBlockIndex);
 	
-	GLint maxNameLength = -1;
-	glGetProgramiv(program, GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, &maxNameLength);
-	if (maxNameLength <= 0) {
-		RET_NULL;
-	}
+	char buffer[NAME_SIZE_MAX];
+	glGetActiveUniformBlockName(program, uniformBlockIndex, NAME_SIZE_MAX, nullptr, buffer);
 	
-	auto name = std::make_unique<GLchar[]>(maxNameLength);
-	GLsizei length;
-	glGetActiveUniformBlockName(program, uniformBlockIndex, maxNameLength, &length, name.get());
-	
-	RET_STR(name.get());
+	RET_STR(buffer);
 }
 
 } // namespace webgl

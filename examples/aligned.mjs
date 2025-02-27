@@ -1,5 +1,3 @@
-'use strict';
-
 import Image from 'image-raub';
 import glfw from 'glfw-raub';
 const { Document } = glfw;
@@ -131,10 +129,4 @@ const drawScene = () => {
 };
 
 
-const tick = () => {
-	drawScene();
-	
-	document.requestAnimationFrame(tick);
-};
-
-document.requestAnimationFrame(tick);
+document.loop(drawScene);

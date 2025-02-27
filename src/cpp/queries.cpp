@@ -15,15 +15,15 @@ DBG_EXPORT JS_METHOD(createQuery) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(deleteQuery) { NAPI_ENV;
-	REQ_UINT32_ARG(0, query);
+	LET_ID_ARG(0, query);
 	GLuint queries[1] = { query };
 	glDeleteQueries(1, queries);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(isQuery) { NAPI_ENV;
-	REQ_UINT32_ARG(0, query);
+	LET_ID_ARG(0, query);
 	
 	RET_BOOL(glIsQuery(query) != 0);
 }
@@ -31,7 +31,7 @@ DBG_EXPORT JS_METHOD(isQuery) { NAPI_ENV;
 
 DBG_EXPORT JS_METHOD(beginQuery) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
-	REQ_UINT32_ARG(1, query);
+	LET_ID_ARG(1, query);
 	
 	switch (target) {
 	case GL_ANY_SAMPLES_PASSED:
@@ -47,7 +47,7 @@ DBG_EXPORT JS_METHOD(beginQuery) { NAPI_ENV;
 	
 	glBeginQuery(target, query);
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(endQuery) { NAPI_ENV;
@@ -67,11 +67,11 @@ DBG_EXPORT JS_METHOD(endQuery) { NAPI_ENV;
 
 	glEndQuery(target);
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(getQueryParameter) { NAPI_ENV;
-	REQ_INT32_ARG(0, query);
+	LET_ID_ARG(0, query);
 	REQ_INT32_ARG(1, pname);
 	
 	GLuint value;

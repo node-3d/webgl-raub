@@ -25,29 +25,27 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.9.0
+          node-version: 22.14.0
           cache: 'npm'
 
       - name: Get Package Version
         id: package-version
         run: node -p "'version='+require('./package').version" >> $GITHUB_OUTPUT
 
-      - name: Create Draft Release
+      - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          draft: true
           tag_name: ${{ steps.package-version.outputs.version }}
           name: Release ${{ steps.package-version.outputs.version }}
-          body: Binaries at ${{ github.sha }}
 
   build:
     name: Build
     strategy:
         matrix:
-          os: [ubuntu-22.04, windows-2022, macos-14]
+          os: [ubuntu-22.04, ubuntu-22.04-arm, windows-2022, macos-14]
 
     runs-on: ${{ matrix.os }}
 
@@ -61,7 +59,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.9.0
+          node-version: 22.14.0
           cache: 'npm'
 
       - name: Install Modules
@@ -83,7 +81,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          draft: true
           tag_name: ${{ steps.package-version.outputs.version }}
           name: Release ${{ steps.package-version.outputs.version }}
           files: ${{ steps.pack-files.outputs.pack }}

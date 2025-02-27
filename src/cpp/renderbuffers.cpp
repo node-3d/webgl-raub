@@ -13,15 +13,15 @@ DBG_EXPORT JS_METHOD(createRenderbuffer) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(deleteRenderbuffer) { NAPI_ENV;
-	REQ_UINT32_ARG(0, buffer);
+	LET_ID_ARG(0, buffer);
 	GLuint buffers[1] = { buffer };
 	glDeleteRenderbuffers(1, buffers);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(isRenderbuffer) { NAPI_ENV;
-	REQ_UINT32_ARG(0, buffer);
+	LET_ID_ARG(0, buffer);
 	
 	RET_BOOL(glIsRenderbuffer(buffer) != 0);
 }
@@ -29,10 +29,10 @@ DBG_EXPORT JS_METHOD(isRenderbuffer) { NAPI_ENV;
 
 DBG_EXPORT JS_METHOD(bindRenderbuffer) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
-	LET_INT32_ARG(1, buffer);
+	LET_ID_ARG(1, buffer);
 	
 	glBindRenderbuffer(target, buffer);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -54,7 +54,7 @@ DBG_EXPORT JS_METHOD(renderbufferStorage) { NAPI_ENV;
 	REQ_UINT32_ARG(3, height);
 	
 	glRenderbufferStorage(target, internalformat, width, height);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(renderbufferStorageMultisample) { NAPI_ENV;
@@ -65,7 +65,7 @@ DBG_EXPORT JS_METHOD(renderbufferStorageMultisample) { NAPI_ENV;
 	REQ_UINT32_ARG(4, height);
 	
 	glRenderbufferStorageMultisample(target, samples, internalformat, width, height);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 

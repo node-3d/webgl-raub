@@ -115,9 +115,4 @@ const drawScene = () => {
 };
 
 
-const tick = () => {
-	drawScene();
-	document.requestAnimationFrame(tick);
-};
-
-document.requestAnimationFrame(tick);
+document.loop(drawScene);

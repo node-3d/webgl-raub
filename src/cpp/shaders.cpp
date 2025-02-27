@@ -3,6 +3,10 @@
 
 namespace webgl {
 
+constexpr size_t SOURCE_SIZE_MAX = 10 * 1024;
+constexpr uint32_t COUNT_SHADERS_MAX = 64;
+constexpr size_t SHADER_LOG_SIZE_MAX = 5 * 1024;
+
 
 DBG_EXPORT JS_METHOD(createShader) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
@@ -14,52 +18,52 @@ DBG_EXPORT JS_METHOD(createShader) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(deleteShader) { NAPI_ENV;
-	REQ_UINT32_ARG(0, shader);
+	LET_ID_ARG(0, shader);
 	
 	glDeleteShader(shader);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(isShader) { NAPI_ENV;
-	REQ_UINT32_ARG(0, shader);
+	LET_ID_ARG(0, shader);
 	
 	RET_BOOL(glIsShader(shader) != 0);
 }
 
 
 DBG_EXPORT JS_METHOD(attachShader) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
-	REQ_INT32_ARG(1, shader);
+	LET_ID_ARG(0, program);
+	LET_ID_ARG(1, shader);
 	
 	glAttachShader(program, shader);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(compileShader) { NAPI_ENV;
-	REQ_INT32_ARG(0, shader);
+	LET_ID_ARG(0, shader);
 	
 	glCompileShader(shader);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(detachShader) { NAPI_ENV;
-	REQ_UINT32_ARG(0, program);
-	REQ_UINT32_ARG(1, shader);
+	LET_ID_ARG(0, program);
+	LET_ID_ARG(1, shader);
 	
 	glDetachShader(program, shader);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(getAttachedShaders) { NAPI_ENV;
-	REQ_INT32_ARG(0, program);
+	LET_ID_ARG(0, program);
 	
-	GLuint shaders[1024];
+	GLuint shaders[COUNT_SHADERS_MAX];
 	GLsizei count;
-	glGetAttachedShaders(program, 1024, &count, shaders);
+	glGetAttachedShaders(program, COUNT_SHADERS_MAX, &count, shaders);
 	
 	Napi::Array shadersArr = JS_ARRAY;
 	for (int i = 0; i < count; i++) {
@@ -71,11 +75,10 @@ DBG_EXPORT JS_METHOD(getAttachedShaders) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(getShaderInfoLog) { NAPI_ENV;
-	REQ_INT32_ARG(0, shader);
+	LET_ID_ARG(0, shader);
 	
-	int len = 1024;
-	char error[1024];
-	glGetShaderInfoLog(shader, 1024, &len, error);
+	char error[SHADER_LOG_SIZE_MAX];
+	glGetShaderInfoLog(shader, SHADER_LOG_SIZE_MAX, nullptr, error);
 	
 	RET_STR(error);
 }
@@ -89,7 +92,7 @@ DBG_EXPORT JS_METHOD(getShaderInfoLog) { NAPI_ENV;
 	case GL_SHADER_SOURCE_LENGTH:
 
 DBG_EXPORT JS_METHOD(getShaderParameter) { NAPI_ENV;
-	REQ_INT32_ARG(0, shader);
+	LET_ID_ARG(0, shader);
 	REQ_INT32_ARG(1, pname);
 	
 	int value = 0;
@@ -115,19 +118,12 @@ DBG_EXPORT JS_METHOD(getShaderParameter) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(getShaderSource) { NAPI_ENV;
-	REQ_INT32_ARG(0, shader);
+	LET_ID_ARG(0, shader);
 	
-	GLint len;
-	glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &len);
+	char source[SOURCE_SIZE_MAX];
+	glGetShaderSource(shader, SOURCE_SIZE_MAX, nullptr, source);
 	
-	if (!len) {
-		RET_STR("");
-	}
-	
-	auto source = std::make_unique<GLchar[]>(len);
-	glGetShaderSource(shader, len, NULL, source.get());
-	
-	RET_STR(source.get());
+	RET_STR(source);
 }
 
 
@@ -150,19 +146,19 @@ DBG_EXPORT JS_METHOD(getShaderPrecisionFormat) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(shaderSource) { NAPI_ENV;
-	REQ_INT32_ARG(0, shader);
+	LET_ID_ARG(0, shader);
 	REQ_STR_ARG(1, code);
 	
 	const char *strings = code.c_str();
 	GLint lengths = code.length();
 	
 	glShaderSource(shader, 1, &strings, &lengths);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(releaseShaderCompiler) { NAPI_ENV;
 	glReleaseShaderCompiler();
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(shaderBinary) { NAPI_ENV;
@@ -171,14 +167,17 @@ DBG_EXPORT JS_METHOD(shaderBinary) { NAPI_ENV;
 	REQ_INT32_ARG(2, binaryFormat);
 	REQ_STR_ARG(3, binary);
 	
-	uint32_t shaderCount = jsShaders.Length();
-	auto cppShaders = std::make_unique<GLuint[]>(shaderCount);
+	GLuint cppShaders[COUNT_SHADERS_MAX];
+	uint32_t shaderCount = std::min(COUNT_SHADERS_MAX, jsShaders.Length());
+	
 	for (uint32_t i = 0; i < shaderCount; i++) {
-		cppShaders[i] = jsShaders.Get(i).As<Napi::Number>().FloatValue();
+		cppShaders[i] = extractId(jsShaders.Get(i).As<Napi::Object>());
 	}
 	
-	glShaderBinary(count, cppShaders.get(), binaryFormat, binary.c_str(), binary.length());
-	RET_UNDEFINED;
+	glShaderBinary(
+		shaderCount, cppShaders, binaryFormat, binary.c_str(), binary.length()
+	);
+	RET_WEBGL_VOID;
 }
 
 } // namespace webgl

@@ -12,15 +12,15 @@ DBG_EXPORT JS_METHOD(createTexture) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(deleteTexture) { NAPI_ENV;
-	REQ_UINT32_ARG(0, texture);
+	LET_ID_ARG(0, texture);
 	GLuint textures[1] = { texture };
 	glDeleteTextures(1, textures);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(isTexture) { NAPI_ENV;
-	REQ_UINT32_ARG(0, texture);
+	LET_ID_ARG(0, texture);
 	
 	RET_BOOL(glIsTexture(texture) != 0);
 }
@@ -28,18 +28,18 @@ DBG_EXPORT JS_METHOD(isTexture) { NAPI_ENV;
 
 DBG_EXPORT JS_METHOD(bindTexture) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
-	LET_INT32_ARG(1, texture);
+	LET_ID_ARG(1, texture);
 	
 	glBindTexture(target, texture);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(activeTexture) { NAPI_ENV;
-	REQ_INT32_ARG(0, texture);
+	REQ_INT32_ARG(0, target);
 	
-	glActiveTexture(texture);
-	RET_UNDEFINED;
+	glActiveTexture(target);
+	RET_WEBGL_VOID;
 }
 
 
@@ -54,7 +54,7 @@ DBG_EXPORT JS_METHOD(copyTexImage2D) { NAPI_ENV;
 	REQ_INT32_ARG(7, border);
 	
 	glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -69,7 +69,7 @@ DBG_EXPORT JS_METHOD(copyTexSubImage2D) { NAPI_ENV;
 	REQ_INT32_ARG(7, height);
 	
 	glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -77,7 +77,7 @@ DBG_EXPORT JS_METHOD(generateMipmap) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	
 	glGenerateMipmap(target);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -149,7 +149,7 @@ DBG_EXPORT JS_METHOD(texImage2D) { NAPI_ENV;
 		);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(texImage3D) { NAPI_ENV;
@@ -194,7 +194,7 @@ DBG_EXPORT JS_METHOD(texImage3D) { NAPI_ENV;
 		);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -204,7 +204,7 @@ DBG_EXPORT JS_METHOD(texParameterf) { NAPI_ENV;
 	REQ_FLOAT_ARG(2, param);
 	
 	glTexParameterf(target, name, param);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -214,7 +214,7 @@ DBG_EXPORT JS_METHOD(texParameteri) { NAPI_ENV;
 	REQ_INT32_ARG(2, param);
 	
 	glTexParameteri(target, name, param);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -226,7 +226,7 @@ DBG_EXPORT JS_METHOD(texStorage2D) { NAPI_ENV;
 	REQ_INT32_ARG(4, height);
 	
 	glTexStorage2D(target, levels, format, width, height);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -249,7 +249,7 @@ DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 		glTexSubImage2D(
 			target, level, xoffset, yoffset, w, h, format, type, pixels
 		);
-		RET_UNDEFINED;
+		RET_WEBGL_VOID;
 	}
 	
 	REQ_INT32_ARG(4, width);
@@ -269,7 +269,7 @@ DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 		);
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -303,7 +303,7 @@ DBG_EXPORT JS_METHOD(compressedTexSubImage2D) { NAPI_ENV;
 		target, level, xoffset, yoffset, width, height, format, size, pixels
 	);
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(compressedTexImage2D) { NAPI_ENV;
@@ -335,7 +335,7 @@ DBG_EXPORT JS_METHOD(compressedTexImage2D) { NAPI_ENV;
 		target, level, internalformat, width, height, border, size, pixels
 	);
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(compressedTexImage3D) { NAPI_ENV;
@@ -368,7 +368,7 @@ DBG_EXPORT JS_METHOD(compressedTexImage3D) { NAPI_ENV;
 		target, level, internalformat, width, height, depth, border, size, pixels
 	);
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(compressedTexSubImage3D) { NAPI_ENV;
@@ -403,7 +403,7 @@ DBG_EXPORT JS_METHOD(compressedTexSubImage3D) { NAPI_ENV;
 		target, level, xoffset, yoffset, zoffset, width, height, depth, format, size, pixels
 	);
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(copyTexSubImage3D) { NAPI_ENV;
@@ -421,7 +421,7 @@ DBG_EXPORT JS_METHOD(copyTexSubImage3D) { NAPI_ENV;
 		target, level, xoffset, yoffset, zoffset, x, y, width, height
 	);
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(texStorage3D) { NAPI_ENV;
@@ -436,7 +436,7 @@ DBG_EXPORT JS_METHOD(texStorage3D) { NAPI_ENV;
 		target, level, internalformat, width, height, depth
 	);
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(texSubImage3D) { NAPI_ENV;
@@ -458,7 +458,7 @@ DBG_EXPORT JS_METHOD(texSubImage3D) { NAPI_ENV;
 		target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels
 	);
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 } // namespace webgl

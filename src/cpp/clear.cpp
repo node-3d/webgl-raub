@@ -3,12 +3,14 @@
 
 namespace webgl {
 
+constexpr uint32_t CLEAR_BUFFER_SIZE = 4;
+
 
 DBG_EXPORT JS_METHOD(clear) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	
 	glClear(target);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -19,14 +21,14 @@ DBG_EXPORT JS_METHOD(clearColor) { NAPI_ENV;
 	REQ_FLOAT_ARG(3, alpha);
 	
 	glClearColor(red, green, blue, alpha);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(clearDepth) { NAPI_ENV;
 	REQ_FLOAT_ARG(0, depth);
 	glClearDepth(depth);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -35,14 +37,15 @@ DBG_EXPORT JS_METHOD(clearBufferfv) { NAPI_ENV;
 	REQ_INT32_ARG(1, drawBuffer);
 	REQ_ARRAY_ARG(2, jsValues);
 	
-	uint32_t count = jsValues.Length();
-	auto cppValues = std::make_unique<GLfloat[]>(count);
+	GLfloat bufferFv[CLEAR_BUFFER_SIZE];
+	uint32_t count = std::min(CLEAR_BUFFER_SIZE, jsValues.Length());
+	
 	for (uint32_t i = 0; i < count; i++) {
-		cppValues[i] = jsValues.Get(i).As<Napi::Number>().FloatValue();
+		bufferFv[i] = jsValues.Get(i).As<Napi::Number>().FloatValue();
 	}
 	
-	glClearBufferfv(buffer, drawBuffer, cppValues.get());
-	RET_UNDEFINED;
+	glClearBufferfv(buffer, drawBuffer, bufferFv);
+	RET_WEBGL_VOID;
 }
 
 
@@ -51,15 +54,15 @@ DBG_EXPORT JS_METHOD(clearBufferiv) { NAPI_ENV;
 	REQ_INT32_ARG(1, drawBuffer);
 	REQ_ARRAY_ARG(2, jsValues);
 	
-	uint32_t count = jsValues.Length();
-	auto cppValues = std::make_unique<GLint[]>(count);
+	GLint bufferIv[CLEAR_BUFFER_SIZE];
+	uint32_t count = std::min(CLEAR_BUFFER_SIZE, jsValues.Length());
 	
 	for (uint32_t i = 0; i < count; i++) {
-		cppValues[i] = jsValues.Get(i).As<Napi::Number>().Int32Value();
+		bufferIv[i] = jsValues.Get(i).As<Napi::Number>().Int32Value();
 	}
 	
-	glClearBufferiv(buffer, drawBuffer, cppValues.get());
-	RET_UNDEFINED;
+	glClearBufferiv(buffer, drawBuffer, bufferIv);
+	RET_WEBGL_VOID;
 }
 
 
@@ -68,15 +71,15 @@ DBG_EXPORT JS_METHOD(clearBufferuiv) { NAPI_ENV;
 	REQ_INT32_ARG(1, drawBuffer);
 	REQ_ARRAY_ARG(2, jsValues);
 	
-	uint32_t count = jsValues.Length();
-	auto cppValues = std::make_unique<GLuint[]>(count);
+	GLuint bufferUiv[CLEAR_BUFFER_SIZE];
+	uint32_t count = std::min(CLEAR_BUFFER_SIZE, jsValues.Length());
 	
 	for (uint32_t i = 0; i < count; i++) {
-		cppValues[i] = jsValues.Get(i).As<Napi::Number>().Uint32Value();
+		bufferUiv[i] = jsValues.Get(i).As<Napi::Number>().Uint32Value();
 	}
 	
-	glClearBufferuiv(buffer, drawBuffer, cppValues.get());
-	RET_UNDEFINED;
+	glClearBufferuiv(buffer, drawBuffer, bufferUiv);
+	RET_WEBGL_VOID;
 }
 
 
@@ -86,7 +89,7 @@ DBG_EXPORT JS_METHOD(clearBufferfi) { NAPI_ENV;
 	REQ_FLOAT_ARG(2, depth);
 	REQ_INT32_ARG(3, stencil);
 	glClearBufferfi(buffer, drawBuffer, depth, stencil);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 } // namespace webgl

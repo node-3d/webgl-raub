@@ -1,5 +1,3 @@
-'use strict';
-
 import glfw from 'glfw-raub';
 const { Document } = glfw;
 
@@ -161,13 +159,11 @@ const drawScene = () => {
 };
 
 
-const tick = () => {
-	xRot = (xSpeed * Date.now()) * 0.001;
-	yRot = (ySpeed * Date.now()) * 0.001;
+const tick = (now) => {
+	xRot = (xSpeed * now) * 0.001;
+	yRot = (ySpeed * now) * 0.001;
 	
 	drawScene();
-	
-	document.requestAnimationFrame(tick);
 };
 
-document.requestAnimationFrame(tick);
+document.loop(tick);

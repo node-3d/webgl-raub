@@ -14,15 +14,16 @@ DBG_EXPORT JS_METHOD(createBuffer) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(deleteBuffer) { NAPI_ENV;
-	REQ_UINT32_ARG(0, buffer);
+	LET_ID_ARG(0, buffer);
+	
 	GLuint buffers[1] = { buffer };
 	glDeleteBuffers(1, buffers);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(isBuffer) { NAPI_ENV;
-	REQ_UINT32_ARG(0, buffer);
+	LET_ID_ARG(0, buffer);
 	
 	RET_BOOL(glIsBuffer(buffer) != 0);
 }
@@ -30,32 +31,32 @@ DBG_EXPORT JS_METHOD(isBuffer) { NAPI_ENV;
 
 DBG_EXPORT JS_METHOD(bindBuffer) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
-	REQ_UINT32_ARG(1, buffer);
+	LET_ID_ARG(1, buffer);
 	
 	glBindBuffer(target, buffer);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(bindBufferBase) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, index);
-	REQ_UINT32_ARG(2, buffer);
+	LET_ID_ARG(2, buffer);
 	
 	glBindBufferBase(target, index, buffer);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(bindBufferRange) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
 	REQ_UINT32_ARG(1, index);
-	REQ_UINT32_ARG(2, buffer);
+	LET_ID_ARG(2, buffer);
 	REQ_INT32_ARG(3, offset);
 	REQ_INT32_ARG(4, size);
 	
 	glBindBufferRange(target, index, buffer, offset, size);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -86,7 +87,7 @@ DBG_EXPORT JS_METHOD(bufferData) { NAPI_ENV;
 		
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -95,16 +96,15 @@ DBG_EXPORT JS_METHOD(bufferSubData) { NAPI_ENV;
 	REQ_INT32_ARG(1, offset);
 	REQ_TYPED_ARRAY_ARG(2, arr);
 	
-	int size = arr.ByteLength();
-	void* data = getArrayData<uint8_t>(env, arr);
+	GLsizei count = 0;
+	void* data = getArrayData(env, arr, &count);
 	
-	glBufferSubData(target, offset, size, data);
-	RET_UNDEFINED;
+	glBufferSubData(target, offset, count, data);
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(copyBufferSubData) { NAPI_ENV;
-
 	REQ_INT32_ARG(0, readTarget);
 	REQ_INT32_ARG(1, writeTarget);
 	REQ_INT32_ARG(2, readOffset);
@@ -112,12 +112,11 @@ DBG_EXPORT JS_METHOD(copyBufferSubData) { NAPI_ENV;
 	REQ_INT32_ARG(4, size);
 	
 	glCopyBufferSubData(readTarget, writeTarget, readOffset, writeOffset, size);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(getBufferSubData) { NAPI_ENV;
-
 	REQ_INT32_ARG(0, readTarget);
 	REQ_INT32_ARG(1, sourceByteOffset);
 	REQ_TYPED_ARRAY_ARG(2, dest);
@@ -131,7 +130,7 @@ DBG_EXPORT JS_METHOD(getBufferSubData) { NAPI_ENV;
 	void* data = getArrayData<uint8_t>(env, dest) + offset;
 	
 	glGetBufferSubData(readTarget, sourceByteOffset, size, data);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -150,7 +149,7 @@ DBG_EXPORT JS_METHOD(readBuffer) { NAPI_ENV;
 	REQ_INT32_ARG(0, src);
 	
 	glReadBuffer(src);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 

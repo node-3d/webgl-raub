@@ -1,13 +1,25 @@
-#ifndef _WEBGL_HPP_
-#define _WEBGL_HPP_
-
+#pragma once
 
 #include <addon-tools.hpp>
-
 #include <GL/glew.h>
 
 
+#define LET_ID_ARG(I, VAR)                                                    \
+	GLuint VAR = IS_ARG_EMPTY(I) ? 0 : info[I].As<Napi::Object>().Get("_").As<Napi::Number>().Uint32Value();
+
+#define RET_WEBGL_VOID                                                        \
+	return webgl::undefined;
+
+
 namespace webgl {
+	Napi::Value undefined;
+	
+	constexpr uint32_t NAME_SIZE_MAX = 1024;
+	
+	inline GLuint extractId(Napi::Object x) {
+		return x.Get("_").As<Napi::Number>().Uint32Value();
+	}
+	
 	DBG_EXPORT JS_METHOD(init);
 	
 	// Attrib
@@ -276,5 +288,3 @@ namespace webgl {
 	DBG_EXPORT JS_METHOD(viewport);
 	DBG_EXPORT JS_METHOD(getIndexedParameter);
 } // namespace webgl
-
-#endif /* _WEBGL_HPP_ */

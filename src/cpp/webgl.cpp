@@ -3,6 +3,8 @@
 
 namespace webgl {
 
+constexpr GLint BUFFER_FORMATS_SIZE = 32;
+
 
 DBG_EXPORT JS_METHOD(init) { NAPI_ENV;
 	glewExperimental = GL_TRUE;
@@ -15,18 +17,18 @@ DBG_EXPORT JS_METHOD(init) { NAPI_ENV;
 		JS_THROW("Can't initialize GLEW.");
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(colorMask) { NAPI_ENV;
-	LET_BOOL_ARG(0, red);
-	LET_BOOL_ARG(1, green);
-	LET_BOOL_ARG(2, blue);
-	LET_BOOL_ARG(3, alpha);
+	WEAK_BOOL_ARG(0, red);
+	WEAK_BOOL_ARG(1, green);
+	WEAK_BOOL_ARG(2, blue);
+	WEAK_BOOL_ARG(3, alpha);
 	
 	glColorMask(red, green, blue, alpha);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -34,7 +36,7 @@ DBG_EXPORT JS_METHOD(cullFace) { NAPI_ENV;
 	REQ_INT32_ARG(0, mode);
 	
 	glCullFace(mode);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -42,15 +44,15 @@ DBG_EXPORT JS_METHOD(depthFunc) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	glDepthFunc(id);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(depthMask) { NAPI_ENV;
-	LET_BOOL_ARG(0, flag);
+	WEAK_BOOL_ARG(0, flag);
 	
 	glDepthMask(flag);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -59,7 +61,7 @@ DBG_EXPORT JS_METHOD(depthRange) { NAPI_ENV;
 	REQ_FLOAT_ARG(1, zFar);
 	
 	glDepthRangef(zNear, zFar);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -67,7 +69,7 @@ DBG_EXPORT JS_METHOD(disable) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	glDisable(id);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -75,19 +77,19 @@ DBG_EXPORT JS_METHOD(enable) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	glEnable(id);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(finish) { NAPI_ENV;
 	glFinish();
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(flush) { NAPI_ENV;
 	glFlush();
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -95,7 +97,7 @@ DBG_EXPORT JS_METHOD(frontFace) { NAPI_ENV;
 	REQ_INT32_ARG(0, id);
 	
 	glFrontFace(id);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -177,7 +179,7 @@ DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 		if (cParams != NULL) {
 			RET_STR(cParams);
 		} else {
-			RET_UNDEFINED;
+			RET_WEBGL_VOID;
 		}
 	
 	CASES_PARAM_INT2
@@ -310,15 +312,16 @@ DBG_EXPORT JS_METHOD(getInternalformatParameter) { NAPI_ENV;
 				return Napi::Int32Array::New(env, 0);
 			}
 			
-			auto values = std::make_unique<GLint[]>(length);
+			length = std::min(BUFFER_FORMATS_SIZE, length);
+			GLint bufferFormats[BUFFER_FORMATS_SIZE];
 			for (GLint i = 0; i < length; ++i) {
-				values[i] = 0;
+				bufferFormats[i] = 0;
 			}
-			glGetInternalformativ(target, internalformat, GL_SAMPLES, length, values.get());
+			glGetInternalformativ(target, internalformat, GL_SAMPLES, length, bufferFormats);
 			
 			auto arr = Napi::Int32Array::New(env, length);
 			for (GLint i = 0; i < length; ++i) {
-				arr.Set(i, values[i]);
+				arr.Set(i, bufferFormats[i]);
 			}
 			
 			return arr;
@@ -375,17 +378,14 @@ DBG_EXPORT JS_METHOD(getRenderTarget) { NAPI_ENV;
 	GLenum framebufferStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	
 	if (framebufferStatus == GL_FRAMEBUFFER_COMPLETE) {
-		
 		Napi::Array result = JS_ARRAY;
 		result.Set(0U, JS_NUM(fbo));
 		result.Set(1U, JS_NUM(tex));
 		
 		RET_VALUE(result);
-		
 	} else {
 		RET_NULL;
 	}
-	
 }
 
 
@@ -397,7 +397,6 @@ DBG_EXPORT JS_METHOD(getSupportedExtensions) { NAPI_ENV;
 	} else {
 		RET_STR("");
 	}
-	
 }
 
 
@@ -406,7 +405,7 @@ DBG_EXPORT JS_METHOD(hint) { NAPI_ENV;
 	REQ_INT32_ARG(1, mode);
 	
 	glHint(target, mode);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -423,16 +422,16 @@ DBG_EXPORT JS_METHOD(lineWidth) { NAPI_ENV;
 	REQ_FLOAT_ARG(0, width);
 	
 	glLineWidth(width);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(pixelStorei) { NAPI_ENV;
 	REQ_INT32_ARG(0, name);
-	REQ_INT32_ARG(1, param);
+	WEAK_INT32_ARG(1, param);
 	
 	glPixelStorei(name, param);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -441,7 +440,7 @@ DBG_EXPORT JS_METHOD(polygonOffset) { NAPI_ENV;
 	REQ_FLOAT_ARG(1, units);
 	
 	glPolygonOffset(factor, units);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -456,7 +455,7 @@ DBG_EXPORT JS_METHOD(readPixels) { NAPI_ENV;
 	
 	void *pixels = getData(env, image);
 	glReadPixels(x, y, width, height, format, type, pixels);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -467,7 +466,7 @@ DBG_EXPORT JS_METHOD(scissor) { NAPI_ENV;
 	REQ_INT32_ARG(3, height);
 	
 	glScissor(x, y, width, height);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -478,7 +477,7 @@ DBG_EXPORT JS_METHOD(viewport) { NAPI_ENV;
 	REQ_INT32_ARG(3, h);
 	
 	glViewport(x, y, w, h);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(getIndexedParameter) { NAPI_ENV;
@@ -509,10 +508,10 @@ DBG_EXPORT JS_METHOD(getIndexedParameter) { NAPI_ENV;
 
 DBG_EXPORT JS_METHOD(sampleCoverage) { NAPI_ENV;
 	REQ_FLOAT_ARG(0, value);
-	LET_BOOL_ARG(1, invert);
+	WEAK_BOOL_ARG(1, invert);
 	
 	glSampleCoverage(value, invert);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 } // namespace webgl

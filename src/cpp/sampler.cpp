@@ -12,47 +12,47 @@ DBG_EXPORT JS_METHOD(createSampler) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(deleteSampler) { NAPI_ENV;
-	REQ_UINT32_ARG(0, sampler);
+	LET_ID_ARG(0, sampler);
 	GLuint samplers[1] = { sampler };
 	glDeleteSamplers(1, samplers);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(isSampler) { NAPI_ENV;
-	REQ_UINT32_ARG(0, sampler);
+	LET_ID_ARG(0, sampler);
 	
 	RET_BOOL(glIsSampler(sampler) != 0);
 }
 
 DBG_EXPORT JS_METHOD(bindSampler) { NAPI_ENV;
 	REQ_INT32_ARG(0, target);
-	REQ_UINT32_ARG(1, sampler);
+	LET_ID_ARG(1, sampler);
 	
 	glBindSampler(target, sampler);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(samplerParameterf) { NAPI_ENV;
-	REQ_UINT32_ARG(0, sampler);
+	LET_ID_ARG(0, sampler);
 	REQ_INT32_ARG(1, pname);
 	REQ_FLOAT_ARG(2, param);
 	
 	glSamplerParameterf(sampler, pname, param);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(samplerParameteri) { NAPI_ENV;
-	REQ_UINT32_ARG(0, sampler);
+	LET_ID_ARG(0, sampler);
 	REQ_INT32_ARG(1, pname);
 	REQ_INT32_ARG(2, param);
 	
 	glSamplerParameteri(sampler, pname, param);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(getSamplerParameter) { NAPI_ENV;
-	REQ_UINT32_ARG(0, sampler);
+	LET_ID_ARG(0, sampler);
 	REQ_INT32_ARG(1, pname);
 	
 	switch (pname) {
@@ -82,7 +82,7 @@ DBG_EXPORT JS_METHOD(getSamplerParameter) { NAPI_ENV;
 		break;
 	}
 	
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 } // namespace webgl

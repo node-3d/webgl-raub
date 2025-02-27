@@ -3,7 +3,6 @@
 
 namespace webgl {
 
-
 DBG_EXPORT JS_METHOD(createVertexArray) { NAPI_ENV;
 	GLuint vertexarray;
 	glGenVertexArrays(1, &vertexarray);
@@ -13,27 +12,26 @@ DBG_EXPORT JS_METHOD(createVertexArray) { NAPI_ENV;
 
 
 DBG_EXPORT JS_METHOD(deleteVertexArray) { NAPI_ENV;
-	REQ_UINT32_ARG(0, vertexarray);
+	LET_ID_ARG(0, vertexarray);
 	
 	GLuint vertexarrays[1] = { vertexarray };
 	glDeleteVertexArrays(1, vertexarrays);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
 DBG_EXPORT JS_METHOD(isVertexArray) { NAPI_ENV;
-	REQ_UINT32_ARG(0, vertexarray);
+	LET_ID_ARG(0, vertexarray);
 	
 	RET_BOOL(glIsVertexArray(vertexarray) != 0);
 }
 
 
 DBG_EXPORT JS_METHOD(bindVertexArray) { NAPI_ENV;
-	REQ_UINT32_ARG(0, vertexarray);
+	LET_ID_ARG(0, vertexarray);
 	
 	glBindVertexArray(vertexarray);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
-
 
 } // namespace webgl

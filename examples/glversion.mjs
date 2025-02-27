@@ -1,5 +1,3 @@
-'use strict';
-
 import glfw from 'glfw-raub';
 const { Document } = glfw;
 

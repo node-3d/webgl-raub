@@ -17,7 +17,7 @@ DBG_EXPORT JS_METHOD(fenceSync) { NAPI_ENV;
 DBG_EXPORT JS_METHOD(deleteSync) { NAPI_ENV;
 	REQ_EXT_ARG(0, sync);
 	glDeleteSync(reinterpret_cast<GLsync>(sync));
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -44,7 +44,7 @@ DBG_EXPORT JS_METHOD(waitSync) { NAPI_ENV;
 	
 	GLuint64 timeout64 = nanosec < 0.0 ? GL_TIMEOUT_IGNORED : static_cast<GLuint64>(nanosec);
 	glWaitSync(reinterpret_cast<GLsync>(sync), flags, timeout64);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(getSyncParameter) { NAPI_ENV;

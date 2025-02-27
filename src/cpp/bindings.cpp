@@ -1,4 +1,21 @@
-#include "webgl.hpp"
+#include "webgl.cpp"
+#include "attrib.cpp"
+#include "blend.cpp"
+#include "buffers.cpp"
+#include "clear.cpp"
+#include "draw.cpp"
+#include "framebuffers.cpp"
+#include "programs.cpp"
+#include "queries.cpp"
+#include "renderbuffers.cpp"
+#include "sampler.cpp"
+#include "shaders.cpp"
+#include "stencil.cpp"
+#include "sync.cpp"
+#include "textures.cpp"
+#include "transformfeedback.cpp"
+#include "uniform.cpp"
+#include "vertexarrays.cpp"
 
 /**
  * @link https://chromium.googlesource.com/chromium/blink/+/refs/heads/main/Source/modules/webgl/WebGL2RenderingContextBase.cpp
@@ -896,6 +913,8 @@ static inline void initConstantsOther(Napi::Env env, Napi::Object exports) {
 
 
 Napi::Object initModule(Napi::Env env, Napi::Object exports) {
+	webgl::undefined = env.Undefined();
+	
 	initMethods(env, exports);
 	
 	initConstantsWebgl103(env, exports);

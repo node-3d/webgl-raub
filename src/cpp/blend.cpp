@@ -11,7 +11,7 @@ DBG_EXPORT JS_METHOD(blendColor) { NAPI_ENV;
 	REQ_FLOAT_ARG(3, alpha);
 	
 	glBlendColor(red, green, blue, alpha);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -19,7 +19,7 @@ DBG_EXPORT JS_METHOD(blendEquation) { NAPI_ENV;
 	REQ_INT32_ARG(0, mode);
 	
 	glBlendEquation(mode);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -28,7 +28,7 @@ DBG_EXPORT JS_METHOD(blendEquationSeparate) { NAPI_ENV;
 	REQ_INT32_ARG(1, modeAlpha);
 	
 	glBlendEquationSeparate(modeRGB, modeAlpha);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -37,7 +37,7 @@ DBG_EXPORT JS_METHOD(blendFunc) { NAPI_ENV;
 	REQ_INT32_ARG(1, dfactor);
 	
 	glBlendFunc(sfactor, dfactor);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
@@ -48,7 +48,7 @@ DBG_EXPORT JS_METHOD(blendFuncSeparate) { NAPI_ENV;
 	REQ_INT32_ARG(3, dstAlpha);
 	
 	glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
-	RET_UNDEFINED;
+	RET_WEBGL_VOID;
 }
 
 
