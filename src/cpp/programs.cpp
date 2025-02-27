@@ -14,7 +14,7 @@ DBG_EXPORT JS_METHOD(createProgram) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteProgram) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteProgram) {
 	LET_ID_ARG(0, program);
 	
 	glDeleteProgram(program);
@@ -68,7 +68,7 @@ DBG_EXPORT JS_METHOD(getProgramParameter) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(linkProgram) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(linkProgram) {
 	LET_ID_ARG(0, program);
 	
 	glLinkProgram(program);
@@ -76,7 +76,7 @@ DBG_EXPORT JS_METHOD(linkProgram) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(useProgram) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(useProgram) {
 	LET_ID_ARG(0, program);
 	
 	glUseProgram(program);
@@ -84,7 +84,7 @@ DBG_EXPORT JS_METHOD(useProgram) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(validateProgram) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(validateProgram) {
 	LET_ID_ARG(0, program);
 	
 	glValidateProgram(program);

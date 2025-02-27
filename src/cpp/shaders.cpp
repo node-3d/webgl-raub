@@ -17,7 +17,7 @@ DBG_EXPORT JS_METHOD(createShader) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteShader) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteShader) {
 	LET_ID_ARG(0, shader);
 	
 	glDeleteShader(shader);
@@ -32,7 +32,7 @@ DBG_EXPORT JS_METHOD(isShader) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(attachShader) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(attachShader) {
 	LET_ID_ARG(0, program);
 	LET_ID_ARG(1, shader);
 	
@@ -41,7 +41,7 @@ DBG_EXPORT JS_METHOD(attachShader) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(compileShader) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(compileShader) {
 	LET_ID_ARG(0, shader);
 	
 	glCompileShader(shader);
@@ -49,7 +49,7 @@ DBG_EXPORT JS_METHOD(compileShader) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(detachShader) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(detachShader) {
 	LET_ID_ARG(0, program);
 	LET_ID_ARG(1, shader);
 	
@@ -156,16 +156,15 @@ DBG_EXPORT JS_METHOD(shaderSource) { NAPI_ENV;
 	RET_WEBGL_VOID;
 }
 
-DBG_EXPORT JS_METHOD(releaseShaderCompiler) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(releaseShaderCompiler) {
 	glReleaseShaderCompiler();
 	RET_WEBGL_VOID;
 }
 
 DBG_EXPORT JS_METHOD(shaderBinary) { NAPI_ENV;
-	REQ_INT32_ARG(0, count);
-	REQ_ARRAY_ARG(1, jsShaders);
-	REQ_INT32_ARG(2, binaryFormat);
-	REQ_STR_ARG(3, binary);
+	REQ_ARRAY_ARG(0, jsShaders);
+	REQ_INT32_ARG(1, binaryFormat);
+	REQ_STR_ARG(2, binary);
 	
 	GLuint cppShaders[COUNT_SHADERS_MAX];
 	uint32_t shaderCount = std::min(COUNT_SHADERS_MAX, jsShaders.Length());

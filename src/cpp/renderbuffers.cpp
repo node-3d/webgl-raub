@@ -12,7 +12,7 @@ DBG_EXPORT JS_METHOD(createRenderbuffer) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteRenderbuffer) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteRenderbuffer) {
 	LET_ID_ARG(0, buffer);
 	GLuint buffers[1] = { buffer };
 	glDeleteRenderbuffers(1, buffers);

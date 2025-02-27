@@ -11,6 +11,8 @@ This is a part of [Node3D](https://github.com/node-3d) project.
 npm i -s webgl-raub
 ```
 
+> This addon is ABI-compatible across Node.js versions. **There is no compilation** during the `npm install`.
+
 ![Example](examples/screenshot.jpg)
 
 **TL;DR**: For a quick start, use [3d-core-raub](https://github.com/node-3d/3d-core-raub)
@@ -28,9 +30,7 @@ Here `webgl` contains the **WebGL/OpenGL** API, like a `WebGLRenderingContext` i
 * The addon **does not provide** a window control system, you can use
     [glfw-raub](https://github.com/node-3d/glfw-raub) (or anything else!) to create a window.
 
-> This addon is ABI-compatible across Node.js versions. **There is no compilation** during the `npm install`.
-
-The JS API mostly maps the native OpenGL function calls to their JS counterparts. E.g.:
+The JS API mostly maps the native OpenGL function calls. E.g.:
 
 ```cpp
 // gl.clear(target)
@@ -56,7 +56,7 @@ and additional browser-like interfaces.
 See [this example](/examples/textured.mjs) using both **GLFW** and **Image**.
 The main idea being as follows:
 
-```
+```js
 import Image from 'image-raub';
 import webgl from 'webgl-raub';
 import glfw from 'glfw-raub';

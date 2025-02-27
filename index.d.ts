@@ -528,7 +528,7 @@ declare module "webgl-raub" {
 	const getUniformIndices: (program: WebGLProgram, uniformNames: string[]) => number[];
 	const drawRangeElements: (mode: number, start: number, end: number, count: number, type: number, offset: number) => void;
 	const releaseShaderCompiler: () => void;
-	const shaderBinary: (count: number, shaders: WebGLShader[], binaryFormat: number, binary: string) => void;
+	const shaderBinary: (shaders: WebGLShader[], binaryFormat: number, binary: string) => void;
 	const compressedTexImage2D: (
 		target: number, level: number, internalformat: number, width: number,
 		height: number, border: number, image: TImage,

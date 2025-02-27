@@ -13,7 +13,7 @@ DBG_EXPORT JS_METHOD(createBuffer) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteBuffer) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteBuffer) {
 	LET_ID_ARG(0, buffer);
 	
 	GLuint buffers[1] = { buffer };
@@ -124,7 +124,7 @@ DBG_EXPORT JS_METHOD(getBufferSubData) { NAPI_ENV;
 	LET_OFFS_ARG(4, length);
 	
 	size_t elementSize = dest.ElementSize();
-	size_t size = std::min(dest.ByteLength(), length * elementSize);
+	size_t size = std::min(dest.ByteLength(), elementSize * length);
 	size_t offset = destByteOffset * elementSize;
 	
 	void* data = getArrayData<uint8_t>(env, dest) + offset;

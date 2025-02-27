@@ -11,7 +11,7 @@ DBG_EXPORT JS_METHOD(createTexture) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteTexture) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteTexture) {
 	LET_ID_ARG(0, texture);
 	GLuint textures[1] = { texture };
 	glDeleteTextures(1, textures);

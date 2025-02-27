@@ -18,7 +18,7 @@ DBG_EXPORT JS_METHOD(createTransformFeedback) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteTransformFeedback) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteTransformFeedback) {
 	LET_ID_ARG(0, feedback);
 	
 	if (boundFeedback > -1 && static_cast<uint32_t>(boundFeedback) == feedback) {
@@ -55,19 +55,19 @@ DBG_EXPORT JS_METHOD(beginTransformFeedback) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(endTransformFeedback) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(endTransformFeedback) {
 	glEndTransformFeedback();
 	RET_WEBGL_VOID;
 }
 
 
-DBG_EXPORT JS_METHOD(pauseTransformFeedback) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(pauseTransformFeedback) {
 	glPauseTransformFeedback();
 	RET_WEBGL_VOID;
 }
 
 
-DBG_EXPORT JS_METHOD(resumeTransformFeedback) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(resumeTransformFeedback) {
 	glResumeTransformFeedback();
 	RET_WEBGL_VOID;
 }

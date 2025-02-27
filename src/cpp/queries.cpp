@@ -14,7 +14,7 @@ DBG_EXPORT JS_METHOD(createQuery) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteQuery) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteQuery) {
 	LET_ID_ARG(0, query);
 	GLuint queries[1] = { query };
 	glDeleteQueries(1, queries);

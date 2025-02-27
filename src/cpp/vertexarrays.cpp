@@ -11,7 +11,7 @@ DBG_EXPORT JS_METHOD(createVertexArray) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteVertexArray) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteVertexArray) {
 	LET_ID_ARG(0, vertexarray);
 	
 	GLuint vertexarrays[1] = { vertexarray };
@@ -27,7 +27,7 @@ DBG_EXPORT JS_METHOD(isVertexArray) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(bindVertexArray) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(bindVertexArray) {
 	LET_ID_ARG(0, vertexarray);
 	
 	glBindVertexArray(vertexarray);

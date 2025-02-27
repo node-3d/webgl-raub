@@ -72,7 +72,7 @@ DBG_EXPORT JS_METHOD(uniform4f) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(uniform1i) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(uniform1i) {
 	LET_ID_ARG(0, location);
 	WEAK_INT32_ARG(1, x);
 	
@@ -529,7 +529,7 @@ DBG_EXPORT JS_METHOD(getUniform) { NAPI_ENV;
 			}
 			// Now need to look this up by name again to find its location
 			GLint loc = glGetUniformLocation(program, indexedName.c_str());
-			if (loc == location) {
+			if (loc == static_cast<GLint>(location)) {
 				// Found it. Use the type in the ActiveInfo to determine the return type.
 				GLenum baseType;
 				unsigned length;

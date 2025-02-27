@@ -21,7 +21,7 @@ DBG_EXPORT JS_METHOD(init) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(colorMask) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(colorMask) {
 	WEAK_BOOL_ARG(0, red);
 	WEAK_BOOL_ARG(1, green);
 	WEAK_BOOL_ARG(2, blue);
@@ -48,7 +48,7 @@ DBG_EXPORT JS_METHOD(depthFunc) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(depthMask) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(depthMask) {
 	WEAK_BOOL_ARG(0, flag);
 	
 	glDepthMask(flag);
@@ -81,13 +81,13 @@ DBG_EXPORT JS_METHOD(enable) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(finish) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(finish) {
 	glFinish();
 	RET_WEBGL_VOID;
 }
 
 
-DBG_EXPORT JS_METHOD(flush) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(flush) {
 	glFlush();
 	RET_WEBGL_VOID;
 }

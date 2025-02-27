@@ -14,7 +14,7 @@ DBG_EXPORT JS_METHOD(createFramebuffer) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteFramebuffer) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteFramebuffer) {
 	LET_ID_ARG(0, buffer);
 	
 	GLuint buffers[1] = { buffer };

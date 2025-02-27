@@ -11,7 +11,7 @@ DBG_EXPORT JS_METHOD(createSampler) { NAPI_ENV;
 }
 
 
-DBG_EXPORT JS_METHOD(deleteSampler) { NAPI_ENV;
+DBG_EXPORT JS_METHOD(deleteSampler) {
 	LET_ID_ARG(0, sampler);
 	GLuint samplers[1] = { sampler };
 	glDeleteSamplers(1, samplers);
