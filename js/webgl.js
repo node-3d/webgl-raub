@@ -288,12 +288,103 @@ if (!gl.__isInited) {
 	
 	// Misc OpenGL Functions
 	
+	// https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getParameter
+	// https://registry.khronos.org/OpenGL-Refpages/gl4/html/glGet.xhtml
 	const _getParameter = gl.getParameter;
 	gl.getParameter = (pname) => {
 		if (pname === gl.VERSION) {
 			return gl._versionString;
 		}
-		return _getParameter(pname);
+		
+		// null
+		// FIXME: Do these have OpenGL-based values?
+		if (
+			pname === gl.COPY_READ_BUFFER_BINDING ||
+			pname === gl.COPY_WRITE_BUFFER_BINDING
+		) {
+			return null;
+		}
+		
+		const result = _getParameter(pname);
+		
+		// Float32Array
+		if (
+			pname === gl.ALIASED_LINE_WIDTH_RANGE ||
+			pname === gl.ALIASED_POINT_SIZE_RANGE ||
+			pname === gl.BLEND_COLOR ||
+			pname === gl.COLOR_CLEAR_VALUE ||
+			pname === gl.DEPTH_RANGE
+		) {
+			return wrapF32(result);
+		}
+		
+		// Uint32Array
+		if (pname === gl.COMPRESSED_TEXTURE_FORMATS) {
+			return wrapUi32(result);
+		}
+		
+		// Int32Array
+		if (pname === gl.MAX_VIEWPORT_DIMS || pname === gl.SCISSOR_BOX || pname === gl.VIEWPORT) {
+			return wrapI32(result);
+		}
+		
+		// WebGLFramebuffer
+		if (
+			pname === gl.FRAMEBUFFER_BINDING ||
+			pname === gl.DRAW_FRAMEBUFFER_BINDING ||
+			pname === gl.READ_FRAMEBUFFER_BINDING
+		) {
+			return result ? new gl.WebGLFramebuffer(result) : null;
+		}
+		
+		// WebGLRenderbuffer
+		if (pname === gl.RENDERBUFFER_BINDING) {
+			return result ? new gl.WebGLRenderbuffer(result) : null;
+		}
+		
+		// WebGLSampler
+		if (pname === gl.SAMPLER_BINDING) {
+			return result ? new gl.WebGLSampler(result) : null;
+		}
+		
+		// WebGLTransformFeedback
+		if (pname === gl.TRANSFORM_FEEDBACK_BINDING) {
+			return result ? new gl.WebGLTransformFeedback(result) : null;
+		}
+		
+		// WebGLVertexArrayObject
+		if (pname === gl.VERTEX_ARRAY_BINDING) {
+			return result ? new gl.WebGLVertexArrayObject(result) : null;
+		}
+		
+		// WebGLProgram
+		if (pname === gl.CURRENT_PROGRAM) {
+			return result ? new gl.WebGLProgram(result) : null;
+		}
+		
+		// WebGLBuffer
+		if (
+			pname === gl.ARRAY_BUFFER_BINDING ||
+			pname === gl.ELEMENT_ARRAY_BUFFER_BINDING ||
+			pname === gl.PIXEL_PACK_BUFFER_BINDING ||
+			pname === gl.PIXEL_UNPACK_BUFFER_BINDING ||
+			pname === gl.TRANSFORM_FEEDBACK_BUFFER_BINDING ||
+			pname === gl.UNIFORM_BUFFER_BINDING
+		) {
+			return result ? new gl.WebGLBuffer(result) : null;
+		}
+		
+		// WebGLTexture
+		if (
+			pname === gl.TEXTURE_BINDING_2D ||
+			pname === gl.TEXTURE_BINDING_CUBE_MAP ||
+			pname === gl.TEXTURE_BINDING_2D_ARRAY ||
+			pname === gl.TEXTURE_BINDING_3D
+		) {
+			return result ? new gl.WebGLTexture(result) : null;
+		}
+		
+		return result;
 	};
 	
 	

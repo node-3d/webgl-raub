@@ -161,7 +161,6 @@ DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 	const char *cParams;
 	GLint iParams[4];
 	GLfloat fParams[4];
-	Napi::Array arr = JS_ARRAY;
 	int32_t boundFeedback;
 	
 	switch(name) {
@@ -182,42 +181,47 @@ DBG_EXPORT JS_METHOD(getParameter) { NAPI_ENV;
 			RET_WEBGL_VOID;
 		}
 	
-	CASES_PARAM_INT2
+	CASES_PARAM_INT2 {
+		Napi::Array arr = JS_ARRAY;
 		glGetIntegerv(name, iParams);
 		arr.Set(0U, JS_NUM(iParams[0]));
 		arr.Set(1U, JS_NUM(iParams[1]));
 		RET_VALUE(arr);
-	
-	CASES_PARAM_INT4
+	}
+	CASES_PARAM_INT4 {
+		Napi::Array arr = JS_ARRAY;
 		glGetIntegerv(name, iParams);
 		arr.Set(0U, JS_NUM(iParams[0]));
 		arr.Set(1U, JS_NUM(iParams[1]));
 		arr.Set(2U, JS_NUM(iParams[2]));
 		arr.Set(3U, JS_NUM(iParams[3]));
 		RET_VALUE(arr);
-	
-	CASES_PARAM_FLOAT2
+	}
+	CASES_PARAM_FLOAT2 {
+		Napi::Array arr = JS_ARRAY;
 		glGetFloatv(name, fParams);
 		arr.Set(0U, JS_NUM(fParams[0]));
 		arr.Set(1U, JS_NUM(fParams[1]));
 		RET_VALUE(arr);
-	
-	CASES_PARAM_FLOAT4
+	}
+	CASES_PARAM_FLOAT4 {
+		Napi::Array arr = JS_ARRAY;
 		glGetFloatv(name, fParams);
 		arr.Set(0U, JS_NUM(fParams[0]));
 		arr.Set(1U, JS_NUM(fParams[1]));
 		arr.Set(2U, JS_NUM(fParams[2]));
 		arr.Set(3U, JS_NUM(fParams[3]));
 		RET_VALUE(arr);
-	
-	CASES_PARAM_BOOL4
+	}
+	CASES_PARAM_BOOL4 {
+		Napi::Array arr = JS_ARRAY;
 		glGetBooleanv(name, bParams);
 		arr.Set(0U, JS_BOOL(bParams[0] != 0));
 		arr.Set(1U, JS_BOOL(bParams[1] != 0));
 		arr.Set(2U, JS_BOOL(bParams[2] != 0));
 		arr.Set(3U, JS_BOOL(bParams[3] != 0));
 		RET_VALUE(arr);
-	
+	}
 	CASES_PARAM_INT
 		glGetIntegerv(name, iParams);
 		RET_NUM(iParams[0]);
