@@ -11,7 +11,7 @@ This is a part of [Node3D](https://github.com/node-3d) project.
 npm i -s webgl-raub
 ```
 
-> This addon is ABI-compatible across Node.js versions. **There is no compilation** during the `npm install`.
+> This addon is ABI-compatible across Node.js versions. **There is no compilation** during `npm i`.
 
 ![Example](examples/screenshot.jpg)
 
@@ -25,25 +25,13 @@ import webgl from 'webgl-raub';
 Here `webgl` contains the **WebGL/OpenGL** API, like a `WebGLRenderingContext` instance would.
 * See [WebGLRenderingContext docs](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext)
     for reference.
-* See [TS declarations](/index.d.ts) for the full list of exports.
 * There are also non-WebGL methods exported in case you want to use advanced OpenGL functions.
 * The addon **does not provide** a window control system, you can use
     [glfw-raub](https://github.com/node-3d/glfw-raub) (or anything else!) to create a window.
+* See [TS declarations](/index.d.ts) for the full list of exports.
 
-The JS API mostly maps the native OpenGL function calls. E.g.:
 
-```cpp
-// gl.clear(target)
-DBG_EXPORT JS_METHOD(clear) { NAPI_ENV;
-	REQ_INT32_ARG(0, target);
-	glClear(target);
-	RET_WEBGL_VOID;
-}
-```
-
-You can optionally call `webgl.init()` after the GL context becomes available - this translates
-into a `glewInit()` call. See [GLEW docs](https://glew.sourceforge.net/basic.html) for what
-it does and if you need it (probably "yes"?).
+## WebGL Libs
 
 To use browser **WebGL** libs, like [three.js](https://threejs.org/),
 several additional interfaces must also be provided to mimic the browser.
@@ -73,13 +61,34 @@ Similarly, these modules are utilized in [3d-core-raub](https://github.com/node-
 Using [3d-core-raub](https://github.com/node-3d/3d-core-raub), you can skip setting up
 most environment features for those libs.
 
-
-## WebGL Libs
-
 * [three.js](https://threejs.org/) - known to work well on **Node.js** with this
 implementation of **WebGL**.
 * [PixiJS](https://pixijs.com/) - seems to work with some minor hacks, as proven by this
 [example](https://github.com/node-3d/3d-core-raub/blob/master/examples/pixi/index.js).
+
+
+## Native OpenGL
+
+This is real **native OpenGL**, not ANGLE or anything else.
+You have direct access to GL resource IDs. Due to WebGL
+convention, resource IDs are wrapped in objects, such as `WebGLBuffer`. All of them
+contain raw IDs as `obj._` - the `_` property. You can also create such objects based on
+OpenGL IDs that are obtained elsewhere (e.g. from other separate C++ addons).
+
+The JS API mostly maps the native OpenGL function calls. E.g.:
+
+```cpp
+// gl.clear(target)
+DBG_EXPORT JS_METHOD(clear) { NAPI_ENV;
+	REQ_INT32_ARG(0, target);
+	glClear(target);
+	RET_WEBGL_VOID;
+}
+```
+
+You can optionally call `webgl.init()` after the GL context becomes available - this translates
+into a `glewInit()` call. See [GLEW docs](https://glew.sourceforge.net/basic.html) for what
+it does and if you need it (probably "yes"?).
 
 
 ## MacOS Note
