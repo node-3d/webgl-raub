@@ -1,11 +1,10 @@
-import Image from 'image-raub';
-import glfw from 'glfw-raub';
-const { Document } = glfw;
+import { Image } from '@node-3d/image';
+import { Document } from '@node-3d/glfw';
 
-import gl from '../index.js';
-import { mat4 } from './utils/glMatrix-0.9.5.min.js';
-import { alignedShaders } from './utils/presets.mjs';
-import { buildShader } from './utils/build-shader.mjs';
+import { webgl as gl } from '@node-3d/webgl';
+import { mat4 } from './utils/matrix.ts';
+import { alignedShaders } from './utils/presets.ts';
+import { buildShader } from './utils/build-shader.ts';
 
 
 const vertices = [
@@ -36,31 +35,39 @@ const document = new Document({
 const shaderProgram = buildShader(alignedShaders);
 gl.useProgram(shaderProgram);
 
-shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'aVertexPosition');
-gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+type TAttributes = {
+	vertexPositionAttribute: number;
+	textureCoordAttribute: number;
+	pMatrixUniform: WebGLUniformLocation;
+	mvMatrixUniform: WebGLUniformLocation;
+	samplerUniform: WebGLUniformLocation;
+};
+const shaderVars: TAttributes = {
+	vertexPositionAttribute: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+	textureCoordAttribute: gl.getAttribLocation(shaderProgram, 'aTextureCoord'),
+	pMatrixUniform: gl.getUniformLocation(shaderProgram, 'uPMatrix'),
+	mvMatrixUniform: gl.getUniformLocation(shaderProgram, 'uMVMatrix'),
+	samplerUniform: gl.getUniformLocation(shaderProgram, 'uSampler'),
+};
 
-shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, 'aTextureCoord');
-gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
-
-shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, 'uPMatrix');
-shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
-shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, 'uSampler');
+gl.enableVertexAttribArray(shaderVars.vertexPositionAttribute);
+gl.enableVertexAttribArray(shaderVars.textureCoordAttribute);
 
 const texLena = gl.createTexture();
-texLena.image = new Image();
-texLena.image.onload = () => {
+const texLenaImage = new Image();
+texLenaImage.on('load', () => {
 	console.log(
-		`Loaded image: ${texLena.image.src}`,
-		`${texLena.image.width}x${texLena.image.height}`,
+		`Loaded image: ${texLenaImage.src}`,
+		`${texLenaImage.width}x${texLenaImage.height}`,
 	);
 	gl.bindTexture(gl.TEXTURE_2D, texLena);
 	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texLena.image);
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texLenaImage);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	gl.bindTexture(gl.TEXTURE_2D, null);
-};
-texLena.image.src = 'img/glass.gif';
+});
+texLenaImage.src = 'img/glass.gif';
 
 
 const mvMatrix = mat4.create();
@@ -68,24 +75,24 @@ const pMatrix = mat4.create();
 
 
 const setMatrixUniforms = () => {
-	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+	gl.uniformMatrix4fv(shaderVars.pMatrixUniform, false, pMatrix);
+	gl.uniformMatrix4fv(shaderVars.mvMatrixUniform, false, mvMatrix);
 };
 
 const cubeVertexPositionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-cubeVertexPositionBuffer.itemSize = 3;
+const cubeVertexPositionBufferItemSize = 3;
 
 const cubeVertexTextureCoordBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
-cubeVertexTextureCoordBuffer.itemSize = 2;
+const cubeVertexTextureCoordBufferItemSize = 2;
 
 const cubeVertexIndexBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-cubeVertexIndexBuffer.numItems = 6;
+const cubeVertexIndexBufferNumItems = 6;
 
 
 const drawScene = () => {
@@ -96,8 +103,8 @@ const drawScene = () => {
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 	gl.useProgram(shaderProgram);
-	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-	gl.enableVertexAttribArray(shaderProgram.textureCoordAttribute);
+	gl.enableVertexAttribArray(shaderVars.vertexPositionAttribute);
+	gl.enableVertexAttribArray(shaderVars.textureCoordAttribute);
 	
 	mat4.ortho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, pMatrix);
 	
@@ -105,21 +112,21 @@ const drawScene = () => {
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexPositionBuffer);
 	gl.vertexAttribPointer(
-		shaderProgram.vertexPositionAttribute, cubeVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0,
+		shaderVars.vertexPositionAttribute, cubeVertexPositionBufferItemSize, gl.FLOAT, false, 0, 0,
 	);
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexTextureCoordBuffer);
 	gl.vertexAttribPointer(
-		shaderProgram.textureCoordAttribute, cubeVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0,
+		shaderVars.textureCoordAttribute, cubeVertexTextureCoordBufferItemSize, gl.FLOAT, false, 0, 0,
 	);
 	
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texLena);
-	gl.uniform1i(shaderProgram.samplerUniform, 0);
+	gl.uniform1i(shaderVars.samplerUniform, 0);
 	
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndexBuffer);
 	setMatrixUniforms();
-	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+	gl.drawElements(gl.TRIANGLES, cubeVertexIndexBufferNumItems, gl.UNSIGNED_SHORT, 0);
 	
 	// Cleanup GL state
 	gl.bindTexture(gl.TEXTURE_2D, null);
@@ -130,3 +137,7 @@ const drawScene = () => {
 
 
 document.loop(drawScene);
+
+
+
+

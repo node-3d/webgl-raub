@@ -5,6 +5,8 @@
 .project
 .vscode
 node_modules/
+.rslib/
+dist/
 src/build/
 src/node_modules/
 bin-*/

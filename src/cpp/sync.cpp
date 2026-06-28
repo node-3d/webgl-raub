@@ -49,7 +49,7 @@ DBG_EXPORT JS_METHOD(waitSync) { NAPI_ENV;
 
 DBG_EXPORT JS_METHOD(getSyncParameter) { NAPI_ENV;
 	REQ_EXT_ARG(0, sync);
-	REQ_INT32_ARG(0, pname);
+	REQ_INT32_ARG(1, pname);
 	
 	switch (pname) {
 	case GL_OBJECT_TYPE:

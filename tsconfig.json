@@ -1,0 +1,29 @@
+{
+	"compilerOptions": {
+		"target": "ES2024",
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"strict": true,
+		"allowImportingTsExtensions": true,
+		"rewriteRelativeImportExtensions": true,
+		"declaration": true,
+		"declarationMap": false,
+		"sourceMap": false,
+		"rootDir": ".",
+		"outDir": "dist",
+		"paths": {
+			"@node-3d/webgl": [
+				"./ts/index.ts"
+			]
+		},
+		"verbatimModuleSyntax": true,
+		"skipLibCheck": true,
+		"types": [
+			"node"
+		]
+	},
+	"include": [
+		"ts/**/*.ts",
+		"examples/**/*.ts"
+	]
+}

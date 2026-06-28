@@ -1,10 +1,9 @@
-import glfw from 'glfw-raub';
-const { Document } = glfw;
+import { Document } from '@node-3d/glfw';
 
-import gl from '../index.js';
-import { mat4 } from './utils/glMatrix-0.9.5.min.js';
-import { colorsTri, shapeShaders, vertsQuad, vertsTri } from './utils/presets.mjs';
-import { buildShader } from './utils/build-shader.mjs';
+import { webgl as gl } from '@node-3d/webgl';
+import { mat4 } from './utils/matrix.ts';
+import { colorsTri, shapeShaders, vertsQuad, vertsTri } from './utils/presets.ts';
+import { buildShader } from './utils/build-shader.ts';
 
 
 Document.setWebgl(gl);
@@ -15,22 +14,28 @@ const document = new Document({
 const shaderProgram = buildShader(shapeShaders);
 gl.useProgram(shaderProgram);
 
-shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'aVertexPosition');
-gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
+type TShaderVars = {
+	vertexPositionAttribute: number;
+	vertexColorAttribute: number;
+	pMatrixUniform: WebGLUniformLocation;
+	mvMatrixUniform: WebGLUniformLocation;
+};
+const shaderVars: TShaderVars = {
+	vertexPositionAttribute: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
+	vertexColorAttribute: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
+	pMatrixUniform: gl.getUniformLocation(shaderProgram, 'uPMatrix'),
+	mvMatrixUniform: gl.getUniformLocation(shaderProgram, 'uMVMatrix'),
+};
 
-shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, 'aVertexColor');
-gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
-
-shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, 'uPMatrix');
-shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, 'uMVMatrix');
-
+gl.enableVertexAttribArray(shaderVars.vertexPositionAttribute);
+gl.enableVertexAttribArray(shaderVars.vertexColorAttribute);
 
 const mvMatrix = mat4.create();
 const pMatrix = mat4.create();
 
 const setMatrixUniforms = () => {
-	gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, false, pMatrix);
-	gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, false, mvMatrix);
+	gl.uniformMatrix4fv(shaderVars.pMatrixUniform, false, pMatrix);
+	gl.uniformMatrix4fv(shaderVars.mvMatrixUniform, false, mvMatrix);
 	
 	const error = gl.getError();
 	if (error) {
@@ -41,33 +46,33 @@ const setMatrixUniforms = () => {
 const triangleVertexPositionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertsTri), gl.STATIC_DRAW);
-triangleVertexPositionBuffer.itemSize = 3;
-triangleVertexPositionBuffer.numItems = 3;
+const triangleVertexPositionBufferItemSize = 3;
+const triangleVertexPositionBufferNumItems = 3;
 
 const triangleVertexColorBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
 
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorsTri), gl.STATIC_DRAW);
-triangleVertexColorBuffer.itemSize = 4;
+const triangleVertexColorBufferItemSize = 4;
 
 
 const squareVertexPositionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
 
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertsQuad), gl.STATIC_DRAW);
-squareVertexPositionBuffer.itemSize = 3;
-squareVertexPositionBuffer.numItems = 4;
+const squareVertexPositionBufferItemSize = 3;
+const squareVertexPositionBufferNumItems = 4;
 
 const squareVertexColorBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
 
-let colors2 = [];
+const colors2 = [];
 for (let i = 0; i < 4; i++) {
-	colors2 = colors2.concat([0.5, 0.5, 1.0, 1.0]);
+	colors2.push(0.5, 0.5, 1.0, 1.0);
 }
 
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors2), gl.STATIC_DRAW);
-squareVertexColorBuffer.itemSize = 4;
+const squareVertexColorBufferItemSize = 4;
 
 
 const drawScene = () => {
@@ -78,8 +83,8 @@ const drawScene = () => {
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 	
 	gl.useProgram(shaderProgram);
-	gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
-	gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute);
+	gl.enableVertexAttribArray(shaderVars.vertexPositionAttribute);
+	gl.enableVertexAttribArray(shaderVars.vertexColorAttribute);
 	
 	mat4.perspective(45, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 100.0, pMatrix);
 	
@@ -88,31 +93,35 @@ const drawScene = () => {
 	mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
 	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
 	gl.vertexAttribPointer(
-		shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0
+		shaderVars.vertexPositionAttribute, triangleVertexPositionBufferItemSize, gl.FLOAT, false, 0, 0
 	);
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexColorBuffer);
 	gl.vertexAttribPointer(
-		shaderProgram.vertexColorAttribute, triangleVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0
+		shaderVars.vertexColorAttribute, triangleVertexColorBufferItemSize, gl.FLOAT, false, 0, 0
 	);
 	
 	setMatrixUniforms();
-	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBuffer.numItems);
+	gl.drawArrays(gl.TRIANGLES, 0, triangleVertexPositionBufferNumItems);
 	
 	mat4.translate(mvMatrix, [3.0, 0.0, 0.0]);
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
 	gl.vertexAttribPointer(
-		shaderProgram.vertexPositionAttribute, squareVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0
+		shaderVars.vertexPositionAttribute, squareVertexPositionBufferItemSize, gl.FLOAT, false, 0, 0
 	);
 	
 	gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
 	gl.vertexAttribPointer(
-		shaderProgram.vertexColorAttribute, squareVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0
+		shaderVars.vertexColorAttribute, squareVertexColorBufferItemSize, gl.FLOAT, false, 0, 0
 	);
 	
 	setMatrixUniforms();
-	gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBuffer.numItems);
+	gl.drawArrays(gl.TRIANGLE_STRIP, 0, squareVertexPositionBufferNumItems);
 };
 
 
 document.loop(drawScene);
+
+
+
+

@@ -1,7 +1,8 @@
-import gl from '../../index.js';
+import { webgl as gl } from '@node-3d/webgl';
 
+type TShaderCodes = Readonly<Record<'fs' | 'vs', string>>;
 
-const getShader = (shaderCodes, id) => {
+const getShader = (shaderCodes: TShaderCodes, id: keyof TShaderCodes): WebGLShader => {
 	const shader = gl.createShader(id === 'vs' ? gl.VERTEX_SHADER : gl.FRAGMENT_SHADER);
 	
 	gl.shaderSource(shader, shaderCodes[id]);
@@ -9,14 +10,14 @@ const getShader = (shaderCodes, id) => {
 	
 	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
 		console.error(gl.getShaderInfoLog(shader));
-		return null;
+		throw new Error(`Failed to compile ${id} shader.`);
 	}
 	
 	return shader;
 };
 
 
-export const buildShader = (shaderCodes) => {
+export const buildShader = (shaderCodes: TShaderCodes): WebGLProgram => {
 	const fragmentShader = getShader(shaderCodes, 'fs');
 	const vertexShader = getShader(shaderCodes, 'vs');
 	
@@ -35,3 +36,5 @@ export const buildShader = (shaderCodes) => {
 	
 	return shaderProgram;
 };
+
+

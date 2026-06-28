@@ -9,9 +9,9 @@ constexpr size_t SHADER_LOG_SIZE_MAX = 5 * 1024;
 
 
 DBG_EXPORT JS_METHOD(createShader) { NAPI_ENV;
-	REQ_INT32_ARG(0, id);
+	REQ_INT32_ARG(0, shaderType);
 	
-	GLuint shader = glCreateShader(id);
+	GLuint shader = glCreateShader(shaderType);
 	
 	RET_NUM(shader);
 }

@@ -64,7 +64,7 @@ DBG_EXPORT JS_METHOD(stencilOpSeparate) { NAPI_ENV;
 	REQ_INT32_ARG(0, face);
 	REQ_INT32_ARG(1, fail);
 	REQ_INT32_ARG(2, zfail);
-	REQ_INT32_ARG(2, zpass);
+	REQ_INT32_ARG(3, zpass);
 	
 	glStencilOpSeparate(face, fail, zfail, zpass);
 	RET_WEBGL_VOID;

@@ -1,11 +1,11 @@
-import glfw from 'glfw-raub';
-const { Document } = glfw;
+import { Document } from '@node-3d/glfw';
 
-import gl from '../index.js';
+import { webgl as gl } from '@node-3d/webgl';
 
 
 Document.setWebgl(gl);
-const _doc = new Document();
+// oxlint-disable-next-line no-unused-vars
+const doc = new Document();
 
 console.log(`
 OpenGL
@@ -15,3 +15,7 @@ OpenGL
 	renderer  : ${gl.getParameter(gl.RENDERER)}
 	extensions: ${gl.getSupportedExtensions().length}
 `);
+
+
+
+

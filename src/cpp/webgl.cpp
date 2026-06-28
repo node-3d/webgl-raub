@@ -457,7 +457,7 @@ DBG_EXPORT JS_METHOD(readPixels) { NAPI_ENV;
 	REQ_INT32_ARG(5, type);
 	REQ_OBJ_ARG(6, image);
 	
-	void *pixels = getData(env, image);
+	void *pixels = getData<uint8_t>(env, image);
 	glReadPixels(x, y, width, height, format, type, pixels);
 	RET_WEBGL_VOID;
 }

@@ -135,7 +135,7 @@ DBG_EXPORT JS_METHOD(texImage2D) { NAPI_ENV;
 	} else {
 		REQ_OBJ_ARG(8, image);
 		
-		void *ptr = getData(env, image);
+		const void *ptr = getData(env, image);
 		glTexImage2D(
 			target,
 			level,
@@ -179,7 +179,7 @@ DBG_EXPORT JS_METHOD(texImage3D) { NAPI_ENV;
 	} else {
 		REQ_OBJ_ARG(9, image);
 		
-		void *ptr = getData(env, image);
+		const void *ptr = getData(env, image);
 		glTexImage3D(
 			target,
 			level,
@@ -241,7 +241,7 @@ DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 		REQ_INT32_ARG(5, type);
 		REQ_OBJ_ARG(6, image);
 		
-		void *pixels = getData(env, image);
+		const void *pixels = getData(env, image);
 		
 		GLsizei w = image.Get("width").ToNumber().Uint32Value();
 		GLsizei h = image.Get("height").ToNumber().Uint32Value();
@@ -263,7 +263,7 @@ DBG_EXPORT JS_METHOD(texSubImage2D) { NAPI_ENV;
 		);
 	} else {
 		REQ_OBJ_ARG(8, image);
-		void *pixels = getData(env, image);
+		const void *pixels = getData(env, image);
 		glTexSubImage2D(
 			target, level, xoffset, yoffset, width, height, format, type, pixels
 		);
@@ -284,18 +284,18 @@ DBG_EXPORT JS_METHOD(compressedTexSubImage2D) { NAPI_ENV;
 	REQ_OBJ_ARG(7, image);
 	
 	int size = 0;
-	void *pixels = nullptr;
+	const void *pixels = nullptr;
 	
 	if (image.IsTypedArray() || image.IsArrayBuffer()) {
-		pixels = getArrayData<uint8_t>(env, image, &size);
+		pixels = getArrayData<const uint8_t>(env, image, &size);
 	} else if (image.IsBuffer()) {
-		pixels = getBufferData<uint8_t>(env, image, &size);
+		pixels = getBufferData<const uint8_t>(env, image, &size);
 	} else if (image.Has("data")) {
 		Napi::Object data = image.Get("data").As<Napi::Object>();
 		if (data.IsTypedArray() || data.IsArrayBuffer()) {
-			pixels = getArrayData<uint8_t>(env, data, &size);
+			pixels = getArrayData<const uint8_t>(env, data, &size);
 		} else if (data.IsBuffer()) {
-			pixels = getBufferData<uint8_t>(env, data, &size);
+			pixels = getBufferData<const uint8_t>(env, data, &size);
 		}
 	}
 	
@@ -316,18 +316,18 @@ DBG_EXPORT JS_METHOD(compressedTexImage2D) { NAPI_ENV;
 	REQ_OBJ_ARG(6, image);
 	
 	int size = 0;
-	void *pixels = nullptr;
+	const void *pixels = nullptr;
 	
 	if (image.IsTypedArray() || image.IsArrayBuffer()) {
-		pixels = getArrayData<uint8_t>(env, image, &size);
+		pixels = getArrayData<const uint8_t>(env, image, &size);
 	} else if (image.IsBuffer()) {
-		pixels = getBufferData<uint8_t>(env, image, &size);
+		pixels = getBufferData<const uint8_t>(env, image, &size);
 	} else if (image.Has("data")) {
 		Napi::Object data = image.Get("data").As<Napi::Object>();
 		if (data.IsTypedArray() || data.IsArrayBuffer()) {
-			pixels = getArrayData<uint8_t>(env, data, &size);
+			pixels = getArrayData<const uint8_t>(env, data, &size);
 		} else if (data.IsBuffer()) {
-			pixels = getBufferData<uint8_t>(env, data, &size);
+			pixels = getBufferData<const uint8_t>(env, data, &size);
 		}
 	}
 	
@@ -349,18 +349,18 @@ DBG_EXPORT JS_METHOD(compressedTexImage3D) { NAPI_ENV;
 	REQ_OBJ_ARG(7, image);
 	
 	int size = 0;
-	void *pixels = nullptr;
+	const void *pixels = nullptr;
 	
 	if (image.IsTypedArray() || image.IsArrayBuffer()) {
-		pixels = getArrayData<uint8_t>(env, image, &size);
+		pixels = getArrayData<const uint8_t>(env, image, &size);
 	} else if (image.IsBuffer()) {
-		pixels = getBufferData<uint8_t>(env, image, &size);
+		pixels = getBufferData<const uint8_t>(env, image, &size);
 	} else if (image.Has("data")) {
 		Napi::Object data = image.Get("data").As<Napi::Object>();
 		if (data.IsTypedArray() || data.IsArrayBuffer()) {
-			pixels = getArrayData<uint8_t>(env, data, &size);
+			pixels = getArrayData<const uint8_t>(env, data, &size);
 		} else if (data.IsBuffer()) {
-			pixels = getBufferData<uint8_t>(env, data, &size);
+			pixels = getBufferData<const uint8_t>(env, data, &size);
 		}
 	}
 	
@@ -384,18 +384,18 @@ DBG_EXPORT JS_METHOD(compressedTexSubImage3D) { NAPI_ENV;
 	REQ_OBJ_ARG(9, image);
 	
 	int size = 0;
-	void *pixels = nullptr;
+	const void *pixels = nullptr;
 	
 	if (image.IsTypedArray() || image.IsArrayBuffer()) {
-		pixels = getArrayData<uint8_t>(env, image, &size);
+		pixels = getArrayData<const uint8_t>(env, image, &size);
 	} else if (image.IsBuffer()) {
-		pixels = getBufferData<uint8_t>(env, image, &size);
+		pixels = getBufferData<const uint8_t>(env, image, &size);
 	} else if (image.Has("data")) {
 		Napi::Object data = image.Get("data").As<Napi::Object>();
 		if (data.IsTypedArray() || data.IsArrayBuffer()) {
-			pixels = getArrayData<uint8_t>(env, data, &size);
+			pixels = getArrayData<const uint8_t>(env, data, &size);
 		} else if (data.IsBuffer()) {
-			pixels = getBufferData<uint8_t>(env, data, &size);
+			pixels = getBufferData<const uint8_t>(env, data, &size);
 		}
 	}
 	
@@ -452,7 +452,7 @@ DBG_EXPORT JS_METHOD(texSubImage3D) { NAPI_ENV;
 	REQ_INT32_ARG(9, type);
 	REQ_OBJ_ARG(10, image);
 	
-	void *pixels = getData(env, image);
+	const void *pixels = getData(env, image);
 		
 	glTexSubImage3D(
 		target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels

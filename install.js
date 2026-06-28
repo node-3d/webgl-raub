@@ -1,9 +1,6 @@
-'use strict';
+import { install } from '@node-3d/addon-tools';
 
-const { install } = require('addon-tools-raub');
-
-
-const prefix = 'https://github.com/node-3d/webgl-raub/releases/download';
-const tag = '5.3.0';
+const prefix = 'https://github.com/node-3d/webgl/releases/download';
+const tag = '6.0.0';
 
 install(`${prefix}/${tag}`);

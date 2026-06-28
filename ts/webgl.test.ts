@@ -1,33 +1,30 @@
-'use strict';
-
-const assert = require('node:assert').strict;
-const { describe, it } = require('node:test');
-const webgl = require('..');
-
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
+import { webgl } from './index.ts';
 
 const constants = [
 	'contextAttributes', 'drawingBufferWidth', 'drawingBufferHeight',
-];
+] as const;
 
 const methods = [
 	'init', 'useWebGL2', 'getContextAttributes',
-];
-
+] as const;
 
 describe('WebGL', () => {
 	it('exports an object', () => {
 		assert.strictEqual(typeof webgl, 'object');
 	});
 	
-	constants.forEach((constant) => {
+	for (const constant of constants) {
 		it(`\`${constant}\` constant exposed`, () => {
 			assert.ok(webgl[constant] !== undefined);
 		});
-	});
+	}
 	
-	methods.forEach((method) => {
+	for (const method of methods) {
 		it(`\`${method}()\` method exposed`, () => {
 			assert.strictEqual(typeof webgl[method], 'function');
 		});
-	});
+	}
 });
+

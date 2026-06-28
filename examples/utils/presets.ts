@@ -8,7 +8,10 @@ export const cubeFaceColors = [
 ];
 
 // Repeat each color 4 times. Convert all to flat array.
-export const cubeColors = cubeFaceColors.map((c) => [c, c, c, c]).flatMap((c) => c).flatMap((c) => c);
+export const cubeColors = cubeFaceColors.flatMap((color) => Array.from(
+	{ length: 4 },
+	() => color,
+).flat());
 
 export const cubeVertices = [
 	// Front face
@@ -265,3 +268,5 @@ export const alignedShaders = {
 		}
 	`,
 };
+
+

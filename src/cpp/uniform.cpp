@@ -161,7 +161,7 @@ DBG_EXPORT JS_METHOD(uniform1fv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLfloat *ptr = getArrayData<GLfloat>(env, abv, &num);
+	const GLfloat *ptr = getArrayData<const GLfloat>(env, abv, &num);
 	
 	glUniform1fv(location, num, ptr);
 	RET_WEBGL_VOID;
@@ -173,7 +173,7 @@ DBG_EXPORT JS_METHOD(uniform2fv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLfloat *ptr = getArrayData<GLfloat>(env, abv, &num);
+	const GLfloat *ptr = getArrayData<const GLfloat>(env, abv, &num);
 	num /= 2;
 	
 	glUniform2fv(location, num, ptr);
@@ -186,7 +186,7 @@ DBG_EXPORT JS_METHOD(uniform3fv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLfloat *ptr = getArrayData<GLfloat>(env, abv, &num);
+	const GLfloat *ptr = getArrayData<const GLfloat>(env, abv, &num);
 	num /= 3;
 	
 	glUniform3fv(location, num, ptr);
@@ -199,7 +199,7 @@ DBG_EXPORT JS_METHOD(uniform4fv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLfloat *ptr = getArrayData<GLfloat>(env, abv, &num);
+	const GLfloat *ptr = getArrayData<const GLfloat>(env, abv, &num);
 	num /= 4;
 	
 	glUniform4fv(location, num, ptr);
@@ -212,7 +212,7 @@ DBG_EXPORT JS_METHOD(uniform1iv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLint *ptr = getArrayData<GLint>(env, abv, &num);
+	const GLint *ptr = getArrayData<const GLint>(env, abv, &num);
 	
 	glUniform1iv(location, num, ptr);
 	RET_WEBGL_VOID;
@@ -224,7 +224,7 @@ DBG_EXPORT JS_METHOD(uniform2iv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLint *ptr = getArrayData<GLint>(env, abv, &num);
+	const GLint *ptr = getArrayData<const GLint>(env, abv, &num);
 	num /= 2;
 	
 	glUniform2iv(location, num, ptr);
@@ -237,7 +237,7 @@ DBG_EXPORT JS_METHOD(uniform3iv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLint *ptr = getArrayData<GLint>(env, abv, &num);
+	const GLint *ptr = getArrayData<const GLint>(env, abv, &num);
 	num /= 3;
 	
 	glUniform3iv(location, num, ptr);
@@ -250,7 +250,7 @@ DBG_EXPORT JS_METHOD(uniform4iv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLint *ptr = getArrayData<GLint>(env, abv, &num);
+	const GLint *ptr = getArrayData<const GLint>(env, abv, &num);
 	num /= 4;
 	
 	glUniform4iv(location, num, ptr);
@@ -262,7 +262,7 @@ DBG_EXPORT JS_METHOD(uniform1uiv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLuint *ptr = getArrayData<GLuint>(env, abv, &num);
+	const GLuint *ptr = getArrayData<const GLuint>(env, abv, &num);
 	
 	glUniform1uiv(location, num, ptr);
 	RET_WEBGL_VOID;
@@ -274,7 +274,7 @@ DBG_EXPORT JS_METHOD(uniform2uiv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLuint *ptr = getArrayData<GLuint>(env, abv, &num);
+	const GLuint *ptr = getArrayData<const GLuint>(env, abv, &num);
 	num /= 2;
 	
 	glUniform2uiv(location, num, ptr);
@@ -287,7 +287,7 @@ DBG_EXPORT JS_METHOD(uniform3uiv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLuint *ptr = getArrayData<GLuint>(env, abv, &num);
+	const GLuint *ptr = getArrayData<const GLuint>(env, abv, &num);
 	num /= 3;
 	
 	glUniform3uiv(location, num, ptr);
@@ -300,7 +300,7 @@ DBG_EXPORT JS_METHOD(uniform4uiv) { NAPI_ENV;
 	REQ_OBJ_ARG(1, abv);
 	
 	int num;
-	GLuint *ptr = getArrayData<GLuint>(env, abv, &num);
+	const GLuint *ptr = getArrayData<const GLuint>(env, abv, &num);
 	num /= 4;
 	
 	glUniform4uiv(location, num, ptr);
@@ -314,7 +314,7 @@ DBG_EXPORT JS_METHOD(uniformMatrix2fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv, &count);
 	
 	if (count < 4) {
 		JS_THROW("Not enough data for `uniformMatrix2fv`.");
@@ -331,7 +331,7 @@ DBG_EXPORT JS_METHOD(uniformMatrix2x3fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv, &count);
 	
 	if (count < 6) {
 		JS_THROW("Not enough data for `uniformMatrix2x3fv`.");
@@ -348,7 +348,7 @@ DBG_EXPORT JS_METHOD(uniformMatrix2x4fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv, &count);
 	
 	if (count < 8) {
 		JS_THROW("Not enough data for `uniformMatrix2x4fv`.");
@@ -365,7 +365,7 @@ DBG_EXPORT JS_METHOD(uniformMatrix3fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv, &count);
 	
 	if (count < 9) {
 		JS_THROW("Not enough data for `uniformMatrix3fv`.");
@@ -382,7 +382,7 @@ DBG_EXPORT JS_METHOD(uniformMatrix3x2fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv, &count);
 	
 	if (count < 6) {
 		JS_THROW("Not enough data for `uniformMatrix3x2fv`.");
@@ -399,7 +399,7 @@ DBG_EXPORT JS_METHOD(uniformMatrix3x4fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv, &count);
 	
 	if (count < 12) {
 		JS_THROW("Not enough data for `uniformMatrix3x4fv`.");
@@ -416,7 +416,7 @@ DBG_EXPORT JS_METHOD(uniformMatrix4fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv, &count);
 	
 	if (count < 16) {
 		JS_THROW("Not enough data for `uniformMatrix4fv`.");
@@ -434,7 +434,7 @@ DBG_EXPORT JS_METHOD(uniformMatrix4x2fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv, &count);
 	
 	if (count < 8) {
 		JS_THROW("Not enough data for `uniformMatrix4x2fv`.");
@@ -452,7 +452,7 @@ DBG_EXPORT JS_METHOD(uniformMatrix4x3fv) { NAPI_ENV;
 	REQ_OBJ_ARG(2, abv);
 	
 	GLsizei count = 0;
-	GLfloat* data = getArrayData<GLfloat>(env, abv, &count);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv, &count);
 	
 	if (count < 12) {
 		JS_THROW("Not enough data for `uniformMatrix4x3fv`.");

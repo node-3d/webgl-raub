@@ -23,14 +23,14 @@ jobs:
     steps:
 
       - name: Fetch Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22.14.0
+          node-version: 24.13.0
           cache: 'npm'
 
       - name: Install Modules

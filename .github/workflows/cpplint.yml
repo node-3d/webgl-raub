@@ -12,21 +12,21 @@ on:
       - master
 
 jobs:
-  eslint:
+  cpplint:
     name: Cpplint
     runs-on: ubuntu-22.04
 
     steps:
 
       - name: Fetch Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           persist-credentials: false
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22.14.0
+          node-version: 24.13.0
           cache: 'npm'
 
       - name: Install Modules
@@ -37,5 +37,5 @@ jobs:
 
       - name: Run Cpplint
         run: |
-          node -e "require('addon-tools-raub').cpcpplint()"
+          node -e "require('@node-3d/addon-tools').cpcpplint()"
           cpplint --recursive ./src/cpp

@@ -1,10 +1,10 @@
 {
 	"author": "Luis Blanco <luisblanco1337@gmail.com>",
-	"name": "webgl-raub",
-	"version": "5.3.0",
+	"name": "@node-3d/webgl",
+	"version": "6.0.0",
 	"description": "WebGL for Node.js",
 	"license": "MIT",
-	"main": "index.js",
+	"main": "dist/index.js",
 	"keywords": [
 		"addon",
 		"webgl",
@@ -18,39 +18,60 @@
 		"gyp"
 	],
 	"files": [
-		"js",
-		"core.js",
-		"index.js",
-		"index.d.ts",
+		"dist",
 		"install.js",
 		"LICENSE",
-		"package.json"
+		"package.json",
+		"tsconfig.json"
 	],
 	"engines": {
-		"node": ">=22.14.0",
-		"npm": ">=10.9.2"
+		"node": ">=24.13.0",
+		"npm": ">=11.6.2"
 	},
 	"scripts": {
-		"postinstall": "node install",
-		"eslint": "eslint .",
-		"build": "cd src && node-gyp rebuild -j max --silent && node -e \"require('addon-tools-raub').cpbin('webgl')\"",
-		"test": "node --test --watch",
-		"test-ci": "node --test"
+		"postinstall": "node install.js",
+		"build:rebuild": "cd src && node-gyp rebuild -j max --silent && node -e \"import('@node-3d/addon-tools').then((m) => m.cpbin('webgl'))\"",
+		"build:compile": "cd src && node-gyp build -j max --silent && node -e \"import('@node-3d/addon-tools').then((m) => m.cpbin('webgl'))\"",
+		"test:watch": "node --test --watch \"ts/**/*.test.ts\"",
+		"test:ci": "node --test \"ts/**/*.test.ts\"",
+		"lint:all": "npm run lint:gypi && npm run lint:ts && npm run lint:oxlint",
+		"lint:gypi": "node -e \"import('@node-3d/addon-tools').then((m) => m.checkGypi())\"",
+		"lint:oxlint": "oxlint .",
+		"build:ci": "rslib build",
+		"build:watch": "rslib build --watch",
+		"lint:ts": "tsgo -p tsconfig.json --noEmit",
+		"prepare": "npm run build:ci"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/node-3d/webgl-raub.git"
+		"url": "https://github.com/node-3d/webgl.git"
 	},
 	"dependencies": {
-		"addon-tools-raub": "^9.3.0",
-		"deps-opengl-raub": "^7.2.0",
-		"segfault-raub": "^3.2.0"
+		"@node-3d/addon-tools": "^11.0.0",
+		"@node-3d/deps-opengl": "^8.0.0",
+		"@node-3d/segfault": "^4.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "^22.13.4",
-		"@eslint/js": "^9.20.0",
-		"eslint": "^9.20.1",
+		"@rslib/core": "^0.21.3",
+		"@types/node": "^24.1.0",
+		"@typescript/native-preview": "^7.0.0-dev.20260503.1",
 		"node-addon-api": "^8.3.0",
-		"typescript": "^5.7.3"
+		"oxlint": "^1.65.0",
+		"typescript": "^6.0.3"
+	},
+	"type": "module",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"bugs": {
+		"url": "https://github.com/node-3d/node-3d/issues"
+	},
+	"homepage": "https://github.com/node-3d/node-3d#readme",
+	"publishConfig": {
+		"access": "public"
 	}
 }

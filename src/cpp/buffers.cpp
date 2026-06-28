@@ -69,7 +69,7 @@ DBG_EXPORT JS_METHOD(bufferData) { NAPI_ENV;
 		REQ_INT32_ARG(2, usage);
 		
 		int size;
-		uint8_t* data = getArrayData<uint8_t>(env, arr, &size);
+		const uint8_t *data = getArrayData<const uint8_t>(env, arr, &size);
 		
 		// WebGL2:
 		// void gl.bufferData(target, ArrayBufferView srcData, usage, srcOffset, length);
@@ -97,7 +97,7 @@ DBG_EXPORT JS_METHOD(bufferSubData) { NAPI_ENV;
 	REQ_OBJ_ARG(2, arr);
 	
 	GLsizei count = 0;
-	void* data = getArrayData(env, arr, &count);
+	const void *data = getArrayData(env, arr, &count);
 	
 	glBufferSubData(target, offset, count, data);
 	RET_WEBGL_VOID;
@@ -127,7 +127,7 @@ DBG_EXPORT JS_METHOD(getBufferSubData) { NAPI_ENV;
 	size_t size = std::min(dest.ByteLength(), static_cast<size_t>(elementSize * length));
 	size_t offset = destByteOffset * elementSize;
 	
-	void* data = getArrayData<uint8_t>(env, dest) + offset;
+	void *data = getArrayData<uint8_t>(env, dest) + offset;
 	
 	glGetBufferSubData(readTarget, sourceByteOffset, size, data);
 	RET_WEBGL_VOID;

@@ -3,7 +3,12 @@
 	"version": "0.0.0",
 	"private": true,
 	"dependencies": {
-		"glfw-raub": "^6.4.0",
-		"image-raub": "^5.2.0"
+		"@node-3d/glfw": "^6.4.0",
+		"@node-3d/image": "^5.2.0"
+	},
+	"type": "module",
+	"engines": {
+		"node": ">=24.13.0",
+		"npm": ">=11.6.2"
 	}
 }

@@ -124,7 +124,7 @@ DBG_EXPORT JS_METHOD(vertexAttrib1fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLfloat *data = getArrayData<GLfloat>(env, abv);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv);
 	
 	glVertexAttrib1fv(index, data);
 	RET_WEBGL_VOID;
@@ -145,7 +145,7 @@ DBG_EXPORT JS_METHOD(vertexAttrib2fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLfloat *data = getArrayData<GLfloat>(env, abv);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv);
 	
 	glVertexAttrib2fv(index, data);
 	RET_WEBGL_VOID;
@@ -167,7 +167,7 @@ DBG_EXPORT JS_METHOD(vertexAttrib3fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLfloat *data = getArrayData<GLfloat>(env, abv);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv);
 	
 	glVertexAttrib3fv(index, data);
 	RET_WEBGL_VOID;
@@ -190,7 +190,7 @@ DBG_EXPORT JS_METHOD(vertexAttrib4fv) { NAPI_ENV;
 	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLfloat *data = getArrayData<GLfloat>(env, abv);
+	const GLfloat *data = getArrayData<const GLfloat>(env, abv);
 	
 	glVertexAttrib4fv(index, data);
 	RET_WEBGL_VOID;
@@ -212,7 +212,7 @@ DBG_EXPORT JS_METHOD(vertexAttribI4iv) { NAPI_ENV;
 	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLint *data = getArrayData<GLint>(env, abv);
+	const GLint *data = getArrayData<const GLint>(env, abv);
 	
 	glVertexAttribI4iv(index, data);
 	RET_WEBGL_VOID;
@@ -234,7 +234,7 @@ DBG_EXPORT JS_METHOD(vertexAttribI4uiv) { NAPI_ENV;
 	REQ_INT32_ARG(0, index);
 	REQ_OBJ_ARG(1, abv);
 	
-	GLuint *data = getArrayData<GLuint>(env, abv);
+	const GLuint *data = getArrayData<const GLuint>(env, abv);
 	
 	glVertexAttribI4uiv(index, data);
 	RET_WEBGL_VOID;
