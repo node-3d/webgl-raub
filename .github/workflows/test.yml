@@ -37,8 +37,8 @@ jobs:
         run: npm ci
 
       - name: Build Current Binary
-        run: npm run build
+        run: npm run build:rebuild
 
       - name: Run Unit Tests
         if: matrix.os != 'windows-2022'
-        run: npm run test-ci
+        run: npm run test:ci
